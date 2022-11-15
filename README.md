@@ -11,3 +11,8 @@
 
 
 ## Routes
+
+
+## Notes
+- [Generate realistic user data](https://www.npmjs.com/package/@faker-js/faker)
+- [Logo Generator](https://logoipsum.com/)
