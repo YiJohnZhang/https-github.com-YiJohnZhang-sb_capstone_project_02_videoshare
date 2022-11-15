@@ -1,4 +1,4 @@
-# VideoShare
+# ShortCollabs
 *description*
 
 ## Project Overview
