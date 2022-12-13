@@ -31,7 +31,7 @@ See how much I can finish in 2 weeks time, eh?
 ## Time Tracker
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
-|01||2022-12|: - :||
+|01|db design|2022-12-12|18:25 - :||
 |02||2022-12|: - :||
 |03||2022-12|: - :||
 |04||2022-12|: - :||
