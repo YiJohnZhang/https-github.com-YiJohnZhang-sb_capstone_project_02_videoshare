@@ -31,9 +31,12 @@ See how much I can finish in 2 weeks time, eh?
 ## Time Tracker
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
-|01|db design|2022-12-12|18:25 - :||
+|01|db design, seed|2022-12-12|18:25 - 22:19||
 |02||2022-12|: - :||
 |03||2022-12|: - :||
 |04||2022-12|: - :||
 |0||2022-12|: - :||
 ||||**Total Time**|_ minutes|
+
+## User Data Notes
+- insert hashed password, and populate seed data 

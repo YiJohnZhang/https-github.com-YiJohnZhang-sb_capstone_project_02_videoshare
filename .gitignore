@@ -1,2 +1,6 @@
 /node_modules
-/temp
+/z_preliminary_assets/temp
+
+# images
+*.delist
+*.xcf
