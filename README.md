@@ -32,14 +32,16 @@ See how much I can finish in 2 weeks time, eh?
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
 |01|db design, seed|2022-12-12|18:25 - 22:19||
-|02|db seeding, continued (content)|2022-12-14|13:36 - 14:||
+|02|db seeding, continued (content)|2022-12-14|13:36 - 15:58||
 |03||2022-12-1|: - :||
 |04||2022-12-1|: - :||
 |0||2022-12|: - :||
 ||||**Total Time**|_ minutes|
 
 ## User Data Notes
-- insert hashed password, and populate seed data 
+- **Do the FOLLOWING *AFTER* finished building routing**:
+	- `seed_contents.csv`: Any cell with "2022-12-14: TODO" value
+	- `seed_users.csv`: Any cell with "2022-12-14: TODO" value (**passwords**)
 Ok so there two ways to request a TikTok Video: 1) [embedding videos](https://developers.tiktok.com/doc/embed-videos/) or 2) its API, apparently a `POST`, request to retrieve a video. Apparently the latter method doesn't seem to return a video: **rip a select few for content and save it locally...** .__________________________________.
 
 `POST` request, details:

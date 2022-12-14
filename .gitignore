@@ -1,6 +1,13 @@
 /node_modules
 /z_preliminary_assets/temp
 
-# images
-*.delist
+# media
+## video
+*.mp4
+
+## images
 *.xcf
+
+# files to delist
+*.bak
+*.delist

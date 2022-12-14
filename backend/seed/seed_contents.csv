@@ -1,9 +1,7 @@
 id,title,summary,default_description,link,status,owner,contract_type,contract_details,contract_signed,date_created,date_standby,date_published
-1,,,,,,,,,,2022-12-12,2022-12-26,2022-12-26
-2,,,,,,,,,,2022-12-12,2022-12-26,2022-12-26
-3,,,,,,,,,,2022-12-12,2022-12-26,2022-12-26
-4,,,,,,,,,,2022-12-12,2022-12-26,2022-12-26
-5,,,,,,,,,,2022-12-12,2022-12-26,2022-12-26
-6,,,,,,,,,,2022-12-12,2022-12-26,2022-12-26
-7,,,,,,,,,,2022-12-12,2022-12-26,2022-12-26
-8,,,,,,,,,,2022-12-12,2022-12-26,2022-12-26
+1,"I'm White, I'm Black, I'm Yellow, I'm Red (Countryballs)",,"Kurwaaaaa!\nincluding: France, USA, Switzerland and Russia\nSource: https://youtu.be/Em59yHA8k7I",Em59yHA8k7I_360p,legacy,cstpball,solo,,,2022-12-12,2022-12-26,2022-12-26
+2,Coverage of People Buying a House and Living in It,,That Mitchell and Webb Look (s1 ep2)\nSource: https://youtu.be/gqK5AYiuC_w,gqK5AYiuC_w_360p,active,thatmitchellandwebblook,solo,,,2022-12-12,2022-12-26,2022-12-26
+3,Talent Dredge,,"Again, one of my favorites from the masters, Mitchell and Webb.\nSource: https://youtu.be/3I5udb-BDAQ",3I5udb-BDAQ_360p,active,thatmitchellandwebblook,presplit,2022-12-14: TODO,"[{""thatmitchellandwebblook"":true, ""???"":true}]",2022-12-12,2022-12-26,2022-12-26
+4,Bronze Orientation,,Bronze Orientation for stone-age chippers and tie-ers. A sketch from series 2 of That Mitchell and Webb Look.\nSource: https://youtu.be/,nyu4u3VZYaQ_360p,active,thatmitchellandwebblook,byview,2022-12-14: TODO,"[{""thatmitchellandwebblook"":true, ""???"":true}]",2022-12-12,2022-12-26,2022-12-26
+5,2022-12-14: TODO,marketing campaign for some brand,Lorem ispum.,,standby,2022-12-14: TODO,presplit,2022-12-14: TODO,2022-12-14: TODO,2022-12-12,2022-12-26,
+6,2022-12-14: TODO,2022-12-14: TODO,HYPEEEEEEEEEEEEEEEEEE,,open,2022-12-14: TODO,presplit,2022-12-14: TODO,2022-12-14: TODO,2022-12-12,,
