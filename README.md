@@ -32,11 +32,57 @@ See how much I can finish in 2 weeks time, eh?
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
 |01|db design, seed|2022-12-12|18:25 - 22:19||
-|02||2022-12|: - :||
-|03||2022-12|: - :||
-|04||2022-12|: - :||
+|02||2022-12-1|: - :||
+|03||2022-12-1|: - :||
+|04||2022-12-1|: - :||
 |0||2022-12|: - :||
 ||||**Total Time**|_ minutes|
 
 ## User Data Notes
 - insert hashed password, and populate seed data 
+Ok so there two ways to request a TikTok Video: 1) [embedding videos](https://developers.tiktok.com/doc/embed-videos/) or 2) its API, apparently a `POST`, request to retrieve a video. Apparently the latter method doesn't seem to return a video: **rip a select few for content and save it locally...** .__________________________________.
+
+`POST` request, details:
+- request `header` requires: the application to provide `authorization` token and `content-type` fields:
+	- `authorization`: obtained through `/oauth/access_token/`
+	- `content-type`: `application/json`
+- request `body` requires: `filters` obj (self-explanatory)
+	- I only care about a pre-determined video id.
+
+Example:
+- `curl`
+```js
+curl -L -X POST 'https://open.tiktokapis.com/v2/video/query/?fields=id,title' \
+-H 'Authorization: Bearer act.1d1021d2aee3d41fee2d2add43456badMFZnrhFhfWotu3Ecuiuka27L56lr!2323' \
+-H 'Content-Type: application/json' \
+--data-raw '{
+    "filters": {
+        "video_ids": [
+            "7077642457847991554",
+            "7080217258529737986"
+        ]
+    }
+}
+```
+- `axios`(rough equivalent)
+```js
+// tiktok axios request template
+import {BEARER_TOKEN} from './config';	// get from a secret file or server env.
+const BASE_URL = "https://open.tiktokapis.com/v2/video/query/?fields=id,title";
+const config = {
+
+	"Authorization": `Bearer ${BEARER_TOKEN}`,
+	"Content-Type": 'application/json'
+
+}
+
+let requestData = {filters: video_ids};
+
+	// set `video_ids` = [...];
+
+	const response = await axios.post(BASE_URL, requestData, config)
+	// if it were a `GET` request: axios.get(`${BASE_URL}/${videoID}`, config);
+
+// parse the response
+response.data.videos[INDEX];
+```
