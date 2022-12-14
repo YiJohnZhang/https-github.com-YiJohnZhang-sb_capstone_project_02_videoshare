@@ -32,7 +32,7 @@ See how much I can finish in 2 weeks time, eh?
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
 |01|db design, seed|2022-12-12|18:25 - 22:19||
-|02||2022-12-1|: - :||
+|02|db seeding, continued (content)|2022-12-14|13:36 - 14:||
 |03||2022-12-1|: - :||
 |04||2022-12-1|: - :||
 |0||2022-12|: - :||
