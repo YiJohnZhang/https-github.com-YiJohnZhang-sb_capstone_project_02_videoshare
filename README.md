@@ -33,11 +33,19 @@ See how much I can finish in 2 weeks time, eh?
 |-|-|-|-|-|
 |01|db design, seed|2022-12-12|18:25 - 22:19|234|
 |02|db seeding, continued (content)|2022-12-14|13:36 - 15:58|142|
-|03|db seeding script|2022-12-14|19:47 - :||
+|03|db seeding script|2022-12-14|19:47 - 20:28||
 ||**50.01.03**. Data Sourcing||**Net Total Time**|376+|
 |04||2022-12-1|: - :||
 |0||2022-12|: - :||
 ||||**Total Time**|_ minutes|
+
+
+```sql
+-- users: password->pwd; description->bio
+-- contents: status -> video_status, owner -> initiator
+-- contents_users_join: description->content_description
+```
+
 
 ## User Data Notes
 - **Do the FOLLOWING *AFTER* finished building routing**:
