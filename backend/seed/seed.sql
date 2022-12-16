@@ -3,7 +3,7 @@ DROP DATABASE IF EXISTS sb_50_capstone_project_shortcollabs;
 CREATE_DATABASE sb_50_capstone_project_shortcollabs;
 \c sb_50_capstone_project_shortcollabs;
 
-DROP TABLE IF EXISTS users, contents, roles, contents_users_join, roles_users_join;
+DROP TABLE IF EXISTS roles_users_join, contents_users_join, roles, contents, users;
 
 
 -- DATABASE RELATIONS
@@ -44,7 +44,7 @@ CREATE TABLE roles_users_join (
 
 
 --	DATABASE SEEDING
-INSERT INTO users (username,firstname,lastname,birthdate,verified,account_status,email,pwd,picture,bio,is_elevated)
+INSERT INTO users('username','firstname','lastname','birthdate','verified','account_status','email','password','picture','description','is_elevated')
 	VALUES
 	('tuckerdiane', 'Harold', 'Smith', 1998-10-19, 1, 'active', 'ronald38@yahoo.com', $2b$12$Q1PUFjhN/AWRQ21LbGYvjeLpZZB6lfZ1BPwifHALGO6oIbyC3CmJe, 'xsgamesm-33.jpg', 'Decision professional real each citizen level.', 1),
 	('edward88', 'Carter', 'Johnson', 2004-3-13, 1, 'active', 'richard65@martin.net', 2022-12-14: TODO, 'xsgamesm-49.jpg', 'Maybe key community young ahead.', 1),
@@ -72,7 +72,7 @@ INSERT INTO users (username,firstname,lastname,birthdate,verified,account_status
 	('thatmitchellandwebblook', 'Mitchell', 'Webb', 1990-01-01, 1, 'active', 'thatmitchellandwebblook@fakeemail.com', 2022-12-14: TODO, 'thatmitchandwebblook.jpg', 'Begin money me young science.', 0),
 	('kaliningradgeneral', 'Kaliningrad', 'General', 1990-01-01, 1, 'active', 'kaliningradgeneral@fakeemail.com', 2022-12-14: TODO, 'kaliningradgeneral.jpg', 'Treatment better little cover fact commercial.', 0),
 	
-INSERT INTO contents (title,summary,default_description,link,content_status,initiator,contract_type,contract_details,contract_signed,date_created,date_standby,date_published)
+INSERT INTO contents('title','summary','default_description','link','status','owner','contract_type','contract_details','contract_signed','date_created','date_standby','date_published')
 	VALUES
 	("I\'m White, I\'m Black, I\'m Yellow, I\'m Red (Countryballs)", , 'Kurwaaaaa!\nincluding: France, USA, Switzerland and Russia\nSource: https://youtu.be/Em59yHA8k7I', 'Em59yHA8k7I_360p', 'legacy', 'cstpball', 'solo', , , 2022-12-12, 2022-12-26, 2022-12-26),
 	('Coverage of People Buying a House and Living in It', , 'That Mitchell and Webb Look (s1 ep2)\nSource: https://youtu.be/gqK5AYiuC_w', 'gqK5AYiuC_w_360p', 'active', 'thatmitchellandwebblook', 'solo', , , 2022-12-12, 2022-12-26, 2022-12-26),
@@ -81,7 +81,7 @@ INSERT INTO contents (title,summary,default_description,link,content_status,init
 	(2022-12-14: TODO, "marketing campaign for some brand", 'Lorem ispum.', , 'standby', '2022-12-14: TODO', 'presplit', '2022-12-14: TODO', '2022-12-14: TODO', 2022-12-12, 2022-12-26, ),
 	(2022-12-14: TODO, 2022-12-14: TODO, 'HYPEEEEEEEEEEEEEEEEEE', , 'open', '2022-12-14: TODO', 'presplit', '2022-12-14: TODO', '2022-12-14: TODO', 2022-12-12, , ),
 	
-INSERT INTO roles (role_name)
+INSERT INTO roles('role_name')
 	VALUES
 	('Administrator'),
 	('Creator'),
@@ -104,14 +104,14 @@ INSERT INTO roles (role_name)
 	('empty_14'),
 	('empty_15'),
 	
-INSERT INTO contents_users_join (user_id,content_id,content_description)
+INSERT INTO contents_users_join('user_id','content_id','description')
 	VALUES
 	('cstpball', 1, 'Kurwaaaaa!\nincluding: France, USA, Switzerland and Russia\nSource: https://youtu.be/Em59yHA8k7I'),
 	('thatmitchellandwebblook', 2, 'That Mitchell and Webb Look (s1 ep2)\nSource: https://youtu.be/gqK5AYiuC_w'),
 	('thatmitchellandwebblook', 3, 'Again, one of my favorites from the masters, Mitchell and Webb.\nSource: https://youtu.be/3I5udb-BDAQ'),
 	('thatmitchellandwebblook', 4, 'Bronze Orientation for stone-age chippers and tie-ers. A sketch from series 2 of That Mitchell and Webb Look.\nSource: https://youtu.be/'),
 	
-INSERT INTO roles_users_join (user_id,role_id)
+INSERT INTO roles_users_join('user_id','role_id')
 	VALUES
 	('tuckerdiane', 1),
 	('edward88', 1),

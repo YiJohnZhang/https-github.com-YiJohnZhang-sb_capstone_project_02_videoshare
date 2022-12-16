@@ -34,8 +34,8 @@ See how much I can finish in 2 weeks time, eh?
 |01|db design, seed|2022-12-12|18:25 - 22:19|234|
 |02|db seeding, continued (content)|2022-12-14|13:36 - 15:58|142|
 |03|db seeding script and fixing typo|2022-12-14|19:47 - 22:29|162|
-|04|fix db seeding|2022-12-15|18:45 - :||
-||**50.01.03**. Data Sourcing||**Net Total Time**|538|
+|04|fix db seeding|2022-12-15|18:45 - 18:55|10|
+||**50.01.03**. Data Sourcing||**Net Total Time**|548|
 |05||2022-12-1|: - :||
 |06||2022-12-1|: - :||
 |07||2022-12-1|: - :||
@@ -43,15 +43,6 @@ See how much I can finish in 2 weeks time, eh?
 |09||2022-12-1|: - :||
 |10||2022-12-1|: - :||
 ||||**Total Time**|_ minutes|
-
-to do:
-update database schema for the following variables (AND DOUBle check `seed_contents.csv`)
-```sql
--- users: password->pwd; description->bio
--- contents: status -> video_status, owner -> content_owner
--- contents_users_join: description->content_description
-```
-
 
 ## User Data Notes
 - **Do the FOLLOWING *AFTER* finished building routing**:

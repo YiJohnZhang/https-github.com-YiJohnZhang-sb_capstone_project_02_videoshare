@@ -36,9 +36,9 @@ function trolololAsync(){
 	writerStream.write(`--	SETUP\nDROP DATABASE IF EXISTS ${config.databaseName};\nCREATE_DATABASE ${config.databaseName};\n\\c ${config.databaseName};\n\n`);
 	
 	let droptablesString = 'DROP TABLE IF EXISTS ';
-	for(let relationName of config.relationNames){
+	for(let relationIndex in config.relationNames){
 
-		droptablesString = droptablesString.concat(`${relationName}, `);
+		droptablesString = droptablesString.concat(`${config.relationNames[config.relationNames.length - 1 - relationIndex]}, `);
 
 	}
 	droptablesString = droptablesString.substring(0, droptablesString.length - 2).concat(';');
@@ -63,7 +63,7 @@ function trolololAsync(){
 		const newHeaders = relationsHeader[relationName][0].filter((element) => element !== 'id');
 			// remove 'id' attributes that are `SERIAL`sql
 	
-		writerStream.write(`INSERT INTO ${relationName} (`);
+		writerStream.write(`INSERT INTO ${relationName}(`);
 		writerStream.write(`${newHeaders}`)
 		// column name(s)
 		// for(let __ of .split(','))
