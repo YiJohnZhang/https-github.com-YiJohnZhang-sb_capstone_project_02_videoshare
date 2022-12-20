@@ -5,12 +5,12 @@ require('dotenv').config();	// read .env files and make environmental variables
 
 const DB_URI = (process.env.NODE_ENV === "test")
 	? "postgresql:///sb_c02_shortcollabs_test"
-	: "postgresql:///sb_c02_shortcollabs";
+	: process.env.DATABASE_URL || "postgresql:///sb_c02_shortcollabs";
 
-const PORT_NUMBER = 3000;	//process.env it later
+const PORT_NUMBER = process.env.PORT || 3000;
 
-const BCRYPT_WORK_FACTOR = 14;
-	// subject to update
+const BCRYPT_WORK_FACTOR = (process.env.NODE_ENV === "test") ? 1 : 14;
+	// speed up tests
 
 const JWT_SECRET_KEY = process.env.SECRET_KEY || "test_secret key";
 

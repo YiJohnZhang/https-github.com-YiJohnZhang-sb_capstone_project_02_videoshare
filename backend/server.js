@@ -2,6 +2,6 @@
 	*/
 
 const app = require('./app');
-const {PORT_NUMBER} = require('./config') 
+const { PORT_NUMBER } = require('./config') 
 
 app.listen(PORT_NUMBER);
