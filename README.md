@@ -20,7 +20,7 @@ See how much I can finish in 2 weeks time, eh?
 - 
 
 ## Data Source
-
+- Manually generated.
 
 ## Routes
 
@@ -36,13 +36,13 @@ See how much I can finish in 2 weeks time, eh?
 |03|db seeding script and fixing typo|2022-12-14|19:47 - 22:29|162|
 |04|fix db seeding|2022-12-15|18:45 - 18:55|10|
 ||**50.01.03**. Data Sourcing||**Net Total Time**|548|
-|05|starting TDD of `backend`|2022-12-19 - 2022-12-20|21:43 - 00:31||
-|06||2022-12-20|0: - :||
-|07||2022-12-1|: - :||
-|08||2022-12-1|: - :||
-|09||2022-12-1|: - :||
-|10||2022-12-1|: - :||
+|05|starting TDD of `backend`|2022-12-19 - 2022-12-20|21:43 - 00:31|168|
+|06||2022-12-20|10:54 - :||
+|07||2022-12-20|: - :||
+|08||2022-12-20|: - :||
+|09||2022-12-20|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**||
+|10||2022-12-21|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**||
 ||||**Total Time**|_ minutes|
 
