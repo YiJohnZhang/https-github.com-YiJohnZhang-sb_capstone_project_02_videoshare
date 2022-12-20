@@ -36,12 +36,14 @@ See how much I can finish in 2 weeks time, eh?
 |03|db seeding script and fixing typo|2022-12-14|19:47 - 22:29|162|
 |04|fix db seeding|2022-12-15|18:45 - 18:55|10|
 ||**50.01.03**. Data Sourcing||**Net Total Time**|548|
-|05||2022-12-1|: - :||
+|05||2022-12-19|21:43 - :||
 |06||2022-12-1|: - :||
 |07||2022-12-1|: - :||
 |08||2022-12-1|: - :||
 |09||2022-12-1|: - :||
 |10||2022-12-1|: - :||
+||**50.01.04**. Routes (Backend)||**Net Total Time**||
+||**50.01.05**. Application (Front-End)||**Net Total Time**||
 ||||**Total Time**|_ minutes|
 
 ## User Data Notes
