@@ -7,6 +7,7 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET_KEY } = require('../config');
 const { UnauthorizedError } = require('./utilities');
+// const 
 
 /**	Middleware: Authenticate user.
  *	If a token was provided, verify it, and, if valid, store the token payload
@@ -78,7 +79,7 @@ function isAdmin(req, res, nxt) {
 
 	try {
 
-		if (res.locals.user.isAdmin)
+		if(res.locals.user.isAdmin)
 			return nxt();
 			
 		return nxt(new UnauthorizedError('Not an admin!'));
@@ -89,9 +90,26 @@ function isAdmin(req, res, nxt) {
 
 }
 
+/**	isReferenceUserOrAdmin(req, res, nxt)
+ *	Middleware to check whether or not the user is an admin or the reference user.
+ *	If not, raises UnauthorizedError.
+ */
+function isReferenceUserOrAdmin(req, res, nxt) {
+
+	// console.log(`${req.params.username}: ${res.locals.user.username}`)
+
+	if(req.params.username === res.locals.user.username || res.locals.user.isAdmin)
+		return nxt();
+	
+	return nxt(new UnauthorizedError(`Neither the user, ${req.params.username}. nor admin`));
+
+}
+
+
 module.exports = {
 	authenticateJWT,
 	ensureLoggedIn,
 	isReferenceUser,
-	isAdmin
+	isAdmin,
+	isReferenceUserOrAdmin
 };

@@ -1,8 +1,8 @@
-process.env.NODE_ENV = "TEST";
+process.env.NODE_ENV = 'test';
 
-const { NotFoundError, BadRequestError, UnauthorizedError } = require("../modules/utilities");
-const db = require("../database/db");
-const User = require("../models/user");
+const { NotFoundError, BadRequestError, UnauthorizedError } = require('../modules/utilities');
+const db = require('../database/db');
+const User = require('../models/user');
 const {
 	commonBeforeAll,
 	commonBeforeEach,
@@ -63,23 +63,69 @@ describe('register', () => {
 
 	test('works', async() => {
 
+
+
 	});
-
-
 
 });
 
-/***	returnAll() */
+/***	getAll() */
+describe('getAll()', () => {
 
+	test('fetch entire relation', async() => {
+		
+		const users = await User.getAll();
+		expect(users).toEqual({
 
-/***	returnByUsername() */
+		});
 
+	});
+
+	test('fetch with filtering', async() => {
+		
+		const users = await User.getAll();
+		expect(users).toEqual({
+
+		});
+
+	});
+
+});
+
+/***	getByUsername() */
+describe('getByPK()', () => {
+
+	test('works', async() => {
+		
+		const user = await User.getByPK('');
+		expect(user).toEqual({
+
+		});
+
+	});
+
+});
 
 /***	update() */
+describe('update()', () => {
 
+	const updateData = {
+
+	};
+
+	test('works', async() => {
+		
+		const user = await User.update('', updateData);
+		expect(user).toEqual({
+
+		});
+
+	});
+
+});
 
 /***	delete() */
-describe('register', () => {
+describe('delete()', () => {
 
 	test('works', async() => {
 

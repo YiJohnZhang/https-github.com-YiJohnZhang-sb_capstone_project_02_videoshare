@@ -33,6 +33,7 @@ class ExpressError extends Error {
 		// console.error(this.stack);
 	
 	}
+
 }
 
 /** Generic 400: Bad Request Error */

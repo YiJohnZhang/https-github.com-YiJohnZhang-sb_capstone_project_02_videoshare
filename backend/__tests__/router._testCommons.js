@@ -1,7 +1,7 @@
 const db = require('../database/db');
-const User = require("../models/User");
-const Content = require("../models/Content");
-const { createToken } = require("../helpers/tokens");
+const User = require('../models/User');
+const Content = require('../models/Content');
+const { createToken } = require('../helpers/createTokenHelper');
 
 async function commonBeforeAll() {
 

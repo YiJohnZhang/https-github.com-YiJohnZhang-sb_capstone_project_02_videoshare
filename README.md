@@ -23,6 +23,9 @@ See how much I can finish in 2 weeks time, eh?
 - Manually generated.
 
 ## Routes
+-	Ok, so `/` for auth, `contents/` and `users/` for respective models.
+	- `users/` focuses on returning the users content
+	- `contents/` focuses on returning the contract and content with user(s) involved
 
 # Notes
 - [Generate realistic user data](https://www.npmjs.com/package/@faker-js/faker)
@@ -38,7 +41,7 @@ See how much I can finish in 2 weeks time, eh?
 ||**50.01.03**. Data Sourcing||**Net Total Time**|548|
 |05|starting TDD of `backend`|2022-12-19 - 2022-12-20|21:43 - 00:31|168|
 |06||2022-12-20|10:54 - 12:26|92|
-|07||2022-12-20|15:09 - :||
+|07||2022-12-20|15:09 - 19:41||
 |08||2022-12-20|1: - :||
 |09||2022-12-20|1: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**||

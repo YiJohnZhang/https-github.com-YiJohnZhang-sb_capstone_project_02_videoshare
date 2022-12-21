@@ -4,7 +4,7 @@
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../config');
 
-function createToken(user){
+function createTokenHelper(user){
 
 	const payload = {
 		username: user.username,
@@ -15,4 +15,4 @@ function createToken(user){
 
 }
 
-module.exports = createToken;
+module.exports = createTokenHelper;
