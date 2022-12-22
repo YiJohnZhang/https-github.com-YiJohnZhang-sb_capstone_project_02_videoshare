@@ -1,6 +1,7 @@
 const db = require('../database/db');
 const bcrypt = require("bcrypt");
-const { sqlUpdateQueryBuilder } = require("../helpers/sql");
+const { sqlUpdateQueryBuilder } = require("../helpers/sqlQueryingHelper");
+const createTokenHelper = require('createTokenHelper');
 const {
 	NotFoundError,
 	BadRequestError,

@@ -28,7 +28,7 @@ app.use(express.urlencoded({extended:true}));
 
 //  Routing
 //  =======
-app.use('/', routerAuthentication);
+app.use('/authentication', routerAuthentication);
 app.use('/users', routerUsers);
 app.use('/contents', routerContents);
 

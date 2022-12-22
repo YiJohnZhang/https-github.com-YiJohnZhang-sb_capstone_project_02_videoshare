@@ -20,7 +20,7 @@ const user1Request = {
 	username: 'user1',
 	firstName: 'test',
 	lastName: 'asdf',
-	birthDate: 1991-01-01,
+	birthDate: "1991-01-01",
 	verified: true,
 	accountStatus: 'active',
 	email: 'test@asdf.com',
@@ -31,7 +31,7 @@ const user1Request = {
 const user1InvalidRequest = {
 	firstName: 'test',
 	lastName: 'asdf',
-	birthDate: 1991-01-01,
+	birthDate: "1991-01-01",
 	verified: true,
 	accountStatus: 'active',
 	password: 'password',
@@ -39,11 +39,11 @@ const user1InvalidRequest = {
 	description: 'test description',
 	isElevated: false
 }
-const user1ReferenceResponse = {
+const user1EditResponse = {
 	username: 'user1',
 	firstName: 'test',
 	lastName: 'asdf',
-	birthDate: 1991-01-01,
+	birthDate: "1991-01-01",
 	verified: true,
 	email: 'test@asdf.com',
 	picture: 'default.jpg',
@@ -63,7 +63,7 @@ const user1PublicResponse = {
 const adminObject = {
 	firstName: 'test',
 	lastName: 'admin',
-	birthDate: 1991-01-01,
+	birthDate: "1991-01-01",
 	verified: true,
 	accountStatus: 'active',
 	email: 'admin@asdf.com',
@@ -72,6 +72,43 @@ const adminObject = {
 	description: 'test description',
 	isElevated: true
 }
+
+const user1PublicContent = [
+	{
+		id:,
+		title:,
+		description:,
+		link:,
+		contractSigned:,
+		datePublished:
+	},
+	{
+		id:,
+		title:,
+		description:,
+		link:,
+		contractSigned:,
+		datePublished:
+	}
+];
+const user1InProgressContent = [
+	{
+		id:,
+		title:,
+		description:,
+		link:,
+		status:,
+		owner:,
+		contractType:,
+		contractDetails:,
+		contractSigned:,
+		dateCreated:,
+		dateStandby:,
+		datePublished:
+	}
+];
+
+const user2Content = [];
 
 /***	POST /users */
 describe('POST \`/users\`: create', async() => {
@@ -161,7 +198,8 @@ describe('GET \`/users/:username\`', async() => {
 			.get('/users/user1')
 			.set('authorization', `Bearer: ${u1Token}`);
 		expect(response.body).toEqual({
-			user: user1ReferenceResponse
+			user: user1PublicResponse, 
+			content: user1Content
 		});
 
 	});
@@ -172,7 +210,8 @@ describe('GET \`/users/:username\`', async() => {
 			.get('/users/user1')
 			.set('authorization', `Bearer: ${adminUserToken}`);
 		expect(response.body).toEqual({
-			user: user1PublicResponse
+			user: user1PublicResponse, 
+			content: user1Content
 		});
 
 	});
@@ -182,9 +221,51 @@ describe('GET \`/users/:username\`', async() => {
 		const response = await request(app)
 			.get('/users/user1');
 		expect(response.body).toEqual({
-			user: user1PublicResponse
+			user: user1PublicResponse, 
+			content: user1Content
 		});
 
+	});
+
+	test('404 error: user not found', async() => {
+
+		const response = await request(app)
+			.get('/users/user12');
+		expect(response.statusCode).toEqual(404);
+
+	});
+
+});
+
+
+/***	GET /users/:username/edit */
+describe('GET \`/users/:username\`', async() => {
+
+	test('public view (reference user token)', async() => {
+
+		const response = await request(app)
+			.get('/users/user1')
+			.set('authorization', `Bearer: ${u1Token}`);
+		expect(response.body).toEqual({
+			user: user1EditResponse
+		});
+
+	});
+
+	test('public view (non-reference usertoken)', async() => {
+		
+		const response = await request(app)
+			.get('/users/user1')
+			.set('authorization', `Bearer: ${adminUserToken}`);
+		expect(response.statusCode).toEqual(403);
+
+	});
+
+	test('public view (no token)', async() => {
+		
+		const response = await request(app)
+			.get('/users/user1');
+		expect(response.statusCode).toEqual(403);
 	});
 
 	test('404 error: user not found', async() => {
@@ -200,7 +281,7 @@ describe('GET \`/users/:username\`', async() => {
 /***	PATCH /users/:username */
 describe('PATCH \`/users/:username\`', async() => {
 
-	let patchedUserResponseObject = user1ReferenceResponse;
+	let patchedUserResponseObject = user1EditResponse;
 	patchedUserResponseObject.firstName = 'af';
 
 	test('patches (for reference user)', async() => {

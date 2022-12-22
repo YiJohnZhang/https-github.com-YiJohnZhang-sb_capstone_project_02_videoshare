@@ -16,6 +16,16 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
+const content1Request = {
+
+	
+}
+
+const content1Response = {
+
+	
+}
+
 /***	POST /contents */
 describe('POST \`/contents\`: create', async() => {
 
@@ -44,6 +54,25 @@ describe('PATCH \`/contents/:id\`', async() => {
 	// patchedContentResponseObject.property = 'af';
 	// 
 
+
+	// update state of content (open => standby)
+
+
+
+
+	// update state of content (standby => open)
+		// to add more users, modifying `contract_signed` // `contract_details` will automatically push it to `open` phase
+		// 
+
+
+	
+	// cannot update state from `open` to `standby` if content there is an unsigned user (400) bad request
+
+	// update state of content (standby => active)
+		// cannot change the state if contract_signed array is not all truthy
+
+	// disallowed: update state of content (active => standby)
+
 	
 
 });
@@ -58,10 +87,10 @@ describe('DELETE \`/contents/:id\`', async() => {
 			.set('authorization', `Bearer ${u1Token}`);
 		expect(response.body).toEqual({deleted: 'content1'});
 		
-		const response = await request(app)
+		const response2 = await request(app)
 			.delete('/contents/1')
 			.set('authorization', `Bearer ${u1Token}`);
-		expect(response.statusCode).toEqual(404);
+		expect(response2.statusCode).toEqual(404);
 
 	});
 

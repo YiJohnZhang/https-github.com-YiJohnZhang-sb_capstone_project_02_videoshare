@@ -1,9 +1,6 @@
 const request = require('supertest');
 
-const db = require('../database/db');
 const app = require('../app');
-const User = require('../models/user');
-
 const {
 	commonBeforeAll,
 	commonBeforeEach,
@@ -11,7 +8,7 @@ const {
 	commonAfterAll,
 	u1Token,
 	adminUserToken
-} = require('./router._testCommon');
+} = require('./router._testCommons');
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
@@ -23,7 +20,7 @@ describe('GET \`/authenticate/token`', async() => {
 
 	test('', async() => {
 
-
+		
 
 	});
 
