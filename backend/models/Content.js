@@ -63,10 +63,9 @@ class ModelName {
 	 **/
 	static async getAll(queryObject) {
 
-		const sqlQueryBeforeWHERE = (`
-			SELECT ${generalQueryReturnProperties}
-			FROM modelName
-			`)
+		const sqlQueryBeforeWHERE = (
+			`SELECT ${generalQueryReturnProperties}
+			FROM modelName`);
 		const sqlQueryAfterWHERE = (`ORDER BY content_id`);
 		
 		let result;
@@ -79,7 +78,7 @@ class ModelName {
 			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters)
 
 		}else{
-			result = await db.query(`${sqlQueryBeforeWHERE} $sqlQueryAfterWHERE`)
+			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`)
 		}
 
 		return result.rows;

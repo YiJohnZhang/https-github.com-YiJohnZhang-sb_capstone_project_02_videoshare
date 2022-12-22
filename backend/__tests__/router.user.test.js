@@ -1,8 +1,6 @@
 const request = require('supertest');
 
-const db = require('../database/db');
 const app = require('../app');
-const User = require('../models/user');
 
 const {
 	commonBeforeAll,
@@ -18,68 +16,292 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
+const user1Request = {
+	username: 'user1',
+	firstName: 'test',
+	lastName: 'asdf',
+	birthDate: 1991-01-01,
+	verified: true,
+	accountStatus: 'active',
+	email: 'test@asdf.com',
+	password: 'password',
+	picture: 'default.jpg',
+	description: 'test description'
+}
+const user1InvalidRequest = {
+	firstName: 'test',
+	lastName: 'asdf',
+	birthDate: 1991-01-01,
+	verified: true,
+	accountStatus: 'active',
+	password: 'password',
+	picture: 'default.jpg',
+	description: 'test description',
+	isElevated: false
+}
+const user1ReferenceResponse = {
+	username: 'user1',
+	firstName: 'test',
+	lastName: 'asdf',
+	birthDate: 1991-01-01,
+	verified: true,
+	email: 'test@asdf.com',
+	picture: 'default.jpg',
+	description: 'test description',
+	isElevated: false
+}
+const user1PublicResponse = {
+	username: 'user1',
+	firstName: 'test',
+	lastName: 'asdf',
+	verified: true,
+	picture: 'default.jpg',
+	description: 'test description',
+	isElevated: false
+}
+
+const adminObject = {
+	firstName: 'test',
+	lastName: 'admin',
+	birthDate: 1991-01-01,
+	verified: true,
+	accountStatus: 'active',
+	email: 'admin@asdf.com',
+	password: 'password',
+	picture: 'default.jpg',
+	description: 'test description',
+	isElevated: true
+}
+
 /***	POST /users */
-describe('', async() => {
+describe('POST \`/users\`: create', async() => {
 
-	test('', async() => {
+	test('works: regular user creation', async() => {
 
+		const response = await request(app)
+			.send(user1Request);
+		
 
+		expect(response.statusCode).toEqual(201);
+		expect(response.body)
+			.toEqual({
+				user: user1RegularResponse,
+				token: expect.any(String)
+			});
+		
+	});
+
+	// test('400 error: invalid form, contains \`isAdmin\` property', async() => {});
+	
+	test('400 error: invalid form, request does not conform to schema specs', async() => {
+		
+		const response = await request(app)
+			.send(user1InvalidRequest);
+		expect(response.statusCode).toEqual(400);
 
 	});
 
-})
+	test('403 error: a token is provided (user attempts to send a create account request while logged in)', async() => {
+		
+		const response = await request(app)
+			.send(user1InvalidRequest)
+			.set("authorization", `Bearer ${u1Token}`);
+		expect(response.statusCode).toEqual(403);
+
+	});
+
+	test('409 error: duplicate user', async() => {
+
+		const response = await request(app)
+			.send(user1Request);
+		expect(response.statusCode).toEqual(201);
+		
+
+		const response2 = await request(app)
+			.send(user1Request);
+		expect(response2.statusCode).toEqual(409)
+
+	});
+
+});
 
 /***	GET /users */
-describe('', async() => {
+describe('GET \`/users\`: search', async() => {
 
-	test('', async() => {
+	test('no filter methods (hides admin results)', async() => {
 
+		// 'user'
+		const response = await response(app)
+			.send({});	
+		expect(response.length).toEqual(2);
 
-
-	});
-
-})
-
-/***	POST /users/:username */
-describe('', async() => {
-
-	test('', async() => {
-
-
+		// 'a'
+		const response = await response(app)
+			.send({});
+		expect(response.length).toEqual(1);
 
 	});
 
-})
+	test('filter method', async() => {
+
+		const response = await response(app)
+			.send({});
+		expect(response.length).toEqual(2);
+
+	});
+
+});
 
 /***	GET /users/:username */
-describe('', async() => {
+describe('GET \`/users/:username\`', async() => {
 
-	test('', async() => {
+	test('public view (reference user token)', async() => {
 
-
-
-	});
-
-})
-
-/***	PATH /users/:username */
-describe('', async() => {
-
-	test('', async() => {
-
-
+		const response = await request(app)
+			.get('/users/user1')
+			.set('authorization', `Bearer: ${u1Token}`);
+		expect(response.body).toEqual({
+			user: user1ReferenceResponse
+		});
 
 	});
 
-})
+	test('public view (non-reference usertoken)', async() => {
+		
+		const response = await request(app)
+			.get('/users/user1')
+			.set('authorization', `Bearer: ${adminUserToken}`);
+		expect(response.body).toEqual({
+			user: user1PublicResponse
+		});
+
+	});
+
+	test('public view (no token)', async() => {
+		
+		const response = await request(app)
+			.get('/users/user1');
+		expect(response.body).toEqual({
+			user: user1PublicResponse
+		});
+
+	});
+
+	test('404 error: user not found', async() => {
+
+		const response = await request(app)
+			.get('/users/user12');
+		expect(response.statusCode).toEqual(404);
+
+	});
+
+});
+
+/***	PATCH /users/:username */
+describe('PATCH \`/users/:username\`', async() => {
+
+	let patchedUserResponseObject = user1ReferenceResponse;
+	patchedUserResponseObject.firstName = 'af';
+
+	test('patches (for reference user)', async() => {
+
+		const response = await request(app)
+			.patch('/users/user1')
+			.send({firstName:'af'})
+			.set('authorization', `Bearer: ${u1Token}`);
+		expect(response.body).toEqual({
+			user: patchedUserResponseObject
+		});
+
+	});
+
+	test('patches (for admin)', async() => {
+
+		const response = await request(app)
+			.patch('/users/user1')
+			.send({firstName:'af'})
+			.set('authorization', `Bearer: ${adminUserToken}`);
+		expect(response.body).toEqual({
+			user: patchedUserResponseObject
+		});
+
+	});
+		// really just to reduce complexity of this application, rather than focus on the user-end, focus on the content...
+
+	test('400 error: certain properties are not allowed to be edited through the API', async() => {
+			
+		const response = await request(app)
+			.patch('/users/user1')
+			.send({isElevated:true})
+			.set('authorization', `Bearer: ${u1Token}`);
+		expect(response.statusCode).toEqual(400);
+
+	});
+
+	test('403 error: unauthorized (wrong user)', async() => {
+		
+		const response = await request(app)
+			.patch('/users/user1')
+			.send({firstName:'afsdadfs'})
+			.set('authorization', `Bearer: ${u2Token}`);
+		expect(response.statusCode).toEqual(403);
+
+	});
+		// includes for non-existing users (404) b/c it isn't reference user
+
+	test('403 error: unauthorized (logged out)', async() => {
+		
+		const response = await request(app)
+			.patch('/users/user1')
+			.send({firstName:'afsdadfs'});
+		expect(response.statusCode).toEqual(403);
+
+	});
+
+});
 
 /***	DELETE /users/:username */
-describe('', async() => {
+describe('DELETE \`/users/:username\`', async() => {
 
-	test('', async() => {
-
-
+	test('deletes user (reference user)', async() => {
+		
+		const response = await request(app)
+			.delete('/users/user1')
+			.set('authorization', `Bearer ${u1Token}`);
+		expect(response.body).toEqual({deleted: 'user1'});
+		
+		const response = await request(app)
+			.delete('/users/user1')
+			.set('authorization', `Bearer ${u1Token}`);
+		expect(response.statusCode).toEqual(404);
 
 	});
 
-})
+	test('deletes user (admin)', async() => {
+		
+		const response = await request(app)
+			.delete('/users/user1')
+			.set('authorization', `Bearer ${adminUserToken}`);
+		expect(response.body).toEqual({deleted: 'user1'});
+	
+	});
+
+	test('403 error: unauthorized (wrong user)', async() => {
+		
+		const response = await request(app)
+			.delete('/users/user1')
+			.set('authorization', `Bearer: ${u2Token}`);
+		expect(response.statusCode).toEqual(403);
+
+	});
+		// includes for non-existing users (404) b/c it isn't reference user
+
+	test('403 error: unauthorized (no token)', async() => {
+		
+		const response = await request(app)
+			.delete('/users/user1');
+		expect(response.statusCode).toEqual(403);
+
+	});
+
+});

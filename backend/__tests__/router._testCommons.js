@@ -18,6 +18,7 @@ async function commonBeforeAll() {
 		INSERT INTO users	(username, firstName, lastName, birthdate, email, password, isElevated)
 			VALUES	('user1', 'u1f', 'u1l', 1991-01-01, 'users1@email.com', $1, 0),
 					('user2', 'u2f', 'u2l', 1991-01-01, 'users2@email.com', $2, 0),
+					('asdf', 'u2f', 'u2l', 1991-01-01, 'users2@email.com', $2, 0),
 					('admin', 'a1f', 'a1l', 1991-01-01, 'admin1@email.com', $2, 1)
 		RETURNING username`,
 		[
