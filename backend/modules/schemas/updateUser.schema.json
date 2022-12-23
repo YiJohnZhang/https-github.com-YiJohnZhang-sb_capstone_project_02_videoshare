@@ -1,0 +1,65 @@
+{
+	"_comment": "isElevated => only allowed for admin route (jsonschema comments: https://stackoverflow.com/a/4183018, https://stackoverflow.com/a/244858)",
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"username": {
+			"type": "string",
+			"minLength": 4,
+			"maxLength": 32
+		},
+		"firstName": {
+			"type": "string",
+			"maxLength": 32
+		},
+		"lastName": {
+			"type": "string",
+			"maxLength": 32
+		},
+		"birthdateYear": {
+			"type": "number",
+			"minimum": 1900,
+			"maximum": 2022
+		},
+		"birthdateMonth": {
+			"type": "number",
+			"minimum": 1,
+			"maximum": 12
+		},
+		"birthdateDay": {
+			"type": "number",
+			"minimum": 1,
+			"maximum": 31
+		},
+		"email": {
+			"type": "string",
+			"format":"email"
+		},
+		"password": {
+			"type": "string",
+			"minLength": 6,
+			"maxLength": 32
+		},
+		"picture": {
+			"type": "string",
+			"format":"uri",
+			"minLength": 4
+		},
+		"description": {
+			"type": "string",
+			"maxLength": 2000
+		},
+		"verified": {
+			"type": "boolean"
+		},
+		"isElevated": {
+			"type": "boolean"
+			// admin only (at the route)
+		}
+	},
+	"required": [
+		"username",
+		"password"
+	],
+	"additionalProperties": false
+}

@@ -22,7 +22,6 @@ const user1Request = {
 	lastName: 'asdf',
 	birthDate: "1991-01-01",
 	verified: true,
-	accountStatus: 'active',
 	email: 'test@asdf.com',
 	password: 'password',
 	picture: 'default.jpg',
@@ -33,7 +32,6 @@ const user1InvalidRequest = {
 	lastName: 'asdf',
 	birthDate: "1991-01-01",
 	verified: true,
-	accountStatus: 'active',
 	password: 'password',
 	picture: 'default.jpg',
 	description: 'test description',
@@ -93,18 +91,15 @@ const user1PublicContent = [
 ];
 const user1InProgressContent = [
 	{
-		id:,
-		title:,
-		description:,
-		link:,
-		status:,
-		owner:,
-		contractType:,
-		contractDetails:,
-		contractSigned:,
-		dateCreated:,
-		dateStandby:,
-		datePublished:
+		id:1,
+		title:'asdf',
+		description:'afsd',
+		link:'',
+		status:'',
+		owner:'user1',
+		contractType:'',
+		contractDetails:'',
+		contractSigned:''
 	}
 ];
 
