@@ -1,28 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import './App.css';
 import NavBar from './NavBar';
 import OnboardingPage from './OnboardingPage';
-import UploadPage from './UploadPage';
-import SearchPage from './SearchPage';
-import ContentPage from './ContentPage';
-import ProfilePage from './ProfilePage';
-import LogoutComponent from './LogoutComponent';
-import HomePage from './HomePage';
-import NotFoundPage from './NotFoundPage';
-
-import UserDetailsContext from './context/UserDetailsContext';
 
 function App(){
-	
-	// Session Username Cookie
-	const [sessionUsername, setSessionUsername] = useState(localStorage.getItem('sessionUsername') || undefined);
-	
-	// ...
 
 	return(
-	<UserDetailsContext.Provider value={{sessionUsername, setSessionUsername}}>
+	<React.Fragment>
 		<NavBar />
 		<Switch>
 			<Route path="/login">
@@ -53,8 +39,9 @@ function App(){
 				<NotFoundPage />
 			</Route>
 		</Switch>
-	</UserDetailsContext.Provider>
+	</React.Fragment>
 	);
+
 
 }
 
