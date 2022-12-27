@@ -1,6 +1,6 @@
 const db = require('../database/db');
 const bcrypt = require("bcrypt");
-const { sqlUpdateQueryBuilder } = require("../helpers/sqlQueryingHelper");
+const { sqlUpdateQueryBuilder, sqlFilterQueryBuilder } = require("../helpers/sqlQueryingHelper");
 const createTokenHelper = require('createTokenHelper');
 const {
 	NotFoundError,
@@ -9,8 +9,18 @@ const {
 } = require("../modules/utilities");
 
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
-const generalQueryReturnProperties = `username, first_name AS "firstName", last_name AS "lastName", birthdate, verified, account_status AS "accountStatus", email, picture, description, is_elevated AS "isElevated"`;
-const setJSONSQLMapping = {
+const generalQueryReturnProperties = `
+	username, 
+	first_name AS "firstName", 
+	last_name AS "lastName", 
+	verified, 
+	account_status AS "accountStatus", 
+	picture, 
+	description, 
+	is_elevated AS "isElevated"`;
+const privateQueryReturnProperties = `birthdate, email`
+
+	const setJSONSQLMapping = {
 	firstName: 'first_name',
 	lastName: 'last_name',
 	accountStatus: 'account_status',
@@ -32,7 +42,7 @@ class User {
 
 		// try to find the user first
 		const result = await db.query(
-			`SELECT ${generalQueryReturnProperties}, password"
+			`SELECT ${generalQueryReturnProperties}, password
 			FROM users
 			WHERE username = $1`,
 			[username]
@@ -63,10 +73,10 @@ class User {
 	 **/
 	static async register({ username, password, firstName, lastName, email }){
 
-		const userExists = await db.query(
-			`SELECT username
-			FROM users
-			WHERE username = $1`,
+		const userExists = await db.query(`
+			SELECT username
+				FROM users
+				WHERE username = $1`,
 			[username]
 		);
 
@@ -75,12 +85,12 @@ class User {
 
 		const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
-		const result = await db.query(
-			`INSERT INTO users
-			(username, password, first_name, last_name, email, is_elevated)
-			VALUES ($1, $2, $3, $4, $5, $6)
-			RETURNING ${generalQueryReturnProperties}`,
-			[username, hashedPassword, firstName, lastName, email, isElevated]
+		const result = await db.query(`
+			INSERT INTO users
+				(username, password, first_name, last_name, email)
+				VALUES ($1, $2, $3, $4, $5, $6)
+				RETURNING ${generalQueryReturnProperties}`,
+			[username, hashedPassword, firstName, lastName, email]
 		);
 
 		const userObject = result.rows[0];
@@ -94,12 +104,30 @@ class User {
 	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated, join }
 	 **/
 	static async getAll(queryObject) {
-		
-		const result = await db.query(
-			`SELECT  ${generalQueryReturnProperties}
-			FROM users
-			ORDER BY username`
+
+		const sqlQueryBeforeWHERE = (`
+			SELECT ${generalQueryReturnProperties}
+				FROM users`
 		);
+
+		const sqlQueryAfterWHERE = ('ORDER BY username')
+
+		let result;
+
+		if(queryString){
+
+			if(queryString.username)
+				queryString.username = `%${queryString.username}%`;
+			
+			const {parameterizedWHERE, whereParameters} = sqlFilterQueryBuilder(queryString, queryJSONSQLMapping);
+
+			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
+
+		}else{
+
+			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
+
+		}
 
 		return result.rows;
 
@@ -108,16 +136,16 @@ class User {
 	/**	Given a username, return data about user.
 	 *
 	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated, join }
-	 *		where join is [{ content_id (join), description (join), title, link }]
+	 *		where join is provided by a separate query in the routing.
 	 *
 	 *	Throws NotFoundError if user not found.
 	 **/
 	static async getByPK(username) {
 
-		const result = await db.query(
-			`SELECT  ${generalQueryReturnProperties}
-			FROM users
-			WHERE username = $1`,
+		const result = await db.query(`
+			SELECT  ${generalQueryReturnProperties}
+				FROM users
+				WHERE username = $1`,
 			[username],
 		);
 
@@ -126,7 +154,28 @@ class User {
 		if (!userObject)
 			throw new NotFoundError(`Cannot find user: ${username}`);
 
-		// ??TODO???: map query content!
+		return userObject;
+
+	}
+
+	/**	Given a username, and is reference user, return full data.
+	 *	
+	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, password, picture, description, isElevated, join }
+	 /
+	 */
+	static async getByPKPrivate(username) {
+
+		const result = await db.query(`
+			SELECT ${generalQueryReturnProperties}, ${privateQueryReturnProperties}
+				FROM users
+				WHERE username = $1`,
+			[username]
+		);
+
+		const userObject = result.rows[0];
+
+		if (!userObject)
+			throw new NotFoundError(`Cannot find user: ${username}`);
 
 		return userObject;
 
@@ -175,8 +224,8 @@ class User {
 	 **/
 	static async delete(username) {
 
-		let result = await db.query(
-			`DELETE
+		let result = await db.query(`
+			DELETE
 				FROM users
 				WHERE username = $1
 				RETURNING username`,

@@ -1,4 +1,4 @@
-#
+# directories
 **/node_modules
 /z_preliminary_assets/temp
 
@@ -11,4 +11,9 @@
 
 # files to delist
 *.bak
+*.bak*
 *.delist
+
+# temp files
+*.csv#
+**/.~lock-seed.*
