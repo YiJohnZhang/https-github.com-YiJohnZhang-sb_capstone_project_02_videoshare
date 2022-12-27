@@ -45,8 +45,13 @@ See how much I can finish in 2 weeks time, eh?
 |08||2022-12-21 - 2022-12-22|22:23 - 00:43|140|
 |09||2022-12-22|12:33 - 13:40|67|
 |10||2022-12-22|19:50 - 23:16|206|
+|12||2022-12-27|11:11 - :||
+|1||2022-12-27|: - :||
+|1||2022-12-27|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**||
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47||
+|1||2022-12-2|: - :||
+|1||2022-12-2|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**||
 ||||**Total Time**|_ minutes|
 
