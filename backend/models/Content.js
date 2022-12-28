@@ -90,7 +90,7 @@ class Content {
 
 	}
 
-	/**	Find all matchiing relationName.
+	/**	Find all matching content records.
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [ QUERY_GENERAL_PROPERTIES, ...]
 	 **/
@@ -119,11 +119,11 @@ class Content {
 	
 	}
 
-	/**	Given a pk, return data about relationName.
+	/**	Given a pk, return data about content records.
 	 *
 	 *	=> QUERY_GENERAL_PROPERTIES
 	 *
-	 *	Throws NotFoundError if relationName not found.
+	 *	Throws NotFoundError if content records not found.
 	 **/
 	static async getByPK(pk) {
 
@@ -166,7 +166,7 @@ class Content {
 
 	}
 
-	/**	Update relationName data with `updateRecordObject`.
+	/**	Update content records data with `updateRecordObject`.
 	 *
 	 *	This is for a partial update of a record; and it only changes provided ones.
 	 *
@@ -201,7 +201,7 @@ class Content {
 
 	}
 
-	/**	Delete relationName from database by `pk`.
+	/**	Delete content records from database by `pk`.
 	 *
 	 *	=> `undefined`.
 	 **/
@@ -215,10 +215,32 @@ class Content {
 				WHERE content_id = $1 AND user_id = $2
 				RETURNING content_id, user_id`, [pk, username]);
 
-		const modelNameObject = result.rows[0];
+		const contentObject = result.rows[0];
 
-		if (!modelNameObject)
+		if (!contentObject)
 			throw new NotFoundError(`No ${JOIN_MODEL_NAME}: (${pk}, ${fk})`);
+
+	}
+
+/** */
+
+	/**	Return the content owner from content records in the database.
+	 *
+	 *	=> `username`.
+	 **/
+	static async getContentOwner(pk) {
+
+		let result = await db.query(`
+			SELECT id, owner
+				FROM contents
+				WHERE id = $1`, [pk]);
+
+		const contentObject = result.rows[0];
+
+		if (!contentObject)
+			throw new NotFoundError(`Cannot find content with id: ${pk}.`);
+		
+		return contentObject;
 
 	}
 

@@ -7,11 +7,10 @@ const { validateRequestBody, validateRequestQuery } = require('./middlewareSchem
 const newContentSchema = require('./schemas/newContent.schema.json');
 // const queryModelSchema = require('./schemas/queryContent.schema.json');
 const updateContentSchema = require('./schemas/updateContent.schema.json');
-const { ExpressError, BadRequestError } = require('./utilities');
 
 
-/** POST /
- *	body { input } => { contentResult }
+/** POST `/`
+ *	{ input } => { contentResult }
  *		where `input` is: { req.body }
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES }
  *
@@ -22,10 +21,11 @@ router.post('/', isLoggedIn, validateRequestBody(newContentSchema), async(req, r
 	try{
 
 		// ntomjoin
+		// const NMJoin = 
 
-		const contentResult = await ContentModel.create(req.body);
+		const contentResult = await ContentModel.create(req.body, NMJoin);
 
-		return res.json({content: contentResult});
+		return res.status(201).json({content: contentResult});
 
 	}catch(error){
 		nxt(error);
@@ -33,7 +33,7 @@ router.post('/', isLoggedIn, validateRequestBody(newContentSchema), async(req, r
 	
 });
 
-/** GET /
+/** GET `/`
  *	=> { contentResult }
  *		where `contentResult` is: [{ QUERY_GENERAL_PROPERTIES }, ...]
  *	
@@ -68,7 +68,7 @@ router.get('/', async(req, res, nxt) => {
 
 });
 
-/** GET /[contentID]
+/** GET `/[contentID]`
  *	=> { contentResult }
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES }
  *	
@@ -88,19 +88,19 @@ router.get('/:contentID', async(req, res, nxt) => {
 
 });
 
-/** PATCH /[contentID]
+/** PATCH `/[contentID]/edit`
  *	( input ) => { contentResult }
  *		where `input` is: (req.params.contentID, { req.body })
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES }
  *	
- *	Authorization Required: isLoggedIn, isOwner
+ *	Authorization Required: isLoggedIn, isReferenceUser
 */
-router.update('/:contentID', isLoggedIn, isOwner, validateRequestBody(updateContentSchema), async(req, res, nxt) => {
+router.update('/:contentID/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateContentSchema), async(req, res, nxt) => {
 
 	try{
-
+	
 		const contentResult = await ContentModel.update(req.params.contentID, req.body);
-
+		
 		return res.json({content: contentResult});
 
 	}catch(error){
@@ -109,7 +109,7 @@ router.update('/:contentID', isLoggedIn, isOwner, validateRequestBody(updateCont
 	
 });
 
-/** DELETE /[contentID]
+/** DELETE `/[contentID]`
  *	( input ) => { modelName }
  *		where `input` is: ( req.params.contentID )
  *		where `contentResult` is: {  }
@@ -131,11 +131,11 @@ router.delete('/:contentID', isLoggedIn, isReferenceUserOrAdmin, isOwner, async(
 });
 
 /** */
-/** GET /[contentID]/edit
+/** GET `/[contentID]/edit`
  *	( input ) => { contentResult }
  *		where `input` is: ( , {  })
  *		where `contentResult` is: {  }
- *	Get full model details.
+ *	To edit the content.
  *	Authorization Required: isLoggedIn, isOwner
 */
 router.get('/:contentID', isLoggedIn, isOwner, async(req, res, nxt) => {
@@ -145,6 +145,48 @@ router.get('/:contentID', isLoggedIn, isOwner, async(req, res, nxt) => {
 		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
 
 		// NOTE: if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
+
+		return res.json({content: contentResult});
+
+	}catch(error){
+		nxt(error);
+	}
+
+});
+
+/** GET `/[username]/[contentID]/edit`
+ *	( input ) => { contentResult }
+ *		where `input` is: ( , {  })
+ *		where `contentResult` is: {  }
+ *	To edit the join entry.
+ *	Authorization Required: isLoggedIn, isReferenceUser
+*/
+router.patch('/:username/:contentID', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
+
+	try{
+
+		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
+
+		return res.json({content: contentResult});
+
+	}catch(error){
+		nxt(error);
+	}
+
+});
+
+/** PATCH `/[username]/[contentID]/edit`
+ *	( input ) => { contentResult }
+ *		where `input` is: ( , {  })
+ *		where `contentResult` is: {  }
+ *	To edit the join entry.
+ *	Authorization Required: isLoggedIn, isReferenceUser
+*/
+router.patch('/:username/:contentID', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
+
+	try{
+
+		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
 
 		return res.json({content: contentResult});
 

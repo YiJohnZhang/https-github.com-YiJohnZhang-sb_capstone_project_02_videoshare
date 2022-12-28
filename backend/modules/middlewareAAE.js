@@ -7,8 +7,8 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET_KEY } = require('../config');
 const { UnauthorizedError } = require('./utilities');
-const 
-// const
+
+const ContentModel = require('../models/ContentModel');
 
 /**	authenticate(req, res, nxt)
  *	Middleware to authenticate a user.
@@ -51,6 +51,23 @@ function isLoggedIn(req, res, nxt) {
 	try {
 
 		if (!res.locals.user) throw new UnauthorizedError();
+		nxt();
+
+	} catch(err) {
+		nxt(err);
+	}
+
+}
+
+/**	isLoggedOut(req, res, nxt) 
+ *	Middleware to use when they must be logged out.
+ *	If not, raises UnauthorizedError.
+ */
+function isLoggedOut(req, res, nxt) {
+
+	try {
+
+		if (res.locals.user) throw new UnauthorizedError();
 		nxt();
 
 	} catch(err) {
@@ -120,8 +137,6 @@ function isAdmin(req, res, nxt) {
  */
 function isReferenceUserOrAdmin(req, res, nxt) {
 
-	// console.log(`${req.params.username}: ${res.locals.user.username}`)
-
 	if(req.params.username === res.locals.user.username || checkAdminHelper(res.locals.user))
 		nxt();
 	
@@ -129,16 +144,25 @@ function isReferenceUserOrAdmin(req, res, nxt) {
 
 }
 
-/**	
- *	
+/**	isOwner(req, res, nxt)
+ *	Middleware to check whether or not the user is the owner.
+ *	If not, raises UnauthorizedError.
  */
 function isOwner(req, res, nxt) {
+
+	const result = await ContentModel.getContentOwner(req.params.contentID);
+
+	if(res.locals.user.username === result.owner)
+		nxt();
+
+	nxt(new UnauthorizedError(`User token, \'${res.locals.user.username}\', is not the owner of the content.`))
 
 }
 
 module.exports = {
 	authenticateJWT,
 	isLoggedIn,
+	isLoggedOut,
 	isReferenceUser,
 	isAdmin,
 	isReferenceUserOrAdmin,

@@ -32,9 +32,9 @@ class ShortCollabsAPI {
 				let message = err.response.data.error.message;
 				throw Array.isArray(message) ? message : [message];
 			
-			}
-
 		}
+
+	}
 
 	// Individual API routes
 

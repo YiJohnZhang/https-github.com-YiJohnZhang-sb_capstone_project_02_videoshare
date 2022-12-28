@@ -8,7 +8,7 @@ function createTokenHelper(user){
 
 	const payload = {
 		username: user.username,
-		is_elevated: user.is_elevated || false
+		isElevated: user.isElevated || false
 	};
 
 	return jwt.sign(payload, SECRET_KEY);

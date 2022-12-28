@@ -9,7 +9,7 @@ const {
 } = require("../modules/utilities");
 
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
-const generalQueryReturnProperties = `
+const QUERY_GENERAL_PROPERTIES = `
 	username, 
 	first_name AS "firstName", 
 	last_name AS "lastName", 
@@ -18,15 +18,15 @@ const generalQueryReturnProperties = `
 	picture, 
 	description, 
 	is_elevated AS "isElevated"`;
-const privateQueryReturnProperties = 'birthdate, email';
+const QUERY_PRIVATE_PROPERTIES = 'birthdate, email';
 
-const setJSONSQLMapping = {
+const JSON_SQL_SET_MAPPING = {
 	firstName: 'first_name',
 	lastName: 'last_name',
 	accountStatus: 'account_status',
 	isElevated: 'is_elevated'
 }
-const queryJSONSQLMapping = {
+const JSON_SQL_QUERY_MAPPING = {
 	username: 'username ILIKE'
 }
 
@@ -42,7 +42,7 @@ class User {
 
 		// try to find the user first
 		const result = await db.query(
-			`SELECT ${generalQueryReturnProperties}, password
+			`SELECT ${QUERY_GENERAL_PROPERTIES}, password
 			FROM users
 			WHERE username = $1`,
 			[username]
@@ -71,7 +71,7 @@ class User {
 	 *
 	 *	Throws BadRequestError for duplicates.
 	 **/
-	static async register({ username, password, firstName, lastName, email }){
+	static async register({ username, password, firstName, lastName, email, birthdateYear, birthdateMonth, birthdateDay }){
 
 		const userExists = await db.query(`
 			SELECT username
@@ -83,14 +83,15 @@ class User {
 		if (userExists.rows[0])
 			throw new BadRequestError(`Username, \'${username}\' already taken`);
 
+		const birthdate = `${birthdateYear}-${birthdateMonth}-${birthdateDay}`;
 		const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
 		const result = await db.query(`
 			INSERT INTO users
-				(username, password, first_name, last_name, email)
-				VALUES ($1, $2, $3, $4, $5, $6)
-				RETURNING ${generalQueryReturnProperties}`,
-			[username, hashedPassword, firstName, lastName, email]
+				(username, password, first_name, last_name, email, birthdate)
+				VALUES ($1, $2, $3, $4, $5, $6, $7)
+				RETURNING ${QUERY_GENERAL_PROPERTIES}`,
+			[username, hashedPassword, firstName, lastName, email, birthdate]
 		);
 
 		const userObject = result.rows[0];
@@ -106,7 +107,7 @@ class User {
 	static async getAll(queryObject) {
 
 		const sqlQueryBeforeWHERE = (`
-			SELECT ${generalQueryReturnProperties}
+			SELECT ${QUERY_GENERAL_PROPERTIES}
 				FROM users`
 		);
 
@@ -119,7 +120,7 @@ class User {
 			if(queryString.username)
 				queryString.username = `%${queryString.username}%`;
 			
-			const {parameterizedWHERE, whereParameters} = sqlFilterQueryBuilder(queryString, queryJSONSQLMapping);
+			const {parameterizedWHERE, whereParameters} = sqlFilterQueryBuilder(queryString, JSON_SQL_QUERY_MAPPING);
 
 			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
 
@@ -142,7 +143,7 @@ class User {
 	static async getByPK(username) {
 
 		const result = await db.query(`
-			SELECT  ${generalQueryReturnProperties}
+			SELECT  ${QUERY_GENERAL_PROPERTIES}
 				FROM users
 				WHERE username = $1`,
 			[username],
@@ -165,7 +166,7 @@ class User {
 	static async getByPKPrivate(username) {
 
 		const result = await db.query(`
-			SELECT ${generalQueryReturnProperties}, ${privateQueryReturnProperties}
+			SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
 				FROM users
 				WHERE username = $1`,
 			[username]
@@ -202,13 +203,13 @@ class User {
 		if (updateData.password)
 			updateData.password = await bcrypt.hash(updateData.password, BCRYPT_WORK_FACTOR);
 
-		const { parameterizedSET, setParameters } = sqlUpdateQueryBuilder(updateData, setJSONSQLMapping);
+		const { parameterizedSET, setParameters } = sqlUpdateQueryBuilder(updateData, JSON_SQL_SET_MAPPING);
 		const usernameParameterIndex = "$".concat(setParameters.length + 1);
 
 		const updateQuerySQL = `UPDATE users 
 						SET ${parameterizedSET} 
 						WHERE username = ${usernameParameterIndex} 
-						RETURNING ${generalQueryReturnProperties}`;
+						RETURNING ${QUERY_GENERAL_PROPERTIES}`;
 		const result = await db.query(updateQuerySQL, [...setParameters, username]);
 
 		const userObject = result.rows[0];
