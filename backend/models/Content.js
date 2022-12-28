@@ -1,72 +1,79 @@
 const db = require('../database/db');
-// const bcrypt = require("bcrypt");
-const { sqlUpdateQueryBuilder, sqlFilterQueryBuilder } = require('../helpers/sqlQueryingHelper');
+const { sqlCreateQueryBuilder, sqlFilterQueryBuilder, sqlUpdateQueryBuilder } = require('../helpers/sqlQueryingHelper');
 const {
 	NotFoundError,
-	BadRequestError
+	BadRequestError,
+	ConflictError
 } = require('../modules/utilities');
 
-// const { BCRYPT_WORK_FACTOR } = require("../config.js");
-const generalQueryReturnProperties = `pk, property_one AS "propertyOne"`;
-const setJSONSQLMapping = {
+//	Properties to return for a query
+const QUERY_GENERAL_PROPERTIES = `
+	pk,
+	property_one AS "propertyOne",
+	date_published AS "datePublished"`;
+const QUERY_PRIVATE_PROPERTIES = 'private_property AS "privateProperty", ...';
+
+//	JSON-SQL Mapping Constants
+const JSON_SQL_SET_MAPPING = {
 	propertyOne: 'property_one',
 	/* ... */
 }
-const queryJSONSQLMapping = {
+const JSON_SQL_QUERY_MAPPING = {
 	/* ... */
 }
-	// Search for `relationName`, `modelName`, `pk`
 
+/** Related functions for Content. */
+class Content {
 
-/** Related functions for relationName. */
-class ModelName {
+	static relationName = 'contents';
 
-	/**	Create modelName with data.
+	/**	Create content with data.
 	 *
 	 *	=> { ... }
 	 *
 	 *	Throws BadRequestError for duplicates.
 	 **/
-	static async create({  }){
+	static async create(newRecordObject){
 
-		// const modelExists = await db.query(
-		// 	`SELECT pk
-		// 	FROM relationName
-		// 	WHERE pk = $1`,
-		// 	[pk]
-		// );
+		const contentExists = await db.query(`
+			SELECT id
+				FROM ${this.relationName}
+				WHERE id = $1`, [id]);
 
-		// if (modelExists.rows[0])
-		// 	throw new BadRequestError(`\'${pk}\' already exists.`);
-			// for user-named models
+		if (contentExists.rows[0])
+			throw new BadRequestError(`\'${id}\' already exists.`);
 
-		// const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
-			// for users model
+		try{
 
-		const result = await db.query(
-			`INSERT INTO relationName
-				(, )
-			VALUES ($1, )
-			RETURNING ${generalQueryReturnProperties}`,
-			[]
-		);
+			const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
 
-		const modelnameObject = result.rows[0];
+			const result = await db.query(
+				`INSERT INTO ${this.relationName}
+					${parameterizedINSERTPropertyNames}
+				VALUES ${parameterizedINSERTPropertyIndices}
+				RETURNING ${QUERY_GENERAL_PROPERTIES}`,
+				[insertParameters]
+			);
 
-		return modelnameObject;
+			const contentObject = result.rows[0];
+			return contentObject;
+
+		}catch(error){
+			throw new ConflictError(`${error}`)
+		}
 
 	}
 
-	/**	Find all matchiing relationNames.
+	/**	Find all matchiing relationName.
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [{ pk, propertyOne, ... }, ...]
 	 **/
 	static async getAll(queryObject) {
 
-		const sqlQueryBeforeWHERE = (
-			`SELECT ${generalQueryReturnProperties}
-			FROM modelName`);
-		const sqlQueryAfterWHERE = (`ORDER BY content_id`);
+		const sqlQueryBeforeWHERE = (`
+			SELECT ${QUERY_GENERAL_PROPERTIES}
+			FROM ${this.relationName}`);
+		const sqlQueryAfterWHERE = (`ORDER BY date_published`);
 		
 		let result;
 
@@ -74,11 +81,11 @@ class ModelName {
 
 			// optional: do something to modify queryString
 
-			const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, queryJSONSQLMapping)
-			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters)
+			const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
+			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
 
 		}else{
-			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`)
+			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
 		}
 
 		return result.rows;
@@ -87,58 +94,84 @@ class ModelName {
 
 	/**	Given a pk, return data about relationName.
 	 *
-	 *	=> { pk, ..., joinRelation }
-	 *		where joinRelation is { ... }
+	 *	=> { pk, ... }
 	 *
 	 *	Throws NotFoundError if relationName not found.
 	 **/
 	static async getByPK(pk) {
 
-		const result = await db.query(
-			`SELECT ${generalQueryReturnProperties}
-			FROM relationName
-			WHERE pk = $1`,
-			[pk],
+		const result = await db.query(`
+			SELECT ${QUERY_GENERAL_PROPERTIES}
+				FROM ${this.relationName}
+				WHERE pk = $1`,
+			[pk]
 		);
 
-		const modelnameObject = result.rows[0];
+		const contentObject = result.rows[0];
 
-		if (!modelnameObject)
-			throw new NotFoundError(`Cannot find relationName: ${pk}`);
+		if (!contentObject)
+			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
 
-		return modelnameObject;
+		return contentObject;
 
 	}
 
-	/**	Update relationName data with `updateData`.
+	/**	Given a username, and is reference user, return full data.
+	 *	
+	 *	=> { pk, ..., }
+	 /
+	 */
+	static async getByPKPrivate(username) {
+
+		const result = await db.query(`
+			SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
+				FROM ${this.relationName}
+				WHERE pk = $1`,
+			[pk]
+		);
+
+		const contentObject = result.rows[0];
+
+		if (!contentObject)
+			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
+
+		return contentObject;
+
+	}
+
+	/**	Update relationName data with `updateRecordObject`.
 	 *
 	 *	This is for a partial update of a record; and it only changes provided ones.
 	 *
-	 *	`updateData` may include any of the following:
+	 *	`updateRecordObject` may include any of the following:
 	 *		{ ... }
 	 *
 	 *	=> { ... }
 	 *
 	 *	Throws NotFoundError if not found.
+	 *	@param {*} pk - the primary key
+	 *	...
+	 *	@param {object} updateRecordObject - data to update the primary key
 	 */
-	static async update(pk, updateData) {
+	static async update(pk, updateRecordObject) {
 
 		await this.getByPK(pk);
 
-		// do something with `updateData` if necessary
+		// do something with `updateRecordObject` if necessary, i.e. remove certain properties that are forbidden to be updated or modify passed values
 
-		const { parameterizedSET, setParameters } = sqlUpdateQueryBuilder(updateData, setJSONSQLMapping);
+		const { parameterizedSET, setParameters } = sqlUpdateQueryBuilder(updateRecordObject, JSON_SQL_SET_MAPPING);
 		const pkParameterIndex = "$".concat(setParameters.length + 1);
 
-		const updateQuerySQL = `UPDATE relationName 
+		const updateQuerySQL = `
+					UPDATE ${this.relationName} 
 						SET ${parameterizedSET} 
 						WHERE pk = ${pkParameterIndex} 
-						RETURNING ${generalQueryReturnProperties}`;
+						RETURNING ${QUERY_GENERAL_PROPERTIES}`;
 		const result = await db.query(updateQuerySQL, [...setParameters, pk]);
 
-		const modelnameObject = result.rows[0];
-		delete modelnameObject.password;
-		return modelnameObject;
+		const contentObject = result.rows[0];
+		delete contentObject.password;
+		return contentObject;
 
 	}
 
@@ -148,18 +181,18 @@ class ModelName {
 	 **/
 	static async delete(pk) {
 
-		let result = await db.query(
-			`DELETE
-				FROM relationName
+		let result = await db.query(`
+			DELETE
+				FROM ${this.relationName}
 				WHERE pk = $1
 				RETURNING pk`,
 			[pk],
 		);
 
-		const modelnameObject = result.rows[0];
+		const contentObject = result.rows[0];
 
-		if (!modelnameObject)
-			throw new NotFoundError(`No relationName: ${pk}`);
+		if (!contentObject)
+			throw new NotFoundError(`No ${this.relationName}: ${pk}`);
 
 	}
 

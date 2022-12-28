@@ -1,7 +1,7 @@
+const bcrypt = require('bcrypt');
+
 const db = require('../database/db');
-const bcrypt = require("bcrypt");
 const { sqlUpdateQueryBuilder, sqlFilterQueryBuilder } = require("../helpers/sqlQueryingHelper");
-const createTokenHelper = require('createTokenHelper');
 const {
 	NotFoundError,
 	BadRequestError,
@@ -18,9 +18,9 @@ const generalQueryReturnProperties = `
 	picture, 
 	description, 
 	is_elevated AS "isElevated"`;
-const privateQueryReturnProperties = `birthdate, email`
+const privateQueryReturnProperties = 'birthdate, email';
 
-	const setJSONSQLMapping = {
+const setJSONSQLMapping = {
 	firstName: 'first_name',
 	lastName: 'last_name',
 	accountStatus: 'account_status',
@@ -34,7 +34,7 @@ class User {
 
 	/**	authenticate user with username, password.
 	 *
-	 *	=> { modelName }
+	 *	=> { modelName, password }
 	 *
 	 *	Throws UnauthorizedError is user not found or wrong password.
 	 **/
@@ -101,7 +101,7 @@ class User {
 
 	/**	Find all matching users.
 	 *	Optional: filter data in the form of `queryObject`.
-	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated, join }
+	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated }
 	 **/
 	static async getAll(queryObject) {
 
@@ -135,8 +135,7 @@ class User {
 
 	/**	Given a username, return data about user.
 	 *
-	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated, join }
-	 *		where join is provided by a separate query in the routing.
+	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated }
 	 *
 	 *	Throws NotFoundError if user not found.
 	 **/
