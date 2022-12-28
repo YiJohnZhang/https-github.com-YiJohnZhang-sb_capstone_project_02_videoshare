@@ -24,7 +24,7 @@ const setJSONSQLMapping = {
 	firstName: 'first_name',
 	lastName: 'last_name',
 	accountStatus: 'account_status',
-	isElevated: 'is_elevated',
+	isElevated: 'is_elevated'
 }
 const queryJSONSQLMapping = {
 	username: 'username ILIKE'

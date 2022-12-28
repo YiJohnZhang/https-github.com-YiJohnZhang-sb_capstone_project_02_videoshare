@@ -2,24 +2,37 @@ const db = require('../database/db');
 const { sqlCreateQueryBuilder, sqlFilterQueryBuilder, sqlUpdateQueryBuilder } = require('../helpers/sqlQueryingHelper');
 const {
 	NotFoundError,
-	BadRequestError,
-	ConflictError
+	ExpressError
 } = require('../modules/utilities');
 
 //	Properties to return for a query
 const QUERY_GENERAL_PROPERTIES = `
-	pk,
-	property_one AS "propertyOne",
+	id,
+	title,
+	summary,
+	description,
+	link,
+	date_created AS "dateCreated",
+	date_standby AS "dateStandby",
 	date_published AS "datePublished"`;
-const QUERY_PRIVATE_PROPERTIES = 'private_property AS "privateProperty", ...';
+const QUERY_PRIVATE_PROPERTIES = `
+	status, 
+	owner, 
+	contract_type AS "contractType", 
+	contract_details AS "contractDetails", 
+	contract_signed AS "contractSigned"`;
 
 //	JSON-SQL Mapping Constants
 const JSON_SQL_SET_MAPPING = {
-	propertyOne: 'property_one',
-	/* ... */
+	dateCreated: "date_created",
+	dateStandby: "date_standby",
+	datePublished: "date_published",
+	contractType: "contract_type", 
+	contractDetails: "contract_details", 
+	contractSigned: "contract_signed"
 }
 const JSON_SQL_QUERY_MAPPING = {
-	/* ... */
+	title: 'title ILIKE'
 }
 
 /** Related functions for Content. */
@@ -33,40 +46,53 @@ class Content {
 	 *
 	 *	Throws BadRequestError for duplicates.
 	 **/
-	static async create(newRecordObject){
-
-		const contentExists = await db.query(`
-			SELECT id
-				FROM ${this.relationName}
-				WHERE id = $1`, [id]);
-
-		if (contentExists.rows[0])
-			throw new BadRequestError(`\'${id}\' already exists.`);
+	static async create(newRecordObject, ntomJoin = []){
 
 		try{
+			
+			await db.query('BEGIN');
 
 			const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
 
-			const result = await db.query(
-				`INSERT INTO ${this.relationName}
-					${parameterizedINSERTPropertyNames}
-				VALUES ${parameterizedINSERTPropertyIndices}
-				RETURNING ${QUERY_GENERAL_PROPERTIES}`,
-				[insertParameters]
-			);
+			const result = await db.query(`
+				INSERT INTO ${this.relationName} ${parameterizedINSERTPropertyNames}
+					VALUES ${parameterizedINSERTPropertyIndices}
+					RETURNING ${QUERY_GENERAL_PROPERTIES}`, insertParameters);
 
-			const contentObject = result.rows[0];
-			return contentObject;
+			const modelNameObject = result.rows[0];
+
+			if(ntomJoin){
+
+				const JOIN_MODEL_NAME = 'contents_users_join';
+				const JOIN_MODEL_KEY = '(user_id, content_id)';
+				const JOIN_MODEL_IDX = '($1, $2)';
+
+				newRecordObject.contractSigned.forEach((entry) => {
+
+					await db.query(`
+						INSERT INTO ${JOIN_MODEL_NAME} ${JOIN_MODEL_KEY}
+							VALUES ${JOIN_MODEL_IDX}
+							RETURNING ${JOIN_MODEL_KEY}`,
+							[ newRecordObject.title, entry.username ]);
+				
+				});
+
+			}
+
+			await db.query('COMMIT');
+
+			return modelNameObject;
 
 		}catch(error){
-			throw new ConflictError(`${error}`)
+			await db.query('ROLLBACK');
+			throw new ExpressError(499, `ERR_MULT_NEW_REC_DBFAIL`);
 		}
 
 	}
 
 	/**	Find all matchiing relationName.
 	 *	Optional: filter data in the form of `queryObject`.
-	 *	=> [{ pk, propertyOne, ... }, ...]
+	 *	=> [ QUERY_GENERAL_PROPERTIES, ...]
 	 **/
 	static async getAll(queryObject) {
 
@@ -78,8 +104,9 @@ class Content {
 		let result;
 
 		if(queryObject){
-
-			// optional: do something to modify queryString
+			
+			if(queryObject.title)
+				queryObject.title = `%${queryObject.title}%`
 
 			const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
 			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
@@ -94,7 +121,7 @@ class Content {
 
 	/**	Given a pk, return data about relationName.
 	 *
-	 *	=> { pk, ... }
+	 *	=> QUERY_GENERAL_PROPERTIES
 	 *
 	 *	Throws NotFoundError if relationName not found.
 	 **/
@@ -103,7 +130,7 @@ class Content {
 		const result = await db.query(`
 			SELECT ${QUERY_GENERAL_PROPERTIES}
 				FROM ${this.relationName}
-				WHERE pk = $1`,
+				WHERE id = $1`,
 			[pk]
 		);
 
@@ -118,15 +145,15 @@ class Content {
 
 	/**	Given a username, and is reference user, return full data.
 	 *	
-	 *	=> { pk, ..., }
+	 *	=> QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES
 	 /
 	 */
-	static async getByPKPrivate(username) {
+	static async getByPKPrivate(pk) {
 
 		const result = await db.query(`
 			SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
 				FROM ${this.relationName}
-				WHERE pk = $1`,
+				WHERE id = $1`,
 			[pk]
 		);
 
@@ -146,7 +173,7 @@ class Content {
 	 *	`updateRecordObject` may include any of the following:
 	 *		{ ... }
 	 *
-	 *	=> { ... }
+	 *	=> QUERY_GENERAL_PROPERTIES
 	 *
 	 *	Throws NotFoundError if not found.
 	 *	@param {*} pk - the primary key
@@ -163,14 +190,13 @@ class Content {
 		const pkParameterIndex = "$".concat(setParameters.length + 1);
 
 		const updateQuerySQL = `
-					UPDATE ${this.relationName} 
-						SET ${parameterizedSET} 
-						WHERE pk = ${pkParameterIndex} 
-						RETURNING ${QUERY_GENERAL_PROPERTIES}`;
+			UPDATE ${this.relationName} 
+				SET ${parameterizedSET} 
+				WHERE id = ${pkParameterIndex} 
+				RETURNING ${QUERY_GENERAL_PROPERTIES}`;
 		const result = await db.query(updateQuerySQL, [...setParameters, pk]);
 
 		const contentObject = result.rows[0];
-		delete contentObject.password;
 		return contentObject;
 
 	}
@@ -179,20 +205,20 @@ class Content {
 	 *
 	 *	=> `undefined`.
 	 **/
-	static async delete(pk) {
+	static async delete(pk, username) {
+
+		const JOIN_MODEL_NAME = 'contents_users_join';
 
 		let result = await db.query(`
 			DELETE
-				FROM ${this.relationName}
-				WHERE pk = $1
-				RETURNING pk`,
-			[pk],
-		);
+				FROM ${JOIN_MODEL_NAME}
+				WHERE content_id = $1 AND user_id = $2
+				RETURNING content_id, user_id`, [pk, username]);
 
-		const contentObject = result.rows[0];
+		const modelNameObject = result.rows[0];
 
-		if (!contentObject)
-			throw new NotFoundError(`No ${this.relationName}: ${pk}`);
+		if (!modelNameObject)
+			throw new NotFoundError(`No ${JOIN_MODEL_NAME}: (${pk}, ${fk})`);
 
 	}
 

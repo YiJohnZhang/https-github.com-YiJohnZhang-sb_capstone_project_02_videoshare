@@ -15,27 +15,30 @@ const validateRequestBody = (selectedSchema) => {
 		
 		const schemaErrorList = schemaValidationResult.errors.map((error) => error.stack);
 		const schemaError = new ExpressError(400, schemaErrorList);
-
 		return nxt(schemaError);
 
 	}
 
 }
 
-const validateRequestQuery = (requestQuery, expectedSchema) => {
+const validateRequestQuery = (expectedSchema) => {
 
-	const schemaValidationResult = jsonschema.validate(requestQuery, exampleRequestSchema);
+	return (req, res, nxt) => {
 
-	if(schemaValidationResult.valid)
-		return nxt();
+		const schemaValidationResult = jsonschema.validate(req.query, expectedSchema);
 
-	const schemaErrorList = schemaValidationResult.errors.map((error) => error.stack);
-	const schemaError = new ExpressError(400, schemaErrorList);
-	return nxt(schemaError);
+		if(schemaValidationResult.valid)
+			return nxt();
+
+		const schemaErrorList = schemaValidationResult.errors.map((error) => error.stack);
+		const schemaError = new ExpressError(400, schemaErrorList);
+		return nxt(schemaError);
+
+	}
 
 }
 
 module.exports = {
 	validateRequestBody,
 	validateRequestQuery
-};
+}
