@@ -7,16 +7,19 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET_KEY } = require('../config');
 const { UnauthorizedError } = require('./utilities');
-// const 
+const 
+// const
 
-/**	Middleware: Authenticate user.
+/**	authenticate(req, res, nxt)
+ *	Middleware to authenticate a user.
  *	If a token was provided, verify it, and, if valid, store the token payload
  *	on `res.locals`.
  *	It is not an error if no token was provided or if the token is not valid.
  */
-function authenticateJWT(req, res, next) {
+function authenticateJWT(req, res, nxt) {
 
 	try {
+
 		// const authenticationHeader = req.headers && req.headers.authorization;
 		const authenticationHeader = req.headers.authorization;
 	
@@ -31,27 +34,27 @@ function authenticateJWT(req, res, next) {
 				// double check 
 		}
 
-		return next();
+		nxt();
 
 	} catch (err) {
-		return next();
+		nxt();
 	}
 	
 }
 
-/**	ensureLoggedIn(req, res, next) 
+/**	isLoggedIn(req, res, nxt) 
  *	Middleware to use when they must be logged in.
  *	If not, raises UnauthorizedError.
  */
-function ensureLoggedIn(req, res, next) {
+function isLoggedIn(req, res, nxt) {
 
 	try {
 
 		if (!res.locals.user) throw new UnauthorizedError();
-		return next();
+		nxt();
 
 	} catch(err) {
-		return next(err);
+		nxt(err);
 	}
 
 }
@@ -65,9 +68,30 @@ function isReferenceUser(req, res, nxt) {
 	// console.log(`${req.params.username}: ${res.locals.user.username}`)
 
 	if(req.params.username === res.locals.user.username)
-		return nxt();
+		nxt();
 	
-	return nxt(new UnauthorizedError(`Not the user, ${req.params.username}.`));
+	nxt(new UnauthorizedError(`Not the user, ${req.params.username}.`));
+
+}
+
+/**	checkAdminHelper(req, res, nxt)
+ *	A helper for double authentication the user is an admin, for a database schema with specifications that it is possible.
+ */
+function checkAdminHelper(userToken){
+
+	const username = userToken.username;
+
+	if(userToken.isAdmin && username){
+		// checking res.locals.user object is trivial compared to a db query
+
+		const result = (username);
+
+		if(result)
+			return true;
+
+	}
+
+	return false;
 
 }
 
@@ -79,13 +103,13 @@ function isAdmin(req, res, nxt) {
 
 	try {
 
-		if(res.locals.user.isAdmin)
-			return nxt();
+		if(checkAdminHelper(res.locals.user))
+			nxt();
 			
-		return nxt(new UnauthorizedError('Not an admin!'));
+		nxt(new UnauthorizedError('Not an admin!'));
 
 	} catch(err) {
-		return nxt(err);
+		nxt(err);
 	}
 
 }
@@ -98,18 +122,25 @@ function isReferenceUserOrAdmin(req, res, nxt) {
 
 	// console.log(`${req.params.username}: ${res.locals.user.username}`)
 
-	if(req.params.username === res.locals.user.username || res.locals.user.isAdmin)
-		return nxt();
+	if(req.params.username === res.locals.user.username || checkAdminHelper(res.locals.user))
+		nxt();
 	
-	return nxt(new UnauthorizedError(`Neither the user, ${req.params.username}. nor admin`));
+	nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
 
 }
 
+/**	
+ *	
+ */
+function isOwner(req, res, nxt) {
+
+}
 
 module.exports = {
 	authenticateJWT,
-	ensureLoggedIn,
+	isLoggedIn,
 	isReferenceUser,
 	isAdmin,
-	isReferenceUserOrAdmin
+	isReferenceUserOrAdmin,
+	isOwner
 };
