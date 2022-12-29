@@ -50,7 +50,7 @@ See how much I can finish in 2 weeks time, eh?
 |14|router templating|2022-12-28|09:58 - 12:21|143|
 |15|routers|2022-12-28|13:37 - 15:43|126|
 |16|`formik` for front-end, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24||
-|17|db work, routers|2022-12-28|: - :||
+|17|db work, routers|2022-12-28|19:50 - :||
 |18||2022-12-28|: - :||
 15		16
 1712	
