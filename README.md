@@ -51,20 +51,25 @@ See how much I can finish in 2 weeks time, eh?
 |15|routers|2022-12-28|13:37 - 15:43|126|
 |16|`formik` for front-end, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
 |17|db work|2022-12-28|19:50 - 21:50|120|
-|18|routers|2022-12-28|22:38 - 23:55||
-18		19
-1975	
+|18|routers|2022-12-28|22:38 - 23:55|77|
+|19|db revision, routers|2022-12-29|09:52 - :||
+|20||2022-12-29|: - :||
+|21||2022-12-29|: - :||
+|22||2022-12-29|: - :||
+|23||2022-12-29|: - :||
+19		20
+2052	
 
 ||**50.01.04**. Routes (Backend)||**Net Total Time**||
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
-|1||2022-12-28|: - :||
-|1||2022-12-28|: - :||
+|2||2022-12-29|: - :||
+|2||2022-12-29|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**||
 ||||**Total Time**|_ minutes|
 
 ## Back-end Todo
 - add Comments on schema
-- 
+- update shcema img
 - 
 
 ## More-Time Wishlist
