@@ -49,11 +49,11 @@ See how much I can finish in 2 weeks time, eh?
 |13|finished models|2022-12-27 - 2022-12-28|21:51 - 01:03|192|
 |14|router templating|2022-12-28|09:58 - 12:21|143|
 |15|routers|2022-12-28|13:37 - 15:43|126|
-|16|`formik` for front-end, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24||
-|17|db work, routers|2022-12-28|19:50 - :||
-|18||2022-12-28|: - :||
-15		16
-1712	
+|16|`formik` for front-end, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
+|17|db work|2022-12-28|19:50 - 21:50||
+|18|routers|2022-12-28|: - :||
+16		17
+1855	
 
 ||**50.01.04**. Routes (Backend)||**Net Total Time**||
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|

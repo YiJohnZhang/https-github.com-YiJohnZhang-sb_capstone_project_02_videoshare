@@ -4,8 +4,8 @@
 require('dotenv').config();	// read .env files and make environmental variables
 
 const DB_URI = (process.env.NODE_ENV === "test")
-	? "postgresql:///sb_c02_shortcollabs_test"
-	: process.env.DATABASE_URL || "postgresql:///sb_c02_shortcollabs";
+	? "postgresql:///sb_50_capstone_project_shortcollabs_test"
+	: process.env.DATABASE_URL || "postgresql:///sb_50_capstone_project_shortcollabs";
 
 const PORT_NUMBER = process.env.PORT || 3000;
 

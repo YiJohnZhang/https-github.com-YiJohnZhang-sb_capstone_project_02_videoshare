@@ -9,14 +9,15 @@ const config = {
 		'contents_users_join',
 		'roles_users_join'
 	],
-	outputFileName: 'seed.sql'
+	baseSeedFileName: 'baseSeed.sql',
+	tableOutputFileName: 'schemaSeed.sql',
+	seedOutputFileName: 'contentSeed.sql'
 
 }
 
 //	LIBRARIES & MODULES
 const fs = require('fs');
 const csvParser = require('csv-parser');
-const { writer } = require('repl');
 
 //	GLOBAL VARIABLES
 let relationsHeader = {};
@@ -31,45 +32,55 @@ function trolololAsync(){
 		return;
 	}
 
-	const writerStream = fs.createWriteStream(`${config.outputFileName}`/*, {flags: 'a'}*/);
+	const writerStreamBaseFile = fs.createWriteStream(`${config.baseSeedFileName}`/*, {flags: 'a'}*/);
+	writerStreamBaseFile.write(`--	SETUP\nDROP DATABASE IF EXISTS ${config.databaseName};\nCREATE DATABASE ${config.databaseName};\n\\c ${config.databaseName};\n\n`);
 	
-	writerStream.write(`--	SETUP\nDROP DATABASE IF EXISTS ${config.databaseName};\nCREATE_DATABASE ${config.databaseName};\n\\c ${config.databaseName};\n\n`);
+	writerStreamBaseFile.write(`\n\\i ${config.tableOutputFileName}\n\\i ${config.seedOutputFileName}`)
 	
-	let droptablesString = 'DROP TABLE IF EXISTS ';
+	writerStreamBaseFile.end();
+	// writerStreamBaseFile.write('\n\n\n');
+
+	const writerStreamTableFile = fs.createWriteStream(`${config.tableOutputFileName}`/*, {flags: 'a'}*/);
+	let dropRelationsString = 'DROP TABLE IF EXISTS ';
+
 	for(let relationIndex in config.relationNames){
 
-		droptablesString = droptablesString.concat(`${config.relationNames[config.relationNames.length - 1 - relationIndex]}, `);
+		dropRelationsString = dropRelationsString.concat(`${config.relationNames[config.relationNames.length - 1 - relationIndex]}, `);
 
 	}
-	droptablesString = droptablesString.substring(0, droptablesString.length - 2).concat(';');
+	dropRelationsString = dropRelationsString.substring(0, dropRelationsString.length - 2).concat(';');
 		// rm ', ' artifact
-	writerStream.write(droptablesString);
-
-	writerStream.write('\n\n\n');
+	writerStreamTableFile.write(dropRelationsString);
+	
 	//	DATABASE RELATIONS
-	writerStream.write('-- DATABASE RELATIONS\n')
+	writerStreamTableFile.write('-- DATABASE RELATIONS\n');
 	for (let relationName of config.relationNames){
 	
-		writerStream.write(`--\t${relationName}\nCREATE TABLE ${relationName} (\n\n\t--properties\n\n);`);
-		writerStream.write('\n\n');
+		writerStreamTableFile.write(`--\t${relationName}\nCREATE TABLE ${relationName} (\n\n\t--properties\n\n);`);
+		writerStreamTableFile.write('\n\n');
 	
 	}
 	
-	writerStream.write('\n');
+	// writerStreamTableFile.write('\n');
+	writerStreamTableFile.end();
+
 	//	DATABASE SEEDING
-	writerStream.write('--	DATABASE SEEDING\n')
+	const writerStreamSeedFile = fs.createWriteStream(`${config.seedOutputFileName}`);
+	writerStreamSeedFile.write('--	DATABASE SEEDING');
+	writerStreamSeedFile.write(`-- understood: \`"\` is for column names, \`'\` is for data\n\t-- boolean: expect: TRUE / FALSE without quotes\n\t-- date: expect with single-quotes to not be parsed as integers\n`);
+
 	for (let relationName of config.relationNames){
 
 		const newHeaders = relationsHeader[relationName][0].filter((element) => element !== 'id');
 			// remove 'id' attributes that are `SERIAL`sql
 	
-		writerStream.write(`INSERT INTO ${relationName}(`);
-		writerStream.write(`${newHeaders}`)
+		writerStreamSeedFile.write(`INSERT INTO ${relationName}(`);
+		writerStreamSeedFile.write(`${newHeaders}`)
 		// column name(s)
 		// for(let __ of .split(','))
-		writerStream.write(`)\n\tVALUES`);
+		writerStreamSeedFile.write(`)\n\tVALUES`);
 		// value(s)
-		writerStream.write(`\n\t`);
+		writerStreamSeedFile.write(`\n\t`);
 
 		// 	const {...spreadedRelationsData} = relationsData[relationName];
 			// 	interesting to note that this assigns "[NUMBER]" keys to each entry...
@@ -88,13 +99,15 @@ function trolololAsync(){
 
 			stringifiedRecord = stringifiedRecord.substring(0,stringifiedRecord.length-2);
 				// remove trailing comma and space.
-			writerStream.write(`(${stringifiedRecord}),\n\t`)
+			writerStreamSeedFile.write(`(${stringifiedRecord}),\n\t`);
 			
 		}
 		
-		writerStream.write('\n');
+		writerStreamSeedFile.write('\n');
 	
 	}
+
+	writerStreamSeedFile.end();
 
 }
 

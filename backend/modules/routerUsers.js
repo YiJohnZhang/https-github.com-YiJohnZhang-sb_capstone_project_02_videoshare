@@ -44,7 +44,7 @@ router.get('/', async(req, res, nxt) => {
 router.get('/:username', async(req, res, nxt) => {
 
 	try{
-		
+		// TODO: add content associated with user
 		const userResult = await UserModel.getByPK(req.params.username);
 
 		return res.json({content: userResult});
@@ -65,7 +65,7 @@ router.get('/:username', async(req, res, nxt) => {
 router.update('/:username/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateUserSchema), async(req, res, nxt) => {
 
 	try{
-
+		
 		const userResult = await UserModel.update(req.params.username, req.body);
 
 		return res.json({content: userResult});
@@ -98,7 +98,7 @@ router.delete('/:username', isLoggedIn, isReferenceUserOrAdmin, isOwner, async(r
 });
 
 /** */
-/** GET `/[username]`/edit`
+/** GET `/[username]/edit`
  *	( input ) => { userResult }
  *		where `input` is: ( req.params.username )
  *		where `userResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
