@@ -48,10 +48,12 @@ See how much I can finish in 2 weeks time, eh?
 |12||2022-12-27|11:11 - 12:17|66|
 |13|finished models|2022-12-27 - 2022-12-28|21:51 - 01:03|192|
 |14|router templating|2022-12-28|09:58 - 12:21|143|
-|15|routers|2022-12-28|13:37 - 15:43||
-|16||2022-12-28|: - :||
-14		15
-1586	
+|15|routers|2022-12-28|13:37 - 15:43|126|
+|16|db work, router|2022-12-28|16:01 - :||
+|17||2022-12-28|: - :||
+|18||2022-12-28|: - :||
+15		16
+1712	
 
 ||**50.01.04**. Routes (Backend)||**Net Total Time**||
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
