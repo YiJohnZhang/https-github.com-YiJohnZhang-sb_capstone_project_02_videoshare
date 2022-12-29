@@ -10,26 +10,72 @@ DROP TABLE IF EXISTS roles_users_join, contents_users_join, roles, contents, use
 --	users
 CREATE TABLE users (
 
-	--properties
+	username VARCHAR(32) PRIMARY KEY,
+		-- SQL defines two primary character types: character varying(n) and character(n), where n is a positive integer... If the string to be stored is shorter than the declared length, values of type character (`CHARACTER(n)` or `CHAR(n)`) will be space-padded; values of type character varying (`CHARACTER VARYING(n)` or `VARCHAR(n)`) will simply store the shorter string.
+			-- https://www.postgresql.org/docs/8.4/datatype-character.html
+	first_name VARCHAR(32) NOT NULL,
+	last_name VARCHAR(32) NOT NULL,
+	birthdate DATE NOT NULL,
+	-- parental_controls
+		-- not implemented but to set verified parent / guardian as a "manager" for the child
+	verified BOOLEAN DEFAULT 'f',
+		-- default false
+	-- default 'standby'; 'active', 'banned', or 'suspended'
+	account_status enum NOT NULL,
+	-- extra: basically it lets admin panel sort through which accounts to delete or lift the ban
+	email VARCHAR(100) NOT NULL
+    	CHECK (position('@' IN email) > 1),
+		-- < 100
+	"password" TEXT NOT NULL,
+	picture VARCHAR(64) DEFAULT 'default.jpg',
+		-- default default.jpg
+	"description" VARCHAR(512) NOT NULL,
+		-- LEN <= 512 in client-side, server-side validation; also database
+	is_elevated BOOLEAN DEFAULT 'f'
+		-- reminder: block a request body from containing this attribute
 
 );
 
 --	contents
-CREATE TABLE contents (
+CREATE TYPE status_state AS ENUM ('open', 'standby', 'active', 'legacy');
+	-- default is 'open'
+CREATE TYPE contract_type_state AS ENUM ('single', 'byview', 'presplit');
+	-- default is 'single'
 
-	--properties
+CREATE TABLE contents (
+	id					SERIAL PRIMARY KEY,
+	title				VARcHAR(64) NOT NULL,
+	summary				VARCHAR(512) NOT NULL,
+	"description"		VARCHAR(2200) NOT NULL,
+		-- https://mashable.com/article/tiktok-video-descriptions-photo-mode
+	link				VARCHAR(100) NOT NULL,
+	-- bloopers
+	-- notes
+	-- visible
+	"status"			status_state NOT NULL,
+	"owner"				TEXT
+		REFERENCES users ON DELETE CASCADE,
+	contract_type		contract_type_state NOT NULL,
+	contract_details	TEXT,
+	contract_signed		TEXT,
+	date_created		DATE NOT NULL, 
+	date_standby		DATE,
+	date_published		DATE,
 
 );
 
 --	roles
 CREATE TABLE roles (
 
-	--properties
+	id SMALLINT PRIMARY KEY,
+	"name" TEXT NOT NULL
 
 );
 
 --	contents_users_join
 CREATE TABLE contents_users_join (
+
+	REFERENCES 
 
 	--properties
 

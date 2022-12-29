@@ -49,8 +49,8 @@ See how much I can finish in 2 weeks time, eh?
 |13|finished models|2022-12-27 - 2022-12-28|21:51 - 01:03|192|
 |14|router templating|2022-12-28|09:58 - 12:21|143|
 |15|routers|2022-12-28|13:37 - 15:43|126|
-|16|db work, router|2022-12-28|16:01 - :||
-|17||2022-12-28|: - :||
+|16|`formik` for front-end, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24||
+|17|db work, routers|2022-12-28|: - :||
 |18||2022-12-28|: - :||
 15		16
 1712	
@@ -61,6 +61,9 @@ See how much I can finish in 2 weeks time, eh?
 |1||2022-12-28|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**||
 ||||**Total Time**|_ minutes|
+
+## Material-UI
+30 minutes: Note: `material-ui-formik` is deprecated and `@material-ui/core` has been deprecated to support `React > 16.8`
 
 ## User Data Notes
 - **Do the FOLLOWING *AFTER* finished building routing**:
