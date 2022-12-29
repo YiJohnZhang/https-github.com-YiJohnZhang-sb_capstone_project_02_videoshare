@@ -51,8 +51,8 @@ See how much I can finish in 2 weeks time, eh?
 |15|routers|2022-12-28|13:37 - 15:43|126|
 |16|`formik` for front-end, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
 |17|db work|2022-12-28|19:50 - 21:50|120|
-|18|routers|2022-12-28|22:38 - :||
-17		18
+|18|routers|2022-12-28|22:38 - 23:55||
+18		19
 1975	
 
 ||**50.01.04**. Routes (Backend)||**Net Total Time**||
@@ -61,6 +61,17 @@ See how much I can finish in 2 weeks time, eh?
 |1||2022-12-28|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**||
 ||||**Total Time**|_ minutes|
+
+## Back-end Todo
+- add Comments on schema
+- 
+- 
+
+## More-Time Wishlist
+- admin dashboard to demonstrate full potential of the database schema design.
+- more time: delete content joins individually (`./models/Content.js`); remove master delete by owner (from database schema design)
+- add an additional "social aspect" (chatting, messaging?) to organize collabs; use the `verified`/`parental_controls`/`birthdate` to 
+- had difficulty giving access to "invited" users to edit the main content.
 
 ## Material-UI
 30 minutes: Note: `material-ui-formik` is deprecated and `@material-ui/core` has been deprecated to support `React > 16.8`

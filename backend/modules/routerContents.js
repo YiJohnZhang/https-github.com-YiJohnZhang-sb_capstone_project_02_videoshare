@@ -7,7 +7,7 @@ const { validateRequestBody, validateRequestQuery } = require('./middlewareSchem
 const newContentSchema = require('./schemas/newContent.schema.json');
 // const queryModelSchema = require('./schemas/queryContent.schema.json');
 const updateContentSchema = require('./schemas/updateContent.schema.json');
-
+const updateContentJOINSchema = require('./schemas/updateContentJOIN.schema.json');
 
 /** POST `/`
  *	{ input } => { contentResult }
@@ -20,6 +20,8 @@ router.post('/', isLoggedIn, validateRequestBody(newContentSchema), async(req, r
 
 	try{
 
+
+		// if(req.body.status)
 		// ntomjoin
 		// const NMJoin = 
 
@@ -154,18 +156,18 @@ router.get('/:contentID', isLoggedIn, isOwner, async(req, res, nxt) => {
 
 });
 
-/** GET `/[username]/[contentID]/edit`
+/** GET `/[username]/[contentID]`
  *	( input ) => { contentResult }
  *		where `input` is: ( , {  })
  *		where `contentResult` is: {  }
- *	To edit the join entry.
- *	Authorization Required: isLoggedIn, isReferenceUser
+ *	To edit the JOIN entry.
+ *	Authorization Required: None
 */
-router.patch('/:username/:contentID', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
+router.get('/:username/:contentID', async(req, res, nxt) => {
 
 	try{
 
-		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
+		const contentResult = await ContentModel.getJOINContent(req.params.username, req.params.contentID);
 
 		return res.json({content: contentResult});
 
@@ -182,11 +184,11 @@ router.patch('/:username/:contentID', isLoggedIn, isReferenceUser, async(req, re
  *	To edit the join entry.
  *	Authorization Required: isLoggedIn, isReferenceUser
 */
-router.patch('/:username/:contentID', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
+router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateContentJOINSchema), async(req, res, nxt) => {
 
 	try{
 
-		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
+		const contentResult = await ContentModel.updateJOINContent(req.params.contentID);
 
 		return res.json({content: contentResult});
 

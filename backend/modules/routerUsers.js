@@ -2,6 +2,7 @@ const express = require('express');
 const router = new express.Router();
 
 const UserModel = require('../models/User');
+const ContentModel = require('../models/Content');
 const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin } = require('./middlewareAAE');
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
 const updateUserSchema = require('./schemas/updateUser.schema.json');
@@ -27,7 +28,7 @@ router.get('/', async(req, res, nxt) => {
 			userResults = await UserModel.getAll();		
 		}
 
-		return res.json({contents: userResults});
+		return res.json({users: userResults});
 
 	}catch(error){
 		nxt(error);
@@ -44,10 +45,13 @@ router.get('/', async(req, res, nxt) => {
 router.get('/:username', async(req, res, nxt) => {
 
 	try{
-		// TODO: add content associated with user
+		
 		const userResult = await UserModel.getByPK(req.params.username);
+			// user exists implied
+		const correspondingContentResult = await ContentModel.getContentByUsername();
+			// note: front-end queries for title, link, contract_signed (collaborators if `contract_type` is not `solo`)
 
-		return res.json({content: userResult});
+		return res.json({user: userResult, content: correspondingContentResult});
 
 	}catch(error){
 		nxt(error);
@@ -65,10 +69,10 @@ router.get('/:username', async(req, res, nxt) => {
 router.update('/:username/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateUserSchema), async(req, res, nxt) => {
 
 	try{
-		
+
 		const userResult = await UserModel.update(req.params.username, req.body);
 
-		return res.json({content: userResult});
+		return res.json({user: userResult});
 
 	}catch(error){
 		nxt(error);
@@ -111,7 +115,7 @@ router.get('/:username/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) 
 
 		const userResult = await UserModel.getByPKPrivate(req.params.username);
 
-		return res.json({content: userResult});
+		return res.json({user: userResult});
 
 	}catch(error){
 		nxt(error);

@@ -1,7 +1,6 @@
--- DATABASE RELATIONS
 --	users
 CREATE TYPE account_status AS ENUM ('standby', 'active', 'banned', 'suspended');
-	-- default is 'standby', 'active', 'banned', 'suspended'
+	-- 'standby', 'active', 'banned', 'suspended'
 
 CREATE TABLE users (
 
@@ -13,11 +12,11 @@ CREATE TABLE users (
 	birthdate DATE NOT NULL,
 	-- parental_controls
 		-- not implemented but to set verified parent / guardian as a "manager" for the child
-	verified BOOLEAN DEFAULT 'f',
+	verified BOOLEAN DEFAULT FALSE,
 		-- default false
-	-- default 'standby'; 'active', 'banned', or 'suspended'
-	account_status account_status NOT NULL,
-	-- extra: basically it lets admin panel sort through which accounts to delete or lift the ban
+	account_status account_status DEFAULT 'standby',
+		-- default 'standby';
+		-- unimplemented extra: basically it lets admin panel sort through which accounts to delete or lift the ban
 	email VARCHAR(100) NOT NULL
     	CHECK (position('@' IN email) > 1),
 		-- < 100
@@ -26,7 +25,7 @@ CREATE TABLE users (
 		-- default default.jpg
 	"description" VARCHAR(512) NOT NULL,
 		-- LEN <= 512 in client-side, server-side validation; also database
-	is_elevated BOOLEAN DEFAULT 'f'
+	is_elevated BOOLEAN DEFAULT FALSE
 		-- reminder: block a request body from containing this attribute
 
 );
@@ -34,7 +33,7 @@ CREATE TABLE users (
 --	contents
 CREATE TYPE status_state AS ENUM ('open', 'standby', 'active', 'legacy');
 	-- default is 'open'
-CREATE TYPE contract_type_state AS ENUM ('single', 'byview', 'presplit');
+CREATE TYPE contract_type_state AS ENUM ('solo', 'byview', 'presplit');
 	-- default is 'single'
 
 CREATE TABLE contents (
@@ -44,14 +43,14 @@ CREATE TABLE contents (
 	"description"		VARCHAR(2200)
 		DEFAULT 'Description placeholder.',
 		-- https://mashable.com/article/tiktok-video-descriptions-photo-mode
-	link				VARCHAR(100) NOT NULL,
+	link				VARCHAR(100),
 	-- bloopers
 	-- notes
 	-- visible
-	"status"			status_state NOT NULL,
+	"status"			status_state DEFAULT 'open',
 	"owner"				VARCHAR(32)
 		REFERENCES users(username) ON DELETE CASCADE,
-	contract_type		contract_type_state NOT NULL,
+	contract_type		contract_type_state DEFAULT 'solo',
 		-- 2022-12-12 "monetization type"?
 	contract_details	TEXT
 		DEFAULT '{views:[{username: "temporary", share:1}], engagement:[{username: "temporary", share:1}]}',
@@ -66,7 +65,7 @@ CREATE TABLE contents (
 --	roles
 CREATE TABLE roles (
 
-	id SMALLINT PRIMARY KEY,
+	id SMALLSERIAL PRIMARY KEY,
 	"name" TEXT NOT NULL
 
 );

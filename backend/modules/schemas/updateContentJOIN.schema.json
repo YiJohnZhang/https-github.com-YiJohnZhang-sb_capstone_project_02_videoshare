@@ -1,0 +1,14 @@
+{
+	"_comment": "it is business logic that checks whether or not the 'share' properties add up to <1.00",
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"description": {
+			"type": "string", "maxLength": 1024
+		}
+	},
+	"additionalProperties": false,
+	"required": [
+		"description"
+	]
+}

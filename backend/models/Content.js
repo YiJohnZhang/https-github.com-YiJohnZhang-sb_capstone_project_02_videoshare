@@ -204,7 +204,7 @@ class Content {
 	/**	Delete content records from database by `pk`.
 	 *
 	 *	=> `undefined`.
-	 **/
+	 */
 	static async delete(pk, username) {
 
 		const JOIN_MODEL_NAME = 'contents_users_join';
@@ -227,12 +227,12 @@ class Content {
 	/**	Return the content owner from content records in the database.
 	 *
 	 *	=> `username`.
-	 **/
+	 */
 	static async getContentOwner(pk) {
 
 		let result = await db.query(`
 			SELECT id, owner
-				FROM contents
+				FROM ${this.relationName}
 				WHERE id = $1`, [pk]);
 
 		const contentObject = result.rows[0];
@@ -241,6 +241,58 @@ class Content {
 			throw new NotFoundError(`Cannot find content with id: ${pk}.`);
 		
 		return contentObject;
+
+	}
+
+	/**	Return all content by queried username.
+	 *
+	 *	{ username } => [ { id, description }, ... ].
+	 */
+	static async getContentByUsername(username) {
+
+		let result = await db.query(`
+			SELECT content_id, description
+				FROM contents_users_join
+				WHERE user_id = $1`, [username]);
+
+		const contentList = result.rows;
+
+		return contentList;
+
+	}
+
+	/**	Return the JOIN entry of content given a username.
+	 *
+	 *	{ username } => [ { id, description }, ... ].
+	 */
+	static async getJOINContent(username, contentID) {
+
+		let result = await db.query(`
+			SELECT content_id, description
+				FROM contents_users_join
+				WHERE user_id = $1 AND content_id = $2`, [username, contentID]);
+
+		const contentList = result.rows[0];
+
+		return contentList;
+
+	}
+
+	/**	Update the JOIN entry of content given a username.
+	 *
+	 *	{ username, contentID } => [ { id, description }, ... ].
+	 */
+	static async updateJOINContent(description, username, contentID) {
+
+		let result = await db.query(`
+			UPDATE contents_users_join
+				SET description = $1
+				WHERE user_id = $2 AND content_id = $3
+				RETURNING content_id`, [description, username, contentID]);
+
+		const contentList = result.rows[0];
+
+		return contentList;
 
 	}
 
