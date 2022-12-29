@@ -17,7 +17,8 @@ const QUERY_GENERAL_PROPERTIES = `
 	date_published AS "datePublished"`;
 const QUERY_PRIVATE_PROPERTIES = `
 	status, 
-	owner, 
+	owner,
+	participants,
 	contract_type AS "contractType", 
 	contract_details AS "contractDetails", 
 	contract_signed AS "contractSigned"`;
@@ -146,7 +147,6 @@ class Content {
 	/**	Given a username, and is reference user, return full data.
 	 *	
 	 *	=> QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES
-	 /
 	 */
 	static async getByPKPrivate(pk) {
 
@@ -264,23 +264,54 @@ class Content {
 	/**	Return the JOIN entry of content given a username.
 	 *
 	 *	{ username } => [ { id, description }, ... ].
+	 *
+	 *	Throws NotFoundError if not found.
 	 */
 	static async getJOINContent(username, contentID) {
 
 		let result = await db.query(`
 			SELECT content_id, description
 				FROM contents_users_join
+					JOIN ${this.relationName}
+				WHERE user_id = $1 AND content_id = $2`, [username, contentID]);
+			// publicly only return active ones (status = 'active')?
+				
+		const contentObject = result.rows[0];
+
+		if (!contentObject)
+			throw new NotFoundError(`Cannot find content with: (${username}, ${contentID}).`);
+
+		return contentObject;
+
+	}
+
+	/**	Return the JOIN entry of content given a username, to edit.
+	 *
+	 *	{ username } => [ { id, description }, ... ].
+	 *
+	 *	Throws NotFoundError if not found.
+	 */
+	static async getPrivateJOINContent(username, contentID) {
+
+		let result = await db.query(`
+			SELECT content_id, description
+				FROM contents_users_join
 				WHERE user_id = $1 AND content_id = $2`, [username, contentID]);
 
-		const contentList = result.rows[0];
+		const contentObject = result.rows[0];
 
-		return contentList;
+		if (!contentObject)
+			throw new NotFoundError(`Cannot find content with: (${username}, ${contentID}).`);
+
+		return contentObject;
 
 	}
 
 	/**	Update the JOIN entry of content given a username.
 	 *
 	 *	{ username, contentID } => [ { id, description }, ... ].
+	 *
+	 *	Throws NotFoundError if not found.
 	 */
 	static async updateJOINContent(description, username, contentID) {
 
@@ -289,10 +320,13 @@ class Content {
 				SET description = $1
 				WHERE user_id = $2 AND content_id = $3
 				RETURNING content_id`, [description, username, contentID]);
+				
+		const contentObject = result.rows[0];
 
-		const contentList = result.rows[0];
+		if (!contentObject)
+			throw new NotFoundError(`Cannot find content with: (${username}, ${contentID}).`);
 
-		return contentList;
+		return contentObject;
 
 	}
 

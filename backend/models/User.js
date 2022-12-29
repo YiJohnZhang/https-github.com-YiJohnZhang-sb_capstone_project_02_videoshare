@@ -161,7 +161,8 @@ class User {
 	/**	Given a username, and is reference user, return full data.
 	 *	
 	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, password, picture, description, isElevated, join }
-	 /
+	 *
+	 *	Throws NotFoundError if user not found.
 	 */
 	static async getByPKPrivate(username) {
 
@@ -206,10 +207,11 @@ class User {
 		const { parameterizedSET, setParameters } = sqlUpdateQueryBuilder(updateData, JSON_SQL_SET_MAPPING);
 		const usernameParameterIndex = "$".concat(setParameters.length + 1);
 
-		const updateQuerySQL = `UPDATE users 
-						SET ${parameterizedSET} 
-						WHERE username = ${usernameParameterIndex} 
-						RETURNING ${QUERY_GENERAL_PROPERTIES}`;
+		const updateQuerySQL = `
+			UPDATE users 
+				SET ${parameterizedSET} 
+				WHERE username = ${usernameParameterIndex} 
+				RETURNING ${QUERY_GENERAL_PROPERTIES}`;
 		const result = await db.query(updateQuerySQL, [...setParameters, username]);
 
 		const userObject = result.rows[0];
