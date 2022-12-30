@@ -2,7 +2,7 @@
 	*/
 
 const jwt = require('jsonwebtoken');
-const { SECRET_KEY } = require('../config');
+const { JWT_SECRET_KEY } = require('../config');
 
 function createTokenHelper(user){
 
@@ -11,7 +11,7 @@ function createTokenHelper(user){
 		isElevated: user.isElevated || false
 	};
 
-	return jwt.sign(payload, SECRET_KEY);
+	return jwt.sign(payload, JWT_SECRET_KEY);
 
 }
 

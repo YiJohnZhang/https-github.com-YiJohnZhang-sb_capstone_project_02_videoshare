@@ -59,6 +59,7 @@ async function commonAfterAll() {
 }
 
 test('dummy test so that \'jest\' isn\'t screaming that \"Your test suite must contain at least one test.\"', () => {
+	// console.log(BCRYPT_WORK_FACTOR);
 	expect(1).toEqual(1);
 });
 

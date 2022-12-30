@@ -18,12 +18,12 @@ function sqlCreateQueryBuilder(createData, jsonSQLMapping = {}){
 
 	const keys = Object.keys(createData);
 	const queryArray = keys.map((key) => jsonSQLMapping[key] || key);
-	const indexArray = keys.map((index) => `$${index + 1}`)
+	const indexArray = keys.map((key, index) => `$${index + 1}`)
 
 	return {
 		parameterizedINSERTPropertyNames: `(${queryArray.join(', ')})`,
 		parameterizedINSERTPropertyIndices: `(${indexArray.join(', ')})`,
-		insertParameters: Object.values(createData);
+		insertParameters: Object.values(createData)
 	}
 
 }
@@ -41,9 +41,9 @@ function sqlCreateQueryBuilder(createData, jsonSQLMapping = {}){
 */
 function sqlFilterQueryBuilder(filterData, jsonSQLMapping = {}){
 
-	const keys = Object.keys(filterData);
-	if (keys.length === 0)
+	if (!filterData)
 		return;
+	const keys = Object.keys(filterData);
 
 	const queryArray = keys.map((key, index) => `${jsonSQLMapping[key]} $${index+1}`);
 
@@ -66,9 +66,9 @@ function sqlFilterQueryBuilder(filterData, jsonSQLMapping = {}){
 */
 function sqlUpdateQueryBuilder(updateData, jsonSQLMapping = {}) {
 
-	const keys = Object.keys(updateData);
-	if (keys.length === 0)
+	if (!updateData)
 		throw new BadRequestError("No data.");
+	const keys = Object.keys(updateData);
 
 	// { propertyOne: property1Value, propertyTwo: property2Value } => ['"propertyOne"=$1', '"propertyTwo"=$2']
 	const columns = keys.map((columnName, index) =>
@@ -77,7 +77,7 @@ function sqlUpdateQueryBuilder(updateData, jsonSQLMapping = {}) {
 
 	return {
 		parameterizedSET: columns.join(", "),
-		setParameters: Object.values(updateData),
+		setParameters: Object.values(updateData)
 	}
 
 }

@@ -12,12 +12,6 @@
 		"description": {
 			"type": "string", "maxLength": 1024
 		},
-		"link": {
-			"type": "integer", "maximum": 128
-		},
-		"status": {
-			"type": "string", "enum": ["open", "standby", "active", "legacy"]
-		},
 		"owner": {
 			"type": "string", "minLength": 4, "maxLength": 32
 		},
@@ -68,7 +62,6 @@
 		"title",
 		"summary",
 		"description",
-		"link",
 		"owner",
 		"contractType",
 		"contractDetails"
