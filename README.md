@@ -56,7 +56,10 @@ See how much I can finish in 2 weeks time, eh?
 |20|salvaging current project...; database redesign: done; roles/ru_join: done;|2022-12-29|13:04 - 16:19|180+15=195|
 |21|finish contents?|2022-12-29|17:16 - 18:22||
 |22|finish contents?|2022-12-29|18:59 - 22:16||
-|23||2022-12-29|: - :||
+|23|finish contents?|2022-12-29|22:32 - :||
+|24|finish contents?|2022-12-29|: - :||
+|25|finish contents?|2022-12-29|: - :||
+|26|finish contents?|2022-12-29|: - :||
 19		20
 2052	
 
@@ -82,6 +85,24 @@ See how much I can finish in 2 weeks time, eh?
 
 - `Content_User_JOIN.js: update` 2022-12-29 Note: generalize for composite PK by passing in pk as object and do a parameterizedWHERE query builder on it
 
+## exp
+- there is a bias for falsey for express middleware, i.e. (`middlewareAAE.js: isReferenceUserOrAdmin`):
+```js
+//	works correctly (only throws error if `notRefUserOrAdmin` is true, otherwise `nxt()`):
+
+// if(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
+if(notRefUserOrAdmin)
+	nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
+
+nxt();
+
+// works incorrectly (throws error even if `isRefUserOrAdmin` is true)
+// if(req.params.username === res.locals.user.username || await checkAdminHelper(res.locals.user))
+if(isRefUserOrAdmin)
+		nxt();
+
+nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
+```
 
 ## Material-UI
 30 minutes: Note: `material-ui-formik` is deprecated and `@material-ui/core` has been deprecated to support `React > 16.8`
