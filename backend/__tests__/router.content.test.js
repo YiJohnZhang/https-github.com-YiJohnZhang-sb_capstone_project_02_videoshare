@@ -48,11 +48,11 @@ const CREATE_CONTENT4_RESPONSE = {
 
 const CONTENT_1_PUBLIC_RESPONSE = {
 	id: '',
-	title: '',
-	summary: '',
-	description: '',
-	link: '',
-	partipants: '',
+	title: 'test content',
+	summary: 'afdsa',
+	description: 'mw1',
+	link: 'https://youtu.be/nhVJhRhJbJE',
+	participants: '["testuser1"]',
 	dateCreated: '',
 	dateStandby: '',
 	datePublished: ''
@@ -77,28 +77,28 @@ const CONTENT_1_OWNER_RESPONSE = {
 const CONTENT_1_PARTICIPANT_RESPONSE = CONTENT_1_OWNER_RESPONSE;
 
 /***	POST /contents */
-describe('POST \`/contents\`: create', async() => {
+describe('POST \`/contents\`: create', () => {
 
 	// 
 
 });
 
 /***	GET /contents */
-describe('GET \`/contents\`: search', async() => {
+describe('GET \`/contents\`: search', () => {
 
 	// 
 
 });
 
 /***	GET /contents/:id */
-describe('GET \`/contents/:id\`', async() => {
+describe('GET \`/contents/:id\`', () => {
 
 	// 
 
 });
 
 /***	PATCH /contents/:id */
-describe('PATCH \`/contents/:id\`', async() => {
+describe('PATCH \`/contents/:id\`', () => {
 
 	let patchedContentResponseObject = content1ReferenceResponse;
 	// patchedContentResponseObject.property = 'af';
@@ -128,7 +128,7 @@ describe('PATCH \`/contents/:id\`', async() => {
 });
 
 /***	DELETE /contents/:id */
-describe('DELETE \`/contents/:id\`', async() => {
+describe('DELETE \`/contents/:id\`', () => {
 
 	test('deletes content (admin)', async() => {
 		

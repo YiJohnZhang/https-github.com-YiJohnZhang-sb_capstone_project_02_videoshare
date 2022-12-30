@@ -2,7 +2,7 @@ const db = require('../database/db');
 const { sqlCreateQueryBuilder, sqlFilterQueryBuilder, sqlUpdateQueryBuilder } = require('../helpers/sqlQueryingHelper');
 const {
 	NotFoundError,
-	ExpressError
+	ConflictError
 } = require('../modules/utilities');
 
 //	Properties to return for a query
@@ -32,6 +32,10 @@ const JSON_SQL_SET_MAPPING = {
 	contractDetails: "contract_details", 
 	contractSigned: "contract_signed"
 }
+const JSON_SQL_QUERY_MAPPING = {
+	username: 'title ILIKE'
+}
+
 
 
 /** Related functions for Content. */
@@ -77,8 +81,9 @@ class Content {
 		const sqlQueryAfterWHERE = (`ORDER BY date_published`);
 		
 		let result;
+		const queryObjectLength = Object.keys(queryObject).length || 0;
 
-		if(queryObject){
+		if(queryObjectLength){
 			
 			if(queryObject.title)
 				queryObject.title = `%${queryObject.title}%`
@@ -286,27 +291,6 @@ class Content {
 			throw new NotFoundError(`Cannot find content with: (${username}, ${contentID}).`);
 
 		return contentObject;
-
-	}
-
-	/**	Delete content records from database by `pk`.
-	 *
-	 *	=> `undefined`.
-	 */
-	static async delete(pk, username) {
-
-		const JOIN_MODEL_NAME = 'contents_users_join';
-
-		let result = await db.query(`
-			DELETE
-				FROM ${JOIN_MODEL_NAME}
-				WHERE content_id = $1 AND user_id = $2
-				RETURNING content_id, user_id`, [pk, username]);
-
-		const contentObject = result.rows[0];
-
-		if (!contentObject)
-			throw new NotFoundError(`No ${JOIN_MODEL_NAME}: (${pk}, ${fk})`);
 
 	}
 

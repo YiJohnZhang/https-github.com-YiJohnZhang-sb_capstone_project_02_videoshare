@@ -33,6 +33,32 @@ class ContentUserJoin {
 
 	static relationName = 'contents_users_join';
 
+	/**	Create a single content_users_join record (invitation)
+	 *	technically any participant?
+	 */
+	static async invite(inviterUsername, contentID, invitedUsername){
+
+		await this.getByPK(inviterUsername, contentID);
+			// has permissions to invite.
+		await this.pkDoesNotAlreadyExist(invitedUsername, contentID);
+
+		
+		
+
+		//	add to "participants"
+
+	}
+
+	/**	Create a single content_users_join record (invitation)
+	 *	only owner
+	 */
+	 static async publish(username, contentID){
+
+		await this.getByPK(username, contentID);
+		//	synchronize descriptions?
+		
+	}
+
 	/**	Create content_users_join record with data.
 	 *
 	 *	=> { ... }
@@ -87,7 +113,7 @@ class ContentUserJoin {
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [{ pk, propertyOne, ... }, ...]
 	 **/
-	static async getAll(queryObject) {
+	static async getAllPublic() {
 
 		const sqlQueryBeforeWHERE = (`
 			SELECT ${QUERY_GENERAL_PROPERTIES}
@@ -110,6 +136,12 @@ class ContentUserJoin {
 
 		return result.rows;
 	
+	}
+
+	static async getAllPrivate(){
+
+		
+
 	}
 	
 	/**	Find all matching content_users_join records.
@@ -136,6 +168,22 @@ class ContentUserJoin {
 			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
 
 		return cuJoinObject;
+
+	}
+
+	static async pkDoesNotAlreadyExist(userID, contentID){
+
+		const result = await db.query(`
+			SELECT user_id AS "username"
+				FROM ${this.relationName}
+				WHERE user_id = $1 AND content_id = $2`, [userID, contentID]);
+		
+		const cuJoinObject = result.rows[0];
+
+		if(cuJoinObject)
+			throw new ConflictError(`(${userID}, ${contentID}) already exists.`);
+		
+		return;
 
 	}
 
@@ -173,28 +221,29 @@ class ContentUserJoin {
 		const result = await db.query(updateQuerySQL, [...setParameters, userID, contentID]);
 
 		const cuJoinObject = result.rows[0];
-		// delete cuJoinObject.password;
-			// only for users model
+
 		return cuJoinObject;
 
 	}
 
 	/**	Delete content_users_join records from database by `pk`.
 	 *
-	 *	=> `undefined`.
-	 **/
+	 *	=> `cuJoinObject` = { username, contentID }.
+	 */
 	static async delete(userID, contentID) {
 
 		let result = await db.query(`
 			DELETE
 				FROM ${this.relationName}
 				WHERE user_id = $1 AND content_id = $2
-				RETURNING pk_name`, [userID, contentID]);
+				RETURNING user_id as "username", content_id`, [userID, contentID]);
 
 		const cuJoinObject = result.rows[0];
 
 		if (!cuJoinObject)
 			throw new NotFoundError(`No ${this.relationName}: (${userID}, ${contentID})`);
+
+		return cuJoinObject;
 
 	}
 

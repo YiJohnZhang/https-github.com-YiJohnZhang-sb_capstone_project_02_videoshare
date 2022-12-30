@@ -59,33 +59,61 @@ async function commonBeforeAll() {
 			await bcrypt.hash('admin', BCRYPT_WORK_FACTOR)
 		]);
 
+	// full Content
 	await Content.create({
 		title: 'test content',
 		summary: 'afdsa',
 		description: 'fdas',
-		owner: 'testuser1'
+		link: 'https://youtu.be/nhVJhRhJbJE',
+		status: 'published',
+		owner: 'testuser1',
+		contractType: 'solo',
+		participants: '["testuser1"]',
+		contractDetails: '{"views":[{"username":"testuser1","share":1}], "engagement":[{"username":"testuser1","share":1}]}',
+		contractSigned: '["testuser1"]',
+		dateCreated: '2022-12-29',
+		dateStandby: '2022-12-29',
+		datePublished: '2022-12-30'
 	});
 
 	await Content.create({
 		title: 'test content2',
 		summary: 'afsd',
-		description: 'asfd',
-		owner: 'testuser1'
+		description: 'afsd',
+		link: 'https://youtu.be/FTvLFlNbSQQ',
+		status: 'published',
+		owner: 'testuser1',
+		contractType: 'byview',
+		participants: '["testuser1", "testuser2"]',
+		contractDetails: '{"views":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}], "engagement":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}]}',
+		contractSigned: '["testuser2"]',
+		dateCreated: '2022-12-29',
+		dateStandby: '2022-12-29',
+		datePublished: '2022-12-30'
 	});
 
 	await Content.create({
 		title: 'test content3',
 		summary: 'asdfdsafa',
-		description: 'asdaf',
-		owner: 'testuser1'
+		description: 'afsd',
+		link: '',
+		status: 'standby',
+		owner: 'testuser1',
+		contractType: 'presplit',
+		participants: '["testuser1", "testuser2"]',
+		contractDetails: '{"views":[{"username":"testuser1","share":0.7}, {"username":"testuser2","share":0.3}], "engagement":[{"username":"testuser1","share":0.4}, {"username":"testuser2","share":0.6}]}',
+		contractSigned: '["testuser1"]',
+		dateCreated: '2022-12-30',
+		dateStandby: '2022-12-30',
+		datePublished: null
 	});
 
 	await db.query(`
 	INSERT INTO contents_users_join(user_id,content_id,description)
 		VALUES
-			('testuser1', 1, NULL),
-			('testuser1', 2, NULL),
-			('testuser2', 2, NULL),
+			('testuser1', 1, 'mw1'),
+			('testuser1', 2, 'mw2'),
+			('testuser2', 2, 'mw2'),
 			('testuser1', 3, NULL),
 			('testuser2', 3, NULL)`);
 

@@ -230,7 +230,7 @@ class User {
 
 	/**	Delete given user from database by `username`.
 	 *
-	 *	=> `undefined`.
+	 *	=> `userObject` = { username }.
 	 **/
 	static async delete(username) {
 

@@ -39,65 +39,72 @@ const USER1_PRIVATE_RESPONSE = {
 }
 const USER_1_PUBLIC_CONTENT = [
 	{
-		id: '',
-		title: '',
-		summary: '',
-		description: '',
-		link: '',
-		partipants: '',
-		dateCreated: '',
-		dateStandby: '',
-		datePublished: ''
+		id: 1,
+		title: 'test content',
+		description: 'mw1',
+		link: 'https://youtu.be/nhVJhRhJbJE',
+		participants: '["testuser1"]',
+		dateCreated: '2022-12-29',
+		dateStandby: '2022-12-29',
+		datePublished: '2022-12-30'
 	},
 	{
-		id: '',
-		title: '',
-		summary: '',
-		description: '',
-		link: '',
-		partipants: '',
-		dateCreated: '',
-		dateStandby: '',
-		datePublished: ''
+		id: 2,
+		title: 'test content2',
+		description: 'mw2',
+		link: 'https://youtu.be/FTvLFlNbSQQ',
+		participants: '["testuser1", "testuser2"]',
+		dateCreated: '2022-12-29',
+		dateStandby: '2022-12-29',
+		datePublished: '2022-12-30'
 	}
 ];
 
 const USER_1_ALL_CONTENT =  [
 	{
-		id: '',
-		title: '',
-		summary: '',
-		description: '',
-		link: '',
-		partipants: '',
-		dateCreated: '',
-		dateStandby: '',
-		datePublished: ''
+		id: 1,
+		title: 'test content',
+		summary: 'afdsa',
+		description: 'mw1',
+		link: 'https://youtu.be/nhVJhRhJbJE',
+		participants: '["testuser1"]',
+		dateCreated: '2022-12-29',
+		dateStandby: '2022-12-29',
+		datePublished: '2022-12-30'
 	},
 	{
-		id: '',
-		title: '',
-		summary: '',
-		description: '',
-		link: '',
-		partipants: '',
-		dateCreated: '',
-		dateStandby: '',
-		datePublished: ''
+		id: 2,
+		title: 'test content2',
+		summary: 'afsd',
+		description: 'mw2',
+		link: 'https://youtu.be/FTvLFlNbSQQ',
+		participants: '["testuser1", "testuser2"]',
+		dateCreated: '2022-12-29',
+		dateStandby: '2022-12-29',
+		datePublished: '2022-12-30'
 	},
 	{
-		id: '',
-		title: '',
-		summary: '',
-		description: '',
+		id: 3,
+		title: 'test content3',
+		summary: 'asdfdsafa',
+		description: 'afsd',
 		link: '',
-		partipants: '',
-		dateCreated: '',
-		dateStandby: '',
-		datePublished: ''
+		participants: '["testuser1", "testuser2"]',
+		dateCreated: '2022-12-30',
+		dateStandby: '2022-12-30',
+		datePublished: null
 	}
 ]
-const user2Content = [];
+
+const USER3_PUBLIC_RESPONSE = {
+	username: 'testuser3',
+	firstName: 'Test',
+	lastName: 'User3',
+	verified: false,
+	accountStatus: 'standby',
+	picture: '',
+	description: ''
+}
 
 /***	POST /users (DEPRECATED, MOVE TO `/authentication/register`)*/
 
@@ -147,7 +154,7 @@ describe('GET \`/users\`: search', () => {
 /***	GET /users/:username */
 describe('GET \`/users/:username\`', () => {
 
-	test('private view (reference user token)', async() => {
+	test('public view testuser1 (reference user token)', async() => {
 
 		const response = await request(app)
 			.get('/users/testuser1')
@@ -159,7 +166,7 @@ describe('GET \`/users/:username\`', () => {
 
 	});
 
-	test('private view (admin token)', async() => {
+	test('public view testuser1 (admin token)', async() => {
 
 		const response = await request(app)
 			.get('/users/testuser1')
@@ -171,7 +178,7 @@ describe('GET \`/users/:username\`', () => {
 
 	});
 
-	test('public view (wrong user)', async() => {
+	test('public view testuser1 (non-reference user token)', async() => {
 		
 		const response = await request(app)
 			.get('/users/testuser1')
@@ -199,6 +206,30 @@ describe('GET \`/users/:username\`', () => {
 		const response = await request(app)
 			.get('/users/testuser12');
 		expect(response.statusCode).toEqual(404);
+
+	});
+
+	test('public view testuser3 (reference user token)', async() => {
+
+		const response = await request(app)
+			.get('/users/testuser3')
+			.set('authorization', `Bearer ${user3Token}`);
+		expect(response.body).toEqual({
+			user: USER3_PUBLIC_RESPONSE, 
+			content: []
+		});
+
+	});
+
+	test('public view testuser3 (non-reference user token)', async() => {
+
+		const response = await request(app)
+			.get('/users/testuser3')
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.body).toEqual({
+			user: USER3_PUBLIC_RESPONSE, 
+			content: []
+		});
 
 	});
 
