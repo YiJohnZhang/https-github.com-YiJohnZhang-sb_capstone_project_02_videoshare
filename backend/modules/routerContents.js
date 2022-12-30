@@ -89,9 +89,9 @@ router.get('/:contentID', async(req, res, nxt) => {
  *		where `input` is: (req.params.contentID, { req.body })
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES }
  *	
- *	Authorization Required: isLoggedIn, isReferenceUser
+ *	Authorization Required: isLoggedIn, isOwner
 */
-router.update('/:contentID/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateContentSchema), async(req, res, nxt) => {
+router.update('/:contentID/edit', isLoggedIn, isOwner, validateRequestBody(updateContentSchema), async(req, res, nxt) => {
 
 	try{
 	
@@ -111,20 +111,21 @@ router.update('/:contentID/edit', isLoggedIn, isReferenceUser, validateRequestBo
  *		where `contentResult` is: {  }
  *	
  *	Authorization Required: isLoggedIn, isAdmin or isOwner (isReferenceUserOrAdmin, isOwner)
-*/
-router.delete('/:contentID', isLoggedIn, isReferenceUserOrAdmin, isOwner, async(req, res, nxt) => {
+ */
+//	DISABLED, should this be for admins only or what?
+// router.delete('/:contentID', isLoggedIn, isReferenceUserOrAdmin, isOwner, async(req, res, nxt) => {
 
-	try{
+// 	try{
 
-		const contentResult = await ContentModel.delete(req.params.contentID);
+// 		const contentResult = await ContentModel.delete(req.params.contentID);
 
-		return res.json({deleted: contentResult});
+// 		return res.json({deleted: contentResult});
 
-	}catch(error){
-		nxt(error);
-	};
+// 	}catch(error){
+// 		nxt(error);
+// 	};
 	
-});
+// });
 
 /** */
 /** GET `/[contentID]/edit`
@@ -134,7 +135,7 @@ router.delete('/:contentID', isLoggedIn, isReferenceUserOrAdmin, isOwner, async(
  *	To edit the content.
  *	Authorization Required: isLoggedIn, isOwner
 */
-router.get('/:contentID', isLoggedIn, isOwner, async(req, res, nxt) => {
+router.get('/:contentID/edit', isLoggedIn, isOwner, async(req, res, nxt) => {
 
 	try{
 
@@ -149,6 +150,8 @@ router.get('/:contentID', isLoggedIn, isOwner, async(req, res, nxt) => {
 	}
 
 });
+
+// NOTE: PUSH TO THE JOIN MODEL
 
 /** GET `/[username]/[contentID]`
  *	( input ) => { contentResult }
@@ -171,7 +174,7 @@ router.get('/:username/:contentID', async(req, res, nxt) => {
 
 });
 
-/** PATCH `/[username]/[contentID]/edit`
+/** GET `/[username]/[contentID]/edit`
  *	( input ) => { contentResult }
  *		where `input` is: ( , {  })
  *		where `contentResult` is: {  }

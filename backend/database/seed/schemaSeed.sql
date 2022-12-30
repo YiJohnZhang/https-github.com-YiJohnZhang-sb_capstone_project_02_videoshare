@@ -23,42 +23,48 @@ CREATE TABLE users (
     	CHECK (position('@' IN email) > 1),
 		-- < 100
 	"password" TEXT NOT NULL,
-	picture VARCHAR(64) DEFAULT 'default.jpg',
+	picture VARCHAR(64) DEFAULT '',
 		-- default default.jpg
-	"description" VARCHAR(512) NOT NULL,
+	"description" VARCHAR(512) DEFAULT '',
 		-- LEN <= 512 in client-side, server-side validation; also database
-	is_elevated BOOLEAN DEFAULT FALSE
+	is_elevated BOOLEAN DEFAULT FALSE,
 		-- reminder: block a request body from containing this attribute
+	UNIQUE (email)
 
 );
 
 --	contents
-CREATE TYPE status_state AS ENUM ('open', 'standby', 'active', 'legacy');
+CREATE TYPE status_state AS ENUM ('open', 'standby', 'published', 'legacy');
 	-- default is 'open'
+	-- `published` and `legacy` => JOIN is active
 CREATE TYPE contract_type_state AS ENUM ('solo', 'byview', 'presplit');
-	-- default is 'single'
+	-- default is 'solo'
 
 CREATE TABLE contents (
 	id					SERIAL PRIMARY KEY,
 	title				VARcHAR(64) NOT NULL,
-	summary				VARCHAR(512) NOT NULL,
-	"description"		VARCHAR(2200)
-		DEFAULT 'Description placeholder.',
+	summary				VARCHAR(512) DEFAULT '',
+	"description"		VARCHAR(2200) DEFAULT '',
 		-- https://mashable.com/article/tiktok-video-descriptions-photo-mode
-	link				VARCHAR(100),
+	link				VARCHAR(100) DEFAULT '',
 	-- bloopers
 	-- notes
 	-- visible
 	"status"			status_state DEFAULT 'open',
 	"owner"				VARCHAR(32)
-		REFERENCES users(username) ON DELETE CASCADE,
+		REFERENCES users(username),
+	participants		TEXT,
+		-- DEFAULT '["username", ...]'	
 	contract_type		contract_type_state DEFAULT 'solo',
 		-- 2022-12-12 "monetization type"?
-	contract_details	TEXT
-		DEFAULT '{views:[{username: "temporary", share:1}], engagement:[{username: "temporary", share:1}]}',
-	contract_signed		TEXT
-		DEFAULT '[{username:"temporary", signed: false}]',
-	date_created		DATE NOT NULL, 
+		-- business logic: `solo` sets `participants`, `contract_details`, `contract_signed` to NULL on submission (basically sends NULL to `db`)
+	contract_details	TEXT,
+		-- DEFAULT '{views:[{username: "temporary", share:1}], engagement:[{username: "temporary", share:1}]}',
+	contract_signed		TEXT,
+		-- DEFAULT '[{username:"temporary", signed: false}, ...]',
+		-- DEFAULT '["username", ...]'
+	date_created		DATE
+		DEFAULT CURRENT_DATE,
 	date_standby		DATE,
 	date_published		DATE
 
@@ -75,13 +81,14 @@ CREATE TABLE roles (
 --	contents_users_join
 CREATE TABLE contents_users_join (
 
-	user_id VARCHAR(32) NOT NULL
+	user_id			VARCHAR(32) NOT NULL
 		REFERENCES users(username) ON DELETE CASCADE,
-	content_id SMALLINT NOT NULL
-		REFERENCES contents(id) ON DELETE CASCADE,
-	"description" VARCHAR(2200)
-		-- by default it inherits the contents `default_description`
+	content_id		SMALLINT NOT NULL
+		REFERENCES contents(id),
+	"description"	VARCHAR(2200),
+		-- by default it inherits the contents `description`
 		-- each user sets their own content description
+	PRIMARY KEY (user_id, content_id)
 
 );
 
@@ -90,8 +97,9 @@ CREATE TABLE roles_users_join (
 	-- user, creator, brand (marketing admin), representative (brand assistant w/ delegated responsibilities), admin (site admin), moderator (admin assistant w/ delegated responsibilties)
 
 	user_id VARCHAR(32) NOT NULL
-		REFERENCES users(username),
+		REFERENCES users(username) ON DELETE CASCADE,
 	role_id SMALLINT NOT NULL
-		REFERENCES roles(id)
+		REFERENCES roles(id),
+	PRIMARY KEY (user_id, role_id)
 
 );

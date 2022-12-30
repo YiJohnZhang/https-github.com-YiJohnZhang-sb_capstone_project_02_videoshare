@@ -5,7 +5,8 @@ const { sqlUpdateQueryBuilder, sqlFilterQueryBuilder } = require("../helpers/sql
 const {
 	NotFoundError,
 	BadRequestError,
-	UnauthorizedError
+	UnauthorizedError,
+	ConflictError
 } = require("../modules/utilities");
 
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
@@ -19,6 +20,10 @@ const QUERY_GENERAL_PROPERTIES = `
 	description, 
 	is_elevated AS "isElevated"`;
 const QUERY_PRIVATE_PROPERTIES = 'birthdate, email';
+const AUTHENTICATION_PROPERTIES = `
+	username,
+	is_elevated AS "isElevated",
+	password`;
 
 const JSON_SQL_SET_MAPPING = {
 	firstName: 'first_name',
@@ -41,12 +46,11 @@ class User {
 	static async authenticate(username, password) {
 
 		// try to find the user first
-		const result = await db.query(
-			`SELECT ${QUERY_GENERAL_PROPERTIES}, password
-			FROM users
-			WHERE username = $1`,
-			[username]
-		);
+		const result = await db.query(`
+			SELECT ${AUTHENTICATION_PROPERTIES}
+				FROM users
+				WHERE username = $1`,
+			[username]);
 
 		const userObject = result.rows[0];
 
@@ -70,6 +74,14 @@ class User {
 	 *	=> { ... }
 	 *
 	 *	Throws BadRequestError for duplicates.
+	 *	@param {string} username
+	 *	@param {string} password
+	 *	@param {string} firstName
+	 *	@param {string} lastName
+	 *	@param {string} email
+	 *	@param {integer} birthdateYear
+	 *	@param {integer} birthdateMonth
+	 *	@param {integer} birthdateDay
 	 **/
 	static async register({ username, password, firstName, lastName, email, birthdateYear, birthdateMonth, birthdateDay }){
 
@@ -77,20 +89,19 @@ class User {
 			SELECT username
 				FROM users
 				WHERE username = $1`,
-			[username]
-		);
+			[username]);
 
 		if (userExists.rows[0])
-			throw new BadRequestError(`Username, \'${username}\' already taken`);
+			throw new ConflictError(`Username, \'${username}\' already taken`);
 
-		const birthdate = `${birthdateYear}-${birthdateMonth}-${birthdateDay}`;
+		const birthdate = `'${birthdateYear}-${birthdateMonth}-${birthdateDay}'`;
 		const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
 		const result = await db.query(`
 			INSERT INTO users
 				(username, password, first_name, last_name, email, birthdate)
 				VALUES ($1, $2, $3, $4, $5, $6, $7)
-				RETURNING ${QUERY_GENERAL_PROPERTIES}`,
+				RETURNING ${AUTHENTICATION_PROPERTIES}`,
 			[username, hashedPassword, firstName, lastName, email, birthdate]
 		);
 
@@ -115,12 +126,12 @@ class User {
 
 		let result;
 
-		if(queryString){
+		if(queryObject){
 
-			if(queryString.username)
-				queryString.username = `%${queryString.username}%`;
+			if(queryObject.username)
+				queryObject.username = `%${queryObject.username}%`;
 			
-			const {parameterizedWHERE, whereParameters} = sqlFilterQueryBuilder(queryString, JSON_SQL_QUERY_MAPPING);
+			const {parameterizedWHERE, whereParameters} = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
 
 			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
 
@@ -143,11 +154,10 @@ class User {
 	static async getByPK(username) {
 
 		const result = await db.query(`
-			SELECT  ${QUERY_GENERAL_PROPERTIES}
+			SELECT ${QUERY_GENERAL_PROPERTIES}
 				FROM users
 				WHERE username = $1`,
-			[username],
-		);
+			[username]);
 
 		const userObject = result.rows[0];
 
@@ -170,8 +180,7 @@ class User {
 			SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
 				FROM users
 				WHERE username = $1`,
-			[username]
-		);
+			[username]);
 
 		const userObject = result.rows[0];
 
@@ -211,7 +220,7 @@ class User {
 			UPDATE users 
 				SET ${parameterizedSET} 
 				WHERE username = ${usernameParameterIndex} 
-				RETURNING ${QUERY_GENERAL_PROPERTIES}`;
+				RETURNING ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}`;
 		const result = await db.query(updateQuerySQL, [...setParameters, username]);
 
 		const userObject = result.rows[0];
@@ -231,8 +240,7 @@ class User {
 				FROM users
 				WHERE username = $1
 				RETURNING username`,
-			[username],
-		);
+			[username]);
 
 		const userObject = result.rows[0];
 

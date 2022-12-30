@@ -111,6 +111,11 @@ class ContentUserJoin {
 		return result.rows;
 	
 	}
+	
+	/**	Find all matching content_users_join records.
+	 *	Optional: filter data in the form of `queryObject`.
+	 *	=> [{ pk, propertyOne, ... }, ...]
+	 **/
 
 	/**	Given a pk, return data about content_users_join records.
 	 *

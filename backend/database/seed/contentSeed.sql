@@ -29,13 +29,13 @@ INSERT INTO users("username","first_name","last_name","birthdate","verified","ac
 	('thatmitchellandwebblook', 'Mitchell', 'Webb', '1990-01-01', TRUE, 'active', 'thatmitchellandwebblook@fakeemail.com', '$2a$14$3QlPlVm0blm4M5sLgUmcc.ii6DLtVW6S6AOWRn3rWNZhwBVsWzq/K', 'thatmitchandwebblook.jpg', 'Begin money me young science.', FALSE),
 	('kaliningradgeneral', 'Kaliningrad', 'General', '1990-01-01', TRUE, 'active', 'kaliningradgeneral@fakeemail.com', '$2a$14$3QlPlVm0blm4M5sLgUmcc.ii6DLtVW6S6AOWRn3rWNZhwBVsWzq/K', 'kaliningradgeneral.jpg', 'Treatment better little cover fact commercial.', FALSE);
 	
-INSERT INTO contents(title,summary,description,link,status,owner,contract_type,contract_details,contract_signed,date_created,date_standby,date_published)
+INSERT INTO contents(title,summary,description,link,status,owner,contract_type,participants,contract_details,contract_signed,date_created,date_standby,date_published)
 	VALUES
-	('Coverage of People Buying a House and Living in It', 'temporary', 'That Mitchell and Webb Look (s1 ep2)\nSource: https://youtu.be/gqK5AYiuC_w', 'gqK5AYiuC_w_360p', 'active', 'thatmitchellandwebblook', 'solo', NULL, NULL, '2022-12-12', '2022-12-26', '2022-12-26'),
-	('Talent Dredge', 'temporary', 'Again, one of my favorites from the masters, Mitchell and Webb.\nSource: https://youtu.be/3I5udb-BDAQ', '3I5udb-BDAQ_360p', 'active', 'thatmitchellandwebblook', 'presplit', '{views:[{username: "thatmitchellandwebblook", share:0.7}, {username: "veronicahaynes", share:0.3}], engagement:[{username: "thatmitchellandwebblook", share:0.5}, {username: "veronicahaynes", share:0.5}]}', '[{username: "thatmitchellandwebblook", signed:true}, {username: "veronicahaynes", signed:true}]', '2022-12-12', '2022-12-26', '2022-12-26'),
-	('Bronze Orientation', 'temporary', 'Bronze Orientation for stone-age chippers and tie-ers. A sketch from series 2 of That Mitchell and Webb Look.\nSource: https://youtu.be/nyu4u3VZYaQ', 'nyu4u3VZYaQ_360p', 'active', 'thatmitchellandwebblook', 'byview', NULL, '[{username: "thatmitchellandwebblook", signed:true}, {username: "wjefferson", signed:true}]', '2022-12-12', '2022-12-26', '2022-12-26'),
-	('Lorem Ipsum', 'marketing campaign for some brand', 'Lorem ispum.', NULL, 'standby', 'veronicahaynes', 'presplit', NULL, NULL, '2022-12-12', '2022-12-26', NULL),
-	('Birdie', 'placeholder', 'HYPEEEEEEEEEEEEEEEEEE', NULL, 'open', 'tiffanywilson', 'presplit', NULL, NULL, '2022-12-12', NULL, NULL);
+	('Coverage of People Buying a House and Living in It', 'm&w1', 'That Mitchell and Webb Look (s1 ep2)\nSource: https://youtu.be/gqK5AYiuC_w', 'gqK5AYiuC_w_360p', 'legacy', 'thatmitchellandwebblook', 'solo', '["thatmitchellandwebblook"]', NULL, NULL, '2022-12-12', '2022-12-26', '2022-12-26'),
+	('Talent Dredge', 'm&w2', 'Again, one of my favorites from the masters, Mitchell and Webb.\nSource: https://youtu.be/3I5udb-BDAQ', '3I5udb-BDAQ_360p', 'published', 'thatmitchellandwebblook', 'presplit', '["thatmitchellandwebblook", "veronicahayes"]', '{views:[{username: "thatmitchellandwebblook", share:0.7}, {username: "veronicahaynes", share:0.3}], engagement:[{username: "thatmitchellandwebblook", share:0.5}, {username: "veronicahaynes", share:0.5}]}', '["thatmitchellandwebblook", "veronicahayes"]', '2022-12-12', '2022-12-26', '2022-12-26'),
+	('Bronze Orientation', 'm&w3', 'Bronze Orientation for stone-age chippers and tie-ers. A sketch from series 2 of That Mitchell and Webb Look.\nSource: https://youtu.be/nyu4u3VZYaQ', 'nyu4u3VZYaQ_360p', 'published', 'thatmitchellandwebblook', 'byview', '["thatmitchellandwebblook", "wjefferson"]', NULL, '["thatmitchellandwebblook", "wjefferson"]', '2022-12-12', '2022-12-26', '2022-12-26'),
+	('Lorem Ipsum', 'placeh0lder', 'Lorem ispum.', NULL, 'open', 'veronicahaynes', 'presplit', NULL, NULL, NULL, '2022-12-12', '2022-12-26', NULL),
+	('Birdie', 'placeholder', 'Ispum et Dolor.', NULL, 'open', 'tiffanywilson', 'presplit', NULL, NULL, NULL, '2022-12-12', NULL, NULL);
 	
 INSERT INTO roles(name)
 	VALUES
@@ -64,7 +64,11 @@ INSERT INTO contents_users_join(user_id,content_id,description)
 	VALUES
 	('thatmitchellandwebblook', 1, 'That Mitchell and Webb Look (s1 ep2)\nSource: https://youtu.be/gqK5AYiuC_w'),
 	('thatmitchellandwebblook', 2, 'Again, one of my favorites from the masters, Mitchell and Webb.\nSource: https://youtu.be/3I5udb-BDAQ'),
-	('thatmitchellandwebblook', 3, 'Bronze Orientation for stone-age chippers and tie-ers. A sketch from series 2 of That Mitchell and Webb Look.\nSource: https://youtu.be/');
+	('veronicahaynes', 2, 'ft. me'),
+	('thatmitchellandwebblook', 3, 'Bronze Orientation for stone-age chippers and tie-ers. A sketch from series 2 of That Mitchell and Webb Look.\nSource: https://youtu.be/'),
+	('wjefferson', 3, '2nd instance'),
+	('veronicahaynes', 4, NULL),
+	('tiffanywilson', 5, NULL);
 	
 INSERT INTO roles_users_join("user_id","role_id")
 	VALUES

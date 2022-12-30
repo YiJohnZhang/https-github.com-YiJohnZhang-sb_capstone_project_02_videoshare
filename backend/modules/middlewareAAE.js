@@ -6,9 +6,11 @@
 
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET_KEY } = require('../config');
-const { UnauthorizedError } = require('./utilities');
+const { UnauthorizedError, NotFoundError } = require('./utilities');
 
-const ContentModel = require('../models/ContentModel');
+const ContentModel = require('../models/Content');
+const RoleUserJoinModel = require('../models/Role_User_Join');
+
 
 /**	authenticate(req, res, nxt)
  *	Middleware to authenticate a user.
@@ -97,14 +99,22 @@ function isReferenceUser(req, res, nxt) {
 function checkAdminHelper(userToken){
 
 	const username = userToken.username;
+	const ADMIN_ROLEID = 1;
 
-	if(userToken.isAdmin && username){
+	if(userToken.isElevated && username){
 		// checking res.locals.user object is trivial compared to a db query
+		
+		try{
+	
+			const result = RoleUserJoinModel.getByPK(username, ADMIN_ROLEID);
 
-		const result = (username);
+			if(result.roleID === ADMIN_ROLEID && result.userID === username)
+				return true;
+					// redundant `&&`
 
-		if(result)
-			return true;
+		}catch(error){
+			//	do nothing and let false be returned gracefully
+		}
 
 	}
 
@@ -150,7 +160,12 @@ function isReferenceUserOrAdmin(req, res, nxt) {
  */
 function isOwner(req, res, nxt) {
 
-	const result = await ContentModel.getContentOwner(req.params.contentID);
+	let result;
+	try{
+		result = await ContentModel.getContentOwner(req.params.contentID);
+	}catch(error){
+		nxt(error);
+	}
 
 	if(res.locals.user.username === result.owner)
 		nxt();

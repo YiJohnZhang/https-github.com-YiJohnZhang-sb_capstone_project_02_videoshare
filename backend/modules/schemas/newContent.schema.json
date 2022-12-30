@@ -71,7 +71,6 @@
 		"link",
 		"owner",
 		"contractType",
-		"contractDetails",
-		"contractSigned"
+		"contractDetails"
 	]
 }

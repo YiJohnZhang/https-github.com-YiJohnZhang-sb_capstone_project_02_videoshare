@@ -1,8 +1,8 @@
-user_id,content_id,description,is_active
-'thatmitchellandwebblook',1,'That Mitchell and Webb Look (s1 ep2)\nSource: https://youtu.be/gqK5AYiuC_w',TRUE
-'thatmitchellandwebblook',2,"'Again, one of my favorites from the masters, Mitchell and Webb.\nSource: https://youtu.be/3I5udb-BDAQ'",TRUE
-'veronicahaynes',2,'ft. me',TRUE
-'thatmitchellandwebblook',3,'Bronze Orientation for stone-age chippers and tie-ers. A sketch from series 2 of That Mitchell and Webb Look.\nSource: https://youtu.be/',TRUE
-'wjefferson',3,'2nd instance',TRUE
-'veronicahaynes',4,NULL,NULL
-'tiffanywilson',5,NULL,NULL
+user_id,content_id,description
+'thatmitchellandwebblook',1,'That Mitchell and Webb Look (s1 ep2)\nSource: https://youtu.be/gqK5AYiuC_w'
+'thatmitchellandwebblook',2,"'Again, one of my favorites from the masters, Mitchell and Webb.\nSource: https://youtu.be/3I5udb-BDAQ'"
+'veronicahaynes',2,'ft. me'
+'thatmitchellandwebblook',3,'Bronze Orientation for stone-age chippers and tie-ers. A sketch from series 2 of That Mitchell and Webb Look.\nSource: https://youtu.be/'
+'wjefferson',3,'2nd instance'
+'veronicahaynes',4,NULL
+'tiffanywilson',5,NULL

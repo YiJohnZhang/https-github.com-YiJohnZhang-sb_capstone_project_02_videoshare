@@ -52,8 +52,8 @@ See how much I can finish in 2 weeks time, eh?
 |16|`formik` for front-end, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
 |17|db work|2022-12-28|19:50 - 21:50|120|
 |18|routers|2022-12-28|22:38 - 23:55|77|
-|19|db revision (added `is_active` to `contents_user_join`), added the inevitable `Content_User_Join` model. need to reprint a schema|2022-12-29|09:52 - 11:06||
-|20|salvaging current project...|2022-12-29|13:04 - :||
+|19|db revision (added `is_active` to `contents_user_join`), added the inevitable `Content_User_Join` model. need to reprint a schema|2022-12-29|09:52 - 11:06|74|
+|20|salvaging current project...; database redesign: done; roles/ru_join: done; |2022-12-29|13:04 - 16:19||
 |21||2022-12-29|: - :||
 |22||2022-12-29|: - :||
 |23||2022-12-29|: - :||
@@ -74,6 +74,7 @@ See how much I can finish in 2 weeks time, eh?
 
 ## More-Time Wishlist
 - admin dashboard to demonstrate full potential of the database schema design.
+- admin delete content ()
 - more time: delete content joins individually (`./models/Content.js`); remove master delete by owner (from database schema design)
 - do an invitation-based `participants` invite system so that the invited user has to confirm before added to a content page
 - add an additional "social aspect" (chatting, messaging?) to organize collabs; use the `verified`/`parental_controls`/`birthdate` to 

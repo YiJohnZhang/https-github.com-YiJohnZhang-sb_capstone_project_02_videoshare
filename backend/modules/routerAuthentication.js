@@ -41,10 +41,11 @@ router.post('/register', isLoggedOut, validateRequestBody(newUserSchema), async(
 
 	try{
 
-		if(req.body.isElevated)
-			delete req.body.isElevated;
-	
-		const userResult = await User.register(req.body);
+		// if(req.body.isElevated)
+		// 	delete req.body.isElevated;
+			//	extra security
+		
+		const userResult = await UserModel.register(req.body);
 		const token = createToken(userResult);
 		
 		return res.status(201).json({token, username: userResult.username});

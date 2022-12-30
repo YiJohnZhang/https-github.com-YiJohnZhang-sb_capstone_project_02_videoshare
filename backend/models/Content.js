@@ -205,22 +205,7 @@ class Content {
 	 *
 	 *	=> `undefined`.
 	 */
-	static async delete(pk, username) {
-
-		const JOIN_MODEL_NAME = 'contents_users_join';
-
-		let result = await db.query(`
-			DELETE
-				FROM ${JOIN_MODEL_NAME}
-				WHERE content_id = $1 AND user_id = $2
-				RETURNING content_id, user_id`, [pk, username]);
-
-		const contentObject = result.rows[0];
-
-		if (!contentObject)
-			throw new NotFoundError(`No ${JOIN_MODEL_NAME}: (${pk}, ${fk})`);
-
-	}
+	// UNIMPLEMENTED: should this be for admins only to delete all instances or what?
 
 /** */
 
@@ -327,6 +312,27 @@ class Content {
 			throw new NotFoundError(`Cannot find content with: (${username}, ${contentID}).`);
 
 		return contentObject;
+
+	}
+
+	/**	Delete content records from database by `pk`.
+	 *
+	 *	=> `undefined`.
+	 */
+	static async delete(pk, username) {
+
+		const JOIN_MODEL_NAME = 'contents_users_join';
+
+		let result = await db.query(`
+			DELETE
+				FROM ${JOIN_MODEL_NAME}
+				WHERE content_id = $1 AND user_id = $2
+				RETURNING content_id, user_id`, [pk, username]);
+
+		const contentObject = result.rows[0];
+
+		if (!contentObject)
+			throw new NotFoundError(`No ${JOIN_MODEL_NAME}: (${pk}, ${fk})`);
 
 	}
 
