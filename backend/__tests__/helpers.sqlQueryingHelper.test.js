@@ -200,6 +200,4 @@ describe('sqlUpdateQueryBuilder', () => {
 
 	});
 
-
-
 });

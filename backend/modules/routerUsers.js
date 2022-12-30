@@ -66,9 +66,11 @@ router.get('/:username', async(req, res, nxt) => {
  *	
  *	Authorization Required: isLoggedIn, isReferenceUser
 */
-router.update('/:username/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateUserSchema), async(req, res, nxt) => {
+router.patch('/:username/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
 
 	try{
+		console.log(updateUserSchema)
+		validateRequestBody(req.body, updateUserSchema);
 
 		const userResult = await UserModel.update(req.params.username, req.body);
 
@@ -85,9 +87,9 @@ router.update('/:username/edit', isLoggedIn, isReferenceUser, validateRequestBod
  *		where `input` is: ( req.params.username )
  *		where `userResult` is: {  }
  *	
- *	Authorization Required: isLoggedIn, isAdmin or isOwner (isReferenceUserOrAdmin, isOwner)
+ *	Authorization Required: isLoggedIn, isReferenceUserOrAdmin
 */
-router.delete('/:username', isLoggedIn, isReferenceUserOrAdmin, isOwner, async(req, res, nxt) => {
+router.delete('/:username', isLoggedIn, isReferenceUserOrAdmin, async(req, res, nxt) => {
 
 	try{
 

@@ -158,7 +158,7 @@ function isReferenceUserOrAdmin(req, res, nxt) {
  *	Middleware to check whether or not the user is the owner.
  *	If not, raises UnauthorizedError.
  */
-function isOwner(req, res, nxt) {
+async function isOwner(req, res, nxt) {
 
 	let result;
 	try{

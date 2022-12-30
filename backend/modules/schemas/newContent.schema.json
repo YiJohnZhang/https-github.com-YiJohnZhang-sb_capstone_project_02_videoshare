@@ -62,8 +62,6 @@
 		"title",
 		"summary",
 		"description",
-		"owner",
-		"contractType",
-		"contractDetails"
+		"owner"
 	]
 }

@@ -48,18 +48,8 @@
 		"description": {
 			"type": "string",
 			"maxLength": 2000
-		},
-		"verified": {
-			"type": "boolean"
-		},
-		"isElevated": {
-			"type": "boolean"
-			// admin only (at the route)
 		}
 	},
-	"required": [
-		"username",
-		"password"
-	],
+	"required": [],
 	"additionalProperties": false
 }

@@ -32,9 +32,7 @@ const JSON_SQL_SET_MAPPING = {
 	contractDetails: "contract_details", 
 	contractSigned: "contract_signed"
 }
-const JSON_SQL_QUERY_MAPPING = {
-	title: 'title ILIKE'
-}
+
 
 /** Related functions for Content. */
 class Content {
@@ -47,11 +45,9 @@ class Content {
 	 *
 	 *	Throws BadRequestError for duplicates.
 	 **/
-	static async create(newRecordObject, ntomJoin = []){
+	 static async create(newRecordObject){
 
 		try{
-			
-			await db.query('BEGIN');
 
 			const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
 
@@ -61,32 +57,10 @@ class Content {
 					RETURNING ${QUERY_GENERAL_PROPERTIES}`, insertParameters);
 
 			const modelNameObject = result.rows[0];
-
-			if(ntomJoin){
-
-				const JOIN_MODEL_NAME = 'contents_users_join';
-				const JOIN_MODEL_KEY = '(user_id, content_id)';
-				const JOIN_MODEL_IDX = '($1, $2)';
-
-				newRecordObject.contractSigned.forEach((entry) => {
-
-					await db.query(`
-						INSERT INTO ${JOIN_MODEL_NAME} ${JOIN_MODEL_KEY}
-							VALUES ${JOIN_MODEL_IDX}
-							RETURNING ${JOIN_MODEL_KEY}`,
-							[ newRecordObject.title, entry.username ]);
-				
-				});
-
-			}
-
-			await db.query('COMMIT');
-
 			return modelNameObject;
 
 		}catch(error){
-			await db.query('ROLLBACK');
-			throw new ExpressError(499, `ERR_MULT_NEW_REC_DBFAIL`);
+			throw new ConflictError(`${error}`);
 		}
 
 	}

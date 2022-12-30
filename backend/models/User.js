@@ -20,11 +20,7 @@ const QUERY_GENERAL_PROPERTIES = `
 	description, 
 	is_elevated AS "isElevated"`;
 const QUERY_PRIVATE_PROPERTIES = 'birthdate, email';
-const AUTHENTICATION_PROPERTIES = `
-	username,
-	is_elevated AS "isElevated",
-	password`;
-
+const AUTHENTICATION_PROPERTIES = `username, is_elevated AS "isElevated"`;
 const JSON_SQL_SET_MAPPING = {
 	firstName: 'first_name',
 	lastName: 'last_name',
@@ -47,9 +43,9 @@ class User {
 
 		// try to find the user first
 		const result = await db.query(`
-			SELECT ${AUTHENTICATION_PROPERTIES}
+			SELECT ${AUTHENTICATION_PROPERTIES}, password
 				FROM users
-				WHERE username = $1`,
+				WHERE username = $1;`,
 			[username]);
 
 		const userObject = result.rows[0];
@@ -100,8 +96,8 @@ class User {
 		const result = await db.query(`
 			INSERT INTO users
 				(username, password, first_name, last_name, email, birthdate)
-				VALUES ($1, $2, $3, $4, $5, $6, $7)
-				RETURNING ${AUTHENTICATION_PROPERTIES}`,
+				VALUES ($1, $2, $3, $4, $5, $6)
+				RETURNING ${AUTHENTICATION_PROPERTIES};`,
 			[username, hashedPassword, firstName, lastName, email, birthdate]
 		);
 
@@ -133,11 +129,11 @@ class User {
 			
 			const {parameterizedWHERE, whereParameters} = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
 
-			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
+			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE};`, whereParameters);
 
 		}else{
 
-			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
+			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE};`);
 
 		}
 
