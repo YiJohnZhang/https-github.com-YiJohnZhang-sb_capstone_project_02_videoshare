@@ -42,10 +42,16 @@ class BadRequestError extends ExpressError{
 		super(400, message ? message : 'Bad Request');
 	}
 }
-/** Generic 403: Unauthorized Error */
+/** Generic 401: Unauthorized Error */
 class UnauthorizedError extends ExpressError{
 	constructor(message=undefined){
-		super(401, message ? message : 'Forbidden');
+		super(401, message ? message : 'Unauthorized');
+	}
+}
+/** Generic 403: Forbidden Error */
+class ForbiddenError extends ExpressError{
+	constructor(message=undefined){
+		super(403, message ? message : 'Forbidden');
 	}
 }
 /** Generic 404: Not Found Error */
@@ -66,6 +72,7 @@ module.exports = {
 	ExpressError,
 	BadRequestError,
 	UnauthorizedError,
+	ForbiddenError,
 	NotFoundError,
 	ConflictError
 };

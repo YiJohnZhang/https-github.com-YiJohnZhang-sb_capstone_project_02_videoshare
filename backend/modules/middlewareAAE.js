@@ -6,11 +6,10 @@
 
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET_KEY } = require('../config');
-const { UnauthorizedError, NotFoundError } = require('./utilities');
+const { UnauthorizedError, ForbiddenError } = require('./utilities');
 
 const ContentModel = require('../models/Content');
 const RoleUserJoinModel = require('../models/Role_User_Join');
-
 
 /**	authenticate(req, res, nxt)
  *	Middleware to authenticate a user.
@@ -69,7 +68,7 @@ function isLoggedOut(req, res, nxt) {
 
 	try {
 
-		if (res.locals.user) throw new UnauthorizedError();
+		if (res.locals.user) throw new ForbiddenError();
 		nxt();
 
 	} catch(err) {
@@ -95,7 +94,8 @@ function isReferenceUser(req, res, nxt) {
 
 /**	checkAdminHelper(req, res, nxt)
  *	A helper for double authentication the user is an admin, for a database schema with specifications that it is possible.
- */
+ *
+//  * ABANDONED
 async function checkAdminHelper(userToken){
 
 	const username = userToken.username;
@@ -108,9 +108,10 @@ async function checkAdminHelper(userToken){
 	
 			const result = await RoleUserJoinModel.getByPK(username, ADMIN_ROLEID);
 
-			if(result.roleID === ADMIN_ROLEID && result.userID === username)
+			if(result.roleID === ADMIN_ROLEID && result.userID === username){
 				return true;
 					// redundant `&&`
+			}
 
 		}catch(error){
 			//	do nothing and let false be returned gracefully
@@ -120,7 +121,7 @@ async function checkAdminHelper(userToken){
 
 	return false;
 
-}
+}*/
 
 /**	isAdmin(req, res, nxt)
  *	Middleware to check whether or not the user is an admin.
@@ -130,7 +131,9 @@ async function isAdmin(req, res, nxt) {
 
 	try {
 
-		if(await checkAdminHelper(res.locals.user))
+		// const isAdmin = await checkAdminHelper(res.locals.user);
+
+		if(res.local.user.isElevated)
 			nxt();
 			
 		nxt(new UnauthorizedError('Not an admin!'));
@@ -146,14 +149,22 @@ async function isAdmin(req, res, nxt) {
  *	If not, raises UnauthorizedError.
  */
 async function isReferenceUserOrAdmin(req, res, nxt) {
-
+	
 	// console.log(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
-	if(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
+	// if(!req.params.username === res.locals.user.username || !await checkAdminHelper(res.locals.user))
+	// if(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
+	// if(req.params.username === res.locals.user.username || res.locals.isElevated)
+	// 	nxt();
+	if(req.params.username != res.locals.user.username && !res.locals.user.isElevated)
 		nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
-		// for some reason there is a propensity to move out .______________________. (2 hours of debugging)
+	
+	// if(req.params.username === res.locals.user.username)
+	// 	nxt();
+	
+	// if(res.locals.users.isElevated)
+	// 	nxt();
 
 	nxt();
-
 	/* if(req.params.username === res.locals.user.username || await checkAdminHelper(res.locals.user))
 		nxt();
 	if(req.params.username === res.locals.user.username)
@@ -187,6 +198,13 @@ async function isOwner(req, res, nxt) {
 
 }
 
+async function isParticipatingUser(req, res, nxt) {
+
+	// for editing the content (sign and stuff.)
+
+
+}
+
 module.exports = {
 	authenticateJWT,
 	isLoggedIn,
@@ -194,5 +212,6 @@ module.exports = {
 	isReferenceUser,
 	isAdmin,
 	isReferenceUserOrAdmin,
-	isOwner
+	isOwner,
+	isParticipatingUser
 };

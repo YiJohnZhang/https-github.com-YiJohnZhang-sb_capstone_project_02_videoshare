@@ -16,59 +16,26 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-const user1Request = {
+const USER1_PUBLIC_RESPONSE = {
 	username: 'testuser1',
-	firstName: 'test',
-	lastName: 'asdf',
-	birthDate: "1991-01-01",
-	verified: true,
-	email: 'test@asdf.com',
-	password: 'password',
-	picture: 'default.jpg',
-	description: 'test description'
-}
-const user1InvalidRequest = {
-	firstName: 'test',
-	lastName: 'asdf',
-	birthDate: "1991-01-01",
-	verified: true,
-	password: 'password',
-	picture: 'default.jpg',
-	description: 'test description',
-	isElevated: false
-}
-const user1EditResponse = {
-	username: 'testuser1',
-	firstName: 'test',
-	lastName: 'asdf',
-	birthDate: "1991-01-01",
-	verified: true,
-	email: 'test@asdf.com',
-	picture: 'default.jpg',
-	description: 'test description',
-	isElevated: false
-}
-const user1PublicResponse = {
-	username: 'testuser1',
-	firstName: 'test',
-	lastName: 'asdf',
-	verified: true,
-	picture: 'default.jpg',
-	description: 'test description',
-	isElevated: false
+	firstName: 'Test',
+	lastName: 'User1',
+	verified: false,
+	accountStatus: 'standby',
+	picture: '',
+	description: ''
 }
 
-const adminObject = {
-	firstName: 'test',
-	lastName: 'admin',
-	birthDate: "1991-01-01",
-	verified: true,
-	accountStatus: 'active',
-	email: 'admin@asdf.com',
-	password: 'password',
-	picture: 'default.jpg',
-	description: 'test description',
-	isElevated: true
+const USER1_PRIVATE_RESPONSE = {
+	username: 'testuser1',
+	firstName: 'Test',
+	lastName: 'User1',
+	birthdate: '1990-01-01T08:00:00.000Z',
+	verified: false,
+	accountStatus: 'standby',
+	email: 'testuser1@gmail.com',
+	picture: '',
+	description: ''
 }
 
 // const user1PublicContent = [
@@ -106,62 +73,6 @@ const adminObject = {
 const user2Content = [];
 
 /***	POST /users (DEPRECATED, MOVE TO `/authentication/register`)*/
-/*
-describe('POST \`/users\`: create', () => {
-
-	test('works: regular user creation', async() => {
-
-		const response = await request(app)
-			.post('/users')
-			.send(user1Request);
-
-		expect(response.statusCode).toEqual(201);
-		expect(response.body)
-			.toEqual({
-				user: user1RegularResponse,
-				token: expect.any(String)
-			});
-		
-	});
-
-	// test('400 error: invalid form, contains \`isAdmin\` property', async() => {});
-	
-	test('400 error: invalid form, request does not conform to schema specs', async() => {
-		
-		const response = await request(app)
-			.post('/users')
-			.send(user1InvalidRequest);
-		expect(response.statusCode).toEqual(400);
-
-	});
-
-	test('403 error: a token is provided (user attempts to send a create account request while logged in)', async() => {
-		
-		const response = await request(app)
-			.post('/users')
-			.send(user1InvalidRequest)
-			.set("authorization", `Bearer ${user1Token}`);
-		expect(response.statusCode).toEqual(403);
-
-	});
-
-	test('409 error: duplicate user', async() => {
-
-		const response = await request(app)
-			.post('/users')
-			.send(user1Request);
-		expect(response.statusCode).toEqual(201);
-		
-
-		const response2 = await request(app)
-			.post('/users')
-			.send(user1Request);
-		expect(response2.statusCode).toEqual(409)
-
-	});
-
-});
-*/
 
 /***	GET /users */
 describe('GET \`/users\`: search', () => {
@@ -193,13 +104,13 @@ describe('GET \`/users\`: search', () => {
 		const response1 = await request(app)
 			.get('/users/')
 			.query({username:'test'})
-			.set('authorization', `Bearer: ${user1Token}`);;
+			.set('authorization', `Bearer ${user1Token}`);;
 		expect(response1.body.users.length).toEqual(3);
 
 		const response2 = await request(app)
 			.get('/users/')
 			.query({username:'2'})
-			.set('authorization', `Bearer: ${user1Token}`);;
+			.set('authorization', `Bearer ${user1Token}`);;
 		expect(response2.body.users.length).toEqual(1);
 
 	});
@@ -213,22 +124,22 @@ describe('GET \`/users/:username\`', () => {
 
 		const response = await request(app)
 			.get('/users/testuser1')
-			.set('authorization', `Bearer: ${user1Token}`);
+			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body).toEqual({
-			user: user1PublicResponse, 
-			content: user1Content
+			user: USER1_PUBLIC_RESPONSE, 
+			content: USER1_CONTENT
 		});
 
 	});
 
-	test('public view (non-reference usertoken)', async() => {
+	test('public view (wrong user)', async() => {
 		
 		const response = await request(app)
 			.get('/users/testuser1')
-			.set('authorization', `Bearer: ${adminToken}`);
+			.set('authorization', `Bearer ${adminToken}`);
 		expect(response.body).toEqual({
-			user: user1PublicResponse, 
-			content: user1Content
+			user: USER1_PUBLIC_RESPONSE, 
+			content: USER1_CONTENT
 		});
 
 	});
@@ -238,8 +149,8 @@ describe('GET \`/users/:username\`', () => {
 		const response = await request(app)
 			.get('/users/testuser1');
 		expect(response.body).toEqual({
-			user: user1PublicResponse, 
-			content: user1Content
+			user: USER1_PUBLIC_RESPONSE, 
+			content: USER1_CONTENT
 		});
 
 	});
@@ -254,74 +165,103 @@ describe('GET \`/users/:username\`', () => {
 
 });
 
-
 /***	GET /users/:username/edit */
-describe('GET \`/users/:username\`', () => {
+describe('GET \`/users/:username/edit\`', () => {
 
-	test('public view (reference user token)', async() => {
+	test('private view (reference user token)', async() => {
 
 		const response = await request(app)
-			.get('/users/testuser1')
-			.set('authorization', `Bearer: ${user1Token}`);
+			.get('/users/testuser1/edit')
+			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body).toEqual({
-			user: user1EditResponse
+			user: USER1_PRIVATE_RESPONSE
 		});
 
 	});
 
-	test('public view (non-reference usertoken)', async() => {
+	test('private view (admin usertoken)', async() => {
 		
 		const response = await request(app)
-			.get('/users/testuser1')
-			.set('authorization', `Bearer: ${adminToken}`);
-		expect(response.statusCode).toEqual(403);
+			.get('/users/testuser1/edit')
+			.set('authorization', `Bearer ${adminToken}`);
+		expect(response.body).toEqual({
+			user: USER1_PRIVATE_RESPONSE
+		});
+
 
 	});
 
-	test('public view (no token)', async() => {
+	test('private view (wrong user)', async() => {
 		
 		const response = await request(app)
-			.get('/users/testuser1');
-		expect(response.statusCode).toEqual(403);
+			.get('/users/testuser1/edit')
+			.set('authorization', `Bearer ${user3Token}`);
+		expect(response.statusCode).toEqual(401);
+
 	});
 
-	test('404 error: user not found', async() => {
+	test('private view (no token)', async() => {
+		
+		const response = await request(app)
+			.get('/users/testuser1/edit');
+		expect(response.statusCode).toEqual(401);
+	});
+
+	test('\"404 error\": user not found', async() => {
 
 		const response = await request(app)
-			.get('/users/testuser12');
-		expect(response.statusCode).toEqual(404);
+			.get('/users/testuser12/edit');
+		expect(response.statusCode).toEqual(401);
+			// never going to be the reference user
 
 	});
 
 });
 
 /***	PATCH /users/:username */
-describe('PATCH \`/users/:username\`', () => {
-
-	let patchedUserResponseObject = user1EditResponse;
-	patchedUserResponseObject.firstName = 'af';
+describe('PATCH \`/users/:username/edit\`', () => {
 
 	test('patches (for reference user)', async() => {
 
 		const response = await request(app)
-			.patch('/users/testuser1')
+			.patch('/users/testuser1/edit')
 			.send({firstName:'af'})
-			.set('authorization', `Bearer: ${user1Token}`);
+			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body).toEqual({
-			user: patchedUserResponseObject
+			user: { ...USER1_PRIVATE_RESPONSE, firstName: 'af' }
 		});
+
+	});
+
+	test('illegal patch (for reference user)', async() => {
+
+		const response = await request(app)
+			.patch('/users/testuser1/edit')
+			.send({accountStatus:'banned'})
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.statusCode).toEqual(400);
 
 	});
 
 	test('patches (for admin)', async() => {
 
 		const response = await request(app)
-			.patch('/users/testuser1')
-			.send({firstName:'af'})
-			.set('authorization', `Bearer: ${adminToken}`);
+			.patch('/users/testuser1/edit')
+			.send({accountStatus:'active'})
+			.set('authorization', `Bearer ${adminToken}`);
 		expect(response.body).toEqual({
-			user: patchedUserResponseObject
+			user: { ...USER1_PRIVATE_RESPONSE, accountStatus:'active' }
 		});
+
+	});
+
+	test('illegal patch (for admin)', async() => {
+
+		const response = await request(app)
+			.patch('/users/testuser1/edit')
+			.send({firstName:'af'})
+			.set('authorization', `Bearer ${adminToken}`);
+		expect(response.statusCode).toEqual(400);
 
 	});
 		// really just to reduce complexity of this application, rather than focus on the user-end, focus on the content...
@@ -329,9 +269,9 @@ describe('PATCH \`/users/:username\`', () => {
 	test('400 error: certain properties are not allowed to be edited through the API', async() => {
 			
 		const response = await request(app)
-			.patch('/users/testuser1')
+			.patch('/users/testuser1/edit')
 			.send({isElevated:true})
-			.set('authorization', `Bearer: ${user1Token}`);
+			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.statusCode).toEqual(400);
 
 	});
@@ -339,9 +279,9 @@ describe('PATCH \`/users/:username\`', () => {
 	test('401 error: unauthorized (wrong user)', async() => {
 		
 		const response = await request(app)
-			.patch('/users/testuser1')
+			.patch('/users/testuser1/edit')
 			.send({firstName:'afsdadfs'})
-			.set('authorization', `Bearer: ${user3Token}`);
+			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.statusCode).toEqual(401);
 
 	});
@@ -350,7 +290,7 @@ describe('PATCH \`/users/:username\`', () => {
 	test('401 error: unauthorized (logged out)', async() => {
 		
 		const response = await request(app)
-			.patch('/users/testuser1')
+			.patch('/users/testuser1/edit')
 			.send({firstName:'afsdadfs'});
 		expect(response.statusCode).toEqual(401);
 
@@ -388,7 +328,7 @@ describe('DELETE \`/users/:username\`', () => {
 		
 		const response = await request(app)
 			.delete('/users/testuser3')
-			.set('authorization', `Bearer: ${user1Token}`);
+			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.statusCode).toEqual(401);
 
 	});

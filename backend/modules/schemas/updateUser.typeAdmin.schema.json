@@ -1,0 +1,15 @@
+{
+	"_comment": "isElevated => only allowed for admin route (jsonschema comments: https://stackoverflow.com/a/4183018, https://stackoverflow.com/a/244858)",
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"accountStatus":{
+			"type": "string", "enum": ["standby", "active", "banned", "suspended"]
+		},
+		"isVerified":{
+			"type": "boolean"
+		}
+	},
+	"required": [],
+	"additionalProperties": false
+}

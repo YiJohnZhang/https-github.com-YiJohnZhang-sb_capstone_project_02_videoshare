@@ -2,39 +2,29 @@
 	*/
 
 const jsonschema = require('jsonschema');
-const { ExpressError } = require('./utilities');
+const { BadRequestError } = require('./utilities');
 
-const validateRequestBody = (selectedSchema) => {
+function validateRequestBody(requestBody, expectedSchema){
 
-	return (req, res, nxt) => {
+	const schemaValidationResult = jsonschema.validate(requestBody, expectedSchema);
+
+	if(schemaValidationResult.valid)
+		return;
 	
-		const schemaValidationResult = jsonschema.validate(req.body, selectedSchema);
-
-		if(schemaValidationResult.valid)
-			return nxt();
-		
-		const schemaErrorList = schemaValidationResult.errors.map((error) => error.stack);
-		const schemaError = new ExpressError(400, schemaErrorList);
-		return nxt(schemaError);
-
-	}
+	const schemaErrorList = schemaValidationResult.errors.map((error) => error.stack);
+	throw new BadRequestError(schemaErrorList);
 
 }
 
-const validateRequestQuery = (expectedSchema) => {
+function validateRequestQuery (requestQuery, expectedSchema){
 
-	return (req, res, nxt) => {
+	const schemaValidationResult = jsonschema.validate(requestQuery, expectedSchema);
 
-		const schemaValidationResult = jsonschema.validate(req.query, expectedSchema);
+	if(schemaValidationResult.valid)
+		return nxt();
 
-		if(schemaValidationResult.valid)
-			return nxt();
-
-		const schemaErrorList = schemaValidationResult.errors.map((error) => error.stack);
-		const schemaError = new ExpressError(400, schemaErrorList);
-		return nxt(schemaError);
-
-	}
+	const schemaErrorList = schemaValidationResult.errors.map((error) => error.stack);
+	throw new BadRequestError(schemaErrorList);
 
 }
 

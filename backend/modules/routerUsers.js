@@ -6,7 +6,8 @@ const ContentModel = require('../models/Content');
 const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin } = require('./middlewareAAE');
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
 
-const updateUserSchema = require('./schemas/updateUser.schema.json');
+const updateUserSchema_userVariant = require('./schemas/updateUser.typeUser.schema.json');
+const updateUserSchema_adminVariant = require('./schemas/updateUser.typeAdmin.schema.json');
 
 /** GET `/`
  *	=> { userResult }
@@ -73,7 +74,11 @@ router.patch('/:username/edit', isLoggedIn, isReferenceUserOrAdmin, async(req, r
 
 	try{
 		
-		validateRequestBody(req.body, updateUserSchema);
+		if(res.locals.user.isElevated){
+			validateRequestBody(req.body, updateUserSchema_adminVariant);
+		}else{
+			validateRequestBody(req.body, updateUserSchema_userVariant);
+		}
 
 		const userResult = await UserModel.update(req.params.username, req.body);
 
@@ -111,14 +116,13 @@ router.delete('/:username', isLoggedIn, isReferenceUserOrAdmin, async(req, res, 
  *		where `input` is: ( req.params.username )
  *		where `userResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
  *	Get full User details.
- *	Authorization Required: isLoggedIn, isReferenceUser
+ *	Authorization Required: isLoggedIn, isReferenceUserOrAdmin
 */
-router.get('/:username/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
+router.get('/:username/edit', isLoggedIn, isReferenceUserOrAdmin, async(req, res, nxt) => {
 
 	try{
 
 		const userResult = await UserModel.getByPKPrivate(req.params.username);
-
 		return res.json({user: userResult});
 
 	}catch(error){
