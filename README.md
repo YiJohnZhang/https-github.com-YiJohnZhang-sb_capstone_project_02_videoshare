@@ -57,7 +57,7 @@ See how much I can finish in 2 weeks time, eh?
 |21|finish contents?|2022-12-29|17:16 - 18:22|66|
 |22|finish contents?|2022-12-29|18:59 - 22:16|197|
 |23|pathing users....|2022-12-29 - 2022-12-30|22:32 - 00:31|119|
-|24|auth|2022-12-30|02:29 - :||
+|24|`auth`, and some `content`|2022-12-30|02:29 - 03:27||
 |25|finish contents?|2022-12-30|: - :||
 |26|finish contents?|2022-12-30|: - :||
 19		20		24

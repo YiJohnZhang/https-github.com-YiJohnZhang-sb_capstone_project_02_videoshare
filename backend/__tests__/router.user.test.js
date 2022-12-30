@@ -37,39 +37,66 @@ const USER1_PRIVATE_RESPONSE = {
 	picture: '',
 	description: ''
 }
+const USER_1_PUBLIC_CONTENT = [
+	{
+		id: '',
+		title: '',
+		summary: '',
+		description: '',
+		link: '',
+		partipants: '',
+		dateCreated: '',
+		dateStandby: '',
+		datePublished: ''
+	},
+	{
+		id: '',
+		title: '',
+		summary: '',
+		description: '',
+		link: '',
+		partipants: '',
+		dateCreated: '',
+		dateStandby: '',
+		datePublished: ''
+	}
+];
 
-// const user1PublicContent = [
-// 	{
-// 		id:,
-// 		title:,
-// 		description:,
-// 		link:,
-// 		contractSigned:,
-// 		datePublished:
-// 	},
-// 	{
-// 		id:,
-// 		title:,
-// 		description:,
-// 		link:,
-// 		contractSigned:,
-// 		datePublished:
-// 	}
-// ];
-// const user1InProgressContent = [
-// 	{
-// 		id:1,
-// 		title:'asdf',
-// 		description:'afsd',
-// 		link:'',
-// 		status:'',
-// 		owner:'testuser1',
-// 		contractType:'',
-// 		contractDetails:'',
-// 		contractSigned:''
-// 	}
-// ];
-
+const USER_1_ALL_CONTENT =  [
+	{
+		id: '',
+		title: '',
+		summary: '',
+		description: '',
+		link: '',
+		partipants: '',
+		dateCreated: '',
+		dateStandby: '',
+		datePublished: ''
+	},
+	{
+		id: '',
+		title: '',
+		summary: '',
+		description: '',
+		link: '',
+		partipants: '',
+		dateCreated: '',
+		dateStandby: '',
+		datePublished: ''
+	},
+	{
+		id: '',
+		title: '',
+		summary: '',
+		description: '',
+		link: '',
+		partipants: '',
+		dateCreated: '',
+		dateStandby: '',
+		datePublished: ''
+	}
+]
 const user2Content = [];
 
 /***	POST /users (DEPRECATED, MOVE TO `/authentication/register`)*/
@@ -120,14 +147,26 @@ describe('GET \`/users\`: search', () => {
 /***	GET /users/:username */
 describe('GET \`/users/:username\`', () => {
 
-	test('public view (reference user token)', async() => {
+	test('private view (reference user token)', async() => {
 
 		const response = await request(app)
 			.get('/users/testuser1')
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body).toEqual({
 			user: USER1_PUBLIC_RESPONSE, 
-			content: USER1_CONTENT
+			content: USER_1_ALL_CONTENT
+		});
+
+	});
+
+	test('private view (admin token)', async() => {
+
+		const response = await request(app)
+			.get('/users/testuser1')
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.body).toEqual({
+			user: USER1_PUBLIC_RESPONSE, 
+			content: USER_1_ALL_CONTENT
 		});
 
 	});
@@ -136,10 +175,10 @@ describe('GET \`/users/:username\`', () => {
 		
 		const response = await request(app)
 			.get('/users/testuser1')
-			.set('authorization', `Bearer ${adminToken}`);
+			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.body).toEqual({
 			user: USER1_PUBLIC_RESPONSE, 
-			content: USER1_CONTENT
+			content: USER_1_PUBLIC_CONTENT
 		});
 
 	});
@@ -150,7 +189,7 @@ describe('GET \`/users/:username\`', () => {
 			.get('/users/testuser1');
 		expect(response.body).toEqual({
 			user: USER1_PUBLIC_RESPONSE, 
-			content: USER1_CONTENT
+			content: USER_1_PUBLIC_CONTENT
 		});
 
 	});

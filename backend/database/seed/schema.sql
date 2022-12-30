@@ -61,8 +61,8 @@ CREATE TABLE contents (
 	contract_details	TEXT,
 		-- DEFAULT '{views:[{username: "temporary", share:1}], engagement:[{username: "temporary", share:1}]}',
 	contract_signed		TEXT,
-		-- DEFAULT '[{username:"temporary", signed: false}, ...]',
-		-- DEFAULT '["username", ...]'
+		-- pre-2022-12-28: DEFAULT '[{username:"temporary", signed: false}, ...]',
+		-- 2022-12-29: DEFAULT '["username", ...]'
 	date_created		DATE
 		DEFAULT CURRENT_DATE,
 	date_standby		DATE,

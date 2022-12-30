@@ -12,13 +12,13 @@ const QUERY_GENERAL_PROPERTIES = `
 	summary,
 	description,
 	link,
+	participants,
 	date_created AS "dateCreated",
 	date_standby AS "dateStandby",
 	date_published AS "datePublished"`;
 const QUERY_PRIVATE_PROPERTIES = `
 	status, 
 	owner,
-	participants,
 	contract_type AS "contractType", 
 	contract_details AS "contractDetails", 
 	contract_signed AS "contractSigned"`;
