@@ -91,6 +91,9 @@ describe('parseResponseBodyProperties', () => {
 			contractSigned: ["testuser1"]
 		});
 
+		expect(result.contractDetails.views).toEqual([{username:"testuser1",share:1}]);
+		expect(result.contractDetails.engagement[0]).toEqual({username:"testuser1",share:1})
+
 	});
 
 	test('SAMPLE_RESPONSE_OBJECT_2', () => {
@@ -101,6 +104,8 @@ describe('parseResponseBodyProperties', () => {
 			participants: ["testuser1","testuser2"]
 		});
 
+		expect(result.participants[0]).toEqual("testuser1");
+
 	});
 
 });
@@ -109,7 +114,6 @@ describe('circular', () => {
 
 	test('SAMPLE_REQUEST_OBJECT', () => {
 
-		console.log(SAMPLE_REQUEST_OBJECT)
 		const stringified = stringifyRequestBodyProperties(SAMPLE_REQUEST_OBJECT);
 		expect(stringified).toEqual({
 			...SAMPLE_REQUEST_OBJECT,

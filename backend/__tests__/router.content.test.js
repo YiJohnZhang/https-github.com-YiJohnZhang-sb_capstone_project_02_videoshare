@@ -77,14 +77,14 @@ const CONTENT_1_OWNER_RESPONSE = {
 const CONTENT_1_PARTICIPANT_RESPONSE = CONTENT_1_OWNER_RESPONSE;
 
 /***	POST /contents */
-describe('POST \`/contents\`: create', () => {
+describe('POST \`/contents/\`: create', () => {
 
 	// 
 
 });
 
 /***	GET /contents */
-describe('GET \`/contents\`: search', () => {
+describe('GET \`/contents/\`: search', () => {
 
 	// 
 
@@ -103,25 +103,6 @@ describe('PATCH \`/contents/:id\`', () => {
 	let patchedContentResponseObject = content1ReferenceResponse;
 	// patchedContentResponseObject.property = 'af';
 	// 
-
-
-	// update state of content (open => standby)
-
-
-
-
-	// update state of content (standby => open)
-		// to add more users, modifying `contract_signed` // `contract_details` will automatically push it to `open` phase
-		// 
-
-
-	
-	// cannot update state from `open` to `standby` if content there is an unsigned user (400) bad request
-
-	// update state of content (standby => active)
-		// cannot change the state if contract_signed array is not all truthy
-
-	// disallowed: update state of content (active => standby)
 
 	
 

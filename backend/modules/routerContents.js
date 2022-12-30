@@ -2,7 +2,7 @@ const express = require('express');
 const router = new express.Router();
 
 const ContentModel = require('../models/Content');
-const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin, isOwner } = require('./middlewareAAE');
+const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin, isOwner, isParticipatingUser } = require('./middlewareAAE');
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
 const newContentSchema = require('./schemas/newContent.schema.json');
 // const queryModelSchema = require('./schemas/queryContent.schema.json');
@@ -22,11 +22,7 @@ router.post('/', isLoggedIn, async(req, res, nxt) => {
 
 		validateRequestBody(req.body, newContentSchema);
 
-		// if(req.body.status)
-		// ntomjoin
-		// const NMJoin = 
-
-		const contentResult = await ContentModel.create(req.body, NMJoin);
+		const contentResult = await ContentModel.create(req.body);
 
 		return res.status(201).json({content: contentResult});
 
@@ -48,14 +44,9 @@ router.post('/', isLoggedIn, async(req, res, nxt) => {
 router.get('/', async(req, res, nxt) => {
 
 	try{
-
-		let contentResults;
-
-		if(req.query){
-			contentResults = await ContentModel.getAll(req.query);
-		}else{
-			contentResults = await ContentModel.getAll();		
-		}
+		
+		const contentResults = await ContentModel.getAll(req.query);
+			// tod: note add JOIN query to return list of users, throw it under "contents"
 
 		return res.json({contents: contentResults});
 
@@ -76,6 +67,7 @@ router.get('/:contentID', async(req, res, nxt) => {
 	try{
 		
 		const contentResult = await ContentModel.getByPK(req.params.contentID);
+			// todo: add JOIN query to return list users
 
 		return res.json({content: contentResult});
 
@@ -93,13 +85,54 @@ router.get('/:contentID', async(req, res, nxt) => {
  *	Authorization Required: isLoggedIn, isOwner
 */
 router.patch('/:contentID/edit', isLoggedIn, isOwner, async(req, res, nxt) => {
+	// todo: isParticipatingUser returns false if the status is 'active' or 'legacy'
 
 	try{
 
 		validateRequestBody(req.body, updateContentSchema)
 	
 		const contentResult = await ContentModel.update(req.params.contentID, req.body);
+			// todo: disable if the current status is pbulished or legacy'
 		
+		return res.json({content: contentResult});
+
+	}catch(error){
+		nxt(error);
+	};
+	
+});
+
+router.patch('/:contentID/:username/sign', isLoggedIn, isReferenceUser, isParticipatingUser, async(req, res, nxt) => {
+
+	try{
+
+		validateRequestBody(req.body, updateContentSchema)
+			// to do: modified schema
+		
+		const contentResult = await ContentModel.signUpdate(req.params.contentID, req.params.username);
+			// todo: disable if the current status is pbulished or legacy'
+			// also, whenever contractDetails change, automatically reset 'contractSigned to `[]`'
+		
+		return res.json({content: contentResult});
+
+	}catch(error){
+		nxt(error);
+	};
+	
+});
+
+router.patch('/:contentID/update', isLoggedIn, isAdmin, async(req, res, nxt) => {
+	// todo: isParticipatingUser returns false if the status is 'active' or 'legacy'
+
+	try{
+
+		validateRequestBody(req.body, updateContentSchema)
+			//todo modified schema (only update status available)
+	
+		const contentResult = await ContentModel.update(req.params.contentID, req.body, true);
+			// isElevated = true => the status can be toggled
+			// also can be hidden, but allow very little changes
+
 		return res.json({content: contentResult});
 
 	}catch(error){
@@ -144,6 +177,22 @@ router.get('/:contentID/edit', isLoggedIn, isOwner, async(req, res, nxt) => {
 		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
 
 		// NOTE: if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
+
+		return res.json({content: contentResult});
+
+	}catch(error){
+		nxt(error);
+	}
+
+});
+
+router.get('/:contentID/:username/sign', isLoggedIn, isReferenceUser, isParticipatingUser, async(req, res, nxt) => {
+
+	try{
+
+		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, req.params.username);
+			// NOTE: if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
+			// all this returns is contractType `participatingusers`, `contractDetails`, `contractSigned`
 
 		return res.json({content: contentResult});
 

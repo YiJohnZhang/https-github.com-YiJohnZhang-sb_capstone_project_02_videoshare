@@ -74,4 +74,7 @@ router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, validate
 
 });
 
+//delete: regular: a user can hide it?
+//delete: admin: delete all instances
+
 module.exports = router;
