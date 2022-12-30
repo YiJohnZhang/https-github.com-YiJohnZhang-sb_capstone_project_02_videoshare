@@ -16,10 +16,11 @@ const updateContentJOINSchema = require('./schemas/updateContentJOIN.schema.json
  *
  *	Authorization Required: isLoggedIn
 */
-router.post('/', isLoggedIn, validateRequestBody(newContentSchema), async(req, res, nxt) => {
+router.post('/', isLoggedIn, async(req, res, nxt) => {
 
 	try{
 
+		validateRequestBody(req.body, newContentSchema);
 
 		// if(req.body.status)
 		// ntomjoin
@@ -91,9 +92,11 @@ router.get('/:contentID', async(req, res, nxt) => {
  *	
  *	Authorization Required: isLoggedIn, isOwner
 */
-router.update('/:contentID/edit', isLoggedIn, isOwner, validateRequestBody(updateContentSchema), async(req, res, nxt) => {
+router.patch('/:contentID/edit', isLoggedIn, isOwner, async(req, res, nxt) => {
 
 	try{
+
+		validateRequestBody(req.body, updateContentSchema)
 	
 		const contentResult = await ContentModel.update(req.params.contentID, req.body);
 		
@@ -109,23 +112,22 @@ router.update('/:contentID/edit', isLoggedIn, isOwner, validateRequestBody(updat
  *	( input ) => { modelName }
  *		where `input` is: ( req.params.contentID )
  *		where `contentResult` is: {  }
- *	
- *	Authorization Required: isLoggedIn, isAdmin or isOwner (isReferenceUserOrAdmin, isOwner)
+ *	2022-12-30: Only Admin
+ *	Authorization Required: isLoggedIn, isAdmin
  */
-//	DISABLED, should this be for admins only or what?
-// router.delete('/:contentID', isLoggedIn, isReferenceUserOrAdmin, isOwner, async(req, res, nxt) => {
+router.delete('/:contentID', isLoggedIn, isAdmin, async(req, res, nxt) => {
 
-// 	try{
+	try{
 
-// 		const contentResult = await ContentModel.delete(req.params.contentID);
+		const contentResult = await ContentModel.delete(req.params.contentID);
 
-// 		return res.json({deleted: contentResult});
+		return res.json({deleted: contentResult});
 
-// 	}catch(error){
-// 		nxt(error);
-// 	};
+	}catch(error){
+		nxt(error);
+	};
 	
-// });
+});
 
 /** */
 /** GET `/[contentID]/edit`
@@ -142,71 +144,6 @@ router.get('/:contentID/edit', isLoggedIn, isOwner, async(req, res, nxt) => {
 		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
 
 		// NOTE: if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
-
-		return res.json({content: contentResult});
-
-	}catch(error){
-		nxt(error);
-	}
-
-});
-
-// NOTE: PUSH TO THE JOIN MODEL
-
-/** GET `/[username]/[contentID]`
- *	( input ) => { contentResult }
- *		where `input` is: ( , {  })
- *		where `contentResult` is: {  }
- *	To edit the JOIN entry.
- *	Authorization Required: None
-*/
-router.get('/:username/:contentID', async(req, res, nxt) => {
-
-	try{
-
-		const contentResult = await ContentModel.getJOINContent(req.params.username, req.params.contentID);
-
-		return res.json({content: contentResult});
-
-	}catch(error){
-		nxt(error);
-	}
-
-});
-
-/** GET `/[username]/[contentID]/edit`
- *	( input ) => { contentResult }
- *		where `input` is: ( , {  })
- *		where `contentResult` is: {  }
- *	To edit the join entry.
- *	Authorization Required: isLoggedIn, isReferenceUser
-*/
-router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateContentJOINSchema), async(req, res, nxt) => {
-
-	try{
-
-		const contentResult = await ContentModel.updateJOINContent(req.params.username, req.params.contentID, req.body);
-
-		return res.json({content: contentResult});
-
-	}catch(error){
-		nxt(error);
-	}
-
-});
-
-/** PATCH `/[username]/[contentID]/edit`
- *	( input ) => { contentResult }
- *		where `input` is: ( , {  })
- *		where `contentResult` is: {  }
- *	To edit the join entry.
- *	Authorization Required: isLoggedIn, isReferenceUser
-*/
-router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateContentJOINSchema), async(req, res, nxt) => {
-
-	try{
-
-		const contentResult = await ContentModel.updateJOINContent(req.params.username, req.params.contentID, req.body);
 
 		return res.json({content: contentResult});
 
