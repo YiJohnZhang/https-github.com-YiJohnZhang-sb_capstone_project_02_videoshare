@@ -54,13 +54,13 @@ See how much I can finish in 2 weeks time, eh?
 |18|routers|2022-12-28|22:38 - 23:55|77|
 |19|db revision (added `is_active` to `contents_user_join`), added the inevitable `Content_User_Join` model. need to reprint a schema|2022-12-29|09:52 - 11:06|74|
 |20|salvaging current project...; database redesign: done; roles/ru_join: done;|2022-12-29|13:04 - 16:19|180+15=195|
-|21|finish contents?|2022-12-29|17:16 - 18:22||
-|22|finish contents?|2022-12-29|18:59 - 22:16||
-|23|finish contents?|2022-12-29 - 2022-12-30|22:32 - 00:31||
-|24|finish contents?|2022-12-29|: - :||
-|25|finish contents?|2022-12-29|: - :||
-|26|finish contents?|2022-12-29|: - :||
-19		20
+|21|finish contents?|2022-12-29|17:16 - 18:22|66|
+|22|finish contents?|2022-12-29|18:59 - 22:16|197|
+|23|pathing users....|2022-12-29 - 2022-12-30|22:32 - 00:31|119|
+|24|auth|2022-12-30|02:29 - :||
+|25|finish contents?|2022-12-30|: - :||
+|26|finish contents?|2022-12-30|: - :||
+19		20		24
 2052	
 
 ||**50.01.04**. Routes (Backend)||**Net Total Time**||
