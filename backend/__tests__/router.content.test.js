@@ -21,10 +21,10 @@ const CREATE_USER4_REQUEST = {
 	summary: 'some summary idea',
 	description: '',
 	owner: 'testuser4',
-	participants: '["testuser4"]',
+	participants: ["testuser4"],
 	contractType:'',
-	contractDetails:'{views:[{username:"testuser4",share:1}}], engagement:[{username:"testuser4",share:1}}]}',
-	contractSigned:'[]'
+	contractDetails:{views:[{username:"testuser4",share:1}], engagement:[{username:"testuser4",share:1}]},
+	contractSigned:[]
 }
 	/*owner:			upon creation, make it currentUser*/
 	/*participants:		upon creation, make it '[currentUser]'*/

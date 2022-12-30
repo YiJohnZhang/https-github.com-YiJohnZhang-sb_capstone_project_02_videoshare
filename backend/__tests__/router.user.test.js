@@ -43,7 +43,7 @@ const USER_1_PUBLIC_CONTENT = [
 		title: 'test content',
 		description: 'mw1',
 		link: 'https://youtu.be/nhVJhRhJbJE',
-		participants: '["testuser1"]',
+		participants: ["testuser1"],
 		dateCreated: '2022-12-29',
 		dateStandby: '2022-12-29',
 		datePublished: '2022-12-30'
@@ -53,7 +53,7 @@ const USER_1_PUBLIC_CONTENT = [
 		title: 'test content2',
 		description: 'mw2',
 		link: 'https://youtu.be/FTvLFlNbSQQ',
-		participants: '["testuser1", "testuser2"]',
+		participants: ["testuser1", "testuser2"],
 		dateCreated: '2022-12-29',
 		dateStandby: '2022-12-29',
 		datePublished: '2022-12-30'
@@ -61,40 +61,19 @@ const USER_1_PUBLIC_CONTENT = [
 ];
 
 const USER_1_ALL_CONTENT =  [
-	{
-		id: 1,
-		title: 'test content',
-		summary: 'afdsa',
-		description: 'mw1',
-		link: 'https://youtu.be/nhVJhRhJbJE',
-		participants: '["testuser1"]',
-		dateCreated: '2022-12-29',
-		dateStandby: '2022-12-29',
-		datePublished: '2022-12-30'
-	},
-	{
-		id: 2,
-		title: 'test content2',
-		summary: 'afsd',
-		description: 'mw2',
-		link: 'https://youtu.be/FTvLFlNbSQQ',
-		participants: '["testuser1", "testuser2"]',
-		dateCreated: '2022-12-29',
-		dateStandby: '2022-12-29',
-		datePublished: '2022-12-30'
-	},
+	...USER_1_PUBLIC_CONTENT,
 	{
 		id: 3,
 		title: 'test content3',
 		summary: 'asdfdsafa',
 		description: 'afsd',
 		link: '',
-		participants: '["testuser1", "testuser2"]',
+		participants: ["testuser1", "testuser2"],
 		dateCreated: '2022-12-30',
 		dateStandby: '2022-12-30',
 		datePublished: null
 	}
-]
+];
 
 const USER3_PUBLIC_RESPONSE = {
 	username: 'testuser3',
