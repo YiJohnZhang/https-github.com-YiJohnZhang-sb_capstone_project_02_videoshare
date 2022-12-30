@@ -55,7 +55,7 @@ See how much I can finish in 2 weeks time, eh?
 |19|db revision (added `is_active` to `contents_user_join`), added the inevitable `Content_User_Join` model. need to reprint a schema|2022-12-29|09:52 - 11:06|74|
 |20|salvaging current project...; database redesign: done; roles/ru_join: done;|2022-12-29|13:04 - 16:19|180+15=195|
 |21|finish contents?|2022-12-29|17:16 - 18:22||
-|22|finish contents?|2022-12-29|18:59 - :||
+|22|finish contents?|2022-12-29|18:59 - 22:16||
 |23||2022-12-29|: - :||
 19		20
 2052	

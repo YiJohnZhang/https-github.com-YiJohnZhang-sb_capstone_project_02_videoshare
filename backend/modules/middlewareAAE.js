@@ -32,7 +32,7 @@ function authenticateJWT(req, res, nxt) {
 			// console.log(jwt.verify(token, JWT_SECRET_KEY));
 			res.locals.user = jwt.verify(token, JWT_SECRET_KEY);
 				// res.locals is passed in the request chain
-			console.log(jwt.verify(token, JWT_SECRET_KEY));
+			// console.log(jwt.verify(token, JWT_SECRET_KEY));
 				// double check 
 		}
 
@@ -96,17 +96,17 @@ function isReferenceUser(req, res, nxt) {
 /**	checkAdminHelper(req, res, nxt)
  *	A helper for double authentication the user is an admin, for a database schema with specifications that it is possible.
  */
-function checkAdminHelper(userToken){
+async function checkAdminHelper(userToken){
 
 	const username = userToken.username;
 	const ADMIN_ROLEID = 1;
 
-	if(userToken.isElevated && username){
+	if(userToken.isElevated){
 		// checking res.locals.user object is trivial compared to a db query
 		
 		try{
 	
-			const result = RoleUserJoinModel.getByPK(username, ADMIN_ROLEID);
+			const result = await RoleUserJoinModel.getByPK(username, ADMIN_ROLEID);
 
 			if(result.roleID === ADMIN_ROLEID && result.userID === username)
 				return true;
@@ -126,11 +126,11 @@ function checkAdminHelper(userToken){
  *	Middleware to check whether or not the user is an admin.
  *	If not, raises UnauthorizedError.
  */
-function isAdmin(req, res, nxt) {
+async function isAdmin(req, res, nxt) {
 
 	try {
 
-		if(checkAdminHelper(res.locals.user))
+		if(await checkAdminHelper(res.locals.user))
 			nxt();
 			
 		nxt(new UnauthorizedError('Not an admin!'));
@@ -145,13 +145,26 @@ function isAdmin(req, res, nxt) {
  *	Middleware to check whether or not the user is an admin or the reference user.
  *	If not, raises UnauthorizedError.
  */
-function isReferenceUserOrAdmin(req, res, nxt) {
+async function isReferenceUserOrAdmin(req, res, nxt) {
 
-	if(req.params.username === res.locals.user.username || checkAdminHelper(res.locals.user))
+	// console.log(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
+	if(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
+		nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
+		// for some reason there is a propensity to move out .______________________. (2 hours of debugging)
+
+	nxt();
+
+	/* if(req.params.username === res.locals.user.username || await checkAdminHelper(res.locals.user))
+		nxt();
+	if(req.params.username === res.locals.user.username)
+		nxt();
+	
+	if(await checkAdminHelper(res.locals.user))
 		nxt();
 	
 	nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
-
+	*/
+	
 }
 
 /**	isOwner(req, res, nxt)

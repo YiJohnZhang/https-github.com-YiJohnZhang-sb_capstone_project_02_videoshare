@@ -7,8 +7,8 @@ const {
 	commonBeforeEach,
 	commonAfterEach,
 	commonAfterAll,
-	u1Token,
-	adminUserToken
+	user1Token, user3Token,
+	adminToken
 } = require('./router._testCommons');
 
 beforeAll(commonBeforeAll);
@@ -17,7 +17,7 @@ afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
 const user1Request = {
-	username: 'user1',
+	username: 'testuser1',
 	firstName: 'test',
 	lastName: 'asdf',
 	birthDate: "1991-01-01",
@@ -38,7 +38,7 @@ const user1InvalidRequest = {
 	isElevated: false
 }
 const user1EditResponse = {
-	username: 'user1',
+	username: 'testuser1',
 	firstName: 'test',
 	lastName: 'asdf',
 	birthDate: "1991-01-01",
@@ -49,7 +49,7 @@ const user1EditResponse = {
 	isElevated: false
 }
 const user1PublicResponse = {
-	username: 'user1',
+	username: 'testuser1',
 	firstName: 'test',
 	lastName: 'asdf',
 	verified: true,
@@ -96,7 +96,7 @@ const adminObject = {
 // 		description:'afsd',
 // 		link:'',
 // 		status:'',
-// 		owner:'user1',
+// 		owner:'testuser1',
 // 		contractType:'',
 // 		contractDetails:'',
 // 		contractSigned:''
@@ -105,7 +105,8 @@ const adminObject = {
 
 const user2Content = [];
 
-/***	POST /users */
+/***	POST /users (DEPRECATED, MOVE TO `/authentication/register`)*/
+/*
 describe('POST \`/users\`: create', () => {
 
 	test('works: regular user creation', async() => {
@@ -139,7 +140,7 @@ describe('POST \`/users\`: create', () => {
 		const response = await request(app)
 			.post('/users')
 			.send(user1InvalidRequest)
-			.set("authorization", `Bearer ${u1Token}`);
+			.set("authorization", `Bearer ${user1Token}`);
 		expect(response.statusCode).toEqual(403);
 
 	});
@@ -160,31 +161,46 @@ describe('POST \`/users\`: create', () => {
 	});
 
 });
+*/
 
 /***	GET /users */
 describe('GET \`/users\`: search', () => {
 
-	test('no filter methods (hides admin results)', async() => {
+	test('no filter methods', async() => {
 
-		// 'user'
-		// const response = await response(app)
-		// 	.get('/users')
-		// 	.send({});
-		// expect(response.length).toEqual(2);
-
-		// // 'a'
-		// const response = await response(app)
-		// 	.get('/users')
-		// 	.send({});
-		// expect(response.length).toEqual(1);
+		const response = await request(app)
+			.get('/users/');
+		expect(response.body.users.length).toEqual(4);
 
 	});
 
 	test('filter method', async() => {
 
-		const response = await response(app)
-			.send({});
-		expect(response.length).toEqual(2);
+		const response = await request(app)
+			.get('/users/')
+			.query({username:'test'});
+		expect(response.body.users.length).toEqual(3);
+
+		const response2 = await request(app)
+			.get('/users/')
+			.query({username:'2'});
+		expect(response2.body.users.length).toEqual(1);
+
+	});
+
+	test('with auth', async() => {
+
+		const response1 = await request(app)
+			.get('/users/')
+			.query({username:'test'})
+			.set('authorization', `Bearer: ${user1Token}`);;
+		expect(response1.body.users.length).toEqual(3);
+
+		const response2 = await request(app)
+			.get('/users/')
+			.query({username:'2'})
+			.set('authorization', `Bearer: ${user1Token}`);;
+		expect(response2.body.users.length).toEqual(1);
 
 	});
 
@@ -196,8 +212,8 @@ describe('GET \`/users/:username\`', () => {
 	test('public view (reference user token)', async() => {
 
 		const response = await request(app)
-			.get('/users/user1')
-			.set('authorization', `Bearer: ${u1Token}`);
+			.get('/users/testuser1')
+			.set('authorization', `Bearer: ${user1Token}`);
 		expect(response.body).toEqual({
 			user: user1PublicResponse, 
 			content: user1Content
@@ -208,8 +224,8 @@ describe('GET \`/users/:username\`', () => {
 	test('public view (non-reference usertoken)', async() => {
 		
 		const response = await request(app)
-			.get('/users/user1')
-			.set('authorization', `Bearer: ${adminUserToken}`);
+			.get('/users/testuser1')
+			.set('authorization', `Bearer: ${adminToken}`);
 		expect(response.body).toEqual({
 			user: user1PublicResponse, 
 			content: user1Content
@@ -220,7 +236,7 @@ describe('GET \`/users/:username\`', () => {
 	test('public view (no token)', async() => {
 		
 		const response = await request(app)
-			.get('/users/user1');
+			.get('/users/testuser1');
 		expect(response.body).toEqual({
 			user: user1PublicResponse, 
 			content: user1Content
@@ -231,7 +247,7 @@ describe('GET \`/users/:username\`', () => {
 	test('404 error: user not found', async() => {
 
 		const response = await request(app)
-			.get('/users/user12');
+			.get('/users/testuser12');
 		expect(response.statusCode).toEqual(404);
 
 	});
@@ -245,8 +261,8 @@ describe('GET \`/users/:username\`', () => {
 	test('public view (reference user token)', async() => {
 
 		const response = await request(app)
-			.get('/users/user1')
-			.set('authorization', `Bearer: ${u1Token}`);
+			.get('/users/testuser1')
+			.set('authorization', `Bearer: ${user1Token}`);
 		expect(response.body).toEqual({
 			user: user1EditResponse
 		});
@@ -256,8 +272,8 @@ describe('GET \`/users/:username\`', () => {
 	test('public view (non-reference usertoken)', async() => {
 		
 		const response = await request(app)
-			.get('/users/user1')
-			.set('authorization', `Bearer: ${adminUserToken}`);
+			.get('/users/testuser1')
+			.set('authorization', `Bearer: ${adminToken}`);
 		expect(response.statusCode).toEqual(403);
 
 	});
@@ -265,14 +281,14 @@ describe('GET \`/users/:username\`', () => {
 	test('public view (no token)', async() => {
 		
 		const response = await request(app)
-			.get('/users/user1');
+			.get('/users/testuser1');
 		expect(response.statusCode).toEqual(403);
 	});
 
 	test('404 error: user not found', async() => {
 
 		const response = await request(app)
-			.get('/users/user12');
+			.get('/users/testuser12');
 		expect(response.statusCode).toEqual(404);
 
 	});
@@ -288,9 +304,9 @@ describe('PATCH \`/users/:username\`', () => {
 	test('patches (for reference user)', async() => {
 
 		const response = await request(app)
-			.patch('/users/user1')
+			.patch('/users/testuser1')
 			.send({firstName:'af'})
-			.set('authorization', `Bearer: ${u1Token}`);
+			.set('authorization', `Bearer: ${user1Token}`);
 		expect(response.body).toEqual({
 			user: patchedUserResponseObject
 		});
@@ -300,9 +316,9 @@ describe('PATCH \`/users/:username\`', () => {
 	test('patches (for admin)', async() => {
 
 		const response = await request(app)
-			.patch('/users/user1')
+			.patch('/users/testuser1')
 			.send({firstName:'af'})
-			.set('authorization', `Bearer: ${adminUserToken}`);
+			.set('authorization', `Bearer: ${adminToken}`);
 		expect(response.body).toEqual({
 			user: patchedUserResponseObject
 		});
@@ -313,30 +329,30 @@ describe('PATCH \`/users/:username\`', () => {
 	test('400 error: certain properties are not allowed to be edited through the API', async() => {
 			
 		const response = await request(app)
-			.patch('/users/user1')
+			.patch('/users/testuser1')
 			.send({isElevated:true})
-			.set('authorization', `Bearer: ${u1Token}`);
+			.set('authorization', `Bearer: ${user1Token}`);
 		expect(response.statusCode).toEqual(400);
 
 	});
 
-	test('403 error: unauthorized (wrong user)', async() => {
+	test('401 error: unauthorized (wrong user)', async() => {
 		
 		const response = await request(app)
-			.patch('/users/user1')
+			.patch('/users/testuser1')
 			.send({firstName:'afsdadfs'})
-			.set('authorization', `Bearer: ${u2Token}`);
-		expect(response.statusCode).toEqual(403);
+			.set('authorization', `Bearer: ${user3Token}`);
+		expect(response.statusCode).toEqual(401);
 
 	});
 		// includes for non-existing users (404) b/c it isn't reference user
 
-	test('403 error: unauthorized (logged out)', async() => {
+	test('401 error: unauthorized (logged out)', async() => {
 		
 		const response = await request(app)
-			.patch('/users/user1')
+			.patch('/users/testuser1')
 			.send({firstName:'afsdadfs'});
-		expect(response.statusCode).toEqual(403);
+		expect(response.statusCode).toEqual(401);
 
 	});
 
@@ -348,13 +364,13 @@ describe('DELETE \`/users/:username\`', () => {
 	test('deletes user (reference user)', async() => {
 		
 		const response = await request(app)
-			.delete('/users/user1')
-			.set('authorization', `Bearer ${u1Token}`);
-		expect(response.body).toEqual({deleted: 'user1'});
+			.delete('/users/testuser3')
+			.set('authorization', `Bearer ${user3Token}`);
+		expect(response.body).toEqual({deleted: 'testuser3'});
 		
 		const response2 = await request(app)
-			.delete('/users/user1')
-			.set('authorization', `Bearer ${u1Token}`);
+			.delete('/users/testuser3')
+			.set('authorization', `Bearer ${user3Token}`);
 		expect(response2.statusCode).toEqual(404);
 
 	});
@@ -362,27 +378,27 @@ describe('DELETE \`/users/:username\`', () => {
 	test('deletes user (admin)', async() => {
 		
 		const response = await request(app)
-			.delete('/users/user1')
-			.set('authorization', `Bearer ${adminUserToken}`);
-		expect(response.body).toEqual({deleted: 'user1'});
+			.delete('/users/testuser3')
+			.set('authorization', `Bearer ${adminToken}`);
+		expect(response.body).toEqual({deleted: 'testuser3'});
 	
 	});
 
-	test('403 error: unauthorized (wrong user)', async() => {
+	test('401 error: unauthorized (wrong user)', async() => {
 		
 		const response = await request(app)
-			.delete('/users/user1')
-			.set('authorization', `Bearer: ${u2Token}`);
-		expect(response.statusCode).toEqual(403);
+			.delete('/users/testuser3')
+			.set('authorization', `Bearer: ${user1Token}`);
+		expect(response.statusCode).toEqual(401);
 
 	});
 		// includes for non-existing users (404) b/c it isn't reference user
 
-	test('403 error: unauthorized (no token)', async() => {
+	test('401 error: unauthorized (no token)', async() => {
 		
 		const response = await request(app)
-			.delete('/users/user1');
-		expect(response.statusCode).toEqual(403);
+			.delete('/users/testuser3');
+		expect(response.statusCode).toEqual(401);
 
 	});
 

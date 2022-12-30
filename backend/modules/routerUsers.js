@@ -5,6 +5,7 @@ const UserModel = require('../models/User');
 const ContentModel = require('../models/Content');
 const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin } = require('./middlewareAAE');
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
+
 const updateUserSchema = require('./schemas/updateUser.schema.json');
 
 /** GET `/`
@@ -20,13 +21,15 @@ router.get('/', async(req, res, nxt) => {
 	
 	try{
 
-		let userResults;
-
-		if(req.query){
-			userResults = await UserModel.getAll(req.query);
-		}else{
-			userResults = await UserModel.getAll();		
-		}
+		const userResults = await UserModel.getAll(req.query);
+			// by default req.query is `{}` and `{}` is truthy
+		// if(req.query !== {}){
+		// 	console.log(req.query)
+		// 	userResults = await UserModel.getAll(req.query);
+		// }else{
+		// 	userResults = await UserModel.getAll(undefined);
+		// 	console.log(userResults);
+		// }
 
 		return res.json({users: userResults});
 
@@ -64,12 +67,12 @@ router.get('/:username', async(req, res, nxt) => {
  *		where `input` is: (req.params.username, { req.body })
  *		where `userResult` is: { QUERY_GENERAL_PROPERTIES }
  *	
- *	Authorization Required: isLoggedIn, isReferenceUser
+ *	Authorization Required: isLoggedIn, isReferenceUserOrAdmin
 */
-router.patch('/:username/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
+router.patch('/:username/edit', isLoggedIn, isReferenceUserOrAdmin, async(req, res, nxt) => {
 
 	try{
-		console.log(updateUserSchema)
+		
 		validateRequestBody(req.body, updateUserSchema);
 
 		const userResult = await UserModel.update(req.params.username, req.body);
@@ -94,8 +97,7 @@ router.delete('/:username', isLoggedIn, isReferenceUserOrAdmin, async(req, res, 
 	try{
 
 		const userResult = await UserModel.delete(req.params.username);
-
-		return res.json({deleted: userResult});
+		return res.json({deleted: userResult.username});
 
 	}catch(error){
 		nxt(error);

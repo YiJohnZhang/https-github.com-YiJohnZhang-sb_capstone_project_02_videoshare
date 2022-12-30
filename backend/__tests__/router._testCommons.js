@@ -9,6 +9,7 @@ const createTokenHelper = require('../helpers/createTokenHelper');
 async function commonBeforeAll() {
 
 	// leave `role_users_join` and `roles` Alone: seed first with `testSeed.sql`
+	await db.query("TRUNCATE TABLE roles_users_join RESTART IDENTITY CASCADE;");
 	await db.query("TRUNCATE TABLE contents_users_join RESTART IDENTITY CASCADE;");
 		// restart serial at 1
 
@@ -34,6 +35,17 @@ async function commonBeforeAll() {
 		lastName: 'User2',
 		password: 'password',
 		email: 'testuser2@gmail.com', 
+		birthdateYear:1990,
+		birthdateMonth:1,
+		birthdateDay:1,
+	});
+
+	await User.register({
+		username: 'testuser3',
+		firstName: 'Test',
+		lastName: 'User3',
+		password: 'password',
+		email: 'testuser3@gmail.com', 
 		birthdateYear:1990,
 		birthdateMonth:1,
 		birthdateDay:1,
@@ -77,6 +89,12 @@ async function commonBeforeAll() {
 			('testuser1', 3, NULL),
 			('testuser2', 3, NULL)`);
 
+	await db.query(`
+	INSERT INTO roles_users_join(user_id,role_id)
+		VALUES
+			('adminUser1', 1)`);
+		
+
 }
 
 async function commonBeforeEach() {
@@ -96,15 +114,15 @@ test('dummy test so that \'jest\' isn\'t screaming that \"Your test suite must c
 	expect(1).toEqual(1);
 });
 
-const user1Token = createTokenHelper({ username: 'u1', is_elevated: false });
-const user2Token = createTokenHelper({ username: 'u2', is_elevated: false });
-const adminToken = createTokenHelper({ username: 'admin', is_elevated: true });
+const user1Token = createTokenHelper({ username: 'testuser1', isElevated: false });
+const user3Token = createTokenHelper({ username: 'testuser3', isElevated: false });
+const adminToken = createTokenHelper({ username: 'adminUser1', isElevated: true });
 
 module.exports = {
 	commonBeforeAll,
 	commonBeforeEach,
 	commonAfterEach,
 	commonAfterAll,
-	user1Token, user2Token,
+	user1Token, user3Token,
 	adminToken
 };

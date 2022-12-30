@@ -17,8 +17,7 @@ const QUERY_GENERAL_PROPERTIES = `
 	verified, 
 	account_status AS "accountStatus", 
 	picture, 
-	description, 
-	is_elevated AS "isElevated"`;
+	description`;
 const QUERY_PRIVATE_PROPERTIES = 'birthdate, email';
 const AUTHENTICATION_PROPERTIES = `username, is_elevated AS "isElevated"`;
 const JSON_SQL_SET_MAPPING = {
@@ -122,7 +121,11 @@ class User {
 
 		let result;
 
-		if(queryObject){
+		const queryObjectLength = Object.keys(queryObject).length || 0;
+			// by default req.query is `{}` and `{}` is truthy
+			// console.log(queryObject == true)
+
+		if(queryObjectLength){
 
 			if(queryObject.username)
 				queryObject.username = `%${queryObject.username}%`;
@@ -239,9 +242,11 @@ class User {
 			[username]);
 
 		const userObject = result.rows[0];
-
+		
 		if (!userObject)
 			throw new NotFoundError(`No user: ${username}`);
+
+		return userObject;
 
 	}
 
