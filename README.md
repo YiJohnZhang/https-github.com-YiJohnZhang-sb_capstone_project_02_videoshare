@@ -59,7 +59,7 @@ See how much I can finish in 2 weeks time, eh?
 |23|pathing users....|2022-12-29 - 2022-12-30|22:32 - 00:31|119|
 |24|`auth`, and some `content`|2022-12-30|02:29 - 03:27||
 |25|contents work; reinstalled github; crashed|2022-12-30|09:59 - 11:45||
-|26|finish contents?|2022-12-30|: - :||
+|26|finish contents?|2022-12-30|13:58 - :||
 19		20		24
 2052	
 
