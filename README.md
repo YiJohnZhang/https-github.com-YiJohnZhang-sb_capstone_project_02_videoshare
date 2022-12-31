@@ -1,17 +1,15 @@
 # ShortCollabs
 *The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature that encourages content creators to collaborate with another by allowing a pre-agreement of monetization distribution allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations to non-randomly select a user's profile. The intention of this feature is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans entry onto the platform.*
 
-See how much I can finish in 2 weeks time, eh?
-
 **Live Link `as of 2022-12-3/2023-01-0`**: []() (`todo:inserlink`)
-Note: **This project is hosted on a free front-end host so the performance is worse and may be more buggy than if used locally. Consider downloading and hosting it locally. The back-end is by default set to port `3000` and the front-end is by default set to port `3001`.**
+Note: **This project is hosted on a free frontend host so the performance is worse and may be more buggy than if used locally. Consider downloading and hosting it locally. The backend is by default set to port `3000` and the frontend is by default set to port `3001`.**
 
 # Table of Contents (`todo:inserthyperlinks`)
 - [01. Project Features]()
 - [02. Project Specifications]()
 	- [02.01. Running & Testing Instructions]()
-	- [02.02. Back-end Routes]()
-	- [02.03. Front-end Routes]()
+	- [02.02. Backend Routes]()
+	- [02.03. Frontend Routes]()
 	- [02.04. Data Source]()
 	- [02.05. Further Study]()
 - [03. Misecllaneous Notes & Dump]()
@@ -24,11 +22,11 @@ The project implements a:
 - Implements a 
 
 # 02. Project Specifications
-This project was developed to exceed Springboard Bootcamp's project requirements: instead of focusing on the front-end, and using a readily available backend API, I built my own API.
+**Author Note**: This project was developed to exceed Springboard Bootcamp's project requirements. Instead of using a readily available backend API, I built my own content API, to challenge myself. In the early stages, I attempted a pure TDD approach but without strong documentation, the application quickly became a nightmare. In hindsight, I probably should have started with basic routes first, proceeded to the React frontend, and then progressively add routes for for desired features instead of finishing the backend first and then building the frontend..
 
 This web application uses the **PERN** stack:
-- `react` Front-end w/ Client-Side Routing using `react-router`
-- `express` Back-end, using `node-pg`
+- `react` Frontend w/ Client-Side Routing using `react-router`
+- `express` Backend, using `node-pg`
 - PostgreSQL RDBMS
 
 Project Schema:
@@ -70,7 +68,7 @@ jest
 npm test	# alias for `react-scripts test` in `package.json`
 ```
 
-## 02.02. Back-end Routes (`todo`)
+## 02.02. Backend Routes (`todo`)
 ```sh
 /
 ├──	authorization/
@@ -89,7 +87,7 @@ npm test	# alias for `react-scripts test` in `package.json`
 	└──	
 ```
 
-## 02.03. Front-end Userflow (`todo`)
+## 02.03. Frontend Userflow (`todo`)
 ```sh
 /
 ├──	?search
@@ -164,15 +162,15 @@ Some suggested improvements to this concept are:
 |28|`frontend` work||||
 |29|`README.md` work|||2702|
 |30|update users; `contents`|2022-12-31|00:55 - 02:38|103|
-|31|`contents` work|2022-12-31|10:48 - 12:06||
-|32|`contents` |2022-12-31|: - :||
+|31|`contents` work|2022-12-31|10:48 - 12:06|78|
+|32|`contents` |2022-12-31|15:34 - :||
 |33|`contents` |2022-12-31|: - :||
-29(26)	30
-2702		
+31		32
+2883		
 
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
-|16|`formik` for front-end, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
+|16|`formik` for frontend, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
 |27|onboarding and frontend styling|2022-12-30|17:02 - 18:03|61|
 |28|frontend styling + API|2022-12-30|18:24 - 20:34|130|
 |3||2022-12-31|: - :||
