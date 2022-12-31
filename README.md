@@ -163,10 +163,10 @@ Some suggested improvements to this concept are:
 |27|`frontend` work||||
 |28|`frontend` work||||
 |29|`README.md` work|||2702|
-|30|`contents` |2022-12-30|: - :||
-|31|`contents` |2022-12-30|: - :||
-|32|`contents` |2022-12-30|: - :||
-|33|`contents` |2022-12-30|: - :||
+|30|update users; `contents` |2022-12-31|00:55 - :||
+|31|`contents` |2022-12-31|: - :||
+|32|`contents` |2022-12-31|: - :||
+|33|`contents` |2022-12-31|: - :||
 29(26)	30
 2702		
 
@@ -180,7 +180,7 @@ Some suggested improvements to this concept are:
 |3||2022-12-31|: - :||
 |3||2022-12-31|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
-|29|`README.md` work|2022-12-30|20:54 - 22:05||
+|29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |3||2022-12-31|: - :||
 ||||**Total Time**|_ minutes (--h--m)|
 
