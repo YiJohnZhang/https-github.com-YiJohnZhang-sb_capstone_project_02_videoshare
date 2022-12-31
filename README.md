@@ -74,7 +74,7 @@ See how much I can finish in 2 weeks time, eh?
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |28|onboarding and frontend styling|2022-12-30|17:02 - 18:03|61|
-|29|frontend styling + API|2022-12-30|18:24 - :||
+|29|frontend styling + API|2022-12-30|18:24 - 20:34||
 |3||2022-12-3|: - :||
 |3||2022-12-3|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|

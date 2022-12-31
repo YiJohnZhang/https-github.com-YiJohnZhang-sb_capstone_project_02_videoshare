@@ -1,0 +1,24 @@
+.homeContainer{
+	padding: 25px 0;
+}
+#home-minorContainer{
+
+	position: fixed;
+	height:100%;
+
+}
+	.homepage-minorFillerContent{
+		margin:0;
+		padding:16px 32px;
+		background-color:rgba(96, 96, 96, 0);
+		color:#000;
+	}
+	.homepage-minorFillerContent:hover{
+		background-color:rgba(96, 96, 96, 0.36);
+		color:#FFF;
+	}
+
+#home-majorContainer{
+	padding-left:32px;
+	padding-right:32px;
+}

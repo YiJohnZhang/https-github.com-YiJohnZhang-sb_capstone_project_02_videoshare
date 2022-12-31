@@ -34,6 +34,10 @@ function OnboardingPage({onboardingMethod}){
 			email: '',
 			firstName: '',
 			lastName: '',
+			email: '',
+			birthdateYear: '',
+			birthdateMonth: '',
+			birthdateDay: ''
 			//	...
 		}
 
@@ -48,6 +52,8 @@ function OnboardingPage({onboardingMethod}){
 	}
 
 	async function clickHandler(evt){
+
+		evt.preventDefault();
 
 		async function login(response){
 
@@ -71,6 +77,8 @@ function OnboardingPage({onboardingMethod}){
 
 			}
 
+		}else{
+
 		}
 
 	}
@@ -78,9 +86,78 @@ function OnboardingPage({onboardingMethod}){
 
 	return(
 	<div className="page">
-		<form>
+	<form className="row g-4 width-85percent autoMargin">
+		<div className="col-md-12">
+			<label className="visually-hidden" htmlFor="username">Username</label>
+			<div className="input-group">
+				<div className="input-group-text">@</div>
+				<input name="username"
+					type="text"
+					className="form-control"
+					placeholder="Username"
+					onChange={formChangeHandler}
+					value={formState.username} />
+			</div>
+		</div>
+		<div className="col-md-12">
+			<label className="visually-hidden" htmlFor="password">Password</label>
+			<input name="password"
+				type="password"
+				className="form-control"
+				placeholder="Password"
+				onChange={formChangeHandler}
+				value={formState.password} />
+		</div>
 
-		</form>
+		{onboardingMethod === 'signup' && (
+		<React.Fragment>
+		<div className="col-md-6">
+			<label className="visually-hidden" htmlFor="firstName">First Name</label>
+			<input name="firstName"
+				type="text"
+				className="form-control"
+				placeholder="First Name"
+				onChange={formChangeHandler}
+				value={formState.firstName} />
+		</div>
+		<div className="col-md-6">
+			<label className="visually-hidden" htmlFor="lastName">Last Name</label>
+			<input name="lastName"
+				type="text"
+				className="form-control"
+				placeholder="Last Name"
+				onChange={formChangeHandler}
+				value={formState.lastName} />
+		</div>
+		<div className="col-md-6">
+			<label className="visually-hidden" htmlFor="email">Email</label>
+			<input name="email"
+				type="text"
+				className="form-control"
+				placeholder="Email"
+				onChange={formChangeHandler}
+				value={formState.email} />
+		</div>
+		<div className="col-md-6">
+			<label className="visually-hidden" htmlFor="birthdate">Birthdate</label>
+			<input name="birthdateYear"
+				type="date"
+				className="form-control"
+				onChange={formChangeHandler}
+				value={formState.birthdate} />
+		</div>
+		</React.Fragment>)}
+
+		<div className="col-md-12">
+			<button name={onboardingMethod==='signup' ? 'Sign Up!' : 'Login'}
+				type="date"
+				className="form-control btn btn-outline-danger animation-400"
+				onClick={clickHandler}>
+					{onboardingMethod==='signup' ? 'Sign Up!' : 'Login'}
+				</button>
+		</div>
+		
+	</form>
 	</div>
 	);
 

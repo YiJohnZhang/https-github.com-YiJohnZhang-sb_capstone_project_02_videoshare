@@ -17,7 +17,7 @@ function NavBar() {
 	<table id="navigationTable" className='fullWidth'><tbody><tr>
 
 	{/* group 1 (align left) */}
-		<td className="navbarButton-container"><NavLink className="" exact activeStyle={ACTIVE_STYLE} to="/">Home</NavLink></td>
+		<td className="navbarButton-container"><NavLink className="btn btn-outline-dark" exact activeStyle={ACTIVE_STYLE} to="/">Home</NavLink></td>
 
 		<td className='fullWidth'></td>
 	{/* group 2 (align right) */}
@@ -25,7 +25,7 @@ function NavBar() {
 		{!sessionUsername &&
 		<React.Fragment>
 			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger" activeStyle={ACTIVE_STYLE} to="/login">Login</NavLink></td>
-			<td className="navbarButton-container"><NavLink className="btn btn-primary" activeStyle={ACTIVE_STYLE} to="/signup">Register</NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-primary" activeStyle={ACTIVE_STYLE} to="/signup">Sign&nbsp;Up</NavLink></td>
 		</React.Fragment>
 		}
 	

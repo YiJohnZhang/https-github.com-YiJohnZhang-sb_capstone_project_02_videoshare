@@ -1,5 +1,5 @@
 {
-	"$schema": "http://json-schema.org/draft-04/schema#",
+    "$schema": "http://json-schema.org/draft-06/schema#",
 	"type": "object",
 	"properties": {
 		"username": {
@@ -17,20 +17,9 @@
 			"minLength": 1,
 			"maxLength": 32
 		},
-		"birthdateYear": {
-			"type": "integer",
-			"minimum": 1900,
-			"maximum": 2022
-		},
-		"birthdateMonth": {
-			"type": "integer",
-			"minimum": 1,
-			"maximum": 12
-		},
-		"birthdateDay": {
-			"type": "integer",
-			"minimum": 1,
-			"maximum": 31
+		"birthdate": {
+			"type":"string",
+			"format": "date"
 		},
 		"email": {
 			"type": "string",
@@ -49,9 +38,7 @@
 		"username",
 		"firstName",
 		"lastName",
-		"birthdateYear",
-		"birthdateMonth",
-		"birthdateDay",
+		"birthdate",
 		"email",
 		"password"
 	]
