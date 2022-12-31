@@ -27,9 +27,7 @@ const CREATE_USER4_REQUEST = {
 	lastName: 'User4',
 	password: 'password',
 	email: 'testuser4@gmail.com', 
-	birthdateYear:1990,
-	birthdateMonth:1,
-	birthdateDay:1	
+	birthdate: '1990-01-01'	
 }
 
 const INVALID_CREATE_USER4_REQUEST = {

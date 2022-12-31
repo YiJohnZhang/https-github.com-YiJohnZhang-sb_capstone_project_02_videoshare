@@ -1,6 +1,5 @@
 const db = require('../database/db');
 const { sqlCreateQueryBuilder, sqlFilterQueryBuilder, sqlUpdateQueryBuilder } = require('../helpers/sqlQueryingHelper');
-const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
 
 const {
 	NotFoundError,
@@ -94,6 +93,7 @@ class Content {
 
 			const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
 			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
+				// todo: isnsert (status = 'published' OR status = 'legacy') JERE
 
 		}else{
 			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);

@@ -163,7 +163,7 @@ Some suggested improvements to this concept are:
 |27|`frontend` work||||
 |28|`frontend` work||||
 |29|`README.md` work|||2702|
-|30|update users; `contents` |2022-12-31|00:55 - :||
+|30|update users; `contents` |2022-12-31|00:55 - 02:38||
 |31|`contents` |2022-12-31|: - :||
 |32|`contents` |2022-12-31|: - :||
 |33|`contents` |2022-12-31|: - :||
@@ -185,12 +185,16 @@ Some suggested improvements to this concept are:
 ||||**Total Time**|_ minutes (--h--m)|
 
 ## More Time Wishlist
+- use Python Flask/React: form validation is much more straightforward and it is good for prototyping
+- better UI to set contract & signed
+- hide in progress 
 - admin dashboard to demonstrate full potential of the database schema design.
 - admin delete content ()
 - more time: delete content joins individually (`./models/Content.js`); remove master delete by owner (from database schema design)
 - do an invitation-based `participants` invite system so that the invited user has to confirm before added to a content page
 - add an additional "social aspect" (chatting, messaging?) to organize collabs; use the `verified`/`parental_controls`/`birthdate` to 
 - had difficulty giving access to "invited" users to edit the main content.
+- content creation: when adding a username, on the frontend, validate it.
 
 - `Content_User_JOIN.js: update` 2022-12-29 Note: generalize for composite PK by passing in pk as object and do a parameterizedWHERE query builder on it
 

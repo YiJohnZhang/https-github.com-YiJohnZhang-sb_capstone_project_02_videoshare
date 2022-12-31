@@ -1,9 +1,12 @@
 const express = require('express');
 const router = new express.Router();
 
-const ContentModel = require('../models/Content');
+// const ContentModel = require('../models/Content');
+const ContentUserModel = require('../models/Content_User_Join');
 const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin, isOwner } = require('./middlewareAAE');
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
+const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
+
 const newContentSchema = require('./schemas/newContent.schema.json');
 // const queryModelSchema = require('./schemas/queryContent.schema.json');
 const updateContentSchema = require('./schemas/updateContent.schema.json');
@@ -22,9 +25,9 @@ router.get('/:username/:contentID', async(req, res, nxt) => {
 
 	try{
 
-		const contentResult = await ContentModel.getJOINContent(req.params.username, req.params.contentID);
+		const contentResult = await ContentModel.getByPK(req.params.username, req.params.contentID);
 
-		return res.json({content: contentResult});
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);
@@ -43,9 +46,9 @@ router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req,
 
 	try{
 
-		const contentResult = await ContentModel.getPrivateJOINContent(req.params.username, req.params.contentID);
+		const contentResult = await ContentUserModel.getByPK(req.params.username, req.params.contentID);
 
-		return res.json({content: contentResult});
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);
@@ -66,9 +69,9 @@ router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(re
 
 		validateRequestBody(updateContentJOINSchema)
 
-		const contentResult = await ContentModel.updateJOINContent(req.params.username, req.params.contentID, req.body);
+		const contentResult = await ContentUserModel.update(req.params.username, req.params.contentID, stringifyRequestBodyProperties(req.body));
 
-		return res.json({content: contentResult});
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);

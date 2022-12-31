@@ -4,6 +4,8 @@ const router = new express.Router();
 const ContentModel = require('../models/Content');
 const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin, isOwner, isParticipatingUser } = require('./middlewareAAE');
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
+const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
+
 const newContentSchema = require('./schemas/newContent.schema.json');
 // const queryModelSchema = require('./schemas/queryContent.schema.json');
 const updateContentSchema = require('./schemas/updateContent.schema.json');
@@ -22,9 +24,9 @@ router.post('/', isLoggedIn, async(req, res, nxt) => {
 
 		validateRequestBody(req.body, newContentSchema);
 
-		const contentResult = await ContentModel.create(req.body);
+		const contentResult = await ContentModel.create(stringifyRequestBodyProperties(req.body));
 
-		return res.status(201).json({content: contentResult});
+		return res.status(201).json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);
@@ -48,7 +50,9 @@ router.get('/', async(req, res, nxt) => {
 		const contentResults = await ContentModel.getAll(req.query);
 			// tod: note add JOIN query to return list of users, throw it under "contents"
 
-		return res.json({contents: contentResults});
+		const parsedContentResults = contentResults.forEach((contentResult) => parseResponseBodyProperties(contentResult));
+
+		return res.json({contents: parsedContentResults});
 
 	}catch(error){
 		nxt(error);
@@ -69,14 +73,13 @@ router.get('/:contentID', async(req, res, nxt) => {
 		const contentResult = await ContentModel.getByPK(req.params.contentID);
 			// todo: add JOIN query to return list users
 
-		return res.json({content: contentResult});
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);
 	}
 
 });
-
 
 /** GET `/[contentID]/edit`
  *	( input ) => { contentResult }
@@ -89,10 +92,13 @@ router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, 
 
 	try{
 		
-		const contentResult = await ContentModel.getByPK(req.params.contentID);
+		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
 			// todo: add JOIN query to return list users
 
-		return res.json({content: contentResult});
+			// NOTE (OUT OF SCOPE): if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
+
+
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);
@@ -116,10 +122,10 @@ router.patch('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res
 
 		validateRequestBody(req.body, updateContentSchema)
 	
-		const contentResult = await ContentModel.update(req.params.contentID, req.body);
+		const contentResult = await ContentModel.update(req.params.contentID, stringifyRequestBodyProperties(req.body));
 			// todo: disable if the current status is pbulished or legacy'
 		
-		return res.json({content: contentResult});
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);
@@ -145,7 +151,7 @@ router.patch('/:contentID/:username/sign', isLoggedIn, isReferenceUser, isPartic
 			// todo: disable if the current status is pbulished or legacy'
 			// also, whenever contractDetails change, automatically reset 'contractSigned to `[]`'
 		
-		return res.json({content: contentResult});
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);
@@ -163,15 +169,12 @@ router.patch('/:contentID/:username/sign', isLoggedIn, isReferenceUser, isPartic
 router.patch('/:contentID/:username/publish', isLoggedIn, isReferenceUser, isOwner, async(req, res, nxt) => {
 
 	try{
-
-		validateRequestBody(req.body, updateContentSchema)
-			// to do: modified schema
 		
 		const contentResult = await ContentModel.publishUpdate(req.params.contentID);
 			// todo: disable if the current status is pbulished or legacy'
 			// also, whenever contractDetails change, automatically reset 'contractSigned to `[]`'
 		
-		return res.json({content: contentResult});
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);
@@ -214,7 +217,7 @@ router.delete('/:contentID', isLoggedIn, isAdmin, async(req, res, nxt) => {
 
 		const contentResult = await ContentModel.delete(req.params.contentID);
 
-		return res.json({deleted: contentResult});
+		return res.json({deleted: parseResponseBodyProperties(contentResult)(contentResult)});
 
 	}catch(error){
 		nxt(error);
@@ -223,43 +226,5 @@ router.delete('/:contentID', isLoggedIn, isAdmin, async(req, res, nxt) => {
 });
 
 /** */
-/** GET `/[contentID]/edit`
- *	( input ) => { contentResult }
- *		where `input` is: ( , {  })
- *		where `contentResult` is: {  }
- *	To edit the content.
- *	Authorization Required: isLoggedIn, isOwner
-*/
-router.get('/:contentID/edit', isLoggedIn, isOwner, async(req, res, nxt) => {
-
-	try{
-
-		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
-
-		// NOTE: if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
-
-		return res.json({content: contentResult});
-
-	}catch(error){
-		nxt(error);
-	}
-
-});
-
-router.get('/:contentID/:username/sign', isLoggedIn, isReferenceUser, isParticipatingUser, async(req, res, nxt) => {
-
-	try{
-
-		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, req.params.username);
-			// NOTE: if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
-			// all this returns is contractType `participatingusers`, `contractDetails`, `contractSigned`
-
-		return res.json({content: contentResult});
-
-	}catch(error){
-		nxt(error);
-	}
-
-});
 
 module.exports = router;

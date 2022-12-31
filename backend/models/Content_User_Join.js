@@ -36,28 +36,28 @@ class ContentUserJoin {
 	/**	Create a single content_users_join record (invitation)
 	 *	technically any participant?
 	 */
-	static async invite(inviterUsername, contentID, invitedUsername){
+	// static async invite(inviterUsername, contentID, invitedUsername){
 
-		await this.getByPK(inviterUsername, contentID);
-			// has permissions to invite.
-		await this.pkDoesNotAlreadyExist(invitedUsername, contentID);
+	// 	await this.getByPK(inviterUsername, contentID);
+	// 		// has permissions to invite.
+	// 	await this.pkDoesNotAlreadyExist(invitedUsername, contentID);
 
 		
 		
 
-		//	add to "participants"
+	// 	//	add to "participants"
 
-	}
+	// }
 
-	/**	Create a single content_users_join record (invitation)
-	 *	only owner
-	 */
-	 static async publish(username, contentID){
+	// /**	Create a single content_users_join record (invitation)
+	//  *	only owner
+	//  */
+	//  static async publish(username, contentID){
 
-		await this.getByPK(username, contentID);
-		//	synchronize descriptions?
+	// 	await this.getByPK(username, contentID);
+	// 	//	synchronize descriptions?
 		
-	}
+	// }
 
 	/**	Create content_users_join record with data.
 	 *
@@ -113,7 +113,7 @@ class ContentUserJoin {
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [{ pk, propertyOne, ... }, ...]
 	 **/
-	static async getAllPublic() {
+	static async getAllPublic(queryObject) {
 
 		const sqlQueryBeforeWHERE = (`
 			SELECT ${QUERY_GENERAL_PROPERTIES}
@@ -138,7 +138,7 @@ class ContentUserJoin {
 	
 	}
 
-	static async getAllPrivate(){
+	static async getAllPrivate(username){
 
 		
 
