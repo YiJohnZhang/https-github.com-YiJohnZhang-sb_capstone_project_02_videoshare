@@ -163,8 +163,8 @@ Some suggested improvements to this concept are:
 |27|`frontend` work||||
 |28|`frontend` work||||
 |29|`README.md` work|||2702|
-|30|update users; `contents`|2022-12-31|00:55 - 02:38||
-|31|`contents` work|2022-12-31|10:48 - 23:06||
+|30|update users; `contents`|2022-12-31|00:55 - 02:38|103|
+|31|`contents` work|2022-12-31|10:48 - 12:06||
 |32|`contents` |2022-12-31|: - :||
 |33|`contents` |2022-12-31|: - :||
 29(26)	30
