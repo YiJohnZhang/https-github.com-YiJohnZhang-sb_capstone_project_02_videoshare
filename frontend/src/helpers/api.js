@@ -16,7 +16,7 @@ class ShortCollabsAPI {
 
 		//	set request settings
 		const url = `${BASE_URL}/${endpoint}`;
-		const headers = { Authorization: `Bearer ${JoblyAPI.token}` };
+		const headers = { Authorization: `Bearer ${ShortCollabsAPI.token}` };
 		// ???
 		const params = (method === "get")
 			? data

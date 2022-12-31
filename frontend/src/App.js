@@ -26,10 +26,10 @@ function App(){
 		<NavBar />
 		<Switch>
 			<Route path="/login">
-				<OnboardingPage method="login" />
+				<OnboardingPage onboardingMethod="login" />
 			</Route>
 			<Route path="/signup">
-				<OnboardingPage method="signup" />
+				<OnboardingPage onboardingMethod="signup" />
 			</Route>
 			<Route path="/upload">
 				<UploadPage />

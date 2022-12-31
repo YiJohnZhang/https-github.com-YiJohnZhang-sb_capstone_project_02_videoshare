@@ -7,7 +7,15 @@ function HomePage(){
 
 	return(
 	<div className="page">
-		{/* insert content in order */}
+		<div className="width-15percent floatLeft">
+			<a>adsf</a>
+		</div>
+		<div className="width-85percent floatRight">
+			<p>fsda</p>
+		</div>
+
+
+	{/* insert content in order */}
 	</div>
 	);
 

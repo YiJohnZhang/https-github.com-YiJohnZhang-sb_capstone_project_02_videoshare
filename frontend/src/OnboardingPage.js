@@ -9,7 +9,7 @@ import ShortCollabsAPI from './helpers/api';
 import UserDetailsContext from './context/UserDetailsContext';
 
 
-function OnboardingPage(){
+function OnboardingPage({onboardingMethod}){
 
 	useAuthenticationDependentRedirect(false);
 

@@ -5,9 +5,16 @@ function NotFoundPage(){
 
 	const history = useHistory();
 
+	function linkClickHandler(evt){
+
+		evt.preventDefault();
+		history.goBack();
+
+	}
+
 	return(
 	<div className="page">
-		<Link to={}></Link>
+		<Link onClick={linkClickHandler}></Link>
 	</div>
 	);
 
