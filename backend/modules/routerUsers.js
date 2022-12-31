@@ -51,9 +51,9 @@ router.get('/:username', async(req, res, nxt) => {
 	try{
 		
 		const userResult = await UserModel.getByPK(req.params.username);
-			// todo: add JOIN query to return list of users, throw it under "user"
 			// user exists implied
 		const correspondingContentResult = await ContentModel.getContentByUsername();
+			// todo: add content query and set it to userResult.contents = correspondngContentResult
 			// note: front-end queries for title, link, contract_signed (collaborators if `contract_type` is not `solo`)
 
 		return res.json({user: userResult, content: correspondingContentResult});

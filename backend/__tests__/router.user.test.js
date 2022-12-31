@@ -117,13 +117,13 @@ describe('GET \`/users\`: search', () => {
 		const response1 = await request(app)
 			.get('/users/')
 			.query({username:'test'})
-			.set('authorization', `Bearer ${user1Token}`);;
+			.set('authorization', `Bearer ${user1Token}`);
 		expect(response1.body.users.length).toEqual(3);
 
 		const response2 = await request(app)
 			.get('/users/')
 			.query({username:'2'})
-			.set('authorization', `Bearer ${user1Token}`);;
+			.set('authorization', `Bearer ${user1Token}`);
 		expect(response2.body.users.length).toEqual(1);
 
 	});
@@ -236,7 +236,6 @@ describe('GET \`/users/:username/edit\`', () => {
 		expect(response.body).toEqual({
 			user: USER1_PRIVATE_RESPONSE
 		});
-
 
 	});
 

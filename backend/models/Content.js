@@ -93,7 +93,7 @@ class Content {
 
 			const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
 			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
-				// todo: isnsert (status = 'published' OR status = 'legacy') JERE
+				// todo (ignore): isnsert (status = 'published' OR status = 'legacy') JERE
 
 		}else{
 			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
@@ -238,12 +238,12 @@ class Content {
 		const result = await db.query(`
 		SELECT participants, contract_signed AS "contractSigned"
 			FROM ${this.relationName}
-			WHERE id = $1`, [contentID]);
+			WHERE id = $1 AND status = 'standby'`, [contentID]);
 
 		const contentObject = result.rows[0];
 
 		if (!contentObject)
-			throw new NotFoundError(`Cannot find content with id: ${contentID}.`);
+			throw new NotFoundError(`Cannot find valid content with id: ${contentID}.`);
 
 		const participants = JSON.parse(contentObject.participants);
 		const contractSigned = JSON.parse(contentObject.contractSigned);
@@ -339,6 +339,7 @@ class Content {
 
 	}
 
+	// TODO: DELETE
 	/**	Return the JOIN entry of content given a username.
 	 *
 	 *	{ username } => [ { id, description }, ... ].
@@ -363,6 +364,7 @@ class Content {
 
 	}
 
+	// TODO: DELETE
 	/**	Return the JOIN entry of content given a username, to edit.
 	 *
 	 *	{ username } => [ { id, description }, ... ].
@@ -385,6 +387,7 @@ class Content {
 
 	}
 
+	// TODO: DELETE
 	/**	Update the JOIN entry of content given a username.
 	 *
 	 *	{ username, contentID } => [ { id, description }, ... ].

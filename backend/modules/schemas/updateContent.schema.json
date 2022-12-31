@@ -21,6 +21,12 @@
 		"contractType": {
 			"type": "string", "enum": ["single", "byview", "presplit"]
 		},
+		"participants": {
+			"type": "array",
+			"items": [{
+					"type": "string", "minLength": 4, "maxLength": 32
+			}]
+		},
 		"contractDetails": {
 			"type": "object",
 			"properties": {
@@ -29,7 +35,7 @@
 					"items": [{
 						"type": "object",
 						"properties": {
-							"username": {"type": "string"},
+							"username": {"type": "string", "minLength": 4, "maxLength": 32},
 							"share": {"type": "number"}
 						},
 						"required": ["username", "share"]
@@ -40,7 +46,7 @@
 					"items": [{
 						"type": "object",
 						"properties": {
-							"username": {"type": "string"},
+							"username": {"type": "string", "minLength": 4, "maxLength": 32},
 							"share": {"type": "number"}
 						},
 						"required": ["username", "share"]
@@ -52,12 +58,7 @@
 		"contractSigned": {
 			"type": "array",
 			"items": [{
-				"type": "object",
-				"properties": {
-					"username": {"type": "string"},
-					"signed": {"type": "boolean"}
-				},
-				"required": ["username", "signed"]
+					"type": "string", "minLength": 4, "maxLength": 32
 			}]
 		}
 	},
@@ -68,6 +69,7 @@
 		"description",
 		"owner",
 		"contractType",
+		"participants",
 		"contractDetails",
 		"contractSigned"
 	]
