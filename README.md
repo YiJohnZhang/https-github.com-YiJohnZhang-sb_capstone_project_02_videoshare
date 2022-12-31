@@ -38,13 +38,14 @@ See how much I can finish in 2 weeks time, eh?
 |02|db seeding, continued (content)|2022-12-14|13:36 - 15:58|142|
 |03|db seeding script and fixing typo|2022-12-14|19:47 - 22:29|162|
 |04|fix db seeding|2022-12-15|18:45 - 18:55|10|
-||**50.01.03**. Data Sourcing||**Net Total Time**|548|
+||**50.01.03**. Data Sourcing||**Net Total Time**|548 (09h08m)|
 |05|starting TDD of `backend`|2022-12-19 - 2022-12-20|21:43 - 00:31|168|
 |06||2022-12-20|10:54 - 12:26|92|
 |07||2022-12-20|15:09 - 19:41|512|
 |08||2022-12-21 - 2022-12-22|22:23 - 00:43|140|
 |09||2022-12-22|12:33 - 13:40|67|
 |10||2022-12-22|19:50 - 23:16|206|
+|11|`frontend` work||||
 |12||2022-12-27|11:11 - 12:17|66|
 |13|finished models|2022-12-27 - 2022-12-28|21:51 - 01:03|192|
 |14|router templating|2022-12-28|09:58 - 12:21|143|
@@ -60,20 +61,32 @@ See how much I can finish in 2 weeks time, eh?
 |24|`auth`, and some `content`|2022-12-30|02:29 - 03:27||
 |25|contents work; reinstalled github; crashed|2022-12-30|09:59 - 11:45||
 |26|finish contents?|2022-12-30|13:58 - 15:16||
+|27|contents `model` based on `router`|2022-12-30|13:58 - 15:16||
+|29|`contents` tests|2022-12-30|: - :||
+|30|`contents` |2022-12-30|: - :||
+|31|`contents` |2022-12-30|: - :||
+|32|`contents` |2022-12-30|: - :||
+|33|`contents` |2022-12-30|: - :||
 19		20		24
 2052	
 
-||**50.01.04**. Routes (Backend)||**Net Total Time**||
+||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
-|2||2022-12-29|: - :||
-|2||2022-12-29|: - :||
-||**50.01.05**. Application (Front-End)||**Net Total Time**||
-||||**Total Time**|_ minutes|
+|28|onboarding and |2022-12-30|17:02 - :||
+|3||2022-12-30|: - :||
+|3||2022-12-3|: - :||
+|3||2022-12-3|: - :||
+||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
+|3||2022-12-3|: - :||
+||||**Total Time**|_ minutes (--h--m)|
 
 ## Back-end Todo
 - add Comments on schema
 - update shcema img
 - 
+
+
+
 
 ## More-Time Wishlist
 - admin dashboard to demonstrate full potential of the database schema design.
