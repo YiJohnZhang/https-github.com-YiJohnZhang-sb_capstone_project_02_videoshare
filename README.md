@@ -62,8 +62,9 @@ See how much I can finish in 2 weeks time, eh?
 |25|contents work; reinstalled github; crashed|2022-12-30|09:59 - 11:45||
 |26|finish contents?|2022-12-30|13:58 - 15:16||
 |27|contents `model` based on `router`|2022-12-30|13:58 - 15:16||
-|29|`contents` tests|2022-12-30|: - :||
-|30|`contents` |2022-12-30|: - :||
+|28|`frontend` work||||
+|29|`frontend` work||||
+|30|`contents` models + routes|2022-12-30|: - :||
 |31|`contents` |2022-12-30|: - :||
 |32|`contents` |2022-12-30|: - :||
 |33|`contents` |2022-12-30|: - :||
@@ -72,12 +73,12 @@ See how much I can finish in 2 weeks time, eh?
 
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
-|28|onboarding and frontend styling|2022-12-30|17:02 - 18:03||
-|3||2022-12-30|: - :||
+|28|onboarding and frontend styling|2022-12-30|17:02 - 18:03|61|
+|29|frontend styling + API|2022-12-30|18:24 - :||
 |3||2022-12-3|: - :||
 |3||2022-12-3|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
-|3||2022-12-3|: - :||
+|30||2022-12-30|: - :||
 ||||**Total Time**|_ minutes (--h--m)|
 
 ## Back-end Todo
