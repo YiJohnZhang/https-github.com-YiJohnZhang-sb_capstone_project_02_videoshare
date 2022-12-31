@@ -64,8 +64,8 @@ See how much I can finish in 2 weeks time, eh?
 |27|contents `model` based on `router`|2022-12-30|13:58 - 15:16||
 |28|`frontend` work||||
 |29|`frontend` work||||
-|30|`contents` models + routes|2022-12-30|: - :||
-|31|`contents` |2022-12-30|: - :||
+|30|`README.md` work||||
+|31|`contents` models + routes|2022-12-30|: - :||
 |32|`contents` |2022-12-30|: - :||
 |33|`contents` |2022-12-30|: - :||
 19		20		24
@@ -78,7 +78,7 @@ See how much I can finish in 2 weeks time, eh?
 |3||2022-12-3|: - :||
 |3||2022-12-3|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
-|30||2022-12-30|: - :||
+|30|`README.md` work|2022-12-30|20:54 - 21:||
 ||||**Total Time**|_ minutes (--h--m)|
 
 ## Back-end Todo
