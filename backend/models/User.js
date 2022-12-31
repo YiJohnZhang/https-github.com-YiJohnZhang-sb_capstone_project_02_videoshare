@@ -78,7 +78,7 @@ class User {
 	 *	@param {integer} birthdateMonth
 	 *	@param {integer} birthdateDay
 	 **/
-	static async register({ username, password, firstName, lastName, email, birthdateYear, birthdateMonth, birthdateDay }){
+	static async register({ username, password, firstName, lastName, email, birthdate/*birthdateYear, birthdateMonth, birthdateDay*/ }){
 
 		const userExists = await db.query(`
 			SELECT username
@@ -89,7 +89,7 @@ class User {
 		if (userExists.rows[0])
 			throw new ConflictError(`Username, \'${username}\' already taken`);
 
-		const birthdate = `'${birthdateYear}-${birthdateMonth}-${birthdateDay}'`;
+		// const birthdate = `'${birthdateYear}-${birthdateMonth}-${birthdateDay}'`;
 		const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
 		const result = await db.query(`

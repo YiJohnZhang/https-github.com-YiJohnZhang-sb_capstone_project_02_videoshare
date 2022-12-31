@@ -198,10 +198,27 @@ async function isOwner(req, res, nxt) {
 
 }
 
+/**	isParticipant(req, res, nxt)
+ *	Middleware to check whether or not the user is a participant.
+ *	If not, raises UnauthorizedError.
+ */
 async function isParticipatingUser(req, res, nxt) {
 
 	// for editing the content (sign and stuff.)
 
+	try{
+
+		const result = ContentModel.getParticipants(req.params.contentID);
+		const participantSet = new Set(result);
+		
+		if(participantSet.has(res.locals.user.username))
+			nxt();
+
+	}catch(error){
+		nxt(new UnauthorizedError('not a participant'))
+	}
+
+	nxt(new UnauthorizedError('not a participant'));
 
 }
 

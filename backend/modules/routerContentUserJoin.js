@@ -39,11 +39,11 @@ router.get('/:username/:contentID', async(req, res, nxt) => {
  *	To edit the join entry.
  *	Authorization Required: isLoggedIn, isReferenceUser
 */
-router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateContentJOINSchema), async(req, res, nxt) => {
+router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
 
 	try{
 
-		const contentResult = await ContentModel.updateJOINContent(req.params.username, req.params.contentID, req.body);
+		const contentResult = await ContentModel.getPrivateJOINContent(req.params.username, req.params.contentID);
 
 		return res.json({content: contentResult});
 
@@ -60,9 +60,11 @@ router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, validateRe
  *	To edit the join entry.
  *	Authorization Required: isLoggedIn, isReferenceUser
 */
-router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, validateRequestBody(updateContentJOINSchema), async(req, res, nxt) => {
+router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
 
 	try{
+
+		validateRequestBody(updateContentJOINSchema)
 
 		const contentResult = await ContentModel.updateJOINContent(req.params.username, req.params.contentID, req.body);
 

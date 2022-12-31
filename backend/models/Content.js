@@ -1,8 +1,12 @@
 const db = require('../database/db');
 const { sqlCreateQueryBuilder, sqlFilterQueryBuilder, sqlUpdateQueryBuilder } = require('../helpers/sqlQueryingHelper');
+const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
+
 const {
 	NotFoundError,
-	ConflictError
+	ConflictError,
+	UnauthorizedError,
+	ExpressError
 } = require('../modules/utilities');
 
 //	Properties to return for a query
@@ -164,6 +168,7 @@ class Content {
 		await this.getByPK(pk);
 
 		// do something with `updateRecordObject` if necessary, i.e. remove certain properties that are forbidden to be updated or modify passed values
+			// not the time to remove `isOwner` ._. just get it working
 
 		const { parameterizedSET, setParameters } = sqlUpdateQueryBuilder(updateRecordObject, JSON_SQL_SET_MAPPING);
 		const pkParameterIndex = "$".concat(setParameters.length + 1);
@@ -188,11 +193,98 @@ class Content {
 
 /** */
 
+
+	static async signUpdate(contentID, username){
+
+		const result = await db.query(`
+			SELECT participants, contract_signed AS "contractSigned"
+				FROM ${this.relationName}
+				WHERE id = $1`, [contentID]);
+
+		const contentObject = result.rows[0];
+
+		const participants = JSON.parse(contentObject.participants);
+			// double check username is in participants
+		const userIsParticipant = participants.indexOf(username);
+		if(userIsParticipant === -1)
+			throw new UnauthorizedError('not a participant')	
+
+		// toggle whehter or not it is signed
+		const contractSigned = JSON.parse(contentObject.contractSigned);
+		let newContract = [...contractSigned];
+
+		const userIndex = contractSigned.indexOf(username);
+
+		if(userIndex === -1){
+			newContract.push(username);
+		}else{
+			newContract = newContract.filter((userID) => userID !== username);
+		}
+
+		// commit
+		const commitResult = await db.query(`
+			UPDATE ${this.relationName}
+				SET contract_signed = $1
+				WHERE content_id = $2
+				RETURNING contract_signed AS "contractSigned"`, [newContract, contentID]);
+		
+		return commitResult.rows[0].contractSigned;		
+
+	}
+
+	// double check it is all signed.
+	static async publishUpdate(contentID){
+
+		const result = await db.query(`
+		SELECT participants, contract_signed AS "contractSigned"
+			FROM ${this.relationName}
+			WHERE id = $1`, [contentID]);
+
+		const contentObject = result.rows[0];
+
+		if (!contentObject)
+			throw new NotFoundError(`Cannot find content with id: ${contentID}.`);
+
+		const participants = JSON.parse(contentObject.participants);
+		const contractSigned = JSON.parse(contentObject.contractSigned);
+
+		// fail signing if `participants` not equal to `contractSigned`
+		if(participants != contractSigned)
+			throw new ExpressError(499, 'All participants must have signed the contract.');	
+		
+		try{
+
+			await db.query('BEGIN');
+
+			const publishQuery = await db.query(`
+				UPDATE ${this.relationName}
+					SET status = $1
+					WHERE content_id = $2
+					RETURNING content_id`, ['published', contentID]);
+
+			const parameterizedVALUES_array = participants.map((participant, index) => `($${3+index}, $1, $2))`);
+
+			let parameterizedVALUES_string = parameterizedVALUES_array.join(',');
+
+			const createContentUserJoinEntriesQuery = await db.query(`
+				INSERT INTO contents_users_join (user_id, content_id, description)
+					VALUES ${parameterizedVALUES_string};`, [contentID, description, ...participants])
+			
+			await db.query('COMMIT');
+
+			return 'success';
+		
+		}catch(error){
+			throw new ExpressError(498, error)
+		}
+
+	}
+
 	/**	Return the content owner from content records in the database.
 	 *
 	 *	=> `username`.
 	 */
-	static async getContentOwner(pk) {
+	 static async getContentOwner(pk) {
 
 		let result = await db.query(`
 			SELECT id, owner
@@ -204,7 +296,29 @@ class Content {
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find content with id: ${pk}.`);
 		
-		return contentObject;
+		return contentObject.owner;
+
+	}
+
+	/**	Return the participants from content records in the database.
+	 *
+	 *	=> `["username", ...]` (stringified array?).
+	 */
+	static async getParticipants(pk) {
+
+		let result = await db.query(`
+			SELECT participants
+				FROM ${this.relationName}
+				WHERE id = $1`, [pk]);
+
+		const contentObject = result.rows[0];
+
+		if (!contentObject)
+			throw new NotFoundError(`Cannot find content with id: ${pk}.`);
+		
+		const participantArray = JSON.parse(contentObject.participants);
+
+		return participantArray;
 
 	}
 
@@ -277,7 +391,7 @@ class Content {
 	 *
 	 *	Throws NotFoundError if not found.
 	 */
-	static async updateJOINContent(description, username, contentID) {
+	static async updateJOINContent(username, contentID, { description }) {
 
 		let result = await db.query(`
 			UPDATE contents_users_join

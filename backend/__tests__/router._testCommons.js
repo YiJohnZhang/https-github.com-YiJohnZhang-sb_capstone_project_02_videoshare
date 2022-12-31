@@ -23,10 +23,11 @@ async function commonBeforeAll() {
 		firstName: 'Test',
 		lastName: 'User1',
 		password: 'password',
-		email: 'testuser1@gmail.com', 
-		birthdateYear:1990,
-		birthdateMonth:1,
-		birthdateDay:1,
+		email: 'testuser1@gmail.com',
+		birthdate: '1990-01-01' 
+		// birthdateYear:1990,
+		// birthdateMonth:1,
+		// birthdateDay:1
 	});
 
 	await User.register({
@@ -35,9 +36,10 @@ async function commonBeforeAll() {
 		lastName: 'User2',
 		password: 'password',
 		email: 'testuser2@gmail.com', 
-		birthdateYear:1990,
-		birthdateMonth:1,
-		birthdateDay:1,
+		birthdate: '1990-01-01' 
+		// birthdateYear:1990,
+		// birthdateMonth:1,
+		// birthdateDay:1
 	});
 
 	await User.register({
@@ -46,9 +48,10 @@ async function commonBeforeAll() {
 		lastName: 'User3',
 		password: 'password',
 		email: 'testuser3@gmail.com', 
-		birthdateYear:1990,
-		birthdateMonth:1,
-		birthdateDay:1,
+		birthdate: '1990-01-01' 
+		// birthdateYear:1990,
+		// birthdateMonth:1,
+		// birthdateDay:1
 	});
 
 	//	the api does not allow creating elevated users
