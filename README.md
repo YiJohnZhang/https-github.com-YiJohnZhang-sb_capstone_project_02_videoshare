@@ -91,19 +91,31 @@ npm test	# alias for `react-scripts test` in `package.json`
 ## 02.03. Frontend Userflow (`todo`)
 ```sh
 /
-├──	?search
+├──	?search						# possibly integrate into home page?
 ├──	signin/					# logout required
 ├──	register/				# logout required
 ├──	users/
 │	├── [username]
-│	└── [username]/edit		# login required
-├──	contents/
-│	├── [contentid]			# 2022-12-30: redirects to a random [contentid]/[username] if multiple individuals?
-│	├── new					# login required
-│	└── [contentid]/edit	# login required (multiple types depending on authentication)
+│	└── [username]/edit		# login required, check reference user.
+├──	content/					# index page?
+│	├── upload/				# login required
+│	├── edit/[contentid]	# login required, if check participant.
 └── logout					# login required
+└── 
 # Idea: if 403, return to home.
 ```
+|Page|Path|Page Component|Notes|Authentication|
+|-|-|-|-|-|
+|Home|`/`|`HomePage`|Home page. Displays content. **Integrated Search**|None|
+|Onboarding|`/login` or `/signup`|`OnboardingPage`|Use this as a common page|notLoggedIn|
+|Profile|`/user/:username`|`ProfilePage`|Either the reference user or public.|None|
+||`/user/:username/edit`|`EditUserPage`, either redirect or pop-up|Must be reference user. Push to `404` if not.|loggedIn & check reference user|
+|Logout|`/logout`|`LogoutComponent`|A component that doesn't render anything|loggedIn|
+|EditContentPage|`/upload`|`EditContentPage`|Create a piece of content. Backend Notes: keep as is. once the create button is hit, redirect to edit content page.|loggedIn|
+|EditContentPage|`/edit/:contentID`|`EditContentPage`|A form to edit a piece of content.|loggedIn & check participant (push to `404` o.w.)|
+
+-fin: home, onboarding, logout
+-todo: editcontentpage, profile, EditUserPage
 
 ## 02.04. Data Source
 - The sample data is dummy data.
@@ -186,7 +198,7 @@ Some suggested improvements to this concept are:
 |16|`formik` for frontend, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
 |27|onboarding and frontend styling|2022-12-30|17:02 - 18:03|61|
 |28|frontend styling + API|2022-12-30|18:24 - 20:34|130|
-|33||2022-12-31|21:43 - :||
+|33|bulk of `HomePage`, styling and documentation|2022-12-31|21:43 - 23:36||
 |3||2023-01-01|: - :||
 |3||2023-01-01|: - :||
 |3||2023-01-01|: - :||

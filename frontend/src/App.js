@@ -4,9 +4,8 @@ import { Switch, Route } from 'react-router-dom';
 import './App.css';
 import NavBar from './NavBar';
 import OnboardingPage from './OnboardingPage';
-import UploadPage from './UploadPage';
 import SearchPage from './SearchPage';
-import ContentPage from './ContentPage';
+import EditContentPage from './EditContentPage';
 import ProfilePage from './ProfilePage';
 import LogoutComponent from './LogoutComponent';
 import HomePage from './HomePage';
@@ -32,15 +31,16 @@ function App(){
 				<OnboardingPage onboardingMethod="signup" />
 			</Route>
 			<Route path="/upload">
-				<UploadPage />
+				<EditContentPage contentMethod="create" />
 			</Route>
-			<Route path="/search">
+			<Route path="/edit/:contentID">
+				<EditContentPage contentMethod="update" />
+			</Route>
+			{/* integrate below into home page? */}
+			<Route path="/search">	
 				<SearchPage />
 			</Route>
-			<Route path="/content">
-				<ContentPage />
-			</Route>
-			<Route path="/user">
+			<Route path="/profile">
 				<ProfilePage />
 			</Route>
 			<Route path="/logout">
@@ -49,9 +49,9 @@ function App(){
 			<Route path="/">
 				<HomePage />
 			</Route>
-			<Route path="/" >
+			{/* <Route path="/" >
 				<NotFoundPage />
-			</Route>
+			</Route> */}
 		</Switch>
 	</UserDetailsContext.Provider>
 	);

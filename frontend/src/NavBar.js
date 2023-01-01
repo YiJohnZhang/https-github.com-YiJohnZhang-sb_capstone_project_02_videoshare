@@ -33,7 +33,7 @@ function NavBar() {
 		{sessionUsername &&
 		<React.Fragment>
 			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger" activeStyle={ACTIVE_STYLE} to="/profile">Profile</NavLink></td>
-			<td className="navbarButton-container"><NavLink className="btn btn-danger" activeStyle={ACTIVE_STYLE} to="/upload">+&nbsp;Upload</NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-danger" activeStyle={ACTIVE_STYLE} to="/upload"><i class="fa-duotone fa-video-plus"></i></NavLink></td>
 			<td className="navbarButton-container"><NavLink className="btn btn-outline-dark" to="/logout">Logout</NavLink></td>
 		</React.Fragment>
 		}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import ContentPage from '../ContentPage';
+import ContentPage from '../EditContentPage';
 
 //	Smoke Test
 test('ContentPage: smoke test', () => {

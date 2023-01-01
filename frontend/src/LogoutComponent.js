@@ -6,7 +6,8 @@ import UserDetailsContext from './context/UserDetailsContext';
 
 function LogoutComponent(){
 
-	useAuthenticationDependentRedirect(false);
+	useAuthenticationDependentRedirect(true);
+		// must be signed in to visit this component
 
 	const {setSessionUsername} = useContext(UserDetailsContext);
 	const history = useHistory();

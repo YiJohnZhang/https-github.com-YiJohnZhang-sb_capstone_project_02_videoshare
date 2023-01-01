@@ -1,6 +1,11 @@
 .homeContainer{
 	padding: 25px 0;
 }
+
+#home-searchbar{
+	margin: 25px auto;
+}
+
 #home-minorContainer{
 
 	position: fixed;
