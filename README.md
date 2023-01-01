@@ -198,10 +198,10 @@ Some suggested improvements to this concept are:
 |16|`formik` for frontend, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
 |27|onboarding and frontend styling|2022-12-30|17:02 - 18:03|61|
 |28|frontend styling + API|2022-12-30|18:24 - 20:34|130|
-|33|bulk of `HomePage`, styling and documentation|2022-12-31|21:43 - 23:36||
-|3||2023-01-01|: - :||
-|3||2023-01-01|: - :||
-|3||2023-01-01|: - :||
+|33|bulk of `HomePage`, styling and documentation|2022-12-31|21:43 - 23:36|113|
+|34|`ProfilePage`|2023-01-01|08:16 - :||
+|35||2023-01-01|: - :||
+|36||2023-01-01|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |3||2022-12-31|: - :||
