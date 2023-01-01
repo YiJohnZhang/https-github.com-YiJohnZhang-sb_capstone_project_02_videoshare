@@ -1,5 +1,6 @@
 const db = require('../database/db');
 const { sqlCreateQueryBuilder, sqlFilterQueryBuilder, sqlUpdateQueryBuilder } = require('../helpers/sqlQueryingHelper');
+
 const {
 	ExpressError,
 	NotFoundError,
@@ -11,8 +12,7 @@ const {
 const QUERY_GENERAL_PROPERTIES = `
 	user_id AS "userID",
 	content_id AS "contentID",
-	description,
-	is_active AS "isActive"`;
+	description`;
 const QUERY_PRIVATE_PROPERTIES = ``;
 
 //	JSON-SQL Mapping Constants
@@ -36,133 +36,158 @@ class ContentUserJoin {
 	/**	Create a single content_users_join record (invitation)
 	 *	technically any participant?
 	 */
-	// static async invite(inviterUsername, contentID, invitedUsername){
+	static async invite(inviterUsername, contentID, invitedUsername){
 
-	// 	await this.getByPK(inviterUsername, contentID);
-	// 		// has permissions to invite.
-	// 	await this.pkDoesNotAlreadyExist(invitedUsername, contentID);
+		// await this.getByPK(inviterUsername, contentID);
+		// 	// has permissions to invite.
+		// await this.pkDoesNotAlreadyExist(invitedUsername, contentID);
 
-		
-		
 
 	// 	//	add to "participants"
 
-	// }
+	}
 
 	// /**	Create a single content_users_join record (invitation)
 	//  *	only owner
 	//  */
-	//  static async publish(username, contentID){
+	 static async publish(username, contentID){
 
-	// 	await this.getByPK(username, contentID);
-	// 	//	synchronize descriptions?
+		// await this.getByPK(username, contentID);
+		//	synchronize descriptions?
 		
-	// }
+	}
 
 	/**	Create content_users_join record with data.
 	 *
 	 *	=> { ... }
 	 *
 	 *	Throws BadRequestError for duplicates.
-	 **/
+	 */
+
 	static async create(newRecordObject, ntomJoin = []){
 
-		try{
+		// try{
 			
-			await db.query('BEGIN');
+		// 	await db.query('BEGIN');
 
-			const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
+		// 	const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
 
-			const result = await db.query(`
-				INSERT INTO ${this.relationName} ${parameterizedINSERTPropertyNames}
-					VALUES ${parameterizedINSERTPropertyIndices}
-					RETURNING ${QUERY_GENERAL_PROPERTIES}`, insertParameters);
+		// 	const result = await db.query(`
+		// 		INSERT INTO ${this.relationName} ${parameterizedINSERTPropertyNames}
+		// 			VALUES ${parameterizedINSERTPropertyIndices}
+		// 			RETURNING ${QUERY_GENERAL_PROPERTIES}`, insertParameters);
 
-			const cuJoinObject = result.rows[0];
+		// 	const cuJoinObject = result.rows[0];
 
-			if(ntomJoin){
+		// 	if(ntomJoin){
 
-				const JOIN_MODEL_NAME = '';
-				const JOIN_MODEL_KEY = '(fk1, fk2, ...)';
-				const JOIN_MODEL_IDX = '($1, $2, ...)';
+		// 		const JOIN_MODEL_NAME = '';
+		// 		const JOIN_MODEL_KEY = '(fk1, fk2, ...)';
+		// 		const JOIN_MODEL_IDX = '($1, $2, ...)';
 
-				newRecordObject./*...*/.forEach((entry) => {
+		// 		// newRecordObject./*...*/.forEach((entry) => {
 
-					await db.query(`
-						INSERT INTO ${JOIN_MODEL_NAME} ${JOIN_MODEL_KEY}
-							VALUES ${JOIN_MODEL_IDX}
-							RETURNING ${JOIN_MODEL_KEY}`,
-							[/* newRecordObject...., entry */]);
+		// 		// 	await db.query(`
+		// 		// 		INSERT INTO ${JOIN_MODEL_NAME} ${JOIN_MODEL_KEY}
+		// 		// 			VALUES ${JOIN_MODEL_IDX}
+		// 		// 			RETURNING ${JOIN_MODEL_KEY}`,
+		// 		// 			[/* newRecordObject...., entry */]);
 				
-				});
+		// 		// });
 
-			}
+		// 	}
 
-			await db.query('COMMIT');
+		// 	await db.query('COMMIT');
 
-			return cuJoinObject;
+		// 	return cuJoinObject;
 
-		}catch(error){
-			await db.query('ROLLBACK');
-			throw new ExpressError(499, `ERR_MULT_NEW_REC_DBFAIL`);
-		}
+		// }catch(error){
+		// 	await db.query('ROLLBACK');
+		// 	throw new ExpressError(499, `ERR_MULT_NEW_REC_DBFAIL`);
+		// }
 
 	}
 
+	// 2022-12-31: NOTE THIS IS NOW REDUNDANT BECAUSE I ELECTED TO MAKE IT THAT "participants" 
 	/**	Find all matching content_users_join records.
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [{ pk, propertyOne, ... }, ...]
-	 **/
+	 */
 	static async getAllPublic(queryObject) {
 
-		const sqlQueryBeforeWHERE = (`
-			SELECT ${QUERY_GENERAL_PROPERTIES}
-			FROM ${this.relationName}`);
-		const sqlQueryAfterWHERE = (`ORDER BY pk`);
+		// const sqlQueryBeforeWHERE = (`
+		// 	SELECT ${QUERY_GENERAL_PROPERTIES}
+		// 	FROM ${this.relationName}
+		// 	JOIN "contents" ON "contents.id" = "${this.relationName}.content_id"`);
+		// const sqlQueryAfterWHERE = (`ORDER BY contents.date_published`);
 		
-		let result;
+		// let result;
 
-		if(queryObject){
+		// if(queryObject){
 
-			// optional: do something to modify queryString
-			// note: block `isActive` query
+		// 	const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
+		// 	result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} AND (contents.status = 'published' OR contents.status = 'legacy') ${sqlQueryAfterWHERE}`, whereParameters);
 
-			const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
-			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
+		// }else{
+		// 	result = await db.query(`${sqlQueryBeforeWHERE} WHERE (contents.status = 'published' OR contents.status = 'legacy') ${sqlQueryAfterWHERE}`);
+		// }
 
-		}else{
-			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
-		}
-
-		return result.rows;
+		// return result.rows;
 	
 	}
 
 	static async getAllPrivate(username){
 
-		
+		// const sqlQueryBeforeWHERE = (`
+		// 	SELECT ${QUERY_GENERAL_PROPERTIES}
+		// 	FROM ${this.relationName}
+		// 	JOIN "contents" ON "contents.id" = "${this.relationName}.content_id"`);
+		// const sqlQueryAfterWHERE = (`ORDER BY contents.date_published`);
+		// 	// too late to change 'contents.participants' to ARRAY type
+
+		// let result;
+
+		// if(queryObject){
+
+		// 	const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
+		// 	result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
+
+		// }else{
+		// 	result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
+		// }
+
+		// return result.rows;		
 
 	}
 	
 	/**	Find all matching content_users_join records.
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [{ pk, propertyOne, ... }, ...]
-	 **/
+	 */
 
 	/**	Given a pk, return data about content_users_join records.
 	 *
 	 *	=> { pk, ... }
 	 *
 	 *	Throws NotFoundError if content_users_join records not found.
-	 **/
+	 */
 	static async getByPK(userID, contentID) {
+		console.log("adf")
+		const temp = await db.query(`
+			SELECT contents.id
+				FROM ${this.relationName}
+				JOIN contents ON contents.id = ${this.relationName}.id
+		`);
+		console.log(temp.rows);
 
 		const result = await db.query(`
-			SELECT ${QUERY_GENERAL_PROPERTIES}
+			SELECT contents.id, contents.title, description, contents.link, contents.participants, contents.date_published AS "datePublished"
 				FROM ${this.relationName}
+				JOIN contents ON contents.id = ${this.relationName}.content_id
 				WHERE user_id = $1 AND content_id = $2`, [userID, contentID]);
 
 		const cuJoinObject = result.rows[0];
+		console.log(cuJoinObject)
 
 		if (!cuJoinObject)
 			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
@@ -248,7 +273,6 @@ class ContentUserJoin {
 	}
 
 /** */
-
 	
 
 }

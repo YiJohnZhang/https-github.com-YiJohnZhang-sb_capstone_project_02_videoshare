@@ -29,6 +29,7 @@ router.post('/', isLoggedIn, async(req, res, nxt) => {
 		return res.status(201).json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
+		// console.log(error);
 		nxt(error);
 	};
 	
@@ -50,11 +51,11 @@ router.get('/', async(req, res, nxt) => {
 		const contentResults = await ContentModel.getAll(req.query);
 			// tod: note add JOIN query to return list of users, throw it under "contents"
 
-		const parsedContentResults = contentResults.forEach((contentResult) => parseResponseBodyProperties(contentResult));
-
+		const parsedContentResults = contentResults.map((contentResult) => parseResponseBodyProperties(contentResult));
 		return res.json({contents: parsedContentResults});
 
 	}catch(error){
+		console.log(error);
 		nxt(error);
 	}
 
@@ -89,7 +90,7 @@ router.get('/:contentID', async(req, res, nxt) => {
  *	Authorization Required: isLoggedIn, isParticipatingUser
 */
 router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, nxt) => {
-
+	
 	try{
 		
 		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
@@ -97,10 +98,11 @@ router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, 
 
 			// NOTE (OUT OF SCOPE): if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
 
-
+		console.log(contentResult);
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
+		console.log(error);
 		nxt(error);
 	}
 

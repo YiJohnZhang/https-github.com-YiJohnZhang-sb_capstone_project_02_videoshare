@@ -208,9 +208,10 @@ async function isParticipatingUser(req, res, nxt) {
 
 	try{
 
-		const result = ContentModel.getParticipants(req.params.contentID);
+		const result = await ContentModel.getParticipants(req.params.contentID);
 		const participantSet = new Set(result);
-		
+		console.log(participantSet)
+
 		if(participantSet.has(res.locals.user.username))
 			nxt();
 

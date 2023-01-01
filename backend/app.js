@@ -17,6 +17,7 @@ const { RESPONSE_MESSAGE_MAPPING, NotFoundError } = require('./modules/utilities
 const routerAuthentication = require('./modules/routerAuthentication');
 const routerUsers = require('./modules/routerUsers');
 const routerContents = require('./modules/routerContents');
+const routerContentsUsersJoin = require('./modules/routerContentUserJoin');
 
 //  Settings & Before Middleware
 //  ============================
@@ -31,6 +32,7 @@ app.use(express.urlencoded({extended:true}));
 app.use('/authentication', routerAuthentication);
 app.use('/users', routerUsers);
 app.use('/contents', routerContents);
+app.use('/cujoin', routerContentsUsersJoin)
 
 // 404 Route Not Found
 app.use((req, res, nxt) => {

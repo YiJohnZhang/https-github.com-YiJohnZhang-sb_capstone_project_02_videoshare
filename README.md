@@ -12,6 +12,7 @@ Note: **This project is hosted on a free frontend host so the performance is wor
 	- [02.03. Frontend Routes]()
 	- [02.04. Data Source]()
 	- [02.05. Further Study]()
+	- [02.06. Glaring Lack-of-Direction Modifications Examples]()
 - [03. Misecllaneous Notes & Dump]()
 	- [03.01. Time Tracker]()
 	- [Other Dump Notes (to delete)]()
@@ -22,11 +23,9 @@ The project implements a:
 - Implements a 
 
 # 02. Project Specifications
-**Author Note**: This project was developed to exceed Springboard Bootcamp's project requirements. Instead of using a readily available backend API, I built my own content API, to challenge myself. In the early stages, I attempted a pure TDD approach but without strong documentation, the application quickly became a nightmare. In hindsight, I probably should have started with basic routes first, proceeded to the React frontend, and then progressively add routes for for desired features instead of finishing the backend first and then building the frontend..
-
 This web application uses the **PERN** stack:
 - `react` Frontend w/ Client-Side Routing using `react-router`
-- `express` Backend, using `node-pg`
+- `express` Backend, using `node-pg` query builder
 - PostgreSQL RDBMS
 
 Project Schema:
@@ -40,6 +39,8 @@ The project proposes the following attributes to a relation to achieve the inten
 |`participants`|`TEXT`sql|`'["user1","user2","user3"]'`|A stringified array of usernames involved. It is `'["user1"]` if `contract_type` = `solo`.|
 |`contract_details`|`TEXT`sql|`'{"views":[{"username":"user1","share":0.25}, {"username":"user2","share":0.25},{"username":"user3","share":0.5}],"engagement":[{"username":"user1","share":0.74}, {"username":"user2","share":0.21},{"username":"user3","share":0.05}]}'`|A stringified JSON object of usernames and monetization fractions in respective monetization categories. It is `'{"views":[{"username":"user1","share":1}, ],"engagement":[{"username":"user1","share":1}]}'` if `contract_type` = `solo`.|
 |`contract_signed`|`TEXT`sql|Similar to `contract_details`.|A stringified array of usernames that have agreed to the contract. Used to check whether or not the content `status` may be set to `standby`.  Behaves similarly to `contract_details`.|
+
+**Crushing Expectations**: This project was designed to exceed Springboard Bootcamp's final capstone project requirements. Instead of using a readily available backend API, I built my own content API, to challenge myself. In the early stages, I attempted a pure TDD approach but without strong documentation, the application quickly became a nightmare. In hindsight, I probably should have started with basic routes first, proceeded to the React frontend, and then progressively add routes for for desired features instead of finishing the backend first and then building the frontend. The frontend is lackluster, the backend is more developed.
 
 ## 02.01. Use Instructions
 **To run the application**,
@@ -116,9 +117,21 @@ Some suggested improvements to this concept are:
 4. **real-time editing**. use a websockets connection for editing a `byview` or `presplit` collab to quickly negotiate an agreement 
 5. **intergrated communication**. maybe an integrated chat system, i.e. 3rd party or built-in integrated with the application to facilitate communication between users to organize collabs.
 6. **user safety**. given that social media connects many users, implement a "parental controls" or "guardian" feature to protect underage users that may want to use the collabs feature. this could be a "guardian account" acting as an "agent" for the underage user where any invitations to an underage user must be accepted by the respective "guardian account".
+7. **MORE TIME SPENT ON DOCUMENTATION**. see **02.06 Glaring Lack-of-Direction Modifications Examples**
+
+## 02.06 Glaring Lack-of-Direction Modifications Examples
+1. `./backend/models/Content_User_Join:111-138: getAllPublic`: I written this method prior to finalizing `./backend/models/Content.js`. Before I proposed that any user joining a content will get a join content added to `contents_user_join`. Therefore, a `JOIN`sql to the `contents` relation is needed to return only content that is published: with status `published` or `legacy`. However, after 2022-12-30, I have set that only published content will appear in `contents_user_join`, deprecating `Content_User_Join.getAllPublic(queryObject)`. `39-48:create`, `53-58:publish`, `67-109:create` are deprecated for the same reason.
+2. `./backend/models/Content_User_Join:139-160: getAllPrivate` is partially written and incomplete for reason (**1**).
+3. `./backend/models/Content_User_Join:221-243: update` is excessively complicated for the reason listed in (**1**), the query could have just been set as the following for performance. It is left as such because my original intention is to integrate a `UserModel.js` class I have written over the course of a week on my own motivation when I first studied `express.js` in this Bootcamp, **see [https://github.com/YiJohnZhang/sb_u03_assignments/blob/main/03_35.02.07_node-pg_m-n_relationships/models.js](https://github.com/YiJohnZhang/sb_u03_assignments/blob/main/03_35.02.07_node-pg_m-n_relationships/models.js)** copied into `./backend/integrations/models.js`.
+```js
+`UPDATE ${this.relationName}
+	SET description
+	WHERE user_id = $1 AND content_id = $2
+	RETURNING ${QUERY_GENERAL_PROPERTIES}`, [userID, contentID]
+```
+4. 
 
 
-## Routes
 -	Ok, so `/` for auth, `contents/` and `users/` for respective models.
 	- `users/` focuses on returning the users content
 	- `contents/` focuses on returning the contract and content with user(s) involved
@@ -163,7 +176,7 @@ Some suggested improvements to this concept are:
 |29|`README.md` work|||2702|
 |30|update users; `contents`|2022-12-31|00:55 - 02:38|103|
 |31|`contents` work|2022-12-31|10:48 - 12:06|78|
-|32|`contents` |2022-12-31|15:34 - :||
+|32|`contents` and `cu_join` work|2022-12-31|15:34 - 18:23||
 |33|`contents` |2022-12-31|: - :||
 31		32
 2883		
@@ -214,6 +227,7 @@ if(isRefUserOrAdmin)
 
 nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
 ```
+- `supertest` request throws `ECONNREFUSED 127.0.0.1:80` if there is no `/` prefix: https://stackoverflow.com/a/58919202
 
 ## Resource Notes
 - [Generate realistic user data](https://www.npmjs.com/package/@faker-js/faker)

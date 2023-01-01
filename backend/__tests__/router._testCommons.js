@@ -15,6 +15,7 @@ async function commonBeforeAll() {
 
 	// noinspection SqlWithoutWhere
 	await db.query("TRUNCATE TABLE contents RESTART IDENTITY CASCADE;");
+	// await db.query("DELETE FROM contents");
 	// noinspection SqlWithoutWhere
 	await db.query("DELETE FROM users");
 

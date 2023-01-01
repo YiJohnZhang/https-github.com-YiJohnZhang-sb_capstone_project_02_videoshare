@@ -36,7 +36,7 @@ const JSON_SQL_SET_MAPPING = {
 	contractSigned: "contract_signed"
 }
 const JSON_SQL_QUERY_MAPPING = {
-	username: 'title ILIKE'
+	title: 'title ILIKE'
 }
 
 
@@ -61,10 +61,10 @@ class Content {
 			const result = await db.query(`
 				INSERT INTO ${this.relationName} ${parameterizedINSERTPropertyNames}
 					VALUES ${parameterizedINSERTPropertyIndices}
-					RETURNING ${QUERY_GENERAL_PROPERTIES}`, insertParameters);
+					RETURNING ${QUERY_GENERAL_PROPERTIES}`, [...insertParameters]);
 
-			const modelNameObject = result.rows[0];
-			return modelNameObject;
+			const contentObject = result.rows[0];
+			return contentObject;
 
 		}catch(error){
 			throw new ConflictError(`${error}`);

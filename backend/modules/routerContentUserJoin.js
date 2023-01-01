@@ -1,87 +1,86 @@
-// basically in my confusion and pressure,  need more timeE.
-// TODO: Change path patern to GET `/[contentID]/[username]`
+const express = require('express');
+const router = new express.Router();
 
-// const express = require('express');
-// const router = new express.Router();
+// const ContentModel = require('../models/Content');
+const ContentUserModel = require('../models/Content_User_Join');
+const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin, isOwner } = require('./middlewareAAE');
+const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
+const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
 
-// // const ContentModel = require('../models/Content');
-// const ContentUserModel = require('../models/Content_User_Join');
-// const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin, isOwner } = require('./middlewareAAE');
-// const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
-// const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
+const newContentSchema = require('./schemas/newContent.schema.json');
+// const queryModelSchema = require('./schemas/queryContent.schema.json');
+const updateContentSchema = require('./schemas/updateContent.schema.json');
+const updateContentJOINSchema = require('./schemas/updateContentJOIN.schema.json');
+// use isParticipatingUser for editing contract by participating users
 
-// const newContentSchema = require('./schemas/newContent.schema.json');
-// // const queryModelSchema = require('./schemas/queryContent.schema.json');
-// const updateContentSchema = require('./schemas/updateContent.schema.json');
-// const updateContentJOINSchema = require('./schemas/updateContentJOIN.schema.json');
-// // use isParticipatingUser for editing contract by participating users
+/** GET `/[username]/[contentID]`
+ *	( input ) => { contentResult }
+ *		where `input` is: ( , {  })
+ *		where `contentResult` is: {  }
+ *	To edit the JOIN entry.
+ *	Authorization Required: None
+*/
+router.get('/:username/:contentID', async(req, res, nxt) => {
 
-// /** GET `/[username]/[contentID]`
-//  *	( input ) => { contentResult }
-//  *		where `input` is: ( , {  })
-//  *		where `contentResult` is: {  }
-//  *	To edit the JOIN entry.
-//  *	Authorization Required: None
-// */
-// router.get('/:username/:contentID', async(req, res, nxt) => {
+	try{
 
-// 	try{
+		const contentResult = await ContentUserModel.getByPK(req.params.username, req.params.contentID);
+		// note: user ajoin to get more information
 
-// 		const contentResult = await ContentModel.getByPK(req.params.username, req.params.contentID);
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
-// 		return res.json({content: parseResponseBodyProperties(contentResult)});
+	}catch(error){
+		nxt(error);
+	}
 
-// 	}catch(error){
-// 		nxt(error);
-// 	}
+});
 
-// });
+/** GET `/[username]/[contentID]/edit`
+ *	( input ) => { contentResult }
+ *		where `input` is: ( , {  })
+ *		where `contentResult` is: {  }
+ *	To edit the join entry description.
+ *	Authorization Required: isLoggedIn, isReferenceUser
+*/
+router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
 
-// /** GET `/[username]/[contentID]/edit`
-//  *	( input ) => { contentResult }
-//  *		where `input` is: ( , {  })
-//  *		where `contentResult` is: {  }
-//  *	To edit the join entry.
-//  *	Authorization Required: isLoggedIn, isReferenceUser
-// */
-// router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
+	try{
 
-// 	try{
+		const contentResult = await ContentUserModel.getByPK(req.params.username, req.params.contentID);
 
-// 		const contentResult = await ContentUserModel.getByPK(req.params.username, req.params.contentID);
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
-// 		return res.json({content: parseResponseBodyProperties(contentResult)});
+	}catch(error){
+		console.log(error);
+		nxt(error);
+	}
 
-// 	}catch(error){
-// 		nxt(error);
-// 	}
+});
 
-// });
+/** PATCH `/[username]/[contentID]/edit`
+ *	( input ) => { contentResult }
+ *		where `input` is: ( , {  })
+ *		where `contentResult` is: {  }
+ *	To edit the join entry description.
+ *	Authorization Required: isLoggedIn, isReferenceUser
+*/
+router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
 
-// /** PATCH `/[username]/[contentID]/edit`
-//  *	( input ) => { contentResult }
-//  *		where `input` is: ( , {  })
-//  *		where `contentResult` is: {  }
-//  *	To edit the join entry.
-//  *	Authorization Required: isLoggedIn, isReferenceUser
-// */
-// router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
+	try{
 
-// 	try{
+		validateRequestBody(updateContentJOINSchema);
 
-// 		validateRequestBody(updateContentJOINSchema)
+		const contentResult = await ContentUserModel.update(req.params.username, req.params.contentID, stringifyRequestBodyProperties(req.body));
 
-// 		const contentResult = await ContentUserModel.update(req.params.username, req.params.contentID, stringifyRequestBodyProperties(req.body));
+		return res.json({content: parseResponseBodyProperties(contentResult)});
 
-// 		return res.json({content: parseResponseBodyProperties(contentResult)});
+	}catch(error){
+		nxt(error);
+	}
 
-// 	}catch(error){
-// 		nxt(error);
-// 	}
+});
 
-// });
+//delete: regular: a user can hide it?
+//delete: admin: delete all instances
 
-// //delete: regular: a user can hide it?
-// //delete: admin: delete all instances
-
-// module.exports = router;
+module.exports = router;
