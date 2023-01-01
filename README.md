@@ -1,13 +1,13 @@
 # ShortCollabs
 *The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature that encourages content creators to collaborate with another by allowing a pre-agreement of monetization distribution allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations to non-randomly select a user's profile. The intention of this feature is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans entry onto the platform.*
 
-**Live Link `as of 2022-12-3/2023-01-0`**: []() (`todo:inserlink`)
-Note: **This project is hosted on a free frontend host so the performance is worse and may be more buggy than if used locally. Consider downloading and hosting it locally. The backend is by default set to port `3000` and the frontend is by default set to port `3001`.**
+**Live Link `as of 2023-01-0`**: []() (`todo:inserlink`)
+**NOTE**: This project is hosted on the **free-tier plan** on the frontend host, **[surge.sh](https://surge.sh/)**; from experience, the performance of projects hosted on the free-tier is unreliable than if hosted locally. Consider [**downloading** and **building** this project locally](GITHUB:RUNNING AND TESTING INSTRUCTIONS): the default backend port is ,port `3000` and the default frontend port is port `3001`.
 
 # Table of Contents (`todo:inserthyperlinks`)
 - [01. Project Features]()
 - [02. Project Specifications]()
-	- [02.01. Running & Testing Instructions]()
+	- [02.01. Running & Testing Instructions](GITHUB:RUNNING AND TESTING INSTRUCTIONS)
 	- [02.02. Backend Routes]()
 	- [02.03. Frontend Routes]()
 	- [02.04. Data Source]()
@@ -42,7 +42,7 @@ The project proposes the following attributes to a relation to achieve the inten
 
 **Crushing Expectations**: This project was designed to exceed Springboard Bootcamp's final capstone project requirements. Instead of using a readily available backend API, I built my own content API, to challenge myself. In the early stages, I attempted a pure TDD approach but without strong documentation, the application quickly became a nightmare. In hindsight, I probably should have started with basic routes first, proceeded to the React frontend, and then progressively add routes for for desired features instead of finishing the backend first and then building the frontend. The frontend is lackluster, the backend is more developed.
 
-## 02.01. Use Instructions
+## 02.01. Running & Testing Instructions
 **To run the application**,
 - Backend:
 ```sh
@@ -81,6 +81,11 @@ npm test	# alias for `react-scripts test` in `package.json`
 │	├── `DELETE`/[username]		# delete user by id
 │	├── `GET`	/[username]		# return user by id, private information
 │	└── `PATCH`	/[username]		# update user by id, private information
+├── cujoin/
+|	├──	
+|	├──	
+|	└── 
+|	└──	
 └── contents/
 	├──	
 	|	├──	
@@ -90,8 +95,7 @@ npm test	# alias for `react-scripts test` in `package.json`
 
 ## 02.03. Frontend Userflow (`todo`)
 ```sh
-/
-├──	?search						# possibly integrate into home page?
+/								# integrates search
 ├──	signin/					# logout required
 ├──	register/				# logout required
 ├──	users/
@@ -114,12 +118,36 @@ npm test	# alias for `react-scripts test` in `package.json`
 |EditContentPage|`/upload`|`EditContentPage`|Create a piece of content. Backend Notes: keep as is. once the create button is hit, redirect to edit content page.|loggedIn|
 |EditContentPage|`/edit/:contentID`|`EditContentPage`|A form to edit a piece of content.|loggedIn & check participant (push to `404` o.w.)|
 
--fin: home, onboarding, logout
--todo: editcontentpage, profile, EditUserPage
+|Page|Page Component|API Call|
+|-|-|-|
+|Home|`HomePage`|`searchUsers`, `searchContent`, `getAllContents`|
+|Login|`OnboardingPage`|`authenticateUser`|
+|Signup|`OnboardingPage`|`registerUser`|
+|Logout|`LogoutComponent`|None|
+|Profile|`ProfilePage`|`getUserInformation` / `getUserFullInformation` (if reference user)|
+|Profile, Edit|`EditUserPage`|`getUserPrivateInformation` / `patchUserInformation`|
+|Content, Create|`EditContentPage`|`createContent`|
+|Content, Edit|`EditContentPage`|`getContentFullInformation`|
+|Content, Publish|`EditContentPage`|`getContentFullInformation`|
+
+- `params` aliases:
+	- `userHandle` is an alias for `username`
+	- `contentId` is an alias for `contentID`
+
+- fin: `LogoutComponent`
+- todo: editcontentpage, profile, EditUserPage
+	- `OnboardingPage`: API call.
+	- `HomePage`: API call.
+	- `ProfilePage`:
+	- `EditUserPage`
+	- `EditContentPage` (`save` to update content object; `signed`/`publish`: `signed` is toggl-ble and updates accordingly and appears aas `settled` for the owner; `publish` is disabled for non-owner users; publish is disabled if link is invalid)
+		- reduce the scope: just make it a text field (array and json field = text input and parse as array/json when sent to backend and show `save`/`publish`)
+
+- more time: bookmarkable search queries.
 
 ## 02.04. Data Source
 - The sample data is dummy data.
-- Content used is by *ThatMitchellAndWebbLook*, a British comedy duo. I do not have explicit permission to feature their content; it is sample content.
+- Content used features *That Mitchell and Webb Look*, a British comedy duo. I do not have explicit permission to feature their content; it is sample content.
 
 ## 02.05. Further Study
 Some suggested improvements to this concept are:
@@ -199,7 +227,7 @@ Some suggested improvements to this concept are:
 |27|onboarding and frontend styling|2022-12-30|17:02 - 18:03|61|
 |28|frontend styling + API|2022-12-30|18:24 - 20:34|130|
 |33|bulk of `HomePage`, styling and documentation|2022-12-31|21:43 - 23:36|113|
-|34|`ProfilePage`|2023-01-01|08:16 - :||
+|34|`ProfilePage`|2023-01-01|08:16 - 09:16||
 |35||2023-01-01|: - :||
 |36||2023-01-01|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|

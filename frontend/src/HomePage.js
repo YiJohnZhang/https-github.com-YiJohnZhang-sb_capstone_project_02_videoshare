@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import ShortCollabsAPI from './helpers/api';
+// import { useHistory } from 'react-router-dom';
+
+import useControlledForm from './hooks/useControlledForm';
 
 import './HomePage.css';
-import useControlledForm from './hooks/useControlledForm';
+import ShortCollabsAPI from './helpers/api';
 import ContentCard from './ContentCard';
 import UserCard from './UserCard';
 
 function HomePage(props){
+
+	// const history = useHistory();
 
 	const INITIAL_FORM_STATE = {
 		searchField:'',
@@ -15,8 +19,6 @@ function HomePage(props){
 
 	const [formState, setFormState] = useControlledForm(INITIAL_FORM_STATE);
 	const [matchingQuery, setMatchingQuery] = useState();
-	// make a query
-	//	...
 
 	useEffect(() => {
 
@@ -39,7 +41,7 @@ function HomePage(props){
 				// contentResult = await ShortCollabsAPI.searchContents(formState.searchField);
 				setMatchingQuery(contentResult);
 			}else{
-				// list trending content
+				// default: list trending content
 				// contentResult = await ShortCollabsAPI.getAllContents();
 				setMatchingQuery(contentResult);
 			}
@@ -48,10 +50,10 @@ function HomePage(props){
 
 		if(formState.searchSelection === 'searchContent'){
 			searchContents();
-		}else{
-			searchUsers();
 		}
-
+		
+		searchUsers();
+		
 	}, [formState])
 
 	function formChangeHandler(evt) {
@@ -125,9 +127,6 @@ function HomePage(props){
 					*/
 			)}
 		</div>
-
-
-	{/* insert content in order */}
 	</div>
 	);
 

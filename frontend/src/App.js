@@ -33,14 +33,14 @@ function App(){
 			<Route path="/upload">
 				<EditContentPage contentMethod="create" />
 			</Route>
-			<Route path="/edit/:contentID">
+			<Route path="/edit/:contentId">
 				<EditContentPage contentMethod="update" />
 			</Route>
-			{/* integrate below into home page? */}
-			<Route path="/search">	
+			{/* below integrated into home page? */}
+			{/* <Route path="/search">	
 				<SearchPage />
-			</Route>
-			<Route path="/profile">
+			</Route> */}
+			<Route path="/profile/:userHandle">
 				<ProfilePage />
 			</Route>
 			<Route path="/logout">
