@@ -299,6 +299,8 @@ Some suggested improvements to this concept are:
 |31|`contents` work|2022-12-31|10:48 - 12:06|78|
 |32|`contents` and `cu_join` work|2022-12-31|15:34 - 18:23|169|
 ||**DEPRECATED: 50.01.04**. Routes (Backend)||**Net Total Time**|3052 min (50h52m)|
+|38|salvaging backend #2...|2023-01-02|10:51 - :||
+|39||2023-01-02|: - :||
 |4||2023-01-02|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
@@ -309,13 +311,12 @@ Some suggested improvements to this concept are:
 |34|`ProfilePage`|2023-01-01|08:16 - 09:16|60|
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
-|37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30||
-|38||2023-01-02|: - :||
-|39||2023-01-02|: - :||
+|37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
 |4||2023-01-02|: - :||
 37		38
-1059	
-||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
+1190	
+1043
+||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m), excluding `formik exploration`: |
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |4x||2022-01-0|: - :||
 ||||**Total Time**|_ minutes (--h--m)|
