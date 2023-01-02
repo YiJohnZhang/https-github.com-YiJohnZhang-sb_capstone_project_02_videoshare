@@ -4,9 +4,10 @@ import { Switch, Route } from 'react-router-dom';
 import './App.css';
 import NavBar from './NavBar';
 import OnboardingPage from './OnboardingPage';
-import SearchPage from './SearchPage';
+// import SearchPage from './SearchPage';
 import EditContentPage from './EditContentPage';
 import ProfilePage from './ProfilePage';
+import EditUserPage from './EditUserPage';
 import LogoutComponent from './LogoutComponent';
 import HomePage from './HomePage';
 import NotFoundPage from './NotFoundPage';
@@ -40,8 +41,11 @@ function App(){
 			{/* <Route path="/search">	
 				<SearchPage />
 			</Route> */}
-			<Route path="/profile/:userHandle">
+			<Route path="/user/:userHandle">
 				<ProfilePage />
+			</Route>
+			<Route path="/account">
+				<EditUserPage />
 			</Route>
 			<Route path="/logout">
 				<LogoutComponent />
@@ -49,9 +53,6 @@ function App(){
 			<Route path="/">
 				<HomePage />
 			</Route>
-			{/* <Route path="/" >
-				<NotFoundPage />
-			</Route> */}
 		</Switch>
 	</UserDetailsContext.Provider>
 	);

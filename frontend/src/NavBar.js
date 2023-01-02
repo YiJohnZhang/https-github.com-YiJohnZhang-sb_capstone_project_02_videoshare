@@ -32,8 +32,8 @@ function NavBar() {
 	{/* if signed in */}
 		{sessionUsername &&
 		<React.Fragment>
-			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger" activeStyle={ACTIVE_STYLE} to="/profile">Profile</NavLink></td>
-			<td className="navbarButton-container"><NavLink className="btn btn-danger" activeStyle={ACTIVE_STYLE} to="/upload"><i class="fa-duotone fa-video-plus"></i></NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-outline-success" activeStyle={ACTIVE_STYLE} to="/account"><i className="fa-duotone fa-user-pen"></i></NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger" activeStyle={ACTIVE_STYLE} to="/upload"><i className="fa-duotone fa-video-plus"></i></NavLink></td>
 			<td className="navbarButton-container"><NavLink className="btn btn-outline-dark" to="/logout">Logout</NavLink></td>
 		</React.Fragment>
 		}

@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
-import UserDetailsContext from './context/UserDetailsContext';
-
 import ShortCollabsAPI from './helpers/api';
+import UserDetailsContext from './context/UserDetailsContext';
 import UserCard from './UserCard';
 import ContentCard from './ContentCard';
 
@@ -13,35 +12,38 @@ function ProfilePage({}){
 	const userHandle = useParams();
 	const {sessionUsername} = useContext(UserDetailsContext);
 
-	const [userInformation, setUserInformation] = useState();
+	const [userData, setUserData] = useState();
 
 	useEffect(() => {
 
-		async function returnUserInformation(){
+		async function returnUserData(){
 
 			let userData;
 
 			if(userHandle === sessionUsername){
-				userData = await ShortCollabsAPI.getUserFullInformation();
+				userData = await ShortCollabsAPI.getFullUserData();
 					// returns hidden in progress for owner only. more time: schema design so it does for participants
 			}else{
-				userData = await ShortCollabsAPI.getUserInformation();
+				userData = await ShortCollabsAPI.getUserData();
 			}
 
-			setUserInformation(userData)
+			setUserData(userData)
 
 		}
 
-		returnUserInformation();
+		returnUserData();
 
 	}, [userHandle]);
 
 
 	return(
 	<div className="page">
-		<UserCard aspectratio="horizontal"/>
-		{/* insert content in order
-			userInformation.contents.map((content) => (
+		<UserCard aspectratio="standard"
+			username={userHandle}
+			
+			/>
+		{/* todo: insert content in order
+			userData.contents.map((content) => (
 
 				<ContentCard aspectratio="vertical"
 					key={`content-${content.id}`}

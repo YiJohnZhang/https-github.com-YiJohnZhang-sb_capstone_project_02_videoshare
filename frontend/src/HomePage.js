@@ -5,6 +5,7 @@ import useControlledForm from './hooks/useControlledForm';
 
 import './HomePage.css';
 import ShortCollabsAPI from './helpers/api';
+import UserDetailsContext from './context/UserDetailsContext';
 import ContentCard from './ContentCard';
 import UserCard from './UserCard';
 
@@ -65,6 +66,7 @@ function HomePage(props){
 
 	return(
 	<div className="page">
+
 		<div id='home-searchbar' className='width-85percent'>
 		<form>
 			<div className="input-group">
@@ -84,7 +86,7 @@ function HomePage(props){
 					value="searchContent"
 					checked={formState.searchSelection==="searchContent"}
 					onChange={formChangeHandler} />
-				<label className="btn btn-secondary" htmlFor="searchContent"><i className="fa-duotone fa-video"></i></label>
+				<label className="btn btn-outline-danger" htmlFor="searchContent"><i className="fa-duotone fa-video"></i></label>
 
 				<input name="searchSelection"
 					type="radio"
@@ -93,11 +95,12 @@ function HomePage(props){
 					value="searchUser"
 					checked={formState.searchSelection==="searchUser"}
 					onChange={formChangeHandler} />
-				<label className="btn btn-secondary" htmlFor="searchUser"><i className="fa-duotone fa-user"></i></label>
+				<label className="btn btn-outline-danger" htmlFor="searchUser"><i className="fa-duotone fa-user"></i></label>
 
 			</div>
 		</form>
 		</div>
+
 		<div id="home-minorContainer" className="homeContainer width-15percent floatLeft">
 			{props.randomText.map((element) => (
 				<p key={element}
@@ -106,11 +109,14 @@ function HomePage(props){
 				</p>
 			))}
 		</div>
+
 		<div id="home-majorContainer" className="homeContainer width-85percent floatRight">
-			<p>placeholder</p>
-			{/*inject content here*/}
+			{/*todo: inject content here*/}
 			{formState.searchSelection==='searchContent' ? (
-				<>Inject Contents Here</>
+				formState.searchField ? 
+				(<h4>
+					Content Search Results for "<em>{formState.searchField}</em>&nbsp;&nbsp;"
+				</h4>) : null
 				// contents
 				/* <ContentCard
 					aspectRatio="horizontal"
@@ -118,7 +124,7 @@ function HomePage(props){
 					/>
 					*/
 			) : (
-				<>Inject Users Here</>
+				<h4>User Search Results for " <em>{formState.searchField}</em>&nbsp;&nbsp;"</h4>
 				// users
 				/* <UserCard
 					aspectRatio="horizontal"
@@ -127,6 +133,7 @@ function HomePage(props){
 					*/
 			)}
 		</div>
+
 	</div>
 	);
 

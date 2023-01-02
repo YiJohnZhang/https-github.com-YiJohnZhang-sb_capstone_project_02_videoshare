@@ -113,10 +113,13 @@ npm test	# alias for `react-scripts test` in `package.json`
 |Home|`/`|`HomePage`|Home page. Displays content. **Integrated Search**|None|
 |Onboarding|`/login` or `/signup`|`OnboardingPage`|Use this as a common page|notLoggedIn|
 |Profile|`/user/:username`|`ProfilePage`|Either the reference user or public.|None|
-||`/user/:username/edit`|`EditUserPage`, either redirect or pop-up|Must be reference user. Push to `404` if not.|loggedIn & check reference user|
+||`/account`|`EditUserPage`|loggedIn|
 |Logout|`/logout`|`LogoutComponent`|A component that doesn't render anything|loggedIn|
 |EditContentPage|`/upload`|`EditContentPage`|Create a piece of content. Backend Notes: keep as is. once the create button is hit, redirect to edit content page.|loggedIn|
 |EditContentPage|`/edit/:contentID`|`EditContentPage`|A form to edit a piece of content.|loggedIn & check participant (push to `404` o.w.)|
+- `params` aliases:
+	1. `userHandle` is an alias for `username`
+	2. `contentId` is an alias for `contentID`
 
 |Page|Page Component|API Call|
 |-|-|-|
@@ -124,24 +127,28 @@ npm test	# alias for `react-scripts test` in `package.json`
 |Login|`OnboardingPage`|`authenticateUser`|
 |Signup|`OnboardingPage`|`registerUser`|
 |Logout|`LogoutComponent`|None|
-|Profile|`ProfilePage`|`getUserInformation` / `getUserFullInformation` (if reference user)|
-|Profile, Edit|`EditUserPage`|`getUserPrivateInformation` / `patchUserInformation`|
+|Profile|`ProfilePage`|`getUserData` (public or neq ref user) / `getFullUserData` (if reference user)|
+|Profile, Edit|`EditUserPage`|`getFullUserData` / `patchUserData`|
 |Content, Create|`EditContentPage`|`createContent`|
-|Content, Edit|`EditContentPage`|`getContentFullInformation`|
-|Content, Publish|`EditContentPage`|`getContentFullInformation`|
+|Content, Edit|`EditContentPage`|`getFullContentData` / `patchContent`|
+|Content, Publish|`EditContentPage`|`getFullContentData` / `publishContent`|
 
-- `params` aliases:
-	- `userHandle` is an alias for `username`
-	- `contentId` is an alias for `contentID`
-
-- fin: `LogoutComponent`
-- todo: editcontentpage, profile, EditUserPage
-	- `OnboardingPage`: API call.
-	- `HomePage`: API call.
-	- `ProfilePage`:
-	- `EditUserPage`
+- fin:
+	- `NavBar`: maybe a frosted bg :)
+	- `LogoutComponent`
+- need API:
+	- `HomePage`
+	- `OnboardingPage` and EN_FORM_ERR_HANDLING
+	- `EditUserPage` and EN_FORM_ERR_HANDLING, EN_authdepredirect
 	- `EditContentPage` (`save` to update content object; `signed`/`publish`: `signed` is toggl-ble and updates accordingly and appears aas `settled` for the owner; `publish` is disabled for non-owner users; publish is disabled if link is invalid)
 		- reduce the scope: just make it a text field (array and json field = text input and parse as array/json when sent to backend and show `save`/`publish`)
+		- double check form elements
+- tests: upr for tests (above)
+- todo
+	- `ProfilePage`: needs below
+	- `UserCard` (need API)
+	- `ContentCard` (need API)
+	- `404Page`?
 
 - more time: bookmarkable search queries.
 
@@ -162,14 +169,7 @@ Some suggested improvements to this concept are:
 ## 02.06 Glaring Lack-of-Direction Modifications Examples
 1. `./backend/models/Content_User_Join:111-138: getAllPublic`: I written this method prior to finalizing `./backend/models/Content.js`. Before I proposed that any user joining a content will get a join content added to `contents_user_join`. Therefore, a `JOIN`sql to the `contents` relation is needed to return only content that is published: with status `published` or `legacy`. However, after 2022-12-30, I have set that only published content will appear in `contents_user_join`, deprecating `Content_User_Join.getAllPublic(queryObject)`. `39-48:create`, `53-58:publish`, `67-109:create` are deprecated for the same reason.
 2. `./backend/models/Content_User_Join:139-160: getAllPrivate` is partially written and incomplete for reason (**1**).
-3. `./backend/models/Content_User_Join:221-243: update` is excessively complicated for the reason listed in (**1**), the query could have just been set as the following for performance. It is left as such because my original intention is to integrate a `UserModel.js` class I have written over the course of a week on my own motivation when I first studied `express.js` in this Bootcamp, **see [https://github.com/YiJohnZhang/sb_u03_assignments/blob/main/03_35.02.07_node-pg_m-n_relationships/models.js](https://github.com/YiJohnZhang/sb_u03_assignments/blob/main/03_35.02.07_node-pg_m-n_relationships/models.js)** copied into `./backend/integrations/models.js`.
-```js
-`UPDATE ${this.relationName}
-	SET description
-	WHERE user_id = $1 AND content_id = $2
-	RETURNING ${QUERY_GENERAL_PROPERTIES}`, [userID, contentID]
-```
-4. 
+3. 
 
 
 -	Ok, so `/` for auth, `contents/` and `users/` for respective models.
@@ -228,7 +228,7 @@ Some suggested improvements to this concept are:
 |28|frontend styling + API|2022-12-30|18:24 - 20:34|130|
 |33|bulk of `HomePage`, styling and documentation|2022-12-31|21:43 - 23:36|113|
 |34|`ProfilePage`|2023-01-01|08:16 - 09:16|60|
-|35|`EditUserPage`/`EditContentPage`|2023-01-01|13:37 - :||
+|35|`EditUserPage`/`EditContentPage`|2023-01-01|13:37 - 17:22||
 |36||2023-01-01|: - :||
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|

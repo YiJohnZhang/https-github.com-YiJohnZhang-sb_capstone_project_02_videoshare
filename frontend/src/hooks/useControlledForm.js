@@ -38,13 +38,13 @@ function useControlledForm(INITIAL_FORM_STATE){
 	 *	Overwrites current `formState` with a new object corresponding to the form
 	 *	@param {object} newFormObject
 	 */
-	function overwriteForm(newFormObject){
+	function overwriteFormState(newFormObject){
 
 		setFormState(newFormObject);
 
 	}
 
-	return [formState, updateFormState, resetFormState, overwriteForm];
+	return [formState, updateFormState, resetFormState, overwriteFormState];
 		// later: formic form validation
 
 }
