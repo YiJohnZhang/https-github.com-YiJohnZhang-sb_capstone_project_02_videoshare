@@ -85,7 +85,7 @@ function HomePage(props){
 						type="text"
 						id="searchtextfield"
 						className="form-control"
-						placeholder="search..."
+						placeholder={`search ${formState.searchSelection==='searchUser' ? 'users...' : ''}`}
 						value={formState.searchField}
 						onChange={formChangeHandler}/>
 					<label className="visually-hidden" htmlFor="searchField">Search</label>

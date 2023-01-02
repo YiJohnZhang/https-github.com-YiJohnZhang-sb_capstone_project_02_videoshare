@@ -2,31 +2,32 @@
 *The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature that encourages content creators to collaborate with another by allowing a pre-agreement of monetization distribution allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations to non-randomly select a user's profile. The intention of this feature is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans entry onto the platform.*
 
 **Live Link `as of 2023-01-0`**: []() (`todo:inserlink`)
-**NOTE**: This project is hosted on the **free-tier plan** on the frontend host, **[surge.sh](https://surge.sh/)**; from experience, the performance of projects hosted on the free-tier is unreliable than if hosted locally. Consider [**downloading** and **building** this project locally](GITHUB:RUNNING AND TESTING INSTRUCTIONS): the default backend port is ,port `3000` and the default frontend port is port `3001`.
+**NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, the performance of projects hosted on the free-tier is unreliable than if hosted locally. Consider [**downloading** and **building** this project locally](`todo`: GITHUB link for RUNNING AND TESTING INSTRUCTIONS): the default backend port is ,port `3000` and the default frontend port is port `3001`.
 
 # Table of Contents (`todo:inserthyperlinks`)
 - [01. Project Features]()
 - [02. Project Specifications]()
 	- [02.01. Running & Testing Instructions](GITHUB:RUNNING AND TESTING INSTRUCTIONS)
-	- [02.02. Backend Routes]()
-	- [02.03. Frontend Routes]()
-	- [02.04. Data Source]()
+	- [02.02. Frontend Userflow]()
+	- [02.03. Backend Routes]()
+	- [02.04. Resources & Data Source]()
 	- [02.05. Further Study]()
 	- [02.06. Glaring Lack-of-Direction Modifications Examples]()
 - [03. Misecllaneous Notes & Dump]()
 	- [03.01. Time Tracker]()
 	- [Other Dump Notes (to delete)]()
 
-# 01. Project Features
-The project implements a:
-- User base with authorization routes.
-- Implements a 
+# 01. Project Features (`todo`)
+- 
+- 
+- 
 
 # 02. Project Specifications
 This web application uses the **PERN** stack:
 - `react` Frontend w/ Client-Side Routing using `react-router`
 - `express` Backend, using `node-pg` query builder
 - PostgreSQL RDBMS
+- Follows RESTful Routing specifications.
 
 Project Schema:
 **`TODO: INSERT SCHEMA`**
@@ -50,13 +51,15 @@ The project proposes the following attributes to a relation to achieve the inten
 cd backend
 # run `server.js`
 node server.js	# by default, this starts on port 3000, the default port number is located in `config.js`
+	# by default, listens on: localhost://127.0.0.1:3000
 ```
 - Frontend:
 ```sh
 # go to `frontend` directory
 cd frontend
-# 
+# start react app
 npm start
+	# default resource location: localhost://127.0.0.1:3001
 ```
 
 **To run the tests**,
@@ -69,31 +72,7 @@ jest
 npm test	# alias for `react-scripts test` in `package.json`
 ```
 
-## 02.02. Backend Routes (`todo`)
-```sh
-/
-├──	authorization/
-│	├── token/			# login
-│	└── register/		# register
-├──	users
-│	├── `GET`	/				# return users w/ filter
-│	├── `GET`	/[username]		# return user by id, public information only
-│	├── `DELETE`/[username]		# delete user by id
-│	├── `GET`	/[username]		# return user by id, private information
-│	└── `PATCH`	/[username]		# update user by id, private information
-├── cujoin/
-|	├──	
-|	├──	
-|	└── 
-|	└──	
-└── contents/
-	├──	
-	|	├──	
-	│	└── 
-	└──	
-```
-
-## 02.03. Frontend Userflow (`todo`)
+## 02.02. Frontend Userflow (`todo`)
 ```sh
 /										# integrates search
 ├──	signin/								# logout required
@@ -136,6 +115,29 @@ npm test	# alias for `react-scripts test` in `package.json`
 |Content, Publish|`EditContentPage`|`getFullContentData` / `publishContent`|
 |Join Content, Edit|`EditJoinContent`|`getJoinContentData` / `patchJoinContent`|
 
+|##|API Method|Model/Method|Method Name/Backend Route|
+|-|-|-|-|
+|01|`register(reqBody)`|`Authentication`/`POST`|`/authentication/register`|
+|02|`login(reqBody)`|`Authentication`/`POST`|`/authentication/login`|
+|03|`returnAllUsers()`: DISABLED|`Users`/`GET`|`/users/`|
+|04|`searchUsers(reqQuery)`|`Users`/`GET`|`/users/`|
+|05|`returnUser(username)`|`Users`/`GET`|`/users/:username/`|
+|06|`returnFullUserData(username)`|`Users`/`GET`|`/users/:username/edit`|
+|07|`patchUser(username, reqBody)`|`Users`/`PATCH`|`/users/:username/edit`|
+|08|`deleteUser(username)`: DISABLED|`Users`/`DELETE`|`/users/:username`|
+|09|`returnContent()`|`Contents`/`GET`|`/contents/:contentID/`|
+|10|`returnAllContents()`|`Contents`/`GET`|`/contents/`|
+|11|`searchContents(reqQuery)`|`Contents`/`GET`|`/contents/`|
+|12|`returnContent()`|`Contents`/`GET`|`/contents/:contentID/`|
+|13|`getFullContentData(contentID)`|`Contents`/`GET`|`/contents/:contentID/edit`|
+|14|`createContent(reqBody)`|`Contents`/`POST`|`/contents/:contentID/`|
+|15|`patchContent(contentID, reqBody)`|`Contents`/`PATCH` (update)|`/contents/:contentID/edit`|
+|16|`publishContent(contentID, reqBody)`|`Contents`/`PATCH` (publish)|`/contents/:contentID/publish`|
+|17|`deleteContent(contentID)`: DISABLED|`Contents`/`DELETE`|`/contents/:contentID/`|
+|18|`getJoinContentData(contentID, username)`|`Contents_Users_Join`/`GET`|`/contents/:contentID/:username/`|
+|19|`patchJoinContent(contentID, username, reqBody)`|`Contents_Users_Join`/`PATCH`|`/contents/:contentID/:username/edit`|
+|20|`deleteJoinContent(contentID, username)`: DISABLED|`Contents_Users_Join`/`DELETE`|`/contents/:contentID/:username/`|
+
 - fin:
 	- `LogoutComponent`
 	- `ErrorPage`
@@ -154,12 +156,86 @@ npm test	# alias for `react-scripts test` in `package.json`
 		- double check form elements
 	- `EditJoinContentPage`
 - todo
-	- logo (sc & favico)
-- more time: bookmarkable search queries.
+	- content_imgs, add more contents (~2022-01-06)
+	- 
+- more time
+	- add a means to link edits (isProfilePage will fetch the username; non-null publishedDate will decide the link format)
+	- bookmarkable search queries.
 
-## 02.04. Data Source
+## 02.03. Backend Routes (`todo`)
+```sh
+/
+├──	authorization/
+│	├── token/			# login
+│	└── register/		# register
+├──	users
+│	├── `GET`	/				# return users w/ filter
+│	├── `GET`	/[username]		# return user by id, public information only
+│	├── `DELETE`/[username]		# delete user by id
+│	├── `GET`	/[username]		# return user by id, private information
+│	└── `PATCH`	/[username]		# update user by id, private information
+├── cujoin/
+|	├──	
+|	├──	
+|	└── 
+|	└──	
+└── contents/
+	├──	
+	|	├──	
+	│	└── 
+	└──	
+```
+
+## 02.04. Resources & Data Source
 - The sample data is dummy data.
-- Content used features *That Mitchell and Webb Look*, a British comedy duo. I do not have explicit permission to feature their content; it is sample content.
+- The user profile pictures are pulled from [xsgames.com/randomusers](https://xsgames.co/randomusers/).
+- The logo is sourced from [LogoIpsum](https://logoipsum.com/). It is [logo #247](https://logoipsum.com/artwork/247).
+- Content used features *That Mitchell and Webb Look*, a [British comedy duo](https://www.comedy.co.uk/tv/that_mitchell_and_webb_look/). I do not have explicit permission to feature their content.
+- **Considered Resources (Notes Dump)**:
+	- [Generate realistic user data](https://www.npmjs.com/package/@faker-js/faker)
+	- **Material-UI / Formik/Material-UI Library** (30 minutes). `material-ui-formik` is deprecated and `@material-ui/core` has been deprecated for `React > 16.8`.
+	- **TikTok Content** is difficult to use. It seems that one is **only** able to [embed TikTok](https://developers.tiktok.com/doc/embed-videos/) videos either through HTML embedding or through its [API]() .______.
+- TikTok API Instructions:
+- `POST` request, details:
+- request `header` requires: the application to provide `authorization` token and `content-type` fields:
+	- `authorization`: obtained through `/oauth/access_token/`
+	- `content-type`: `application/json`
+- request `body` requires: `filters` obj (self-explanatory)
+	- I only care about a pre-determined video id.
+```js
+// curl
+curl -L -X POST 'https://open.tiktokapis.com/v2/video/query/?fields=id,title' \
+-H 'Authorization: Bearer act.1d1021d2aee3d41fee2d2add43456badMFZnrhFhfWotu3Ecuiuka27L56lr!2323' \
+-H 'Content-Type: application/json' \
+--data-raw '{
+    "filters": {
+        "video_ids": [
+            "7077642457847991554",
+            "7080217258529737986"
+        ]
+    }
+}
+
+// loose axios equiv req template
+import {BEARER_TOKEN} from './config';	// get from a secret file or server env.
+const BASE_URL = "https://open.tiktokapis.com/v2/video/query/?fields=id,title";
+const config = {
+
+	"Authorization": `Bearer ${BEARER_TOKEN}`,
+	"Content-Type": 'application/json'
+
+}
+
+let requestData = {filters: video_ids};
+
+	// set `video_ids` = [...];
+
+	const response = await axios.post(BASE_URL, requestData, config)
+	// if it were a `GET` request: axios.get(`${BASE_URL}/${videoID}`, config);
+
+// parse the response
+response.data.videos[INDEX];
+```
 
 ## 02.05. Further Study
 Some suggested improvements to this concept are:
@@ -233,7 +309,7 @@ Some suggested improvements to this concept are:
 |34|`ProfilePage`|2023-01-01|08:16 - 09:16|60|
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
-|37|`api.js` work|2023-01-02|08:19 - :||
+|37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30||
 |38||2023-01-02|: - :||
 |39||2023-01-02|: - :||
 |4||2023-01-02|: - :||
@@ -259,7 +335,7 @@ Some suggested improvements to this concept are:
 - `Content_User_JOIN.js: update` 2022-12-29 Note: generalize for composite PK by passing in pk as object and do a parameterizedWHERE query builder on it
 
 ## `express.js` Notes
-- there is a bias for falsey for express middleware, i.e. (`middlewareAAE.js: isReferenceUserOrAdmin`):
+1. there is a bias for falsey for express middleware, i.e. (`middlewareAAE.js: isReferenceUserOrAdmin`):
 ```js
 //	works correctly (only throws error if `notRefUserOrAdmin` is true, otherwise `nxt()`):
 
@@ -276,59 +352,4 @@ if(isRefUserOrAdmin)
 
 nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
 ```
-- `supertest` request throws `ECONNREFUSED 127.0.0.1:80` if there is no `/` prefix: https://stackoverflow.com/a/58919202
-
-## Resource Notes
-- [Generate realistic user data](https://www.npmjs.com/package/@faker-js/faker)
-- [Logo Generator](https://logoipsum.com/)
-
-## Resource Notes (Material-UI? Formik/Material-UI?)
-30 minutes: Note: `material-ui-formik` is deprecated and `@material-ui/core` has been deprecated to support `React > 16.8`
-
-## Resource Notes (Content)
-Ok so there two ways to request a TikTok Video: 1) [embedding videos](https://developers.tiktok.com/doc/embed-videos/) or 2) its API, apparently a `POST`, request to retrieve a video. Apparently the latter method doesn't seem to return a video: .________.
-
-`POST` request, details:
-- request `header` requires: the application to provide `authorization` token and `content-type` fields:
-	- `authorization`: obtained through `/oauth/access_token/`
-	- `content-type`: `application/json`
-- request `body` requires: `filters` obj (self-explanatory)
-	- I only care about a pre-determined video id.
-
-Example:
-- `curl`
-```js
-curl -L -X POST 'https://open.tiktokapis.com/v2/video/query/?fields=id,title' \
--H 'Authorization: Bearer act.1d1021d2aee3d41fee2d2add43456badMFZnrhFhfWotu3Ecuiuka27L56lr!2323' \
--H 'Content-Type: application/json' \
---data-raw '{
-    "filters": {
-        "video_ids": [
-            "7077642457847991554",
-            "7080217258529737986"
-        ]
-    }
-}
-```
-- `axios`(rough equivalent)
-```js
-// tiktok axios request template
-import {BEARER_TOKEN} from './config';	// get from a secret file or server env.
-const BASE_URL = "https://open.tiktokapis.com/v2/video/query/?fields=id,title";
-const config = {
-
-	"Authorization": `Bearer ${BEARER_TOKEN}`,
-	"Content-Type": 'application/json'
-
-}
-
-let requestData = {filters: video_ids};
-
-	// set `video_ids` = [...];
-
-	const response = await axios.post(BASE_URL, requestData, config)
-	// if it were a `GET` request: axios.get(`${BASE_URL}/${videoID}`, config);
-
-// parse the response
-response.data.videos[INDEX];
-```
+2. `supertest` request throws `ECONNREFUSED 127.0.0.1:80` if there is no `/` prefix: https://stackoverflow.com/a/58919202

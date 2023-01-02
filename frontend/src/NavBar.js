@@ -1,25 +1,34 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import './NavBar.css';
+import ShortCollabsAPI from './helpers/api.js';
 import UserDetailsContext from './context/UserDetailsContext.js'
 
-const ACTIVE_STYLE = {
-	fontWeight: 'bold'
-}
+import './NavBar.css';
+import logo from './logoipsum-247.svg';
 
 function NavBar() {
 
 	const {sessionUsername} = useContext(UserDetailsContext);
 
+	const ACTIVE_STYLE = {
+		fontWeight: 'bold'
+	}
 
 	return (
 	<table id="navigationTable" className='fullWidth'><tbody><tr>
 
 	{/* group 1 (align left) */}
-		<td className="navbarButton-container"><NavLink className="btn btn-outline-dark" exact activeStyle={ACTIVE_STYLE} to="/">Home</NavLink></td>
+		<td className="navbarButton-container"><NavLink className="" exact to="/"><img src={logo} alt="logo"/></NavLink></td>
 
-		<td className='fullWidth'></td>
+		<td id="navigationtd-message" className='fullWidth'>{!ShortCollabsAPI.BASE_URL.includes("localhost") &&
+		(<React.Fragment>
+			<i className="fa-solid fa-triangle-exclamation"></i>&nbsp;<strong>Warning</strong>: The front-end is hosted on <strong><a href="https://surge.sh" target="_blank" rel="noreferrer noopener">surge.sh</a> free-tier plan.</strong> From experience, the <strong>performance is unstable</strong>.
+			<br/>
+			Consider running it locally. <strong>Available at <a href="https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs" target="_blank" rel="noreferrer noopener"><i className="fa-brands fa-github"></i> ShortCollabs</a></strong>.
+		</React.Fragment>		
+		)}
+		</td>
 	{/* group 2 (align right) */}
 	{/* if signed out */}
 		{!sessionUsername &&

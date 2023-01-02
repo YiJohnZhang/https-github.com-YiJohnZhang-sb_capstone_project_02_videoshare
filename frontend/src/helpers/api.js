@@ -1,12 +1,11 @@
 import axios from 'axios';
 
-// const BASE_URL = "https://___.herokuapp.com";
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
-
 /**	An API Class to help with API calls.
  */
 class ShortCollabsAPI {
 
+	// static BASE_URL = "https://___.herokuapp.com";
+	static BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 	static token = localStorage.getItem('jwt');
 	//	temporary token:
 		//	
@@ -16,7 +15,7 @@ class ShortCollabsAPI {
 		// console.debug("API Call:", endpoint, method, data);
 
 		//	set request settings
-		const url = `${BASE_URL}/${endpoint}`;
+		const url = `${this.BASE_URL}/${endpoint}`;
 		const headers = { Authorization: `Bearer ${ShortCollabsAPI.token}` };
 		const params = (method==="get")
 			? data
@@ -90,20 +89,6 @@ class ShortCollabsAPI {
 		}
 
 	}
-
-	/**	Users: Return by username.*/ 
-	static async returnUser(username){
-
-		try{
-
-			const response = await this.request(`/users/${username}`);
-			return response.user;
-
-		}catch(error){
-			return {error}
-		}
-
-	}
 	
 	/**	Users: Search*/ 
 	static async searchUsers(username){
@@ -119,8 +104,25 @@ class ShortCollabsAPI {
 
 	}
 
+
+
+	/**	Users: Return by username.*/ 
+	static async getUserData(username){
+
+		try{
+
+			const response = await this.request(`/users/${username}`);
+			return response.user;
+
+		}catch(error){
+			return {error}
+		}
+
+	}
+
+
 	/**	Users: Return private user details.*/ 
-	static async returnUserDetails(username){
+	static async getFullUserData(username){
 
 		try{
 
@@ -134,7 +136,7 @@ class ShortCollabsAPI {
 	}
 
 	/**	Users: Update user details.*/ 
-	static async updateUserDetails(username, userData){
+	static async patchUser(username, userData){
 
 		try{
 
@@ -147,27 +149,13 @@ class ShortCollabsAPI {
 
 	}
 
-	/**	Users: Delete user. NOT IMPLEMENTED.*/ 
+	/**	Users: Delete user. NOT ATTACHED.*/ 
 	static async deleteUser(username){
 
 		try{
 
 			const response = await this.request(`/users/${username}/`, 'delete');
 			return response.user;
-
-		}catch(error){
-			return {error}
-		}
-
-	}
-
-	/**	Contents: New content (master relation).*/
-	static async newContent(contentData){
-
-		try{
-
-			const response = await this.request(`/contents/`, 'post', contentData);
-			return response.content;
 
 		}catch(error){
 			return {error}
@@ -190,20 +178,6 @@ class ShortCollabsAPI {
 		}
 
 	}
-
-	/**	Contents: Return by contentID*/ 
-	static async returnContent(contentID){
-
-		try{
-
-			const response = await this.request(`/contents/${contentID}`);
-			return response.content;
-
-		}catch(error){
-			return {error}
-		}
-
-	}
 	
 	/**	Contents: Search*/ 
 	static async searchContents(contentTitle){
@@ -219,8 +193,22 @@ class ShortCollabsAPI {
 
 	}
 
+	/**	Contents: Return by contentID*/ 
+	static async returnContent(contentID){
+
+		try{
+
+			const response = await this.request(`/contents/${contentID}`);
+			return response.content;
+
+		}catch(error){
+			return {error}
+		}
+
+	}
+
 	/**	Contents: Return private content details (master relation).*/ 
-	static async returnContentDetails(contentID){
+	static async getFullContentData(contentID){
 
 		try{
 
@@ -233,12 +221,40 @@ class ShortCollabsAPI {
 
 	}
 
+	/**	Contents: New content (master relation).*/
+	static async createContent(contentData){
+
+		try{
+
+			const response = await this.request(`/contents/`, 'post', contentData);
+			return response.content;
+
+		}catch(error){
+			return {error}
+		}
+
+	}
+
 	/**	Contents: Update content details (master relation)*/ 
-	static async updateContentDetails(contentID, contentData){
+	static async patchContent(contentID, contentData){
 
 		try{
 
 			const response = await this.request(`/contents/${contentID}/edit`, 'patch', contentData);
+			return response.content;
+
+		}catch(error){
+			return {error}
+		}
+
+	}
+
+	/**	Contents: Update content details (master relation)*/ 
+	static async publishContent(contentID, contentData){
+
+		try{
+
+			const response = await this.request(`/contents/${contentID}/publish`, 'patch', contentData);
 			return response.content;
 
 		}catch(error){
@@ -261,22 +277,8 @@ class ShortCollabsAPI {
 
 	}
 
-	/**	cu_join (ContentJoin):	New content (join relation). 2022-12-30 Note: using `cuJoin` placeholder.*/
-	static async publishContent(contentID, contentData){
-
-		try{
-
-			const response = await this.request(`/contents/${contentID}/publish`, 'post', contentData);
-			return response.cuJoin;
-
-		}catch(error){
-			return {error}
-		}
-
-	}
-
 	/**	cu_join (ContentJoin):	Get. I imagine sending more information to this route is a way to count engagement. 2022-12-30 Note: using `cuJoin` placeholder.*/
-	static async get(contentID, username){
+	static async getJoinContentData(contentID, username){
 
 		try{
 
@@ -290,7 +292,7 @@ class ShortCollabsAPI {
 	}
 	
 	/**	*/ 
-	static async get__(){
+	static async patchJoinContent(contentID, username, contentData){
 
 		try{
 
@@ -303,6 +305,19 @@ class ShortCollabsAPI {
 
 	}
 	
+	/** cu_join	(ContentJoin): Delete content join. NOT IMPLEMENTED because how to restore?.*/ 
+	static async deleteContent(contentID){
+
+		try{
+
+			const response = await this.request(`/contents/${contentID}/`, 'delete');
+			return response.content;
+
+		}catch(error){
+			return {error}
+		}
+
+	}
 
 }
 
