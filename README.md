@@ -112,11 +112,11 @@ npm test	# alias for `react-scripts test` in `package.json`
 |-|-|-|-|-|
 |Home|`/`|`HomePage`|Home page. Displays content. **Integrated Search**|None|
 |Onboarding|`/login` or `/signup`|`OnboardingPage`|Use this as a common page|notLoggedIn|
-|Profile|`/user/:username`|`ProfilePage`|Either the reference user or public.|None|
+|Profile|`/user/:userHandle`[1]|`ProfilePage`|Either the reference user or public.|None|
 ||`/account`|`EditUserPage`|loggedIn|
 |Logout|`/logout`|`LogoutComponent`|A component that doesn't render anything|loggedIn|
 |EditContentPage|`/upload`|`EditContentPage`|Create a piece of content. Backend Notes: keep as is. once the create button is hit, redirect to edit content page.|loggedIn|
-|EditContentPage|`/edit/:contentID`|`EditContentPage`|A form to edit a piece of content.|loggedIn & check participant (push to `404` o.w.)|
+|EditContentPage|`/edit/:contentID`[2]|`EditContentPage`|A form to edit a piece of content.|loggedIn & check participant (push to `404` o.w.)|
 - `params` aliases:
 	1. `userHandle` is an alias for `username`
 	2. `contentId` is an alias for `contentID`
@@ -217,10 +217,7 @@ Some suggested improvements to this concept are:
 |30|update users; `contents`|2022-12-31|00:55 - 02:38|103|
 |31|`contents` work|2022-12-31|10:48 - 12:06|78|
 |32|`contents` and `cu_join` work|2022-12-31|15:34 - 18:23|169|
-|33|`contents` |2022-12-31|: - :||
-31		32
-2883		
-
+||**DEPRECATED: 50.01.04**. Routes (Backend)||**Net Total Time**|3052 min (50h52m)|
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|`formik` for frontend, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
@@ -228,8 +225,12 @@ Some suggested improvements to this concept are:
 |28|frontend styling + API|2022-12-30|18:24 - 20:34|130|
 |33|bulk of `HomePage`, styling and documentation|2022-12-31|21:43 - 23:36|113|
 |34|`ProfilePage`|2023-01-01|08:16 - 09:16|60|
-|35|`EditUserPage`/`EditContentPage`|2023-01-01|13:37 - 17:22||
-|36||2023-01-01|: - :||
+|35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
+|36|`UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - :||
+|37||2023-01-02|: - :||
+|38||2023-01-02|: - :||
+36	37
+884	
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |4x||2022-01-0|: - :||
