@@ -352,9 +352,10 @@ Some suggested improvements to this concept are:
 |31|`contents` work|2022-12-31|10:48 - 12:06|78|
 |32|`contents` and `cu_join` work|2022-12-31|15:34 - 18:23|169|
 ||**DEPRECATED: 50.01.04**. Routes (Backend)||**Net Total Time**|3052 min (50h52m)|
-|38|salvaging backend #2...|2023-01-02|10:51 - 11:29||
-|39|finish backend?|2023-01-02|13:41 - 14:24||
-
+|38|salvaging backend #2...|2023-01-02|10:51 - 11:29|38|
+|39|finish backend?|2023-01-02|13:41 - 14:24|43|
+|40|finish backend?|2023-01-02|15:10 - 1:||
+|41||2023-01-02|: - :||
 
 |4||2023-01-02|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
