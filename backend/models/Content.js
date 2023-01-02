@@ -193,7 +193,6 @@ class Content {
 
 /** */
 
-
 	static async signUpdate(contentID, username){
 
 		const result = await db.query(`
