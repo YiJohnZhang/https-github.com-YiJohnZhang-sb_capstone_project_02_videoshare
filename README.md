@@ -165,26 +165,41 @@ npm test	# alias for `react-scripts test` in `package.json`
 ## 02.03. Backend Routes (`todo`)
 ```sh
 /
-├──	authorization/
-│	├── token/			# login
-│	└── register/		# register
+├──	authorization
+│	├── `POST`		/token/				# login
+│	└── `POST`		/register/			# register
 ├──	users
-│	├── `GET`	/				# return users w/ filter
-│	├── `GET`	/[username]		# return user by id, public information only
-│	├── `DELETE`/[username]		# delete user by id
-│	├── `GET`	/[username]		# return user by id, private information
-│	└── `PATCH`	/[username]		# update user by id, private information
-├── cujoin/
-|	├──	
-|	├──	
-|	└── 
-|	└──	
+│	├── `GET`		/					# return users (w/ filter)
+│	├── `GET`		/[username]/		# return user by id, public information
+│	├── `GET`		/[username]/edit	# return user by id, private information
+│	└── `PATCH`		/[username]/edit	# update user by id, private information
+│	├── `DELETE`	/[username]/		# delete user by id
+├── cujoin
+|	├──	`GET`		/[contentID]/[username]/edit	# return cujoin, private information
+|	└──	`PATCH`		/[contentID]/[username]/edit	# update cujoin
+|	└──	`DELETE`	/[contentID]/[username]/		# delete cujoin by pk
 └── contents/
-	├──	
-	|	├──	
-	│	└── 
-	└──	
+	├──	`POST`		/						# create content
+	├──	`GET`		/						# return contents (w/ filter)
+	├──	`GET`		/[contentID]/			# return content by id, public information 
+	├──	`GET`		/[contentID]/edit		# return content by id, private information
+	├──	`PATCH`		/[contentID]/edit		# update content by id, private information
+	├──	`PATCH`		/[contentID]/publish	# update content by id, publish it
+	└──	`DELETE`	/[contentID]/			# delete content by id
 ```
+- schema double-checked
+	- 
+- done:
+	- `Authorization`
+- finish (content data)
+	- `Users`
+- test:
+	- `Contents`
+- salvage:
+	- `Content_User_Join`
+- redo:
+	- 
+
 
 ## 02.04. Resources & Data Source
 - The sample data is dummy data.
@@ -299,7 +314,7 @@ Some suggested improvements to this concept are:
 |31|`contents` work|2022-12-31|10:48 - 12:06|78|
 |32|`contents` and `cu_join` work|2022-12-31|15:34 - 18:23|169|
 ||**DEPRECATED: 50.01.04**. Routes (Backend)||**Net Total Time**|3052 min (50h52m)|
-|38|salvaging backend #2...|2023-01-02|10:51 - :||
+|38|salvaging backend #2...|2023-01-02|10:51 - 11:29||
 |39||2023-01-02|: - :||
 |4||2023-01-02|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|

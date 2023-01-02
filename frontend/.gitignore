@@ -24,4 +24,4 @@ yarn-error.log*
 
 # assets
 *.bak
-**/snapshots/
+**/__snapshots__/
