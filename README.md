@@ -187,6 +187,50 @@ npm test	# alias for `react-scripts test` in `package.json`
 	├──	`PATCH`		/[contentID]/publish	# update content by id, publish it
 	└──	`DELETE`	/[contentID]/			# delete content by id
 ```
+
+|##|Method, Route|Model, Method Sig.|Returns / 2023-01 Notes|
+|-|-|-|-|
+|01|`POST`, `/`|`Content`, `create(reqBody)`|`{content}` (private), Creates N join entries; based on participants.|
+|02|`GET`, `/`|`Content`, `getAll(*reqQuery*)`|`{contents}` (public)|
+|03|`GET`, `/:contentID`|`Content`, `getByPK(contentID`|`{content}` (public). **Hm... this is redundant?** ._.|
+|04|`GET`, `/:contentID/edit`|`Content`, `getByPKPrivate(contentID)`|`{content}` (private)|
+|05|`PATCH`, `/:contentID/edit`|`Content`, `update(contentID,reqBody)`|`{content}` (private): **SIMPLIFIED** This route now switches the state between `created` and `standby` depending on whether or not `participants===signed`js. For the sake of time, it also modifies the join entries to reflect that of the `participants`.|
+|06|`PATCH`, `/:contentID/:username/sign`|`Content`, `signUpdate(contentID,username)`|**DEPRECATED FOR THIS PROJECT**. The idea was that this route could toggle whether or not a user has signed.|
+|07|`PATCH`, `/:contentID/publish`||`{content}` (private). Does a final check whether or not `participants===signed`|
+|08|`PATCH`, `/:contentID/update`|**DEPRECATED**.||
+|09|`DELETE`, `/:contentID`|`Content`, `delete(contentID)`|`{content}`. Out-of-scope.|
+|10 NEW?|``|CU_Join*, `getAllPublic(userID)`|`{contents}` (Public)|
+|11 NEW?|``|CU_Join*, `getAll(userID)`|`{contents}` (Public + Private)|
+|12|`GET`, `/:contentID/:username`|CU_Join*, `getByPK(contentID,userID)`|`{content}` (Public)|
+|13 NEW|`GET`, `/:contentID/:username/edit`|CU_Join*, `getByPKPrivate(contentID,userID)`|`{content}` (Private)|
+|14|`PATCH`, `/:contentID/:username/edit`|CU_Join*, `update(contentID,userID,reqBody)`|`{content}`|
+|15|`DELETE` `/:contentID/:username`|CU_Join*, `delete(contentID,userID)`|`{content}`. Out-of-scope.|
+|||*CU_Join = `Content_User_Join`|`userID` is an alias for `username`|
+
+1	
+2	
+3	
+4	
+5	
+6	
+7	
+10
+11	
+12	(basically preview for content publicly) on content page
+13
+
+
+
+- contents todo:
+	- 5
+	- 7
+	- 13
+	- consider deprecating 03
+	- 10
+	- 11
+
+
+note: finish contents first, (JOIN creation)
 - schema double-checked
 	- 
 - done:

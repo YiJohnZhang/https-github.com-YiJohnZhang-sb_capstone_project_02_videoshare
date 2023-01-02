@@ -37,24 +37,12 @@ class ContentUserJoin {
 	 *	technically any participant?
 	 */
 	static async invite(inviterUsername, contentID, invitedUsername){
-
-		// await this.getByPK(inviterUsername, contentID);
-		// 	// has permissions to invite.
-		// await this.pkDoesNotAlreadyExist(invitedUsername, contentID);
-
-
-	// 	//	add to "participants"
-
 	}
 
 	// /**	Create a single content_users_join record (invitation)
 	//  *	only owner
 	//  */
-	 static async publish(username, contentID){
-
-		// await this.getByPK(username, contentID);
-		//	synchronize descriptions?
-		
+	static async publish(username, contentID){
 	}
 
 	/**	Create content_users_join record with data.
@@ -63,49 +51,7 @@ class ContentUserJoin {
 	 *
 	 *	Throws BadRequestError for duplicates.
 	 */
-
 	static async create(newRecordObject, ntomJoin = []){
-
-		// try{
-			
-		// 	await db.query('BEGIN');
-
-		// 	const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
-
-		// 	const result = await db.query(`
-		// 		INSERT INTO ${this.relationName} ${parameterizedINSERTPropertyNames}
-		// 			VALUES ${parameterizedINSERTPropertyIndices}
-		// 			RETURNING ${QUERY_GENERAL_PROPERTIES}`, insertParameters);
-
-		// 	const cuJoinObject = result.rows[0];
-
-		// 	if(ntomJoin){
-
-		// 		const JOIN_MODEL_NAME = '';
-		// 		const JOIN_MODEL_KEY = '(fk1, fk2, ...)';
-		// 		const JOIN_MODEL_IDX = '($1, $2, ...)';
-
-		// 		// newRecordObject./*...*/.forEach((entry) => {
-
-		// 		// 	await db.query(`
-		// 		// 		INSERT INTO ${JOIN_MODEL_NAME} ${JOIN_MODEL_KEY}
-		// 		// 			VALUES ${JOIN_MODEL_IDX}
-		// 		// 			RETURNING ${JOIN_MODEL_KEY}`,
-		// 		// 			[/* newRecordObject...., entry */]);
-				
-		// 		// });
-
-		// 	}
-
-		// 	await db.query('COMMIT');
-
-		// 	return cuJoinObject;
-
-		// }catch(error){
-		// 	await db.query('ROLLBACK');
-		// 	throw new ExpressError(499, `ERR_MULT_NEW_REC_DBFAIL`);
-		// }
-
 	}
 
 	// 2022-12-31: NOTE THIS IS NOW REDUNDANT BECAUSE I ELECTED TO MAKE IT THAT "participants" 
@@ -172,12 +118,15 @@ class ContentUserJoin {
 	 *	Throws NotFoundError if content_users_join records not found.
 	 */
 	static async getByPK(userID, contentID) {
+		
+		// join query
 		console.log("adf")
 		const temp = await db.query(`
 			SELECT contents.id
 				FROM ${this.relationName}
 				JOIN contents ON contents.id = ${this.relationName}.id
 		`);
+
 		console.log(temp.rows);
 
 		const result = await db.query(`
