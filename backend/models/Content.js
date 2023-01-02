@@ -54,22 +54,28 @@ class Content {
 	 **/
 	 static async create(newRecordObject){
 
-		try{
+		function createNewRecord(newRecordObject){
+		
+			try{
 
-			const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
+				const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
 
-			const result = await db.query(`
-				INSERT INTO ${this.relationName} ${parameterizedINSERTPropertyNames}
-					VALUES ${parameterizedINSERTPropertyIndices}
-					RETURNING ${QUERY_GENERAL_PROPERTIES}`, [...insertParameters]);
+				const result = await db.query(`
+					INSERT INTO ${this.relationName} ${parameterizedINSERTPropertyNames}
+						VALUES ${parameterizedINSERTPropertyIndices}
+						RETURNING ${QUERY_GENERAL_PROPERTIES}`, [...insertParameters]);
 
-			const contentObject = result.rows[0];
-			return contentObject;
+				const contentObject = result.rows[0];
+				return contentObject;
 
-		}catch(error){
-			throw new ConflictError(`${error}`);
+			}catch(error){
+				throw new ConflictError(`${error}`);
+			}
+		
 		}
 
+		const newContentObject = createNewRecord(newRecordObject);
+		
 	}
 
 	/**	Find all matching content records.

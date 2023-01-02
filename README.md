@@ -353,7 +353,9 @@ Some suggested improvements to this concept are:
 |32|`contents` and `cu_join` work|2022-12-31|15:34 - 18:23|169|
 ||**DEPRECATED: 50.01.04**. Routes (Backend)||**Net Total Time**|3052 min (50h52m)|
 |38|salvaging backend #2...|2023-01-02|10:51 - 11:29||
-|39|finish backend?|2023-01-02|13:41 - 1:||
+|39|finish backend?|2023-01-02|13:41 - 14:24||
+
+
 |4||2023-01-02|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
