@@ -140,8 +140,7 @@ npm test	# alias for `react-scripts test` in `package.json`
 	- `LogoutComponent`
 	- `ErrorPage`
 	- `UserCard`
-	- `ContentCard`
-		- need to add links	
+	- `ContentCard` (need to add links)	
 - just need API
 	- `ProfilePage`
 - need test:
@@ -224,6 +223,7 @@ Some suggested improvements to this concept are:
 |31|`contents` work|2022-12-31|10:48 - 12:06|78|
 |32|`contents` and `cu_join` work|2022-12-31|15:34 - 18:23|169|
 ||**DEPRECATED: 50.01.04**. Routes (Backend)||**Net Total Time**|3052 min (50h52m)|
+|4||2023-01-02|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|`formik` for frontend, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
@@ -232,11 +232,13 @@ Some suggested improvements to this concept are:
 |33|bulk of `HomePage`, styling and documentation|2022-12-31|21:43 - 23:36|113|
 |34|`ProfilePage`|2023-01-01|08:16 - 09:16|60|
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
-|36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58||
-|37||2023-01-02|: - :||
+|36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
+|37|`api.js` work|2023-01-02|08:19 - :||
 |38||2023-01-02|: - :||
-36	37
-884	
+|39||2023-01-02|: - :||
+|4||2023-01-02|: - :||
+37		38
+1059	
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |4x||2022-01-0|: - :||
