@@ -155,21 +155,25 @@ function EditContentPage({ contentMethod }){
 	return(
 	<div className="page">
 		{/* todo: */}
-	<form id="editContentForm" className="row g-4 width-85percent autoMargin">
+	<form id="editContentForm" className="row g-4 width-85percent margin-auto bootstrap-form marginTop-5pct">
 		
-		<h1>{contentMethod === 'create' ? `Create ${formState.title}` : `Update ${formState.title}`}</h1>
-		
-		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="title">Title</label>
+		<div id="form-information" className="col-md-12">
+			<h2>{contentMethod === 'create' ? `Create ${formState.title}` : `Update ${formState.title}`}</h2>
+		</div>
+
+		<div className="form-floating col-md-12">
 			<input name="title"
 				type="text" maxLength="???"
 				className="form-control"
 				placeholder="Content Title (max 64 characters)"
 				onChange={formChangeHandler}
 				value={formState.title} required/>
+		<label className="" htmlFor="title">Title</label>
+			
 		</div>
 
 		<div className="col-md-12">
+			<label className="visually-hidden" htmlFor="summary">Summary</label>
 			<textarea name="summary"
 				className="form-control"
 				maxLength="512"	rows={3}
@@ -179,19 +183,19 @@ function EditContentPage({ contentMethod }){
 		</div>
 
 		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="link">Description</label>
+			<label className="visually-hidden" htmlFor="description">Description</label>
 			<textarea name="description"
 				className="form-control"
 				maxLength={2200} rows={6}
 				placeholder="Description (max 2200 characters)"
 				onChange={formChangeHandler}
-				value={formState.link} required/>
+				value={formState.description} required/>
 		</div>
 
 		{contentMethod==='create' && (
 		<React.Fragment>
-		<div className="col-md-3"><strong>Monetization Type</strong></div>
-		<div className="col-md-9">
+		{/* <div className="col-md-3"><strong>Monetization Type</strong></div> */}
+		<div className="form-floating col-md-12">
 			<select name="contractType"
 				className="form-select form-select-sm"
 				onChange={formChangeHandler}
@@ -200,7 +204,7 @@ function EditContentPage({ contentMethod }){
 				<option value="byview">By View: Monetization by the algorithm god(s).</option>
 				<option value="presplit">Pre-Split: Agree to a monetization scheme.</option>
 			</select>
-			
+			<label className="" htmlFor="contractType">Monetization Type</label>	
 		</div>
 		</React.Fragment>
 		)}
@@ -224,8 +228,7 @@ function EditContentPage({ contentMethod }){
 		</React.Fragment>
 		)}
 		
-		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="participants">Participants</label>
+		<div className="form-floating col-md-12">
 			<input name="participants"
 				type="text"
 				className="form-control"
@@ -235,21 +238,21 @@ function EditContentPage({ contentMethod }){
 				disabled={contentStaticData.owner!==sessionUsername && contentMethod!=='create'}
 				required={contentStaticData.contractSigned!=='solo'||formState.contractSigned!=='solo'}
 				/>
+			<label className="" htmlFor="participants">Participants (Array Type)</label>
 		</div>
 
-		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="contractDetails">Contract Details</label>
+		<div className="form-floating col-md-12">
 			<input name="contractDetails"
 				type="text"
 				className="form-control"
 				placeholder="Contract Details (Object Type)"
 				onChange={formChangeHandler}
 				value={formState.contractDetails} />
+			<label className="" htmlFor="contractDetails">Contract Details (Object Type)</label>
 		</div>
 		
 		{contentMethod==='update' && (
-		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="contractSigned">Contract Signatories</label>
+		<div className="form-floating col-md-12">
 			<input name="contractSigned"
 				type="text"
 				className="form-control"
@@ -258,6 +261,7 @@ function EditContentPage({ contentMethod }){
 				value={formState.contractSigned}
 				required={contentStaticData.contractSigned!=='solo'||formState.contractSigned!=='solo'}
 				/>
+			<label className="" htmlFor="contractSigned">Contract Signatories (Array Type)</label>
 		</div>
 		)}
 

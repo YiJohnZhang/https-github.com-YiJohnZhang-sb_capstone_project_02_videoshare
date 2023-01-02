@@ -2,10 +2,6 @@
 	padding: 25px 0;
 }
 
-#home-searchbar{
-	margin: 25px auto;
-}
-
 #home-minorContainer{
 
 	position: fixed;
@@ -27,3 +23,12 @@
 	padding-left:32px;
 	padding-right:32px;
 }
+	#home-searchbar{
+		margin: 0 auto;
+		margin-bottom: 25px;
+		width:100%;
+	}
+	#home-contentRoot{
+		width:100%;
+	}
+	/* .home- */

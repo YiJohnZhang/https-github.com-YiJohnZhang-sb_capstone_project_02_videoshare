@@ -1,0 +1,24 @@
+.contentCard-tall{
+	margin:0 auto;
+	width:50%;
+	padding:9px;
+	display:block;
+}
+	.contentCard-tall div{
+		height:300px;
+		display:inline;
+	}
+.contentCard-wide{
+	margin:0;
+	width:100%;
+	padding:16px;
+	display:inline-block;
+}
+	.contentCard-wide div{
+		margin:0 16px;
+		height:100px;
+		display:inline;
+	}
+	.contentCard-wide .contentCardImageContainer{
+		float:left;
+	}

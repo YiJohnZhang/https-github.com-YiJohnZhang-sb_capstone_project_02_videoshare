@@ -2,6 +2,7 @@ html{
 	height:100%;
 	background-color: #F4F4F4;
 }
+.spacing-16px{margin:8px;}
 body {
 	height:100%;
 	margin: 0;
@@ -12,6 +13,10 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	background-color: transparent;
 }
+p{
+	margin:0;
+}
+
 #root{}
 .page{
 	/* position: absolute; */
@@ -27,8 +32,11 @@ body {
 	-o-animation: 400 all ease-in-out;
 }
 
-.autoMargin{
+.margin-auto{
 	margin:auto
+}
+.marginTop-5pct{
+	margin-top:5%;
 }
 
 .fullWidth{
@@ -56,6 +64,24 @@ body {
 
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-	  monospace;
-  }
-  
+		monospace;
+}
+
+form{}
+	.row{
+	}
+	
+	.bootstrap-form div{
+		margin:9px 0;
+		padding-left:0;
+	}
+
+	/* information field (organize) */
+		#form-information{
+			margin:0;
+		}
+
+img{}
+	.userImage{
+		border-radius:100%;
+	}

@@ -3,14 +3,14 @@ import { useParams } from 'react-router-dom';
 
 import ShortCollabsAPI from './helpers/api';
 import UserDetailsContext from './context/UserDetailsContext';
+
 import UserCard from './UserCard';
 import ContentCard from './ContentCard';
 
-
 function ProfilePage({}){
 	
-	const userHandle = useParams();
-	const {sessionUsername} = useContext(UserDetailsContext);
+	const { userHandle } = useParams();
+	const { sessionUsername } = useContext(UserDetailsContext);
 
 	const [userData, setUserData] = useState();
 
@@ -38,22 +38,23 @@ function ProfilePage({}){
 
 	return(
 	<div className="page">
-		<UserCard aspectratio="standard"
+		<UserCard isProfilePage={true}
 			username={userHandle}
-			
+		
 			/>
-		{/* todo: insert content in order
-			userData.contents.map((content) => (
+		<div id="profile-content-root">
+			{/*userData.contents.map((content) => (
 
-				<ContentCard aspectratio="vertical"
-					key={`content-${content.id}`}
-					id={content.id}
-					title={content.title}
-					description={content.description}
-					link={content.link}
-					datePublished={content.datePublished}
-					/>
-		))*/}
+					<ContentCard aspectratio="vertical"
+						key={`content-${content.id}`}
+						contentID={content.id}
+						title={content.title}
+						description={content.description}
+						link={content.link}
+						datePublished={content.datePublished}
+						/>
+			))*/}
+		</div>
 		{/* note: return content in the following order: id backwards? if more time: non-published first, then DESC date_published */}
 	</div>
 	);

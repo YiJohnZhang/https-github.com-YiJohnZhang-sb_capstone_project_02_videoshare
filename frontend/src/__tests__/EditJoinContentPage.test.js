@@ -1,16 +1,16 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import EditContentPage from '../EditContentPage';
+import EditJoinContentPage from '../EditJoinContentPage';
 
 //	Smoke Test
-test('EditContentPage: smoke test', () => {
-	render(<EditContentPage />);
+test('EditJoinContentPage: smoke test', () => {
+	render(<EditJoinContentPage />);
 });
 
 //	Snapshot Test
-test('EditContentPage: snapshot', () => {
+test('EditJoinContentPage: snapshot', () => {
 
-	const {asFragment} = render(<EditContentPage />);
+	const {asFragment} = render(<EditJoinContentPage />);
 	expect(asFragment()).toMatchSnapshot();
 
 });

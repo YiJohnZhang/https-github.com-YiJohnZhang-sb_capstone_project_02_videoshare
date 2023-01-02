@@ -95,18 +95,17 @@ npm test	# alias for `react-scripts test` in `package.json`
 
 ## 02.03. Frontend Userflow (`todo`)
 ```sh
-/								# integrates search
-├──	signin/					# logout required
-├──	register/				# logout required
-├──	users/
+/										# integrates search
+├──	signin/								# logout required
+├──	register/							# logout required
+├──	user/
 │	├── [username]
-│	└── [username]/edit		# login required, check reference user.
-├──	content/					# index page?
-│	├── upload/				# login required
-│	├── edit/[contentid]	# login required, if check participant.
-└── logout					# login required
-└── 
-# Idea: if 403, return to home.
+│	└── [username]/[contentid]/edit		# login required, check reference user.
+├──	account/							# login required
+├── upload/								# login required
+├── edit/[contentid]					# login required, check if participant.
+├──	error/[errorCode]					# basically, show an error code and go home.
+└──	logout								# login required
 ```
 |Page|Path|Page Component|Notes|Authentication|
 |-|-|-|-|-|
@@ -115,8 +114,10 @@ npm test	# alias for `react-scripts test` in `package.json`
 |Profile|`/user/:userHandle`[1]|`ProfilePage`|Either the reference user or public.|None|
 ||`/account`|`EditUserPage`|loggedIn|
 |Logout|`/logout`|`LogoutComponent`|A component that doesn't render anything|loggedIn|
+|Error|`/error`|`ErrorPage`|Some error thrown.|None|
 |EditContentPage|`/upload`|`EditContentPage`|Create a piece of content. Backend Notes: keep as is. once the create button is hit, redirect to edit content page.|loggedIn|
-|EditContentPage|`/edit/:contentID`[2]|`EditContentPage`|A form to edit a piece of content.|loggedIn & check participant (push to `404` o.w.)|
+|EditContentPage|`/edit/:contentID`[2]|`EditContentPage`|A form to edit a piece of content.|loggedIn & check participant (push to `404` o.w.). **block request** if content status is not `open` or `standby` (last auth check).|
+|EditJoinContent|`/user/:userHandle/:contentId/edit`|`EditJoinContent`|A form to edit a join content|logged in, reference user, join content exists|
 - `params` aliases:
 	1. `userHandle` is an alias for `username`
 	2. `contentId` is an alias for `contentID`
@@ -127,15 +128,24 @@ npm test	# alias for `react-scripts test` in `package.json`
 |Login|`OnboardingPage`|`authenticateUser`|
 |Signup|`OnboardingPage`|`registerUser`|
 |Logout|`LogoutComponent`|None|
+|Error|`ErrorPage`|None|
 |Profile|`ProfilePage`|`getUserData` (public or neq ref user) / `getFullUserData` (if reference user)|
 |Profile, Edit|`EditUserPage`|`getFullUserData` / `patchUserData`|
 |Content, Create|`EditContentPage`|`createContent`|
 |Content, Edit|`EditContentPage`|`getFullContentData` / `patchContent`|
 |Content, Publish|`EditContentPage`|`getFullContentData` / `publishContent`|
+|Join Content, Edit|`EditJoinContent`|`getJoinContentData` / `patchJoinContent`|
 
 - fin:
-	- `NavBar`: maybe a frosted bg :)
 	- `LogoutComponent`
+	- `ErrorPage`
+	- `UserCard`
+	- `ContentCard`
+		- need to add links	
+- just need API
+	- `ProfilePage`
+- need test:
+	- `NavBar`: maybe a frosted bg :)
 - need API:
 	- `HomePage`
 	- `OnboardingPage` and EN_FORM_ERR_HANDLING
@@ -143,13 +153,9 @@ npm test	# alias for `react-scripts test` in `package.json`
 	- `EditContentPage` (`save` to update content object; `signed`/`publish`: `signed` is toggl-ble and updates accordingly and appears aas `settled` for the owner; `publish` is disabled for non-owner users; publish is disabled if link is invalid)
 		- reduce the scope: just make it a text field (array and json field = text input and parse as array/json when sent to backend and show `save`/`publish`)
 		- double check form elements
-- tests: upr for tests (above)
+	- `EditJoinContentPage`
 - todo
-	- `ProfilePage`: needs below
-	- `UserCard` (need API)
-	- `ContentCard` (need API)
-	- `404Page`?
-
+	- logo (sc & favico)
 - more time: bookmarkable search queries.
 
 ## 02.04. Data Source
@@ -226,7 +232,7 @@ Some suggested improvements to this concept are:
 |33|bulk of `HomePage`, styling and documentation|2022-12-31|21:43 - 23:36|113|
 |34|`ProfilePage`|2023-01-01|08:16 - 09:16|60|
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
-|36|`UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - :||
+|36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58||
 |37||2023-01-02|: - :||
 |38||2023-01-02|: - :||
 36	37

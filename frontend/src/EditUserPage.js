@@ -83,29 +83,29 @@ function EditUserPage(){
 
 	return(
 	<div className="page">
-	<form id="editUserForm" className="row g-4 width-85percent autoMargin">
+	<form id="editUserForm" className="row g-4 width-85percent margin-auto bootstrap-form marginTop-5pct">
 		
-		<div className="col-md-12">
-			<p>Hello, {sessionUsername}.</p>
+		<div id="form-information" className="col-md-12">
+			<h2>Hello, {sessionUsername}.</h2>
 		</div>
 		
-		<div className="col-md-6">
-			<label className="visually-hidden" htmlFor="firstName">First Name</label>
+		<div className="form-floating col-md-6">
 			<input name="firstName"
 				type="text" maxLength="32"
 				className="form-control"
 				placeholder="First Name"
 				onChange={formChangeHandler}
 				value={formState.firstName} required/>
+			<label className="" htmlFor="firstName">First Name</label>
 		</div>
-		<div className="col-md-6">
-			<label className="visually-hidden" htmlFor="lastName">Last Name</label>
+		<div className="form-floating col-md-6">
 			<input name="lastName"
 				type="text" maxLength="32"
 				className="form-control"
 				placeholder="Last Name"
 				onChange={formChangeHandler}
 				value={formState.lastName} required/>
+			<label className="" htmlFor="lastName">Last Name</label>
 		</div>
 
 		<div className="col-md-4">
@@ -118,34 +118,33 @@ function EditUserPage(){
 			<p><strong>Birth Date</strong>: {userStaticData.birthdate}</p>
 		</div>
 		
-		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="picture">Picture</label>
+		<div className="form-floating col-md-12">
 			<input name="picture"
 				type="text" maxLength="64"
 				className="form-control"
 				placeholder="Picture Link"
 				onChange={formChangeHandler}
 				value={formState.picture} required/>
+			<label className="" htmlFor="picture">Picture Link</label>
 		</div>
 		
 		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="description">Description</label>
-			<input name="description"
-				type="text" maxLength="512"
+			<textarea name="description"
+				type="text" maxLength="512" rows="3" 
 				className="form-control"
-				placeholder="Description..."
+				placeholder="Description (max 512 characters)"
 				onChange={formChangeHandler}
 				value={formState.description} required/>
 		</div>
 		
-		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="password">Password</label>
+		<div className="form-floating col-md-12">
 			<input name="password"
 				type="text" maxLength="64"
 				className="form-control"
 				placeholder="New Password"
 				onChange={formChangeHandler}
 				value={formState.password} required/>
+			<label className="" htmlFor="password">Password</label>
 		</div>
 
 		<div className="col-md-12">

@@ -1,16 +1,16 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import SearchPage from '../SearchPage';
+import EditUserPage from '../EditUserPage';
 
 //	Smoke Test
-test('SearchPage: smoke test', () => {
-	render(<SearchPage />);
+test('EditUserPage: smoke test', () => {
+	render(<EditUserPage />);
 });
 
 //	Snapshot Test
-test('SearchPage: snapshot', () => {
+test('EditUserPage: snapshot', () => {
 
-	const {asFragment} = render(<SearchPage />);
+	const {asFragment} = render(<EditUserPage />);
 	expect(asFragment()).toMatchSnapshot();
 
 });

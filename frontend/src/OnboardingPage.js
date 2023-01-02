@@ -98,68 +98,65 @@ function OnboardingPage({onboardingMethod}){
 
 	return(
 	<div className="page">
-	<form id="onboardingForm" className="row g-4 width-85percent autoMargin">
+	<form id="onboardingForm" className="row g-4 width-85percent margin-auto bootstrap-form marginTop-5pct">
 
-		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="username">Username</label>
-			<div className="input-group">
-				<div className="input-group-text">@</div>
-				<input name="username"
-					type="text" maxLength="32"
-					className="form-control"
-					placeholder="Username"
-					onChange={formChangeHandler}
-					value={formState.username} required/>
-			</div>
+		<div className="form-floating col-md-12">
+			<input name="username"
+				type="text" maxLength="32"
+				className="form-control"
+				placeholder="Username"
+				onChange={formChangeHandler}
+				value={formState.username} required/>
+			<label className="" htmlFor="username">Username</label>
 		</div>
 
-		<div className="col-md-12">
-			<label className="visually-hidden" htmlFor="password">Password</label>
+		<div className="form-floating col-md-12">
 			<input name="password"
 				type="password" maxLength="64"
 				className="form-control"
 				placeholder="Password"
 				onChange={formChangeHandler}
 				value={formState.password} required/>
+			<label className="" htmlFor="password">Password</label>
 		</div>
 
 		{onboardingMethod==='signup' && (
 		<React.Fragment>
-		<div className="col-md-6">
-			<label className="visually-hidden" htmlFor="firstName">First Name</label>
+		<div className="form-floating col-md-6">
 			<input name="firstName"
 				type="text" maxLength="32"
 				className="form-control"
 				placeholder="First Name"
 				onChange={formChangeHandler}
 				value={formState.firstName} required/>
+			<label className="" htmlFor="firstName">First Name</label>
 		</div>
-		<div className="col-md-6">
-			<label className="visually-hidden" htmlFor="lastName">Last Name</label>
+		<div className="form-floating col-md-6">
 			<input name="lastName"
 				type="text" maxLength="32"
 				className="form-control"
 				placeholder="Last Name"
 				onChange={formChangeHandler}
 				value={formState.lastName} required/>
+			<label className="" htmlFor="lastName">Last Name</label>
 		</div>
 
-		<div className="col-md-6">
-			<label className="visually-hidden" htmlFor="email">Email</label>
+		<div className="form-floating col-md-6">
 			<input name="email"
 				type="text" maxLength="100"
 				className="form-control"
 				placeholder="Email"
 				onChange={formChangeHandler}
 				value={formState.email} required/>
+			<label className="" htmlFor="email">Email</label>
 		</div>
-		<div className="col-md-6">
-			<label className="visually-hidden" htmlFor="birthdate">Birthdate</label>
+		<div className="form-floating col-md-6">
 			<input name="birthdate"
 				type="date"
 				className="form-control"
 				onChange={formChangeHandler}
 				value={formState.birthdate} required/>
+			<label className="" htmlFor="birthdate">Birthdate</label>
 		</div>
 		</React.Fragment>)}
 

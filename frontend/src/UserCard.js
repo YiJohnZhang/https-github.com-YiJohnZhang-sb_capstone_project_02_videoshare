@@ -1,33 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import './UserCard.css';
+
 function UserCard({ isProfilePage, username, firstName, lastName, picture, description }){
 
 	return(
-	<React.Component>
-	<div className='usercardContainer'>
-		<table>
-		<tbody>
-			<tr>
-				<td>
-					<Link to={`users/${username}`}>
-						<img src={picture}></img>
-					</Link>
-				</td>
-				<td>
-					<Link to={`users/${username}`}><h4>{username}</h4></Link>
-					<p>{firstName} {lastName}</p>
-				</td>
-			</tr>
-			{isProfilePage && (<tr>
-				<td>
-					<td colSpan={2}>{description}</td>
-				</td>
-			</tr>)}
-		</tbody>
-		</table>
+	<React.Fragment>
+	<div className={isProfilePage ? 'userCard-tall' : 'userCard-wide'}>
+		<div className="userCardImageContainer">
+			<Link to={`/user/${username}`}>
+				<img className="userImage" src={`/${picture}`} alt={`${username}`}></img>
+				{/* throw the picture on public for now */}
+			</Link>
+		</div>
+		<div>
+			<h4><Link to={`/user/${username}`}>@{username}</Link></h4>
+			<p>{firstName} {lastName}</p>			
+		</div>
+		{isProfilePage && (
+		<div>
+			<p>{description}</p>
+		</div>)}
 	</div>
-	</React.Component>
+	</React.Fragment>
 	);
 
 }

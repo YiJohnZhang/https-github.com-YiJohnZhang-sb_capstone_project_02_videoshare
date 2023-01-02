@@ -67,40 +67,6 @@ function HomePage(props){
 	return(
 	<div className="page">
 
-		<div id='home-searchbar' className='width-85percent'>
-		<form>
-			<div className="input-group">
-
-				<input name="searchField"
-					type="text"
-					id="searchtextfield"
-					className="form-control"
-					placeholder="search..."
-					value={formState.searchField}
-					onChange={formChangeHandler}/>
-					
-				<input name="searchSelection"
-					type="radio"
-					id="searchContent"
-					className="btn-check"
-					value="searchContent"
-					checked={formState.searchSelection==="searchContent"}
-					onChange={formChangeHandler} />
-				<label className="btn btn-outline-danger" htmlFor="searchContent"><i className="fa-duotone fa-video"></i></label>
-
-				<input name="searchSelection"
-					type="radio"
-					id="searchUser"
-					className="btn-check"
-					value="searchUser"
-					checked={formState.searchSelection==="searchUser"}
-					onChange={formChangeHandler} />
-				<label className="btn btn-outline-danger" htmlFor="searchUser"><i className="fa-duotone fa-user"></i></label>
-
-			</div>
-		</form>
-		</div>
-
 		<div id="home-minorContainer" className="homeContainer width-15percent floatLeft">
 			{props.randomText.map((element) => (
 				<p key={element}
@@ -111,27 +77,71 @@ function HomePage(props){
 		</div>
 
 		<div id="home-majorContainer" className="homeContainer width-85percent floatRight">
+			<div id='home-searchbar' className=''>
+			<form className="">
+				<div className="input-group">
+
+					<input name="searchField"
+						type="text"
+						id="searchtextfield"
+						className="form-control"
+						placeholder="search..."
+						value={formState.searchField}
+						onChange={formChangeHandler}/>
+					<label className="visually-hidden" htmlFor="searchField">Search</label>
+						
+					<input name="searchSelection"
+						type="radio"
+						id="searchContent"
+						className="btn-check"
+						value="searchContent"
+						checked={formState.searchSelection==="searchContent"}
+						onChange={formChangeHandler} />
+					<label className="btn btn-outline-danger" htmlFor="searchContent"><i className="fa-duotone fa-video"></i></label>
+
+					<input name="searchSelection"
+						type="radio"
+						id="searchUser"
+						className="btn-check"
+						value="searchUser"
+						checked={formState.searchSelection==="searchUser"}
+						onChange={formChangeHandler} />
+					<label className="btn btn-outline-danger" htmlFor="searchUser"><i className="fa-duotone fa-user"></i></label>
+
+				</div>
+			</form>
+			</div>
+
 			{/*todo: inject content here*/}
 			{formState.searchSelection==='searchContent' ? (
-				formState.searchField ? 
-				(<h4>
-					Content Search Results for "<em>{formState.searchField}</em>&nbsp;&nbsp;"
-				</h4>) : null
-				// contents
-				/* <ContentCard
+				formState.searchField ?
+					<h4>Searching "Contents" for "<em>{formState.searchField}</em>&nbsp;&nbsp;"...</h4> : null
+			) : (
+				formState.searchField ?
+				<h4>Searching "Users" for " <em>{formState.searchField}</em>&nbsp;&nbsp;"...</h4> : <h4>Searching "Users" for... </h4>
+			)}
+			<div id="home-contentRoot">
+			{formState.searchSelection==='searchContent' ? (
+			<React.Fragment>
+				{/*	// contents
+				<ContentCard
 					aspectRatio="horizontal"
 					key={}
 					/>
-					*/
+					*/}
+			</React.Fragment>
 			) : (
-				<h4>User Search Results for " <em>{formState.searchField}</em>&nbsp;&nbsp;"</h4>
-				// users
-				/* <UserCard
+			<React.Fragment>
+				{/* // users
+				<UserCard
 					aspectRatio="horizontal"
 					key={} 
 					/>
-					*/
-			)}
+					*/}
+			</React.Fragment>
+			)}	
+			</div>
+
 		</div>
 
 	</div>
