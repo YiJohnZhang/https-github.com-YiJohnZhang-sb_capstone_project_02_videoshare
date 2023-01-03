@@ -1,7 +1,9 @@
 const { 
 	sqlCreateQueryBuilder, 
 	sqlFilterQueryBuilder, 
-	sqlUpdateQueryBuilder } = require('../helpers/sqlQueryingHelper');
+	sqlUpdateQueryBuilder,
+	sqlJoinMultipleQueryBuilder_Configured
+} = require('../helpers/sqlQueryingHelper');
 
 const users_JSON_SQL_SET_MAPPING = {
 	firstName: 'first_name',
@@ -199,5 +201,79 @@ describe('sqlUpdateQueryBuilder', () => {
 		}
 
 	});
+
+});
+
+describe('sqlJoinMultipleQueryBuilder_Configured', () => {
+
+	test('works: delete only (also useful for update)', () => {
+
+		const referenceParticipants = ['usera', 'users', 'userd', 'userf'];
+		const newParticipants = ['users'];
+		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
+
+		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'userd' OR user_id = 'userf';`);
+		expect(`
+			DELETE FROM contents_users_join
+				${stringifiedWHERE}`)
+		.toEqual(`
+			DELETE FROM contents_users_join
+				WHERE user_id = 'usera' OR user_id = 'userd' OR user_id = 'userf';`);
+
+		expect(stringifiedVALUES).toEqual(false);
+
+	});
+
+	test('works: insert only', () => {
+
+		const referenceParticipants = ['users'];
+		const newParticipants = ['usera', 'users', 'userd', 'userf'];
+		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
+
+		expect(stringifiedWHERE).toEqual(false);
+
+		expect(stringifiedVALUES).toEqual(`VALUES ('usera', 1, 'somedesc'), ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc');`)
+		expect(`
+			INSERT INTO contents_users_join(user_id, content_id, description)
+				${stringifiedVALUES}`)
+		.toEqual(`
+			INSERT INTO contents_users_join(user_id, content_id, description)
+				VALUES ('usera', 1, 'somedesc'), ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc');`);
+
+	});
+
+	test('works: is the same', () => {
+
+		const referenceParticipants = ['usera', 'users', 'userd', 'userf'];
+		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, referenceParticipants, 'user_id = ', 1, 'somedesc');
+
+		expect(stringifiedWHERE).toEqual(false);
+		expect(stringifiedVALUES).toEqual(false);
+
+	});
+
+	test('works: mixed where and insert', () => {
+
+		const referenceParticipants = ['usera', 'users'];
+		const newParticipants = ['userd', 'userf'];
+		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
+
+		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'users';`);
+		expect(`
+			DELETE FROM contents_users_join
+				${stringifiedWHERE}`)
+		.toEqual(`
+			DELETE FROM contents_users_join
+				WHERE user_id = 'usera' OR user_id = 'users';`);
+
+		expect(stringifiedVALUES).toEqual(`VALUES ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc');`)
+		expect(`
+			INSERT INTO contents_users_join(user_id, content_id, description)
+				${stringifiedVALUES}`)
+		.toEqual(`
+			INSERT INTO contents_users_join(user_id, content_id, description)
+				VALUES ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc');`);
+
+	})
 
 });

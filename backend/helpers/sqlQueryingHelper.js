@@ -82,4 +82,128 @@ function sqlUpdateQueryBuilder(updateData, jsonSQLMapping = {}) {
 
 }
 
-module.exports = { sqlCreateQueryBuilder, sqlFilterQueryBuilder, sqlUpdateQueryBuilder }
+/**	sqlMultipleInsertsQueryBuilder()
+ *	Out of scope for now
+ *	@param {Array} forEachArray - 
+ *	@param {*} propertyOne - 
+ *	@param {*} propertyTwo - 
+ *	@returns {string} - queryLiteral
+ */
+function sqlMultipleInsertsQueryBuilder(){
+
+}
+
+/**	sqlMultipleRemoveQueryBuilder()
+ *	Out of scope for now
+ *	@param {Array} forEachArray - 
+ *	@param {*} propertyOne - 
+ *	@param {*} propertyTwo - 
+ *	@returns {string} - queryLiteral
+ */
+function sqlMultipleRemoveQueryBuilder(){
+
+}
+
+// /**	sqlMultipleInsertsConfiguredQueryBuilder()
+//  *	2023-01-02 Note: Special built for `Content.create()`, `Content.()` for now.
+//  *	@param {Array} forEachArray - 
+//  *	@param {*} propertyOne - 
+//  *	@param {*} propertyTwo - 
+//  *	@returns {string} - queryLiteral 
+//  */
+// function sqlMultipleInsertsConfiguredQueryBuilder(forEachArray, propertyOne, propertyTwo){
+
+// 	const 
+
+// 	return;
+// }
+
+// /**	sqlMultipleRemoveConfiguredQueryBuilder()
+//  *	2023-01-02 Note: Special built for `Content.update()`, `Content.()` for now. Returns `false` if reference array is the same.
+//  *	Note this does NOT handle inserts.
+//  *	it is the `WHERE` clause
+//  *	@param {Array} referenceArray - before
+//  *	@param {Array} truncatedArray - after
+//  *	@param {string} propertyMatcher - 
+//  *	@returns {string} - deleteString 
+//  */
+// function sqlMultipleRemoveConfiguredQueryBuilder(referenceArray, truncatedArray, propertyMatcher){
+
+// 	// note referenceArray must s.t. [[...truncatedArray], ...]
+
+// 	let deleteArray = [];
+// 	let truncatedSet = new Set(truncatedArray);
+
+// 	referenceArray.forEach((element) => {
+
+// 		if(!truncatedSet.has(element))
+// 			deleteArray.push(`${propertyMatcher} ${element}`);
+
+// 	})
+
+// 	if(deleteArray.length === 0)
+// 		return false;
+
+// 	const deleteString = deleteArray.join(' OR ');
+// 	return deleteArray;
+
+// }
+
+// idea: make a method that can handle both, it needs a `referenceArray` and `newArray`. not now though every minutes counts .__________.
+
+/**	sqlJoinMultipleQueryBuilder_Configured()
+ *	2023-01-02 Note: Special built for `Content.update()`, `Content.()` for now. Returns `false` if reference array is the same.
+ *	Note this does NOT handle inserts.
+ *	it is the `WHERE` clause
+ *	@param {Array} referenceArray - before
+ *	@param {Array} newArray - after
+ *	@param {string} WHEREPropertyMatcher - 
+ *	@returns {string|boolean} stringifiedWHERE - string for `DELETE`sql / `UPDATE`sql
+ *	@returns {string|boolean} stringifiedVALUES - string for `INSERT INTO`slq
+ */
+function sqlJoinMultipleQueryBuilder_Configured(referenceArray, newArray, WHEREPropertyMatcher, insertPropertyOne, insertPropertyTwo){
+
+	// note referenceArray must s.t. [[...truncatedArray], ...]
+
+	// ...`WHERE`sql Aspect
+	let whereArray = [];
+	let newSet = new Set(newArray);
+
+	referenceArray.forEach((element) => {
+
+		if(!newSet.has(element))
+			whereArray.push(`${WHEREPropertyMatcher}'${element}'`);
+
+	})
+
+	const stringifiedWHERE = whereArray.length === 0 ? false : `WHERE ${whereArray.join(' OR ')};`;
+
+	// ...`VALUES`sql Aspect
+	let valuesArray = [];
+	let referenceSet = new Set(referenceArray);
+
+	newArray.forEach((element) => {
+
+		if(!referenceSet.has(element))
+			valuesArray.push(`('${element}', ${insertPropertyOne}, '${insertPropertyTwo}')`)
+
+	})
+
+	const stringifiedVALUES = valuesArray.length === 0 ? false : `VALUES ${valuesArray.join(', ')};`;
+
+	return{
+		stringifiedWHERE,
+		stringifiedVALUES
+	}
+
+}
+
+module.exports = { 
+	sqlCreateQueryBuilder, 
+	sqlFilterQueryBuilder, 
+	sqlUpdateQueryBuilder, 
+	sqlJoinMultipleQueryBuilder_Configured
+}
+
+// 	sqlMultipleInsertsQueryBuilder, 
+// sqlMultipleRemoveQueryBuilder, 
