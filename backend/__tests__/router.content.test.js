@@ -276,10 +276,27 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 	test('test', async() => {
 
 		const response = await request(app)
-			.patch('/contents/CONTENTID/edit')
+			.patch('/contents/3/edit')
 			.send({})
-			.set('authorization', `Bearer ${Token}`);
+			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body.content).toEqual();
+	
+	});
+
+	test('401: unauthorized (wrong user)', async() => {
+
+		const response = await request(app)
+			.get('/contents/3/edit')
+			.set('authorization', `Bearer ${user3Token}`);
+		expect(response.statusCode).toEqual(401);
+	
+	});
+
+	test('401: unauthorized (public)', async() => {
+
+		const response = await request(app)
+			.get('/contents/3/edit');
+			expect(response.statusCode).toEqual(401);
 	
 	});
 
@@ -304,25 +321,29 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 
 // });
 
-// /***	PATCH /contents/:contentID/:username/publish	*/
-// describe('PATCH \`contents/:contentID/:username/publish\`', () => {
+/***	PATCH /contents/:contentID/:username/publish	*/
+describe('PATCH \`contents/:contentID/:username/publish\`', () => {
 
-// 	// auth: isLoggedIn, isReferenceUser, isOwner
-// 	// none => {content: parseResponseBodyProperties(contentResult)}
-// 	//	private level
+	// auth: isLoggedIn, isReferenceUser, isOwner
+	// none => {content: parseResponseBodyProperties(contentResult)}
+	//	private level
 
 	
-// 	test('', async() => {
+	test('', async() => {
 
-// 		const response = await request(app)
-// 			.patch('/contents/CONTENTID/edit')
-// 			.send({})
-// 			.set('authorization', `Bearer ${Token}`);
-// 		expect(response.body.content).toEqual();
+		const response = await request(app)
+			.patch('/contents/3/edit')
+			.send({})
+			.set('authorization', `Bearer ${Token}`);
+		expect(response.body.content).toEqual({
+
+			
+
+		});
 	
-// 	});
+	});
 
-// });
+});
 
 /***	DELETE /contents/:id */
 /*	out of scope.

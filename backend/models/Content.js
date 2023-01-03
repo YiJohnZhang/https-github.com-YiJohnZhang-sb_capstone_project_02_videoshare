@@ -177,15 +177,29 @@ class Content {
 	 *	=> QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES
 	 */
 	static async getByPKPrivate(pk, res) {
-		console.log(res.headersSent)
+		
+		console.log(res.headersSent);
+		const RELATION_NAME = this.relationName;
+
+		// async function asdf() {
+		// 	const result = await db.query(`
+		// 		SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
+		// 			FROM ${RELATION_NAME}
+		// 			WHERE id = $1`,
+		// 		[pk]
+		// 	);
+		// 	console.log(res.headersSent);
+			
+		// }
+
+		// await asdf();
 
 		const result = await db.query(`
 			SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
-				FROM ${this.relationName}
+				FROM ${RELATION_NAME}
 				WHERE id = $1`,
-			[pk]
-		);
-
+			[pk]);
+		
 		console.log(res.headersSent);
 			// wth is res sent here? 
 		const contentObject = result.rows[0];
