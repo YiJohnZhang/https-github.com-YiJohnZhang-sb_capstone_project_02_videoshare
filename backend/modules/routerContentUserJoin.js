@@ -25,7 +25,7 @@ router.get('/:username/:contentID', async(req, res, nxt) => {
 	try{
 
 		const contentResult = await ContentUserModel.getByPK(req.params.username, req.params.contentID);
-		// note: user ajoin to get more information
+		
 
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 
@@ -46,8 +46,11 @@ router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req,
 
 	try{
 
-		const contentResult = await ContentUserModel.getByPK(req.params.username, req.params.contentID);
-
+		const contentResult = await ContentUserModel.getByPKPrivate(req.params.username, req.params.contentID);
+		
+		// it's res.headersSent again ._.
+		console.log(res.headersSent)
+		
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
@@ -68,13 +71,17 @@ router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(re
 
 	try{
 
-		validateRequestBody(updateContentJOINSchema);
+		console.log(`username: ${req.params.username}, contentID: ${req.params.contentID}`)
+
+		validateRequestBody(req.body, updateContentJOINSchema);
 
 		const contentResult = await ContentUserModel.update(req.params.username, req.params.contentID, stringifyRequestBodyProperties(req.body));
+		console.log('asdf')
 
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
+		console.log(error);
 		nxt(error);
 	}
 

@@ -321,7 +321,7 @@ Some suggested improvements to this concept are:
 |41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53||
 |42|fin `content.js`?|2023-01-02|18:38 - 20:30||
 |43|.-. backend work. finished `Users`|2023-01-02|22:02 - 23:54||
-|44||2023-01-03|09:17 - :||
+|44|more cursed "Cannot set headers after they are sent to the client. in `Content_User_Join.js`|2023-01-03|09:17 - 11:04||
 |4||2023-01-03|: - :||
 |4||2023-01-03|: - :||
 |4||2023-01-03|: - :||

@@ -16,7 +16,7 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
-const CONTENT_1_RESPONSE = {
+const CU_CONTENT_1_PUBLIC_RESPONSE = {
 	id: 1,
 	title: 'test content',
 	description: 'mw1',
@@ -25,14 +25,20 @@ const CONTENT_1_RESPONSE = {
 	datePublished: '2022-12-30T08:00:00.000Z'
 }
 
-const CONTENT_1_EDIT_GET_RESPONSE = {
+const CU_CONTENT_1_PRIVATE_RESPONSE = {
 	id: 1,
 	title: 'test content',
-	description: 'mw1'
+	description: 'mw1',
+	link: 'https://youtu.be/nhVJhRhJbJE',
+	status: 'published',
+	participants: ["testuser1"],
+	dateCreated: '2022-12-30T08:00:00.000Z',
+	dateStandby: '2022-12-30T08:00:00.000Z',
+	datePublished: '2022-12-30T08:00:00.000Z'
 }
 
 /***	GET /contents	*/
-describe('GET \`/:username/:contentID/\`', () => {
+describe('GET \`/cujoin/:username/:contentID/\`', () => {
 
 	// auth: none
 	// optional req.query => {content: parseResponseBodyProperties(contentResult)}
@@ -42,7 +48,7 @@ describe('GET \`/:username/:contentID/\`', () => {
 
 		const response = await request(app)
 			.get('/cujoin/testuser1/1')
-		expect(response.body.content).toEqual(CONTENT_1_RESPONSE);
+		expect(response.body.content).toEqual(CU_CONTENT_1_PUBLIC_RESPONSE);
 	
 	});
 
@@ -51,7 +57,7 @@ describe('GET \`/:username/:contentID/\`', () => {
 		const response = await request(app)
 			.get('/cujoin/testuser1/1')
 			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body.content).toEqual(CONTENT_1_RESPONSE);
+		expect(response.body.content).toEqual(CU_CONTENT_1_PUBLIC_RESPONSE);
 	
 	});
 
@@ -60,7 +66,7 @@ describe('GET \`/:username/:contentID/\`', () => {
 		const response = await request(app)
 			.get('/cujoin/testuser1/1')
 			.set('authorization', `Bearer ${user3Token}`);
-		expect(response.body.content).toEqual(CONTENT_1_RESPONSE);
+		expect(response.body.content).toEqual(CU_CONTENT_1_PUBLIC_RESPONSE);
 	
 	});
 
@@ -69,7 +75,7 @@ describe('GET \`/:username/:contentID/\`', () => {
 		const response = await request(app)
 			.get('/cujoin/testuser1/1')
 			.set('authorization', `Bearer ${adminToken}`);
-		expect(response.body.content).toEqual(CONTENT_1_RESPONSE);
+		expect(response.body.content).toEqual(CU_CONTENT_1_PUBLIC_RESPONSE);
 	
 	});
 
@@ -84,7 +90,7 @@ describe('GET \`/:username/:contentID/\`', () => {
 });
 
 /***	GET /:username/:contentID/edit	*/
-describe('GET \`/:username/:contentID/edit\`', () => {
+describe('GET \`/cujoin/:username/:contentID/edit\`', () => {
 
 	// auth: none
 	// => {content: parseResponseBodyProperties(contentResult)}
@@ -93,16 +99,16 @@ describe('GET \`/:username/:contentID/edit\`', () => {
 	test('reference-user request, content1', async() => {
 
 		const response = await request(app)
-			.get('/cujoin/testuser1/1')
+			.get('/cujoin/testuser1/1/edit')
 			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body.content).toEqual(CONTENT_1_EDIT_GET_RESPONSE);
+		expect(response.body.content).toEqual(CU_CONTENT_1_PRIVATE_RESPONSE);
 	
 	});
 
 	test('401: public request, content1', async() => {
 
 		const response = await request(app)
-			.get('/cujoin/1/testuser1')
+			.get('/cujoin/testuser1/1/edit')
 			.set('authorization', `Bearer ${user1Token}`);;
 		expect(response.statusCode).toEqual(401);
 	
@@ -111,7 +117,7 @@ describe('GET \`/:username/:contentID/edit\`', () => {
 	test('401: non-reference user, content1', async() => {
 
 		const response = await request(app)
-			.get('/cujoin/1/testuser1')
+			.get('/cujoin/testuser1/1/edit')
 			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.statusCode).toEqual(401);
 	
@@ -120,7 +126,7 @@ describe('GET \`/:username/:contentID/edit\`', () => {
 });
 
 /***	PATCH /:username/:contentID/edit	*/
-describe('PATCH \`:username/:contentID/edit\`', () => {
+describe('PATCH \`/cujoin/:username/:contentID/edit\`', () => {
 
 	// auth: isLoggedIn, isParticipatingUser
 	// req.body => {content: parseResponseBodyProperties(contentResult)}
@@ -133,7 +139,7 @@ describe('PATCH \`:username/:contentID/edit\`', () => {
 			.send({description: 'asdfffff'})
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body.content).toEqual({
-			...CONTENT_1_EDIT_GET_RESPONSE,
+			...CU_CONTENT_1_PRIVATE_RESPONSE,
 			description: 'asdfffff'
 		});
 	

@@ -14,19 +14,18 @@ const QUERY_GENERAL_PROPERTIES = `
 	content_id AS "contentID",
 	description`;
 const QUERY_GENERAL_PROPERTIES_JOIN = `
-	"contents_users_join"."contentID" AS "contentID",
-	"contents_users_join"."description" AS "description"
+	cu.description AS "description"
 `;
 const QUERY_CONTENT_JOIN_PROPERTIES = `
-	"contents"."title" AS "title",
-	"contents"."link" AS "link",
-	"contents"."status" AS "status",
-	"contents"."participants" AS "participants",
-	"contents"."date_created" AS "dateCreated",
-	"contents"."date_standy" AS "dateStandby",
-	"contents"."date_published" AS "datePublished"`;
-	// todo: consider removing "status"
-	//lowpriority: clean this up and modularize. minus "description, summary, dateCreated, dateStandby"
+	c.id AS "id",
+	c.title AS "title",
+	c.link AS "link",
+	c.status AS "status",
+	c.participants AS "participants",
+	c.date_created AS "dateCreated",
+	c.date_standby AS "dateStandby",
+	c.date_published AS "datePublished"`;
+	
 // const QUERY_USER_PROPERTIES = `
 // 	username, 
 // 	first_name AS "firstName", 
@@ -63,7 +62,7 @@ class ContentUserJoin {
 	static async getAllUserContent(username) {
 
 		let result = await db.query(`
-			SELECT ${QUERY_GENERAL_PROPERTIES_JOIN}, ${QUERY_CONTENT_JOIN_PROPERTIES}
+			SELECT ${QUERY_CONTENT_JOIN_PROPERTIES}, ${QUERY_GENERAL_PROPERTIES_JOIN}
 				FROM contents_users_join
 				JOIN "contents" on "contents"."id" = "${this.relationName}"."content_id"
 				WHERE user_id = $1
@@ -138,20 +137,17 @@ class ContentUserJoin {
 	 */
 	 static async getByPKPrivate(userID, contentID) {
 		
-		console.log("adf")
-		// just trying out join queries here
 		const result = await db.query(`
 			SELECT ${QUERY_GENERAL_PROPERTIES_JOIN}, ${QUERY_CONTENT_JOIN_PROPERTIES}
-				FROM ${this.relationName}
-				JOIN "contents" ON "contents"."id" = "${this.relationName}"."id"
-				WHERE user_id = $1 AND content_id = $2
-		`, [userID, contentID]);
+				FROM ${this.relationName} AS cu
+				JOIN contents AS c ON c.id = cu.content_id
+				WHERE cu.user_id = $1 AND cu.content_id = $2
+			`, [userID, contentID]);
 
 		const cuJoinObject = result.rows[0];
-		console.log(cuJoinObject)
 
 		if (!cuJoinObject)
-			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
+			throw new NotFoundError(`Cannot find ${this.relationName}: (${userID}, ${contentID})`);
 
 		return cuJoinObject;
 
@@ -166,12 +162,10 @@ class ContentUserJoin {
 	 */
 	 static async getByPK(userID, contentID) {
 		
-		console.log("adf")
-		// just trying out join queries here
-		const result = await this.getByPKPrivate(userID, contentID);
+		const cuJoinObject = await this.getByPKPrivate(userID, contentID);
 
-		const cuJoinObject = result.rows[0];
-		console.log(cuJoinObject)
+		if(cuJoinObject.status)
+			delete cuJoinObject.status;
 
 		if(cuJoinObject.dateCreated)
 			delete cuJoinObject.dateCreated;
@@ -201,23 +195,39 @@ class ContentUserJoin {
 	 */
 	static async update(userID, contentID, updateRecordObject) {
 
-		await this.getByPK(userID, contentID);
+		const { description } = updateRecordObject;
+		const result = await db.query(`
+			UPDATE ${this.relationName}
+				SET description = $1
+				WHERE user_id = $2 AND content_id = $3
+				RETURNING description
+			`, [description, userID, contentID]);
 
-		// 2022-12-29 Note: generalize for composite PK by passing in pk as object and do a parameterizedWHERE query builder on it
+		console.log({description, userID, contentID})
 
-		// do something with `updateRecordObject` if necessary, i.e. remove certain properties that are forbidden to be updated or modify passed values
+		const adsf = await db.query(`select * from ${this.relationName} where user_id = 'testuser1' AND content_id = 1`);
+		console.log(adsf.rows[0])
 
-		const { parameterizedSET, setParameters } = sqlUpdateQueryBuilder(updateRecordObject, JSON_SQL_SET_MAPPING);
-		const pkParameterIndex = setParameters.length + 1;
-
-		const updateQuerySQL = `
-			UPDATE ${this.relationName} 
-				SET ${parameterizedSET} 
-				WHERE user_id = $${pkParameterIndex} AND content_id = $${pkParameterIndex+1} 
-				RETURNING ${QUERY_GENERAL_PROPERTIES}`;
-		const result = await db.query(updateQuerySQL, [...setParameters, userID, contentID]);
-
+/*
+		const result = await db.query(`
+			UPDATE ${this.relationName}
+				SET description = $1
+				FROM (
+					SELECT description
+					FROM ${this.relationName}
+					WHERE user_id = $
+				)
+				JOIN contents AS "c" ON c.id = contents_id
+				WHERE user_id = $2 AND content_id = $3
+				RETURNING description, ${QUERY_CONTENT_JOIN_PROPERTIES}
+			`, [description, userID, contentID]);
+*/
+		console.log('aFDS')
 		const cuJoinObject = result.rows[0];
+		console.log(result.rows[0])
+
+		if (!cuJoinObject)
+			throw new NotFoundError(`Cannot find ${this.relationName}: (${userID}, ${contentID})`);
 
 		return cuJoinObject;
 

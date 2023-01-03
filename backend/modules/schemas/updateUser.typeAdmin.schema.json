@@ -10,6 +10,5 @@
 			"type": "boolean"
 		}
 	},
-	"required": [],
 	"additionalProperties": false
 }
