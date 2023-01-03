@@ -98,7 +98,7 @@ class ContentUserJoin {
 	
 	}
 
-	//	NOT IMPLEMENTED: USERFUL FOR USERS TO PRIORITIZE WHAT TO WORK ON (also searchable).
+	//	NOT IMPLEMENTED: USEFUL FOR USERS TO PRIORITIZE WHAT TO WORK ON (also searchable).
 	/**	getAllPrivateContent(username)
 	 *	Find all matching content_users_join records that is publicly available for a username.
 	 *	Optional: filter data in the form of `queryObject`.
@@ -243,7 +243,8 @@ class ContentUserJoin {
 			DELETE
 				FROM ${this.relationName}
 				WHERE user_id = $1 AND content_id = $2
-				RETURNING user_id as "username", content_id`, [userID, contentID]);
+				RETURNING user_id as "username", content_id
+			`,[userID, contentID]);
 
 		const cuJoinObject = result.rows[0];
 

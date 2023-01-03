@@ -9,7 +9,7 @@ const {
 	commonAfterAll,
 	user1Token, user3Token,
 	adminToken
-} = require('./router._testCommons');
+} = require('./router._testCommons.test');
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
