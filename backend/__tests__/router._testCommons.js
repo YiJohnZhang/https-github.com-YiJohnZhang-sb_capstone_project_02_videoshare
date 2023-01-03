@@ -9,13 +9,13 @@ const createTokenHelper = require('../helpers/createTokenHelper');
 async function commonBeforeAll() {
 
 	// leave `role_users_join` and `roles` Alone: seed first with `testSeed.sql`
-	await db.query("TRUNCATE TABLE roles_users_join RESTART IDENTITY CASCADE;");
+	// await db.query("TRUNCATE TABLE roles_users_join RESTART IDENTITY CASCADE;");
 	await db.query("TRUNCATE TABLE contents_users_join RESTART IDENTITY CASCADE;");
 		// restart serial at 1
 
 	// noinspection SqlWithoutWhere
 	await db.query("TRUNCATE TABLE contents RESTART IDENTITY CASCADE;");
-	// await db.query("DELETE FROM contents");
+	await db.query("DELETE FROM contents");
 	// noinspection SqlWithoutWhere
 	await db.query("DELETE FROM users");
 

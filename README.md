@@ -208,17 +208,28 @@ npm test	# alias for `react-scripts test` in `package.json`
 |||*CU_Join = `Content_User_Join`|`userID` is an alias for `username`|
 
 
-1	=> almost done?; try it out in practice.
-2		=> needs jOIN query
+1	=> needs one more test after finishing `CUJOIN`
+2		=> check status OR published_date; JOIN users (no, b/c participants is there...)?
 3		=> redudndant? skip
-4		=> needs JOIN query
-5	=> almost done?
+4		=> almost done, test?
+5	=> almost done? (querybuilder a go), needs test
 6		=> IGNORED; skip 
-7	=> almost done?
+7	=> almost done? (querybuilder a go), needs test; inject published_date by server date, checked particpiants === signed
 10	=> quick
 11	=> quick
 12	(basically preview for content publicly) on content page
 13	=> quick?
+see `router.content.js: ~104` (todo)
+see `Content.js: ~104` (todo) remove "COMMIT" comment after testing passes.
+
+plan:
+by 20:00 => be done with content....js
+by ~21:00 => be done with cujoin
+by ~22:00 => finish users
+SUBMIT BACKEND
+by ~23:00 => front-end test.
+extra time: rush front-end tests.
+
 
 note: finish contents first, (JOIN creation)
 - schema double-checked

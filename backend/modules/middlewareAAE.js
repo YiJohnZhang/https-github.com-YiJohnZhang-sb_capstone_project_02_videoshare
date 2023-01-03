@@ -210,16 +210,15 @@ async function isParticipatingUser(req, res, nxt) {
 
 		const result = await ContentModel.getParticipants(req.params.contentID);
 		const participantSet = new Set(result);
-		console.log(participantSet)
 
 		if(participantSet.has(res.locals.user.username))
 			nxt();
 
+		throw new UnauthorizedError('not a participant');
+
 	}catch(error){
 		nxt(new UnauthorizedError('not a participant'))
 	}
-
-	nxt(new UnauthorizedError('not a participant'));
 
 }
 

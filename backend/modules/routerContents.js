@@ -24,8 +24,6 @@ router.post('/', isLoggedIn, async(req, res, nxt) => {
 
 		validateRequestBody(req.body, newContentSchema);
 
-		console.log(req.body);
-
 		const contentResult = await ContentModel.create(stringifyRequestBodyProperties(req.body));
 
 		return res.status(201).json({content: parseResponseBodyProperties(contentResult)});
@@ -74,7 +72,7 @@ router.get('/:contentID', async(req, res, nxt) => {
 	try{
 		
 		const contentResult = await ContentModel.getByPK(req.params.contentID);
-			// todo: add JOIN query to return list users
+			// todo: add JOIN query to return list users?
 
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 
@@ -95,16 +93,22 @@ router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, 
 	
 	try{
 		
-		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
-			// todo: add JOIN query to return list users
+		// console.log(res.headersSent)
+		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, res);
+			// todo: add JOIN query to return list users??? participants already exists .___.
 
 			// NOTE (OUT OF SCOPE): if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
 
-		console.log(contentResult);
+		// console.log(res.headersSent)
+		// const content = {content: parseResponseBodyProperties(contentResult)};
 		return res.json({content: parseResponseBodyProperties(contentResult)});
-
+		
+		console.log(res.headersSent)
+		return res.json({content});
+		
 	}catch(error){
 		console.log(error);
+			// "Cannot set headers after they are sent to the client"
 		nxt(error);
 	}
 
@@ -137,7 +141,8 @@ router.patch('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res
 	
 });
 
-/** PATCH `/[contentID]/sign`
+/** IGNORE
+ *	PATCH `/[contentID]/sign`
  *	( input ) => { contentResult }
  *		where `input` is: (req.params.contentID, { req.body })
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
@@ -177,7 +182,7 @@ router.patch('/:contentID/:username/publish', isLoggedIn, isReferenceUser, isOwn
 		const contentResult = await ContentModel.publishUpdate(req.params.contentID);
 			// todo: disable if the current status is pbulished or legacy'
 			// also, whenever contractDetails change, automatically reset 'contractSigned to `[]`'
-		
+
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){

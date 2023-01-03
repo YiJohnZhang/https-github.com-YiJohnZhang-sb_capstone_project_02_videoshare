@@ -58,9 +58,11 @@ class Content {
 	 *
 	 *	=> { ... }
 	 *
-	 *	Throws BadRequestError for duplicates.
+	 *	Throws ConflictError for duplicates.
 	 **/
 	 static async create(newRecordObject){
+
+		const RELATION_NAME = this.relationName
 
 		async function createNewRecord(newRecordObject){
 		
@@ -69,7 +71,7 @@ class Content {
 				const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
 
 				const result = await db.query(`
-					INSERT INTO contents ${parameterizedINSERTPropertyNames}
+					INSERT INTO ${RELATION_NAME} ${parameterizedINSERTPropertyNames}
 						VALUES ${parameterizedINSERTPropertyIndices}
 						RETURNING ${QUERY_GENERAL_PROPERTIES}`, [...insertParameters]);
 
@@ -77,15 +79,17 @@ class Content {
 				return contentObject;
 
 			}catch(error){
+
+				await db.query("ROLLBACK");
 				throw new ConflictError(`${error}`);
+
 			}
 		
 		}
 
-		// await db.query("BEGIN");
+		await db.query("BEGIN");
 
 		const newContentObject = await createNewRecord(newRecordObject);
-		console.log(newContentObject);
 
 		try {
 
@@ -97,15 +101,18 @@ class Content {
 				${stringifiedVALUES}
 				RETURNING content_id`);
 
-			const newContentId = result.rows;
-			console.log(newContentId);
+
+			await db.query("COMMIT");
+			
+			const newContentId = result.rows[0];
 			return newContentId;
 
 		}catch(error){
-			throw new ExpressError(500, error);
-		}
 
-		// await db.query("COMMIT");
+			await db.query("ROLLBACK");
+			throw new ExpressError(500, error);
+
+		}
 
 	}
 
@@ -129,8 +136,9 @@ class Content {
 				queryObject.title = `%${queryObject.title}%`
 
 			const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
+			
 			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
-				// todo (ignore): isnsert (status = 'published' OR status = 'legacy') JERE
+				// todo (ignore): isnsert (status = 'published' OR status = 'legacy') HERE
 
 		}else{
 			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
@@ -168,7 +176,8 @@ class Content {
 	 *	
 	 *	=> QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES
 	 */
-	static async getByPKPrivate(pk) {
+	static async getByPKPrivate(pk, res) {
+		console.log(res.headersSent)
 
 		const result = await db.query(`
 			SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
@@ -177,11 +186,15 @@ class Content {
 			[pk]
 		);
 
+		console.log(res.headersSent);
+			// wth is res sent here? 
 		const contentObject = result.rows[0];
+		console.log(res.headersSent)
 
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
 
+			console.log(res.headersSent)
 		return contentObject;
 
 	}
