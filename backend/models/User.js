@@ -4,7 +4,6 @@ const db = require('../database/db');
 const { sqlUpdateQueryBuilder, sqlFilterQueryBuilder } = require("../helpers/sqlQueryingHelper");
 const {
 	NotFoundError,
-	BadRequestError,
 	UnauthorizedError,
 	ConflictError
 } = require("../modules/utilities");

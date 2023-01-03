@@ -291,12 +291,29 @@ class Content {
 
 	}
 
-	/**	Delete content records from database by `pk`.
+	/**	delete(pk)
+	 *	Delete content records from database by `pk`.
 	 *
 	 *	=> `undefined`.
 	 */
-	// UNIMPLEMENTED: should this be for admins only to delete all instances or what?
+	static async delete(pk) {
 
+		let result = await db.query(`
+			DELETE
+				FROM ${this.relationname}
+				WHERE id = $1
+				RETURNING id, title`,
+			[pk]);
+
+		const contentObject = result.rows[0];
+		
+		if (!contentObject)
+			throw new NotFoundError(`No user: ${username}`);
+
+		return contentObject;
+
+	}
+	
 /** */
 
 	static async signUpdate(contentID, username){

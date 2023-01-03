@@ -43,8 +43,6 @@ router.get('/:username', async(req, res, nxt) => {
 	try{
 		
 		const userResult = await UserModel.getByPK(req.params.username);
-			// user exists implied
-		// const correspondingContentResult = await ContentModel.getContentByUsername();
 
 		return res.json({user: userResult});
 

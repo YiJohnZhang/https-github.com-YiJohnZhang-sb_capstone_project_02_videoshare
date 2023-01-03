@@ -49,7 +49,7 @@ router.get('/', async(req, res, nxt) => {
 
 	try{
 		
-		const contentResults = await ContentModel.getAll(req.query);
+		const contentResults = await ContentModel.getAllPublic(req.query);
 			// tod: note add JOIN query to return list of users, throw it under "contents"
 
 		const parsedContentResults = contentResults.map((contentResult) => parseResponseBodyProperties(contentResult));

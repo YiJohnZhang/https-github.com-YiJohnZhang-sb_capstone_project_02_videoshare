@@ -2,7 +2,7 @@
 *The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature that encourages content creators to collaborate with another by allowing a pre-agreement of monetization distribution allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations to non-randomly select a user's profile. The intention of this feature is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans entry onto the platform.*
 
 **Live Link `as of 2023-01-0`**: []() (`todo:inserlink`)
-**NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, the performance of projects hosted on the free-tier is unreliable than if hosted locally. Consider [**downloading** and **building** this project locally](`todo`: GITHUB link for RUNNING AND TESTING INSTRUCTIONS): the default backend port is ,port `3000` and the default frontend port is port `3001`.
+**NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, projects hosted on the free-tier has unreliable performance compared to being hosted locally. **Consider [downloading and building this project locally](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)**: the default backend port is `:3000` and the default frontend port `:3001`.
 
 # Table of Contents (`todo:inserthyperlinks`)
 - [01. Project Features]()
@@ -31,7 +31,7 @@ This web application uses the **PERN** stack:
 
 Project Schema:
 **`TODO: INSERT SCHEMA`**
-The project proposes the following attributes to a relation to achieve the intended goals of the project's purpose:
+The project proposes the following additional attributes to a `content` relation and a `content_user_join` relation to achieve the intended goals of the project's purpose:
 |Attribute Name|Data Type|Example|Description|
 |-|-|-|-|
 |`status`|`ENUM`sql ('created', 'standby', 'published', 'legacy')|`'standby'`|This attribute is used to filter content for searching, modifying, and monetization. `standby` is for content where `participants` have all agreed to the content monetization contract, `published` is when a file has been uploaded, `legacy` content has a reduced monetization rate.|
@@ -41,7 +41,7 @@ The project proposes the following attributes to a relation to achieve the inten
 |`contract_details`|`TEXT`sql|`'{"views":[{"username":"user1","share":0.25}, {"username":"user2","share":0.25},{"username":"user3","share":0.5}],"engagement":[{"username":"user1","share":0.74}, {"username":"user2","share":0.21},{"username":"user3","share":0.05}]}'`|A stringified JSON object of usernames and monetization fractions in respective monetization categories. It is `'{"views":[{"username":"user1","share":1}, ],"engagement":[{"username":"user1","share":1}]}'` if `contract_type` = `solo`.|
 |`contract_signed`|`TEXT`sql|Similar to `contract_details`.|A stringified array of usernames that have agreed to the contract. Used to check whether or not the content `status` may be set to `standby`.  Behaves similarly to `contract_details`.|
 
-**Crushing Expectations**: This project was designed to exceed Springboard Bootcamp's final capstone project requirements. Instead of using a readily available backend API, I built my own content API, to challenge myself. In the early stages, I attempted a pure TDD approach but without strong documentation, the application quickly became a nightmare. In hindsight, I probably should have started with basic routes first, proceeded to the React frontend, and then progressively add routes for for desired features instead of finishing the backend first and then building the frontend. The frontend is lackluster, the backend is more developed.
+**Note**: This project was designed to exceed Springboard Bootcamp's final capstone project requirements.
 
 ## 02.01. Running & Testing Instructions
 **To run the application**,
@@ -190,52 +190,45 @@ npm test	# alias for `react-scripts test` in `package.json`
 	└──	`DELETE`	/[contentID]/			# delete content by id
 ```
 
-|##|Method, Rel. Route|Model, Method|Returns|Purpose|
+|##|Method, Rel. Path|Model, Method|Returns|Purpose|
 |-|-|-|-|-|
 ||`/authenticate`|**Authentication**|||
 |01|`POST`, `/token`|`User`, `login()`|user auth. properties|Authenticates user credentials.|
 |02|`POST`, `/register`|`User`, `register()`|user auth. properties|Creates a user.|
 ||`/users`|**User**|||
 |03|`GET`, `/`|`User`, `getAll()`|user public properties|Front-end user search.|
-|04|`GET`, `/:username`|`User`, `getByPK()`|user public properties|**Deprecated by cu_join**|
+|04|`GET`, `/:username`|`User`, `getByPK()`|user public properties|**?**|
 |05|`GET`, `/:username/edit`|`User`, `getByPKPrivate()`|user private properties|Front-end user edit.|
 |06|`PATCH`, `/:username/edit`|`User`, `update()`|user private properties|Front-end user edit.|
-|07|`DELETE`, `/:username`|`User`, `delete()`|The deleted `username`.|Not used concerning practices.|
+|07|`DELETE`, `/:username`|`User`, `delete()`|Deleted record's `username`.|Tested but not used concerning practices.|
 ||`/cujoin`|**Content-User `Join`**|||
-|08|`GET`, `/:username/:contentID/edit`||||
-|09|`PATCH`, `/:username/:contentID/edit`||||
-|10|`DELETE`, `/:username/:contentID`||||
-|11|`GET`, `/:username`||||
-|12|`GET`, `/:username`||||
-|13|`GET`, ||||
+|08|`GET`, `/:username/:contentID/`|`CU_Join`*, `getByPK()`|content public properties|**not used for this project?**|
+|09|`GET`, `/:username/:contentID/edit`|`CU_Join`*, `getByPKPrivate()`|**`todo`: `headersSent` error**. content private properties|Edit the publicly viewable description.|
+|10|`PATCH`, `/:username/:contentID/edit`|`CU_Join`*, `update()`|content private properties|**`todo`: `headersSent` error**. Edit the publicly viewable description.|
+|11|`DELETE`, `/:username/:contentID`|`CU_Join`*, `delete()`|Deleted record's `user_id` and `content_id`|Tested but not used concerning practices (what if a user wants to restore? How?)|
+|12|`GET`, `/:username`|`CU_Join`*, `getAllUserContent()`|**`todo`**|User profile public/private view (hm... how to use the same route to pass diff info?)|
+|13|`GET`, `/:username`|`CU_Join`*, `getAllUserPublicContent()`|**`todo`**|User profile public/private view (hm... how to use the same route to pass diff info?)|
 ||`/contents`|**Content**|||
-|14|`POST`, `/`||||
-|15|`GET`, `/`||||
-|16|`GET`, `/:contentID`||||
-|17|`GET`, ,`/:contentID/edit`||||
-|18|`PATCH`, `/:contentID/edit`|`Content`, `update()`|||
-|19|`PATCH`, `/:contentID/sign`|`Content`, `signUpdate()`|**Not implemented**|Allow a user to toggle whether or not they are signed.|
-|20|`PATCH`, `/:contentID/publish`|`Content`, `publishUpdate()`|||
-|21|`DELETE`, `/:contentID`|`Content`, `delete()`|||
+|14|`POST`, `/`|`Content`, `create()`|Returns created content id|Front-end create, automatically create N joins based on participants.|
+|15|`GET`, `/`|`Content`, `getAllPublic()`|arr contents (public)|**`todo`: test**Front-end content search.|
+|15A|`GET`, `/`|`Content`, `getAll()`|**deprecated**|**deprecated**|
+|16|`GET`, `/:contentID`|`Content`, `getByPK(contentID)`|content public properties|**not used for this project?**|
+|17|`GET`, ,`/:contentID/edit`|`Content`, `getByPKPrivate(contentID)`|content private properties|**`todo`: `headersSent` error**|
+|18|`PATCH`, `/:contentID/edit`|`Content`, `update()`|**`todo: held up by 17`** content private properites|Used to update a content record before publishing.|
+|19|`PATCH`, `/:contentID/sign`|`Content`, `signUpdate()`|**skipped**|**skipped**. Allow a user to toggle whether or not they are signed.|
+|20|`PATCH`, `/:contentID/publish`|`Content`, `publishUpdate()`|**`todo: test`**|Used to set the content record `status` from `standby` to `published`.|
+|21|`PATCH`, `/:contentID/update`|`Content`, `...`|**skipped**|**skipped**. Used by the admin to set a content record `status` from `published` to `legacy`.|
+|22|`DELETE`, `/:contentID`|`Content`, `delete()`|Deleted record's `id` and `title`.|Tested but not used concerning practices.|
 
-|##|Method, Route|Model, Method Sig.|Returns / 2023-01 Notes|
-|-|-|-|-|
-|01|`POST`, `/`|`Content`, `create(reqBody)`|`{content}` (private), Creates N join entries; based on participants.|
-|02|`GET`, `/`|`Content`, `getAll(*reqQuery*)`|`{contents}` (public)|
-|03|`GET`, `/:contentID`|`Content`, `getByPK(contentID`|`{content}` (public). **Hm... this is redundant?** ._.|
-|04|`GET`, `/:contentID/edit`|`Content`, `getByPKPrivate(contentID)`|`{content}` (private)|
-|05|`PATCH`, `/:contentID/edit`|`Content`, `update(contentID,reqBody)`|`{content}` (private): **SIMPLIFIED** This route now switches the state between `created` and `standby` depending on whether or not `participants===signed`js. For the sake of time, it also modifies the join entries to reflect that of the `participants`.|
-|06|`PATCH`, `/:contentID/:username/sign`|`Content`, `signUpdate(contentID,username)`|**DEPRECATED FOR THIS PROJECT**. The idea was that this route could toggle whether or not a user has signed.|
-|07|`PATCH`, `/:contentID/publish`||`{content}` (private). Does a final check whether or not `participants===signed`|
-|08|`PATCH`, `/:contentID/update`|**DEPRECATED**.||
-|09|`DELETE`, `/:contentID`|`Content`, `delete(contentID)`|`{content}`. Out-of-scope.|
-|10 NEW?|``|CU_Join*, `getAllPublic(userID)`|`{contents}` (Public)|
-|11 NEW?|``|CU_Join*, `getAll(userID)`|`{contents}` (Public + Private)|
-|12|`GET`, `/:contentID/:username`|CU_Join*, `getByPK(contentID,userID)`|`{content}` (Public)|
-|13 NEW|`GET`, `/:contentID/:username/edit`|CU_Join*, `getByPKPrivate(contentID,userID)`|`{content}` (Private)|
-|14|`PATCH`, `/:contentID/:username/edit`|CU_Join*, `update(contentID,userID,reqBody)`|`{content}`|
-|15|`DELETE` `/:contentID/:username`|CU_Join*, `delete(contentID,userID)`|`{content}`. Out-of-scope.|
-|||*CU_Join = `Content_User_Join`|`userID` is an alias for `username`|
+### Remaining Routes
+08	=> not used?
+09	=> => `error: headersSent` by `node-pg`
+10	=> see `09`
+12	=> test, the current pattern is /user/contid... (cujoin/string/integer/)
+13	=> test, the current pattern is /user/contid... (cujoin/string/integer/)
+17	=> `error: headersSent` (node-pg sending an express resposne). **SIMPLIFIED** This route now switches the state between `created` and `standby` depending on whether or not `participants===signed`js. For the sake of time, it also modifies the join entries to reflect that of the `participants`.|
+18	=> held up by `17`
+20	=> needs test; Does a final check whether or not `participants===signed`
 
 ## 02.04. Resources & Data Source
 - The sample data is dummy data.
@@ -348,11 +341,11 @@ Some suggested improvements to this concept are:
 |38|salvaging backend #2...|2023-01-02|10:51 - 11:29|38|
 |39|finish backend?|2023-01-02|13:41 - 14:24|43|
 |40|finished sql query helper method|2023-01-02|15:10 - 16:25|75|
-|41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53||
-|42|fin `content.js`?|2023-01-02|18:38 - 20:30||
-|43|.-. backend work. finished `Users`|2023-01-02|22:02 - 23:54||
+|41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53|33|
+|42|fin `content.js`?|2023-01-02|18:38 - 20:30|112|
+|43|.-. backend work. finished `Users`|2023-01-02|22:02 - 23:54|112|
 |44|more cursed "Cannot set headers after they are sent to the client. in `Content_User_Join.js`|2023-01-03|09:17 - 11:04||
-|45|renamed `router._testCommons` to `router._testCommons.test`; updated documentation for project clarity .___.; |2023-01-03|14:00 - :||
+|45|renamed `router._testCommons` to `router._testCommons.test`; updated documentation for project clarity .___.|2023-01-03|14:00 - 15:52||
 |4||2023-01-03|: - :||
 |4||2023-01-03|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
@@ -374,46 +367,21 @@ Some suggested improvements to this concept are:
 |4x||2022-01-0|: - :||
 ||||**Total Time**|_ minutes (--h--m)|
 
-|##|Method, Route|Model, Method Sig.|Returns / 2023-01 Notes|
-|-|-|-|-|
-|02|`GET`, `/`|`Content`, `getAll(*reqQuery*)`|`{contents}` (public), add a test for this (rn there is `getAll` and `getAllPublic`.|
-
-|04|`GET`, `/:contentID/edit`|`Content`, `getByPKPrivate(contentID)`|`{content}` (private)|
-|05|`PATCH`, `/:contentID/edit`|`Content`, `update(contentID,reqBody)`|`{content}` (private): **SIMPLIFIED** This route now switches the state between `created` and `standby` depending on whether or not `participants===signed`js. For the sake of time, it also modifies the join entries to reflect that of the `participants`.|
-|07|`PATCH`, `/:contentID/publish`||`{content}` (private). Does a final check whether or not `participants===signed`|
-|09|`DELETE`, `/:contentID`|`Content`, `delete(contentID)`|`{content}`. Out-of-scope.|
-|10|``|CU_Join*, `getAllUserPublicContent(userID)`|`{contents}` (Public). **test**.|
-|11|``|CU_Join*, `getAllUserContent(userID)`|`{contents}` (Public + Private). **test**.|
-|12|`GET`, `/:contentID/:username`|CU_Join*, `getByPK(contentID,userID)`|`{content}` (Public). **getByPk, finish it up**|
-|13 NEW|`GET`, `/:contentID/:username/edit`|CU_Join*, `getByPKPrivate(contentID,userID)`|`{content}` **NO. just #12**|
-|14|`PATCH`, `/:contentID/:username/edit`|CU_Join*, `update(contentID,userID,reqBody)`|**TEST**|
-|||*CU_Join = `Content_User_Join`|`userID` is an alias for `username`|
-
 
 2. `Contents.js:publishUpdate:~300`, 'lowpriority': UX confusion?
 	- `Contents.js:publishUpdate:~305`, 'lowpriority': made the diff between standby and open negli.
 	- `Contents.js:publishUpdate:~337`, 'lowpriority': consider being independent of: `POSTGRESQL ISNERT INTO ON CONFLICT DO NOTHING`; needs further work for <PSQL 9.5
 	- `Contents.js:publishUpdate:~347`, `lowpriority`: 
 
-1	=> needs one more test after finishing `CUJOIN`
-2		=> check status OR published_date; JOIN users (no, b/c participants is there...)?
-4		=> almost done, test?
-5	=> almost done? (querybuilder a go), needs test
-7	=> almost done? (querybuilder a go), needs test; inject published_date by server date, checked particpiants === signed
-12	essentially the same as preview for content publicly) on content page
-13	=> quick?
 
 see `router.content.js: ~104` (todo)
 see `Content.js: ~104` (todo) remove "COMMIT" comment after testing passes.
 
 
 note: finish contents first, (JOIN creation)
-- schema double-checked
-	- 
+- cleaned-up
+	- `Authorization`, `Users`
 - done:
-	- `Authorization`
-- finish (content data)
-	- `Users`
 - test:
 - salvage:
 	- `Contents`

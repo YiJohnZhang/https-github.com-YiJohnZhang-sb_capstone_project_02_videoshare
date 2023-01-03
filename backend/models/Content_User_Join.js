@@ -233,7 +233,8 @@ class ContentUserJoin {
 
 	}
 
-	/**	Delete content_users_join records from database by `pk`.
+	/**	delete(username, contentID)
+	 *	Delete content_users_join records from database by `pk`.
 	 *
 	 *	=> `cuJoinObject` = { username, contentID }.
 	 */
