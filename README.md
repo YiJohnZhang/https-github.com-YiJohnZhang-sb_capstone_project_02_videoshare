@@ -321,8 +321,10 @@ Some suggested improvements to this concept are:
 |41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53||
 |42|fin `content.js`?|2023-01-02|18:38 - 20:30||
 |43|.-. backend work. finished `Users`|2023-01-02|22:02 - 23:54||
-
-|4||2023-01-02|: - :||
+|44||2023-01-03|09:17 - :||
+|4||2023-01-03|: - :||
+|4||2023-01-03|: - :||
+|4||2023-01-03|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|`formik` for frontend, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
