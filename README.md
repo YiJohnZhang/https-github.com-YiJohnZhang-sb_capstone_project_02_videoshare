@@ -166,27 +166,57 @@ npm test	# alias for `react-scripts test` in `package.json`
 ```sh
 /
 ├──	authorization
-│	├── `POST`		/token/				# login
-│	└── `POST`		/register/			# register
+│	├── `POST`		/token/					# login
+│	└── `POST`		/register/				# register
 ├──	users
-│	├── `GET`		/					# return users (w/ filter)
-│	├── `GET`		/[username]/		# return user by id, public information
-│	├── `GET`		/[username]/edit	# return user by id, private information
-│	└── `PATCH`		/[username]/edit	# update user by id, private information
-│	├── `DELETE`	/[username]/		# delete user by id
+│	├── `GET`		/						# return users (w/ filter)
+│	├── `GET`		/[username]/			# return user by id, public info
+│	├── `GET`		/[username]/edit		# return user by id, private info
+│	└── `PATCH`		/[username]/edit		# update user by id, private info
+│	├── `DELETE`	/[username]/			# delete user by id
 ├── cujoin
-|	├──	`GET`		/[contentID]/[username]/edit	# return cujoin, private information
-|	└──	`PATCH`		/[contentID]/[username]/edit	# update cujoin
-|	└──	`DELETE`	/[contentID]/[username]/		# delete cujoin by pk
+|	├──	`GET`		/[username]/[contentID]			# return cujoin, public info
+|	├──	`GET`		/[username]/[contentID]/edit	# return cujoin, content private information
+|	├──	`PATCH`		/[username]/[contentID]/edit	# update cujoin
+|	├──	`DELETE`	/[username]/[contentID]/		# delete cujoin by pk
+|	└──	`GET`		/[username]/					#
 └── contents/
 	├──	`POST`		/						# create content
 	├──	`GET`		/						# return contents (w/ filter)
-	├──	`GET`		/[contentID]/			# return content by id, public information 
-	├──	`GET`		/[contentID]/edit		# return content by id, private information
-	├──	`PATCH`		/[contentID]/edit		# update content by id, private information
+	├──	`GET`		/[contentID]/			# return content by id, public info 
+	├──	`GET`		/[contentID]/edit		# return content by id, private info
+	├──	`PATCH`		/[contentID]/edit		# update content by id, default update
 	├──	`PATCH`		/[contentID]/publish	# update content by id, publish it
 	└──	`DELETE`	/[contentID]/			# delete content by id
 ```
+
+|##|Method, Rel. Route|Model, Method|Returns|Purpose|
+|-|-|-|-|-|
+||`/authenticate`|**Authentication**|||
+|01|`POST`, `/token`|`User`, `login()`|user auth. properties|Authenticates user credentials.|
+|02|`POST`, `/register`|`User`, `register()`|user auth. properties|Creates a user.|
+||`/users`|**User**|||
+|03|`GET`, `/`|`User`, `getAll()`|user public properties|Front-end user search.|
+|04|`GET`, `/:username`|`User`, `getByPK()`|user public properties|**Deprecated by cu_join**|
+|05|`GET`, `/:username/edit`|`User`, `getByPKPrivate()`|user private properties|Front-end user edit.|
+|06|`PATCH`, `/:username/edit`|`User`, `update()`|user private properties|Front-end user edit.|
+|07|`DELETE`, `/:username`|`User`, `delete()`|The deleted `username`.|Not used concerning practices.|
+||`/cujoin`|**Content-User `Join`**|||
+|08|`GET`, `/:username/:contentID/edit`||||
+|09|`PATCH`, `/:username/:contentID/edit`||||
+|10|`DELETE`, `/:username/:contentID`||||
+|11|`GET`, `/:username`||||
+|12|`GET`, `/:username`||||
+|13|`GET`, ||||
+||`/contents`|**Content**|||
+|14|`POST`, `/`||||
+|15|`GET`, `/`||||
+|16|`GET`, `/:contentID`||||
+|17|`GET`, ,`/:contentID/edit`||||
+|18|`PATCH`, `/:contentID/edit`|`Content`, `update()`|||
+|19|`PATCH`, `/:contentID/sign`|`Content`, `signUpdate()`|**Not implemented**|Allow a user to toggle whether or not they are signed.|
+|20|`PATCH`, `/:contentID/publish`|`Content`, `publishUpdate()`|||
+|21|`DELETE`, `/:contentID`|`Content`, `delete()`|||
 
 |##|Method, Route|Model, Method Sig.|Returns / 2023-01 Notes|
 |-|-|-|-|
@@ -322,7 +352,7 @@ Some suggested improvements to this concept are:
 |42|fin `content.js`?|2023-01-02|18:38 - 20:30||
 |43|.-. backend work. finished `Users`|2023-01-02|22:02 - 23:54||
 |44|more cursed "Cannot set headers after they are sent to the client. in `Content_User_Join.js`|2023-01-03|09:17 - 11:04||
-|45||2023-01-03|14:00 - :||
+|45|renamed `router._testCommons` to `router._testCommons.test`; updated documentation for project clarity .___.; |2023-01-03|14:00 - :||
 |4||2023-01-03|: - :||
 |4||2023-01-03|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|

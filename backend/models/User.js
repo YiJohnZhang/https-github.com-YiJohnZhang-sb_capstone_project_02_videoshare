@@ -32,9 +32,10 @@ const JSON_SQL_QUERY_MAPPING = {
 
 class User {
 
-	/**	authenticate user with username, password.
+	/**	login(username, password)
+	 *	Authenticates user.
 	 *
-	 *	=> { modelName, password }
+	 *	( username, password ) => { AUTHENTICATION_PROPERTIES }
 	 *
 	 *	Throws UnauthorizedError is user not found or wrong password.
 	 **/
@@ -64,9 +65,10 @@ class User {
 	
 	}
 
-	/**	Register user with data.
+	/**	register(userSignUpProperties)
+	 *	Register user with data.
 	 *
-	 *	=> { ... }
+	 *	{ username, password, firstName, lastName, email, birthdate } => { AUTHENTICATION_PROPERTIES }
 	 *
 	 *	Throws BadRequestError for duplicates.
 	 *	@param {string} username
@@ -104,9 +106,11 @@ class User {
 
 	}
 
-	/**	Find all matching users.
+	/**	getAll(queryObject)
+	 *	Find all matching users.
+	 *	
+	 *	{ queryObject } => { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated }
 	 *	Optional: filter data in the form of `queryObject`.
-	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated }
 	 **/
 	static async getAll(queryObject) {
 
@@ -115,7 +119,7 @@ class User {
 				FROM users`
 		);
 
-		const sqlQueryAfterWHERE = ('ORDER BY username')
+		const sqlQueryAfterWHERE = 'ORDER BY username';
 
 		let result;
 
@@ -142,9 +146,10 @@ class User {
 
 	}
 
-	/**	Given a username, return data about user.
+	/**	getByPK(username)
+	 *	Given a username, return data about user.
 	 *
-	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated }
+	 *	(username) => { username, firstName, lastName, birthdate, verified, accountStatus, email, picture, description, isElevated }
 	 *
 	 *	Throws NotFoundError if user not found.
 	 **/
@@ -165,7 +170,8 @@ class User {
 
 	}
 
-	/**	Given a username, and is reference user, return full data.
+	/**	getByPKPrivate(username)
+	 *	Given a username, and is reference user, return full data.
 	 *	
 	 *	=> { username, firstName, lastName, birthdate, verified, accountStatus, email, password, picture, description, isElevated, join }
 	 *
@@ -188,7 +194,8 @@ class User {
 
 	}
 
-	/**	Update user data with `updateData`.
+	/**	update(username, updateBody)
+	 *	Update user data with `updateData`.
 	 *
 	 *	This is for a partial update of a record; and it only changes provided ones.
 	 *
@@ -226,7 +233,8 @@ class User {
 
 	}
 
-	/**	Delete given user from database by `username`.
+	/**	delete(username)
+	 *	Delete given user from database by `username`.
 	 *
 	 *	=> `userObject` = { username }.
 	 **/
