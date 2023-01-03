@@ -37,43 +37,6 @@ const USER1_PRIVATE_RESPONSE = {
 	picture: '',
 	description: ''
 }
-const USER_1_PUBLIC_CONTENT = [
-	{
-		id: 1,
-		title: 'test content',
-		description: 'mw1',
-		link: 'https://youtu.be/nhVJhRhJbJE',
-		participants: ["testuser1"],
-		dateCreated: '2022-12-29',
-		dateStandby: '2022-12-29',
-		datePublished: '2022-12-30'
-	},
-	{
-		id: 2,
-		title: 'test content2',
-		description: 'mw2',
-		link: 'https://youtu.be/FTvLFlNbSQQ',
-		participants: ["testuser1", "testuser2"],
-		dateCreated: '2022-12-29',
-		dateStandby: '2022-12-29',
-		datePublished: '2022-12-30'
-	}
-];
-
-const USER_1_ALL_CONTENT =  [
-	...USER_1_PUBLIC_CONTENT,
-	{
-		id: 3,
-		title: 'test content3',
-		summary: 'asdfdsafa',
-		description: 'afsd',
-		link: '',
-		participants: ["testuser1", "testuser2"],
-		dateCreated: '2022-12-30',
-		dateStandby: '2022-12-30',
-		datePublished: null
-	}
-];
 
 const USER3_PUBLIC_RESPONSE = {
 	username: 'testuser3',
@@ -84,7 +47,6 @@ const USER3_PUBLIC_RESPONSE = {
 	picture: '',
 	description: ''
 }
-
 /***	POST /users (DEPRECATED, MOVE TO `/authentication/register`)*/
 
 /***	GET /users */
@@ -139,8 +101,7 @@ describe('GET \`/users/:username\`', () => {
 			.get('/users/testuser1')
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body).toEqual({
-			user: USER1_PUBLIC_RESPONSE, 
-			content: USER_1_ALL_CONTENT
+			user: USER1_PUBLIC_RESPONSE
 		});
 
 	});
@@ -151,8 +112,7 @@ describe('GET \`/users/:username\`', () => {
 			.get('/users/testuser1')
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body).toEqual({
-			user: USER1_PUBLIC_RESPONSE, 
-			content: USER_1_ALL_CONTENT
+			user: USER1_PUBLIC_RESPONSE
 		});
 
 	});
@@ -163,8 +123,7 @@ describe('GET \`/users/:username\`', () => {
 			.get('/users/testuser1')
 			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.body).toEqual({
-			user: USER1_PUBLIC_RESPONSE, 
-			content: USER_1_PUBLIC_CONTENT
+			user: USER1_PUBLIC_RESPONSE
 		});
 
 	});
@@ -174,8 +133,7 @@ describe('GET \`/users/:username\`', () => {
 		const response = await request(app)
 			.get('/users/testuser1');
 		expect(response.body).toEqual({
-			user: USER1_PUBLIC_RESPONSE, 
-			content: USER_1_PUBLIC_CONTENT
+			user: USER1_PUBLIC_RESPONSE
 		});
 
 	});
@@ -194,8 +152,7 @@ describe('GET \`/users/:username\`', () => {
 			.get('/users/testuser3')
 			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.body).toEqual({
-			user: USER3_PUBLIC_RESPONSE, 
-			content: []
+			user: USER3_PUBLIC_RESPONSE
 		});
 
 	});
@@ -206,8 +163,7 @@ describe('GET \`/users/:username\`', () => {
 			.get('/users/testuser3')
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body).toEqual({
-			user: USER3_PUBLIC_RESPONSE, 
-			content: []
+			user: USER3_PUBLIC_RESPONSE
 		});
 
 	});

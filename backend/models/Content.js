@@ -50,11 +50,13 @@ const JSON_SQL_QUERY_MAPPING = {
 
 
 /** Related functions for Content. */
+// extra time, subclass this from integrations/model.js
 class Content {
 
 	static relationName = 'contents';
 
-	/**	Create content with data.
+	/**	create(...)	
+	 *	Create content with data.
 	 *
 	 *	=> { ... }
 	 *
@@ -116,11 +118,13 @@ class Content {
 
 	}
 
-	/**	Find all matching content records.
+	// NOT USED
+	/**	getAll(...)
+	 *	Find all matching content records.
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [ QUERY_GENERAL_PROPERTIES, ...]
 	 **/
-	static async getAll(queryObject) {
+	 static async getAll(queryObject) {
 
 		const sqlQueryBeforeWHERE = (`
 			SELECT ${QUERY_GENERAL_PROPERTIES}
@@ -142,6 +146,38 @@ class Content {
 
 		}else{
 			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
+		}
+
+		return result.rows;
+	
+	}
+
+	/**	getAllPublic(...)
+	 *	Find all matching content records.
+	 *	Optional: filter data in the form of `queryObject`.
+	 *	=> [ QUERY_GENERAL_PROPERTIES, ...]
+	 **/
+	 static async getAllPublic(queryObject) {
+
+		const sqlQueryBeforeWHERE = (`
+			SELECT ${QUERY_GENERAL_PROPERTIES}
+			FROM ${this.relationName}`);
+		const sqlQueryAfterWHERE = (`ORDER BY date_published`);
+		
+		let result;
+		const queryObjectLength = Object.keys(queryObject).length || 0;
+
+		if(queryObjectLength){
+			
+			if(queryObject.title)
+				queryObject.title = `%${queryObject.title}%`
+
+			const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
+			
+			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} AND (status = 'published' OR status = 'legacy') ${sqlQueryAfterWHERE}`, whereParameters);
+
+		}else{
+			result = await db.query(`${sqlQueryBeforeWHERE} WHERE (status = 'published' OR status = 'legacy') ${sqlQueryAfterWHERE}`);
 		}
 
 		return result.rows;
@@ -178,10 +214,12 @@ class Content {
 	 */
 	static async getByPKPrivate(pk, res) {
 		
-		console.log(res.headersSent);
-		const RELATION_NAME = this.relationName;
+		console.log('ENTER MODEL BODY ===================================');
+		console.log(`headersSent (\'Content.js\' ~217): ${res.headersSent}`);
+		// const RELATION_NAME = this.relationName;
 
 		// async function asdf() {
+		// 	console.log(res.headersSent);
 		// 	const result = await db.query(`
 		// 		SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
 		// 			FROM ${RELATION_NAME}
@@ -189,26 +227,27 @@ class Content {
 		// 		[pk]
 		// 	);
 		// 	console.log(res.headersSent);
-			
 		// }
 
 		// await asdf();
 
+		console.log(`headersSent (\'Content.js: ~233\'): ${res.headersSent}`);
 		const result = await db.query(`
 			SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
-				FROM ${RELATION_NAME}
+				FROM ${this.relationName}
 				WHERE id = $1`,
 			[pk]);
-		
-		console.log(res.headersSent);
+		// console.log(result.rows[0]);
+		console.log('QUERY COMPLETED ===================================');
+		console.log(`headersSent (\'Content.js: ~240\'): ${res.headersSent}`);
 			// wth is res sent here? 
 		const contentObject = result.rows[0];
-		console.log(res.headersSent)
+		// console.log(result.rows[0]);
+		console.log(`headersSent (\'Content.js: ~245\'): ${res.headersSent}`);
 
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
 
-			console.log(res.headersSent)
 		return contentObject;
 
 	}
@@ -244,6 +283,9 @@ class Content {
 				RETURNING ${QUERY_GENERAL_PROPERTIES}`;
 		const result = await db.query(updateQuerySQL, [...setParameters, pk]);
 
+		// insert the query builder to update the join models
+
+
 		const contentObject = result.rows[0];
 		return contentObject;
 
@@ -262,7 +304,8 @@ class Content {
 		const result = await db.query(`
 			SELECT participants, contract_signed AS "contractSigned"
 				FROM ${this.relationName}
-				WHERE id = $1`, [contentID]);
+				WHERE id = $1`,
+			[contentID]);
 
 		const contentObject = result.rows[0];
 
@@ -289,7 +332,8 @@ class Content {
 			UPDATE ${this.relationName}
 				SET contract_signed = $1
 				WHERE content_id = $2
-				RETURNING contract_signed AS "contractSigned"`, [newContract, contentID]);
+				RETURNING contract_signed AS "contractSigned"`, 
+			[newContract, contentID]);
 		
 		return commitResult.rows[0].contractSigned;		
 
@@ -303,7 +347,7 @@ class Content {
 		SELECT participants, contract_signed AS "contractSigned"
 			FROM ${this.relationName}
 			WHERE id = $1 AND status = 'standby' OR status 'open'`, [contentID]);
-			// lowpriority: really, don't have the time to make this proper. so therefore it is.
+			// lowpriority: really, don't have the time to make this proper. so therefore it is because `signUpdate` is deprecated for now.
 
 		const contentObject = result.rows[0];
 
@@ -327,7 +371,8 @@ class Content {
 				UPDATE ${this.relationName}
 					SET status = $1, published_date = $2
 					WHERE content_id = $3
-					RETURNING content_id, participants, description`, ['published', contentPublishDate.toJSON(), contentID]);
+					RETURNING content_id, participants, description`, 
+				['published', contentPublishDate.toJSON(), contentID]);
 
 			const { id, participants, description } = publishQuery.rows[0];
 			// console.log(publishQuery.rows[0]);
@@ -368,7 +413,8 @@ class Content {
 		let result = await db.query(`
 			SELECT id, owner
 				FROM ${this.relationName}
-				WHERE id = $1`, [pk]);
+				WHERE id = $1`, 
+			[pk]);
 
 		const contentObject = result.rows[0];
 
@@ -388,7 +434,8 @@ class Content {
 		let result = await db.query(`
 			SELECT participants
 				FROM ${this.relationName}
-				WHERE id = $1`, [pk]);
+				WHERE id = $1`, 
+			[pk]);
 
 		const contentObject = result.rows[0];
 
@@ -398,95 +445,6 @@ class Content {
 		const participantArray = JSON.parse(contentObject.participants);
 
 		return participantArray;
-
-	}
-
-	/**	Return all content by queried username.
-	 *
-	 *	{ username } => [ { id, description }, ... ].
-	 */
-	static async getContentByUsername(username) {
-
-		let result = await db.query(`
-			SELECT content_id, description
-				FROM contents_users_join
-				WHERE user_id = $1`, [username]);
-
-		const contentList = result.rows;
-
-		return contentList;
-
-	}
-
-	// TODO: DELETE
-	/**	Return the JOIN entry of content given a username.
-	 *
-	 *	{ username } => [ { id, description }, ... ].
-	 *
-	 *	Throws NotFoundError if not found.
-	 */
-	static async getJOINContent(username, contentID) {
-
-		let result = await db.query(`
-			SELECT content_id, description
-				FROM contents_users_join
-					JOIN ${this.relationName}
-				WHERE user_id = $1 AND content_id = $2`, [username, contentID]);
-			// publicly only return active ones (status = 'active')?
-				
-		const contentObject = result.rows[0];
-
-		if (!contentObject)
-			throw new NotFoundError(`Cannot find content with: (${username}, ${contentID}).`);
-
-		return contentObject;
-
-	}
-
-	// TODO: DELETE
-	/**	Return the JOIN entry of content given a username, to edit.
-	 *
-	 *	{ username } => [ { id, description }, ... ].
-	 *
-	 *	Throws NotFoundError if not found.
-	 */
-	static async getPrivateJOINContent(username, contentID) {
-
-		let result = await db.query(`
-			SELECT content_id, description
-				FROM contents_users_join
-				WHERE user_id = $1 AND content_id = $2`, [username, contentID]);
-
-		const contentObject = result.rows[0];
-
-		if (!contentObject)
-			throw new NotFoundError(`Cannot find content with: (${username}, ${contentID}).`);
-
-		return contentObject;
-
-	}
-
-	// TODO: DELETE
-	/**	Update the JOIN entry of content given a username.
-	 *
-	 *	{ username, contentID } => [ { id, description }, ... ].
-	 *
-	 *	Throws NotFoundError if not found.
-	 */
-	static async updateJOINContent(username, contentID, { description }) {
-
-		let result = await db.query(`
-			UPDATE contents_users_join
-				SET description = $1
-				WHERE user_id = $2 AND content_id = $3
-				RETURNING content_id`, [description, username, contentID]);
-				
-		const contentObject = result.rows[0];
-
-		if (!contentObject)
-			throw new NotFoundError(`Cannot find content with: (${username}, ${contentID}).`);
-
-		return contentObject;
 
 	}
 

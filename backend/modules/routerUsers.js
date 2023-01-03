@@ -23,14 +23,6 @@ router.get('/', async(req, res, nxt) => {
 	try{
 
 		const userResults = await UserModel.getAll(req.query);
-			// by default req.query is `{}` and `{}` is truthy
-		// if(req.query !== {}){
-		// 	console.log(req.query)
-		// 	userResults = await UserModel.getAll(req.query);
-		// }else{
-		// 	userResults = await UserModel.getAll(undefined);
-		// 	console.log(userResults);
-		// }
 
 		return res.json({users: userResults});
 
@@ -52,11 +44,9 @@ router.get('/:username', async(req, res, nxt) => {
 		
 		const userResult = await UserModel.getByPK(req.params.username);
 			// user exists implied
-		const correspondingContentResult = await ContentModel.getContentByUsername();
-			// todo: add content query and set it to userResult.contents = correspondngContentResult
-			// note: front-end queries for title, link, contract_signed (collaborators if `contract_type` is not `solo`)
+		// const correspondingContentResult = await ContentModel.getContentByUsername();
 
-		return res.json({user: userResult, content: correspondingContentResult});
+		return res.json({user: userResult});
 
 	}catch(error){
 		nxt(error);

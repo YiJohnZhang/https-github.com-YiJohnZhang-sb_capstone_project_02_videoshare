@@ -10,10 +10,31 @@ const {
 
 //	Properties to return for a query
 const QUERY_GENERAL_PROPERTIES = `
-	user_id AS "userID",
+	user_id AS "username",
 	content_id AS "contentID",
 	description`;
-const QUERY_PRIVATE_PROPERTIES = ``;
+const QUERY_GENERAL_PROPERTIES_JOIN = `
+	"contents_users_join"."contentID" AS "contentID",
+	"contents_users_join"."description" AS "description"
+`;
+const QUERY_CONTENT_JOIN_PROPERTIES = `
+	"contents"."title" AS "title",
+	"contents"."link" AS "link",
+	"contents"."status" AS "status",
+	"contents"."participants" AS "participants",
+	"contents"."date_created" AS "dateCreated",
+	"contents"."date_standy" AS "dateStandby",
+	"contents"."date_published" AS "datePublished"`;
+	// todo: consider removing "status"
+	//lowpriority: clean this up and modularize. minus "description, summary, dateCreated, dateStandby"
+// const QUERY_USER_PROPERTIES = `
+// 	username, 
+// 	first_name AS "firstName", 
+// 	last_name AS "lastName", 
+// 	verified, 
+// 	picture,
+// 	description`;
+	//lowpriority: clean this up and modularize. minus "accountStatus", consider next time designing the schema as "about" instead of "description"
 
 //	JSON-SQL Mapping Constants
 const JSON_SQL_SET_MAPPING = {
@@ -29,60 +50,62 @@ const JSON_SQL_QUERY_MAPPING = {
 }
 
 /** Related functions for ContentUserJoin. */
+// extra time, subclass this from integrations/model.js
 class ContentUserJoin {
 
 	static relationName = 'contents_users_join';
 
-	/**	Create a single content_users_join record (invitation)
-	 *	technically any participant?
-	 */
-	static async invite(inviterUsername, contentID, invitedUsername){
-	}
-
-	// /**	Create a single content_users_join record (invitation)
-	//  *	only owner
-	//  */
-	static async publish(username, contentID){
-	}
-
-	/**	Create content_users_join record with data.
-	 *
-	 *	=> { ... }
-	 *
-	 *	Throws BadRequestError for duplicates.
-	 */
-	static async create(newRecordObject, ntomJoin = []){
-	}
-
-	// 2022-12-31: NOTE THIS IS NOW REDUNDANT BECAUSE I ELECTED TO MAKE IT THAT "participants" 
-	/**	Find all matching content_users_join records.
+	/**	getAllUserContent(username)
+	 *	Find all matching content_users_join records that for a username.
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [{ pk, propertyOne, ... }, ...]
 	 */
-	static async getAllPublic(queryObject) {
+	static async getAllUserContent(username) {
 
-		// const sqlQueryBeforeWHERE = (`
-		// 	SELECT ${QUERY_GENERAL_PROPERTIES}
-		// 	FROM ${this.relationName}
-		// 	JOIN "contents" ON "contents.id" = "${this.relationName}.content_id"`);
-		// const sqlQueryAfterWHERE = (`ORDER BY contents.date_published`);
-		
-		// let result;
+		let result = await db.query(`
+			SELECT ${QUERY_GENERAL_PROPERTIES_JOIN}, ${QUERY_CONTENT_JOIN_PROPERTIES}
+				FROM contents_users_join
+				JOIN "contents" on "contents"."id" = "${this.relationName}"."content_id"
+				WHERE user_id = $1
+				ORDER BY "contents".date_published`, 
+			[username]);
 
-		// if(queryObject){
+		const contentList = result.rows;
+		console.log(contentList);
 
-		// 	const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
-		// 	result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} AND (contents.status = 'published' OR contents.status = 'legacy') ${sqlQueryAfterWHERE}`, whereParameters);
-
-		// }else{
-		// 	result = await db.query(`${sqlQueryBeforeWHERE} WHERE (contents.status = 'published' OR contents.status = 'legacy') ${sqlQueryAfterWHERE}`);
-		// }
-
-		// return result.rows;
+		return result.rows;
 	
 	}
 
-	static async getAllPrivate(username){
+	/**	getAllUserPublicContent(username)
+	 *	Find all matching content_users_join records that is publicly available for a username.
+	 *	Optional: filter data in the form of `queryObject`.
+	 *	=> [{ pk, propertyOne, ... }, ...]
+	 */
+	static async getAllUserPublicContent(username) {
+
+		let result = await db.query(`
+			SELECT content_id AS "contentID", description, ${QUERY_CONTENT_JOIN_PROPERTIES}
+				FROM contents_users_join
+				JOIN "contents" on "contents"."id" = "${this.relationName}"."content_id"
+				WHERE user_id = $1 AND ("contents"."status" = 'active' OR "contents"."status" = 'legacy')
+				ORDER BY "contents"."date_published"`, 
+			[username]);
+
+		const contentList = result.rows;
+		console.log(contentList);
+
+		return result.rows;
+	
+	}
+
+	//	NOT IMPLEMENTED: USERFUL FOR USERS TO PRIORITIZE WHAT TO WORK ON (also searchable).
+	/**	getAllPrivateContent(username)
+	 *	Find all matching content_users_join records that is publicly available for a username.
+	 *	Optional: filter data in the form of `queryObject`.
+	 *	=> [{ pk, propertyOne, ... }, ...]
+	 */
+	static async getAllPrivateContent(username){
 
 		// const sqlQueryBeforeWHERE = (`
 		// 	SELECT ${QUERY_GENERAL_PROPERTIES}
@@ -105,35 +128,24 @@ class ContentUserJoin {
 		// return result.rows;		
 
 	}
-	
-	/**	Find all matching content_users_join records.
-	 *	Optional: filter data in the form of `queryObject`.
-	 *	=> [{ pk, propertyOne, ... }, ...]
-	 */
 
-	/**	Given a pk, return data about content_users_join records.
-	 *
+	/**	getByPKPrivate (userID, contentID)
+	 *	Given a pk, return data about content_users_join records.
+	 *		Returns users: {...} and Joined(contents: {..., cuDescription})
 	 *	=> { pk, ... }
 	 *
 	 *	Throws NotFoundError if content_users_join records not found.
 	 */
-	static async getByPK(userID, contentID) {
+	 static async getByPKPrivate(userID, contentID) {
 		
-		// join query
 		console.log("adf")
-		const temp = await db.query(`
-			SELECT contents.id
-				FROM ${this.relationName}
-				JOIN contents ON contents.id = ${this.relationName}.id
-		`);
-
-		console.log(temp.rows);
-
+		// just trying out join queries here
 		const result = await db.query(`
-			SELECT contents.id, contents.title, description, contents.link, contents.participants, contents.date_published AS "datePublished"
+			SELECT ${QUERY_GENERAL_PROPERTIES_JOIN}, ${QUERY_CONTENT_JOIN_PROPERTIES}
 				FROM ${this.relationName}
-				JOIN contents ON contents.id = ${this.relationName}.content_id
-				WHERE user_id = $1 AND content_id = $2`, [userID, contentID]);
+				JOIN "contents" ON "contents"."id" = "${this.relationName}"."id"
+				WHERE user_id = $1 AND content_id = $2
+		`, [userID, contentID]);
 
 		const cuJoinObject = result.rows[0];
 		console.log(cuJoinObject)
@@ -145,23 +157,34 @@ class ContentUserJoin {
 
 	}
 
-	static async pkDoesNotAlreadyExist(userID, contentID){
-
-		const result = await db.query(`
-			SELECT user_id AS "username"
-				FROM ${this.relationName}
-				WHERE user_id = $1 AND content_id = $2`, [userID, contentID]);
+	/**	getByPK(userID, contentID)
+	 *	Given a pk, return data about content_users_join records.
+	 *		Returns users: {...} and Joined(contents: {..., cuDescription})
+	 *	=> { pk, ... }
+	 *
+	 *	Throws NotFoundError if content_users_join records not found.
+	 */
+	 static async getByPK(userID, contentID) {
 		
+		console.log("adf")
+		// just trying out join queries here
+		const result = await this.getByPKPrivate(userID, contentID);
+
 		const cuJoinObject = result.rows[0];
+		console.log(cuJoinObject)
 
-		if(cuJoinObject)
-			throw new ConflictError(`(${userID}, ${contentID}) already exists.`);
-		
-		return;
+		if(cuJoinObject.dateCreated)
+			delete cuJoinObject.dateCreated;
+
+		if(cuJoinObject.dateStandby)
+			delete cuJoinObject.dateStandby;
+
+		return cuJoinObject;
 
 	}
 
-	/**	Update content_users_join records data with `updateRecordObject`.
+	/**	update(, ...)
+	 *	Update content_users_join records data with `updateRecordObject`.
 	 *
 	 *	This is for a partial update of a record; and it only changes provided ones.
 	 *

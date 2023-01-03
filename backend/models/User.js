@@ -74,9 +74,7 @@ class User {
 	 *	@param {string} firstName
 	 *	@param {string} lastName
 	 *	@param {string} email
-	 *	@param {integer} birthdateYear
-	 *	@param {integer} birthdateMonth
-	 *	@param {integer} birthdateDay
+	 *	@param {string} birthday - date string 
 	 **/
 	static async register({ username, password, firstName, lastName, email, birthdate/*birthdateYear, birthdateMonth, birthdateDay*/ }){
 

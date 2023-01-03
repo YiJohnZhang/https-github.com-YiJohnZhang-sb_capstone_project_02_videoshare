@@ -207,48 +207,6 @@ npm test	# alias for `react-scripts test` in `package.json`
 |15|`DELETE` `/:contentID/:username`|CU_Join*, `delete(contentID,userID)`|`{content}`. Out-of-scope.|
 |||*CU_Join = `Content_User_Join`|`userID` is an alias for `username`|
 
-
-2. `Contents.js:publishUpdate:~300`, 'lowpriority': UX confusion?
-	- `Contents.js:publishUpdate:~305`, 'lowpriority': made the diff between standby and open negli.
-	- `Contents.js:publishUpdate:~337`, 'lowpriority': consider being independent of: `POSTGRESQL ISNERT INTO ON CONFLICT DO NOTHING`; needs further work for <PSQL 9.5
-	- `Contents.js:publishUpdate:~347`, `lowpriority`: 
-
-1	=> needs one more test after finishing `CUJOIN`
-2		=> check status OR published_date; JOIN users (no, b/c participants is there...)?
-3		=> redudndant? skip
-4		=> almost done, test?
-5	=> almost done? (querybuilder a go), needs test
-7	=> almost done? (querybuilder a go), needs test; inject published_date by server date, checked particpiants === signed
-10	=> quick
-11	=> quick
-12	(basically preview for content publicly) on content page
-13	=> quick?
-see `router.content.js: ~104` (todo)
-see `Content.js: ~104` (todo) remove "COMMIT" comment after testing passes.
-
-plan:
-by 20:00 => be done with content....js
-by ~21:00 => be done with cujoin
-by ~22:00 => finish users
-SUBMIT BACKEND
-by ~23:00 => front-end test.
-extra time: rush front-end tests.
-
-
-note: finish contents first, (JOIN creation)
-- schema double-checked
-	- 
-- done:
-	- `Authorization`
-- finish (content data)
-	- `Users`
-- test:
-- salvage:
-	- `Contents`
-	- `Content_User_Join`
-- redo:
-	- 
-
 ## 02.04. Resources & Data Source
 - The sample data is dummy data.
 - The user profile pictures are pulled from [xsgames.com/randomusers](https://xsgames.co/randomusers/).
@@ -362,7 +320,7 @@ Some suggested improvements to this concept are:
 |40|finished sql query helper method|2023-01-02|15:10 - 16:25|75|
 |41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53||
 |42|fin `content.js`?|2023-01-02|18:38 - 20:30||
-|43|.-. backend work|2023-01-02|22:02 - :||
+|43|.-. backend work. finished `Users`|2023-01-02|22:02 - 23:54||
 
 |4||2023-01-02|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
@@ -383,6 +341,53 @@ Some suggested improvements to this concept are:
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |4x||2022-01-0|: - :||
 ||||**Total Time**|_ minutes (--h--m)|
+
+|##|Method, Route|Model, Method Sig.|Returns / 2023-01 Notes|
+|-|-|-|-|
+|02|`GET`, `/`|`Content`, `getAll(*reqQuery*)`|`{contents}` (public), add a test for this (rn there is `getAll` and `getAllPublic`.|
+
+|04|`GET`, `/:contentID/edit`|`Content`, `getByPKPrivate(contentID)`|`{content}` (private)|
+|05|`PATCH`, `/:contentID/edit`|`Content`, `update(contentID,reqBody)`|`{content}` (private): **SIMPLIFIED** This route now switches the state between `created` and `standby` depending on whether or not `participants===signed`js. For the sake of time, it also modifies the join entries to reflect that of the `participants`.|
+|07|`PATCH`, `/:contentID/publish`||`{content}` (private). Does a final check whether or not `participants===signed`|
+|09|`DELETE`, `/:contentID`|`Content`, `delete(contentID)`|`{content}`. Out-of-scope.|
+|10|``|CU_Join*, `getAllUserPublicContent(userID)`|`{contents}` (Public). **test**.|
+|11|``|CU_Join*, `getAllUserContent(userID)`|`{contents}` (Public + Private). **test**.|
+|12|`GET`, `/:contentID/:username`|CU_Join*, `getByPK(contentID,userID)`|`{content}` (Public). **getByPk, finish it up**|
+|13 NEW|`GET`, `/:contentID/:username/edit`|CU_Join*, `getByPKPrivate(contentID,userID)`|`{content}` **NO. just #12**|
+|14|`PATCH`, `/:contentID/:username/edit`|CU_Join*, `update(contentID,userID,reqBody)`|**TEST**|
+|||*CU_Join = `Content_User_Join`|`userID` is an alias for `username`|
+
+
+2. `Contents.js:publishUpdate:~300`, 'lowpriority': UX confusion?
+	- `Contents.js:publishUpdate:~305`, 'lowpriority': made the diff between standby and open negli.
+	- `Contents.js:publishUpdate:~337`, 'lowpriority': consider being independent of: `POSTGRESQL ISNERT INTO ON CONFLICT DO NOTHING`; needs further work for <PSQL 9.5
+	- `Contents.js:publishUpdate:~347`, `lowpriority`: 
+
+1	=> needs one more test after finishing `CUJOIN`
+2		=> check status OR published_date; JOIN users (no, b/c participants is there...)?
+4		=> almost done, test?
+5	=> almost done? (querybuilder a go), needs test
+7	=> almost done? (querybuilder a go), needs test; inject published_date by server date, checked particpiants === signed
+12	essentially the same as preview for content publicly) on content page
+13	=> quick?
+
+see `router.content.js: ~104` (todo)
+see `Content.js: ~104` (todo) remove "COMMIT" comment after testing passes.
+
+
+note: finish contents first, (JOIN creation)
+- schema double-checked
+	- 
+- done:
+	- `Authorization`
+- finish (content data)
+	- `Users`
+- test:
+- salvage:
+	- `Contents`
+	- `Content_User_Join`
+- redo:
+	- contents & contents_users_join where public resposnes with lesser data is just shaving off distinct private data ._.
 
 ## More Time Wishlist
 - use Python Flask/React: form validation is much more straightforward and it is good for prototyping

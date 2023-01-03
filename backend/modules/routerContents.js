@@ -93,9 +93,11 @@ router.get('/:contentID', async(req, res, nxt) => {
 router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, nxt) => {
 	try{
 		
-		// console.log(res.headersSent)
+		console.log(`heardersSent (\'routerContents.js\': ~96): ${res.headersSent}`)
 		// const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, res);
+		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, res);
 			// so apparently getByPKPrivate is calling `res`?
+		console.log(`heardersSent (\'routerContents.js\': ~99): ${res.headersSent}`)
 
 			
 		// Quick dirty fix:
@@ -130,7 +132,7 @@ router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, 
 });
 
 /* 	
-router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, nxt) => {
+router.get('/:contentID/gedit', isLoggedIn, isParticipatingUser, async(req, res, nxt) => {
 		try{
 		
 		// console.log(res.headersSent)
