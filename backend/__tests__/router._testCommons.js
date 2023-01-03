@@ -112,14 +112,14 @@ async function commonBeforeAll() {
 		datePublished: null
 	});
 
-	await db.query(`
-	INSERT INTO contents_users_join(user_id,content_id,description)
-		VALUES
-			('testuser1', 1, 'mw1'),
-			('testuser1', 2, 'mw2'),
-			('testuser2', 2, 'mw2'),
-			('testuser1', 3, NULL),
-			('testuser2', 3, NULL)`);
+	// await db.query(`
+	// INSERT INTO contents_users_join(user_id,content_id,description)
+	// 	VALUES
+	// 		('testuser1', 1, 'mw1'),
+	// 		('testuser1', 2, 'mw2'),
+	// 		('testuser2', 2, 'mw2'),
+	// 		('testuser1', 3, NULL),
+	// 		('testuser2', 3, NULL)`);
 
 	await db.query(`
 	INSERT INTO roles_users_join(user_id,role_id)

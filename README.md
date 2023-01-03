@@ -207,28 +207,18 @@ npm test	# alias for `react-scripts test` in `package.json`
 |15|`DELETE` `/:contentID/:username`|CU_Join*, `delete(contentID,userID)`|`{content}`. Out-of-scope.|
 |||*CU_Join = `Content_User_Join`|`userID` is an alias for `username`|
 
-1	
-2	
-3	
-4	
-5	
-6	
-7	
-10
-11	
+
+1	=> almost done?; try it out in practice.
+2		=> needs jOIN query
+3		=> redudndant? skip
+4		=> needs JOIN query
+5	=> almost done?
+6		=> IGNORED; skip 
+7	=> almost done?
+10	=> quick
+11	=> quick
 12	(basically preview for content publicly) on content page
-13	
-
-
-
-- contents todo:
-	- 5
-	- 7
-	- 13
-	- consider deprecating 03
-	- 10
-	- 11
-
+13	=> quick?
 
 note: finish contents first, (JOIN creation)
 - schema double-checked
@@ -355,7 +345,7 @@ Some suggested improvements to this concept are:
 |38|salvaging backend #2...|2023-01-02|10:51 - 11:29|38|
 |39|finish backend?|2023-01-02|13:41 - 14:24|43|
 |40|finished sql query helper method|2023-01-02|15:10 - 16:25|75|
-|41|beckned...|2023-01-02|17:20 - :||
+|41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53||
 |42||2023-01-02|18: - :||
 |43||2023-01-02|20: - :||
 

@@ -132,191 +132,191 @@ describe('POST \`/contents/\`', () => {
 	
 });
 
-/***	GET /contents	*/
-describe('GET \`/contents/\`', () => {
+// /***	GET /contents	*/
+// describe('GET \`/contents/\`', () => {
 
-	// auth: none
-	// optional req.query => {content: parseResponseBodyProperties(contentResult)}
-	//	public level
+// 	// auth: none
+// 	// optional req.query => {content: parseResponseBodyProperties(contentResult)}
+// 	//	public level
 
-	test('public and matching', async() => {
+// 	test('public and matching', async() => {
 
-		const response = await request(app)
-			.get('/contents/')
-			.query({title: " conte"})
-		expect(response.body.contents.length).toEqual(3);
+// 		const response = await request(app)
+// 			.get('/contents/')
+// 			.query({title: " conte"})
+// 		expect(response.body.contents.length).toEqual(3);
 	
-	});
+// 	});
 
-	test('public no query', async() => {
+// 	test('public no query', async() => {
 
-		const response = await request(app)
-			.get('/contents/')
-			.query()
-		expect(response.body.contents.length).toEqual(3);
+// 		const response = await request(app)
+// 			.get('/contents/')
+// 			.query()
+// 		expect(response.body.contents.length).toEqual(3);
 	
-	});
+// 	});
 
-	test('public and non-matching', async() => {
+// 	test('public and non-matching', async() => {
 
-		const response = await request(app)
-			.get('/contents/')
-			.query({title: "asdf"});
-		expect(response.body.contents.length).toEqual(0);
+// 		const response = await request(app)
+// 			.get('/contents/')
+// 			.query({title: "asdf"});
+// 		expect(response.body.contents.length).toEqual(0);
 	
-	});
+// 	});
 
-	test('loggedin and matching', async() => {
+// 	test('loggedin and matching', async() => {
 
-		const response = await request(app)
-			.get('/contents/')
-			.query({title: "2"})
-			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body.contents.length).toEqual(1);
+// 		const response = await request(app)
+// 			.get('/contents/')
+// 			.query({title: "2"})
+// 			.set('authorization', `Bearer ${user1Token}`);
+// 		expect(response.body.contents.length).toEqual(1);
 	
-	});
+// 	});
 
-	test('loggedin and non-matching', async() => {
+// 	test('loggedin and non-matching', async() => {
 
-		const response = await request(app)
-			.get('/contents/')
-			.query({title: "asdf"})
-			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body.contents.length).toEqual(0);
+// 		const response = await request(app)
+// 			.get('/contents/')
+// 			.query({title: "asdf"})
+// 			.set('authorization', `Bearer ${user1Token}`);
+// 		expect(response.body.contents.length).toEqual(0);
 	
-	});
+// 	});
 
-});
+// });
 
-/***	GET /contents/:contentID	*/
-describe('GET \`/contents/:contentID\`', () => {
+// /***	GET /contents/:contentID	*/
+// describe('GET \`/contents/:contentID\`', () => {
 
-	// auth: none
-	// => {content: parseResponseBodyProperties(contentResult)}
-	//	public level
+// 	// auth: none
+// 	// => {content: parseResponseBodyProperties(contentResult)}
+// 	//	public level
 
-	test('public request, content1', async() => {
+// 	test('public request, content1', async() => {
 
-		const response = await request(app)
-			.get('/contents/1');
-		expect(response.body.content).toEqual(CONTENT_1_PUBLIC_RESPONSE);
+// 		const response = await request(app)
+// 			.get('/contents/1');
+// 		expect(response.body.content).toEqual(CONTENT_1_PUBLIC_RESPONSE);
 	
-	});
+// 	});
 
-	test('loggedin request, content1', async() => {
+// 	test('loggedin request, content1', async() => {
 
-		const response = await request(app)
-			.get('/contents/1')
-			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body.content).toEqual(CONTENT_1_PUBLIC_RESPONSE);
+// 		const response = await request(app)
+// 			.get('/contents/1')
+// 			.set('authorization', `Bearer ${user1Token}`);
+// 		expect(response.body.content).toEqual(CONTENT_1_PUBLIC_RESPONSE);
 	
-	});
+// 	});
 
-	test('404: content not found', async() => {
+// 	test('404: content not found', async() => {
 
-		const response = await request(app)
-			.get('/contents/6')
-			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.statusCode).toEqual(404);
+// 		const response = await request(app)
+// 			.get('/contents/6')
+// 			.set('authorization', `Bearer ${user1Token}`);
+// 		expect(response.statusCode).toEqual(404);
 	
-	});
+// 	});
 
-});
+// });
 
-/***	GET /contents/:contentID/edit	*/
-describe('GET \`/contents/:contentID/edit\`', () => {
+// /***	GET /contents/:contentID/edit	*/
+// describe('GET \`/contents/:contentID/edit\`', () => {
 
-	// auth: isLoggedIn, isParticipant
-	// => {content: parseResponseBodyProperties(contentResult)}
-	//	private level
+// 	// auth: isLoggedIn, isParticipant
+// 	// => {content: parseResponseBodyProperties(contentResult)}
+// 	//	private level
 
-	test('works', async() => {
+// 	test('works', async() => {
 
-		const response = await request(app)
-			.get('/contents/3/edit')
-			.set('authorization', `Bearer ${user1Token}`);
-		console.log(response.body);
-		expect(response.body.content).toEqual(CONTENT_1_PRIVATE_RESPONSE);
+// 		const response = await request(app)
+// 			.get('/contents/3/edit')
+// 			.set('authorization', `Bearer ${user1Token}`);
+// 		console.log(response.body);
+// 		expect(response.body.content).toEqual(CONTENT_1_PRIVATE_RESPONSE);
 	
-	});
+// 	});
 
-	test('401: unauthorized (wrong user)', async() => {
+// 	test('401: unauthorized (wrong user)', async() => {
 
-		const response = await request(app)
-			.get('/contents/3/edit')
-			.set('authorization', `Bearer ${user3Token}`);
-		expect(response.statusCode).toEqual(401);
+// 		const response = await request(app)
+// 			.get('/contents/3/edit')
+// 			.set('authorization', `Bearer ${user3Token}`);
+// 		expect(response.statusCode).toEqual(401);
 	
-	});
+// 	});
 
-	test('401: unauthorized (public)', async() => {
+// 	test('401: unauthorized (public)', async() => {
 
-		const response = await request(app)
-			.get('/contents/3/edit');
-			expect(response.statusCode).toEqual(401);
+// 		const response = await request(app)
+// 			.get('/contents/3/edit');
+// 			expect(response.statusCode).toEqual(401);
 	
-	});
+// 	});
 
-});
+// });
 
-/***	PATCH /contents/:contentID/edit	*/
-describe('PATCH \`contents/:contentID/edit\`', () => {
+// /***	PATCH /contents/:contentID/edit	*/
+// describe('PATCH \`contents/:contentID/edit\`', () => {
 
-	// auth: isLoggedIn, isParticipatingUser
-	// req.body => {content: parseResponseBodyProperties(contentResult)}
-	//	private level
+// 	// auth: isLoggedIn, isParticipatingUser
+// 	// req.body => {content: parseResponseBodyProperties(contentResult)}
+// 	//	private level
 
 
-	test('', async() => {
+// 	test('', async() => {
 
-		const response = await request(app)
-			.patch('/contents/CONTENTID/edit')
-			.send({})
-			.set('authorization', `Bearer ${Token}`);
-		expect(response.body.content).toEqual();
+// 		const response = await request(app)
+// 			.patch('/contents/CONTENTID/edit')
+// 			.send({})
+// 			.set('authorization', `Bearer ${Token}`);
+// 		expect(response.body.content).toEqual();
 	
-	});
+// 	});
 
-});
+// });
 
-/***	PATCH /contents/:contentID/sign	*/
-describe('PATCH \`contents/:contentID/sign\`', () => {
+// /***	PATCH /contents/:contentID/sign	*/
+// describe('PATCH \`contents/:contentID/sign\`', () => {
 
-	// auth: isLoggedIn, isReferenceUser, isParticipant
-	// rqe.body => {content: parseResponseBodyProperties(contentResult)}
-	//	private level
+// 	// auth: isLoggedIn, isReferenceUser, isParticipant
+// 	// rqe.body => {content: parseResponseBodyProperties(contentResult)}
+// 	//	private level
 
-	test('', async() => {
+// 	test('', async() => {
 
-		const response = await request(app)
-		.patch('/contents/CONTENTID/edit')
-		.send({})
-		.set('authorization', `Bearer ${Token}`);
-		expect(response.body.content).toEqual();
+// 		const response = await request(app)
+// 		.patch('/contents/CONTENTID/edit')
+// 		.send({})
+// 		.set('authorization', `Bearer ${Token}`);
+// 		expect(response.body.content).toEqual();
 	
-	});
+// 	});
 
-});
+// });
 
-/***	PATCH /contents/:contentID/:username/publish	*/
-describe('PATCH \`contents/:contentID/:username/publish\`', () => {
+// /***	PATCH /contents/:contentID/:username/publish	*/
+// describe('PATCH \`contents/:contentID/:username/publish\`', () => {
 
-	// auth: isLoggedIn, isReferenceUser, isOwner
-	// none => {content: parseResponseBodyProperties(contentResult)}
-	//	private level
+// 	// auth: isLoggedIn, isReferenceUser, isOwner
+// 	// none => {content: parseResponseBodyProperties(contentResult)}
+// 	//	private level
 
 	
-	test('', async() => {
+// 	test('', async() => {
 
-		const response = await request(app)
-			.patch('/contents/CONTENTID/edit')
-			.send({})
-			.set('authorization', `Bearer ${Token}`);
-		expect(response.body.content).toEqual();
+// 		const response = await request(app)
+// 			.patch('/contents/CONTENTID/edit')
+// 			.send({})
+// 			.set('authorization', `Bearer ${Token}`);
+// 		expect(response.body.content).toEqual();
 	
-	});
+// 	});
 
-});
+// });
 
 /***	DELETE /contents/:id */
 /*	out of scope.

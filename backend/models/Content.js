@@ -1,5 +1,13 @@
 const db = require('../database/db');
-const { sqlCreateQueryBuilder, sqlFilterQueryBuilder, sqlUpdateQueryBuilder } = require('../helpers/sqlQueryingHelper');
+const { 
+	sqlCreateQueryBuilder, 
+	sqlFilterQueryBuilder, 
+	sqlUpdateQueryBuilder, 
+	sqlJoinMultipleQueryBuilder_Configured 
+} = require('../helpers/sqlQueryingHelper');
+const {
+	parseResponseBodyProperties
+} = require('../helpers/objectStringifyAndParseHelper')
 
 const {
 	NotFoundError,
@@ -54,14 +62,14 @@ class Content {
 	 **/
 	 static async create(newRecordObject){
 
-		function createNewRecord(newRecordObject){
+		async function createNewRecord(newRecordObject){
 		
 			try{
 
 				const { parameterizedINSERTPropertyNames, parameterizedINSERTPropertyIndices, insertParameters } = sqlCreateQueryBuilder(newRecordObject, JSON_SQL_SET_MAPPING);
 
 				const result = await db.query(`
-					INSERT INTO ${this.relationName} ${parameterizedINSERTPropertyNames}
+					INSERT INTO contents ${parameterizedINSERTPropertyNames}
 						VALUES ${parameterizedINSERTPropertyIndices}
 						RETURNING ${QUERY_GENERAL_PROPERTIES}`, [...insertParameters]);
 
@@ -74,8 +82,31 @@ class Content {
 		
 		}
 
-		const newContentObject = createNewRecord(newRecordObject);
-		
+		// await db.query("BEGIN");
+
+		const newContentObject = await createNewRecord(newRecordObject);
+		console.log(newContentObject);
+
+		try {
+
+			const { id, description, participants } = parseResponseBodyProperties(newContentObject);
+
+			const { stringifiedVALUES } = sqlJoinMultipleQueryBuilder_Configured([], participants, 'user_id = ', id, description);
+			const result = await db.query(`
+			INSERT INTO contents_users_join (user_id, content_id, description)
+				${stringifiedVALUES}
+				RETURNING content_id`);
+
+			const newContentId = result.rows;
+			console.log(newContentId);
+			return newContentId;
+
+		}catch(error){
+			throw new ExpressError(500, error);
+		}
+
+		// await db.query("COMMIT");
+
 	}
 
 	/**	Find all matching content records.

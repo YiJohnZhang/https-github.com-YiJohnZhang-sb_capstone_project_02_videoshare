@@ -82,27 +82,27 @@ function sqlUpdateQueryBuilder(updateData, jsonSQLMapping = {}) {
 
 }
 
-/**	sqlMultipleInsertsQueryBuilder()
- *	Out of scope for now
- *	@param {Array} forEachArray - 
- *	@param {*} propertyOne - 
- *	@param {*} propertyTwo - 
- *	@returns {string} - queryLiteral
- */
-function sqlMultipleInsertsQueryBuilder(){
+// /**	sqlMultipleInsertsQueryBuilder()
+//  *	Out of scope for now
+//  *	@param {Array} forEachArray - 
+//  *	@param {*} propertyOne - 
+//  *	@param {*} propertyTwo - 
+//  *	@returns {string} - queryLiteral
+//  */
+// function sqlMultipleInsertsQueryBuilder(){
 
-}
+// }
 
-/**	sqlMultipleRemoveQueryBuilder()
- *	Out of scope for now
- *	@param {Array} forEachArray - 
- *	@param {*} propertyOne - 
- *	@param {*} propertyTwo - 
- *	@returns {string} - queryLiteral
- */
-function sqlMultipleRemoveQueryBuilder(){
+// /**	sqlMultipleRemoveQueryBuilder()
+//  *	Out of scope for now
+//  *	@param {Array} forEachArray - 
+//  *	@param {*} propertyOne - 
+//  *	@param {*} propertyTwo - 
+//  *	@returns {string} - queryLiteral
+//  */
+// function sqlMultipleRemoveQueryBuilder(){
 
-}
+// }
 
 // /**	sqlMultipleInsertsConfiguredQueryBuilder()
 //  *	2023-01-02 Note: Special built for `Content.create()`, `Content.()` for now.
@@ -157,7 +157,9 @@ function sqlMultipleRemoveQueryBuilder(){
  *	it is the `WHERE` clause
  *	@param {Array} referenceArray - before
  *	@param {Array} newArray - after
- *	@param {string} WHEREPropertyMatcher - 
+ *	@param {string} WHEREPropertyMatcher - int his configured case 'user_id = '
+ *	@param {*} insertPropertyOne - in this configured case, content ID
+ *	@param {*} insertPropertyTwo - in this configured case, description
  *	@returns {string|boolean} stringifiedWHERE - string for `DELETE`sql / `UPDATE`sql
  *	@returns {string|boolean} stringifiedVALUES - string for `INSERT INTO`slq
  */
@@ -169,27 +171,35 @@ function sqlJoinMultipleQueryBuilder_Configured(referenceArray, newArray, WHEREP
 	let whereArray = [];
 	let newSet = new Set(newArray);
 
-	referenceArray.forEach((element) => {
+	if(referenceArray){
 
-		if(!newSet.has(element))
-			whereArray.push(`${WHEREPropertyMatcher}'${element}'`);
+		referenceArray.forEach((element) => {
 
-	})
+			if(!newSet.has(element))
+				whereArray.push(`${WHEREPropertyMatcher}'${element}'`);
 
-	const stringifiedWHERE = whereArray.length === 0 ? false : `WHERE ${whereArray.join(' OR ')};`;
+		});
+
+	}
+
+	const stringifiedWHERE = whereArray.length === 0 ? false : `WHERE ${whereArray.join(' OR ')}`;
 
 	// ...`VALUES`sql Aspect
 	let valuesArray = [];
 	let referenceSet = new Set(referenceArray);
 
-	newArray.forEach((element) => {
+	if(newArray){
 
-		if(!referenceSet.has(element))
-			valuesArray.push(`('${element}', ${insertPropertyOne}, '${insertPropertyTwo}')`)
+		newArray.forEach((element) => {
 
-	})
+			if(!referenceSet.has(element))
+				valuesArray.push(`('${element}', ${insertPropertyOne}, '${insertPropertyTwo}')`)
 
-	const stringifiedVALUES = valuesArray.length === 0 ? false : `VALUES ${valuesArray.join(', ')};`;
+		});
+		
+	}
+
+	const stringifiedVALUES = valuesArray.length === 0 ? false : `VALUES ${valuesArray.join(', ')}`;
 
 	return{
 		stringifiedWHERE,

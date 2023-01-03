@@ -212,13 +212,25 @@ describe('sqlJoinMultipleQueryBuilder_Configured', () => {
 		const newParticipants = ['users'];
 		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
 
-		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'userd' OR user_id = 'userf';`);
+		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'userd' OR user_id = 'userf'`);
 		expect(`
 			DELETE FROM contents_users_join
 				${stringifiedWHERE}`)
 		.toEqual(`
 			DELETE FROM contents_users_join
-				WHERE user_id = 'usera' OR user_id = 'userd' OR user_id = 'userf';`);
+				WHERE user_id = 'usera' OR user_id = 'userd' OR user_id = 'userf'`);
+
+		expect(stringifiedVALUES).toEqual(false);
+
+	});
+
+	test('works: delete everything', () => {
+
+		const referenceParticipants = ['usera', 'users', 'userd', 'userf'];
+		const newParticipants = [];
+		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
+
+		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'users' OR user_id = 'userd' OR user_id = 'userf'`);
 
 		expect(stringifiedVALUES).toEqual(false);
 
@@ -232,13 +244,25 @@ describe('sqlJoinMultipleQueryBuilder_Configured', () => {
 
 		expect(stringifiedWHERE).toEqual(false);
 
-		expect(stringifiedVALUES).toEqual(`VALUES ('usera', 1, 'somedesc'), ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc');`)
+		expect(stringifiedVALUES).toEqual(`VALUES ('usera', 1, 'somedesc'), ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc')`);
 		expect(`
 			INSERT INTO contents_users_join(user_id, content_id, description)
 				${stringifiedVALUES}`)
 		.toEqual(`
 			INSERT INTO contents_users_join(user_id, content_id, description)
-				VALUES ('usera', 1, 'somedesc'), ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc');`);
+				VALUES ('usera', 1, 'somedesc'), ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc')`);
+
+	});
+
+	test('works: insert everything', () => {
+
+		const referenceParticipants = [];
+		const newParticipants = ['usera', 'users', 'userd', 'userf'];
+		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
+
+		expect(stringifiedWHERE).toEqual(false);
+
+		expect(stringifiedVALUES).toEqual(`VALUES ('usera', 1, 'somedesc'), ('users', 1, 'somedesc'), ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc')`);
 
 	});
 
@@ -258,22 +282,22 @@ describe('sqlJoinMultipleQueryBuilder_Configured', () => {
 		const newParticipants = ['userd', 'userf'];
 		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
 
-		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'users';`);
+		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'users'`);
 		expect(`
 			DELETE FROM contents_users_join
 				${stringifiedWHERE}`)
 		.toEqual(`
 			DELETE FROM contents_users_join
-				WHERE user_id = 'usera' OR user_id = 'users';`);
+				WHERE user_id = 'usera' OR user_id = 'users'`);
 
-		expect(stringifiedVALUES).toEqual(`VALUES ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc');`)
+		expect(stringifiedVALUES).toEqual(`VALUES ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc')`)
 		expect(`
 			INSERT INTO contents_users_join(user_id, content_id, description)
 				${stringifiedVALUES}`)
 		.toEqual(`
 			INSERT INTO contents_users_join(user_id, content_id, description)
-				VALUES ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc');`);
+				VALUES ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc')`);
 
-	})
+	});
 
 });

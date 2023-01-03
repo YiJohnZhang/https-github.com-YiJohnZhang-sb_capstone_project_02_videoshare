@@ -24,6 +24,8 @@ router.post('/', isLoggedIn, async(req, res, nxt) => {
 
 		validateRequestBody(req.body, newContentSchema);
 
+		console.log(req.body);
+
 		const contentResult = await ContentModel.create(stringifyRequestBodyProperties(req.body));
 
 		return res.status(201).json({content: parseResponseBodyProperties(contentResult)});
