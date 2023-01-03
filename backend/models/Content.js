@@ -80,14 +80,14 @@ class Content {
 
 			}catch(error){
 
-				await db.query("ROLLBACK");
+				await db.query('ROLLBACK');
 				throw new ConflictError(`${error}`);
 
 			}
 		
 		}
 
-		await db.query("BEGIN");
+		await db.query('BEGIN');
 
 		const newContentObject = await createNewRecord(newRecordObject);
 
@@ -102,14 +102,14 @@ class Content {
 				RETURNING content_id`);
 
 
-			await db.query("COMMIT");
+			await db.query('COMMIT');
 			
 			const newContentId = result.rows[0];
 			return newContentId;
 
 		}catch(error){
 
-			await db.query("ROLLBACK");
+			await db.query('ROLLBACK');
 			throw new ExpressError(500, error);
 
 		}
@@ -297,11 +297,13 @@ class Content {
 
 	// double check it is all signed.
 	static async publishUpdate(contentID){
+		// lowpriority: ok so this `publishUpdate` is a single purpose method. it does NOT take a response body to update the partcipiants. all it does is set it to publish. this may be a bit confusing for userflow and lead to a bit of bugs.
 
 		const result = await db.query(`
 		SELECT participants, contract_signed AS "contractSigned"
 			FROM ${this.relationName}
-			WHERE id = $1 AND status = 'standby'`, [contentID]);
+			WHERE id = $1 AND status = 'standby' OR status 'open'`, [contentID]);
+			// lowpriority: really, don't have the time to make this proper. so therefore it is.
 
 		const contentObject = result.rows[0];
 
@@ -319,25 +321,39 @@ class Content {
 
 			await db.query('BEGIN');
 
+			const contentPublishDate = new Date();
+
 			const publishQuery = await db.query(`
 				UPDATE ${this.relationName}
-					SET status = $1
-					WHERE content_id = $2
-					RETURNING content_id`, ['published', contentID]);
+					SET status = $1, published_date = $2
+					WHERE content_id = $3
+					RETURNING content_id, participants, description`, ['published', contentPublishDate.toJSON(), contentID]);
 
-			const parameterizedVALUES_array = participants.map((participant, index) => `($${3+index}, $1, $2))`);
+			const { id, participants, description } = publishQuery.rows[0];
+			// console.log(publishQuery.rows[0]);
 
-			let parameterizedVALUES_string = parameterizedVALUES_array.join(',');
+			// const { stringfiedWHERE, stringifiedVALUES } = sqlJoinMultipleQueryBuilder_Configured([], participants, 'user_id = ', id, description);
 
-			const createContentUserJoinEntriesQuery = await db.query(`
-				INSERT INTO contents_users_join (user_id, content_id, description)
-					VALUES ${parameterizedVALUES_string};`, [contentID, description, ...participants])
+			// if(stringifiedVALUES){
+			// 	await db.query(`
+			// 		INSERT INTO contents_users_join (user_id, content_id, description)
+			// 			VALUES ${stringifiedVALUES};`);
+			// 		// lowpriority:this only works for psql > 9.5
+			// }
+			
+			// if(stringifiedWHERE){
+
+			// }
+			// 	// low priority, get the previous version 
+			
+			// lowpriority: the above is an attempt to address the foreseen UX confusion, but this is not the focus of the project for now.
 			
 			await db.query('COMMIT');
 
 			return 'success';
 		
 		}catch(error){
+			await db.query('ROLLBACK');
 			throw new ExpressError(498, error)
 		}
 

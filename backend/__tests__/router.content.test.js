@@ -279,7 +279,7 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 			.patch('/contents/3/edit')
 			.send({})
 			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body.content).toEqual();
+		expect(response.body.content).toEqual('a');
 	
 	});
 
@@ -302,24 +302,25 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 
 });
 
-// /***	PATCH /contents/:contentID/sign	*/
-// describe('PATCH \`contents/:contentID/sign\`', () => {
+// deprecated
+/***	PATCH /contents/:contentID/sign	*/
+describe('PATCH \`contents/:contentID/sign\`', () => {
 
-// 	// auth: isLoggedIn, isReferenceUser, isParticipant
-// 	// rqe.body => {content: parseResponseBodyProperties(contentResult)}
-// 	//	private level
+	// auth: isLoggedIn, isReferenceUser, isParticipant
+	// rqe.body => {content: parseResponseBodyProperties(contentResult)}
+	//	private level
 
-// 	test('', async() => {
+	// test('', async() => {
 
-// 		const response = await request(app)
-// 		.patch('/contents/CONTENTID/edit')
-// 		.send({})
-// 		.set('authorization', `Bearer ${Token}`);
-// 		expect(response.body.content).toEqual();
+	// 	const response = await request(app)
+	// 	.patch('/contents/CONTENTID/edit')
+	// 	.send({})
+	// 	.set('authorization', `Bearer ${user1Token}`);
+	// 	expect(response.body.content).toEqual();
 	
-// 	});
+	// });
 
-// });
+});
 
 /***	PATCH /contents/:contentID/:username/publish	*/
 describe('PATCH \`contents/:contentID/:username/publish\`', () => {
@@ -328,18 +329,31 @@ describe('PATCH \`contents/:contentID/:username/publish\`', () => {
 	// none => {content: parseResponseBodyProperties(contentResult)}
 	//	private level
 
-	
-	test('', async() => {
+
+	test('test', async() => {
 
 		const response = await request(app)
 			.patch('/contents/3/edit')
 			.send({})
-			.set('authorization', `Bearer ${Token}`);
-		expect(response.body.content).toEqual({
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.body.content).toEqual('a');
+	
+	});
 
-			
+	test('401: unauthorized (wrong user)', async() => {
 
-		});
+		const response = await request(app)
+			.get('/contents/3/edit')
+			.set('authorization', `Bearer ${user3Token}`);
+		expect(response.statusCode).toEqual(401);
+	
+	});
+
+	test('401: unauthorized (public)', async() => {
+
+		const response = await request(app)
+			.get('/contents/3/edit');
+			expect(response.statusCode).toEqual(401);
 	
 	});
 

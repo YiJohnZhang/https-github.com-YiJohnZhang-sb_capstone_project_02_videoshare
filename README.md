@@ -208,12 +208,16 @@ npm test	# alias for `react-scripts test` in `package.json`
 |||*CU_Join = `Content_User_Join`|`userID` is an alias for `username`|
 
 
+2. `Contents.js:publishUpdate:~300`, 'lowpriority': UX confusion?
+	- `Contents.js:publishUpdate:~305`, 'lowpriority': made the diff between standby and open negli.
+	- `Contents.js:publishUpdate:~337`, 'lowpriority': consider being independent of: `POSTGRESQL ISNERT INTO ON CONFLICT DO NOTHING`; needs further work for <PSQL 9.5
+	- `Contents.js:publishUpdate:~347`, `lowpriority`: 
+
 1	=> needs one more test after finishing `CUJOIN`
 2		=> check status OR published_date; JOIN users (no, b/c participants is there...)?
 3		=> redudndant? skip
 4		=> almost done, test?
 5	=> almost done? (querybuilder a go), needs test
-6		=> IGNORED; skip 
 7	=> almost done? (querybuilder a go), needs test; inject published_date by server date, checked particpiants === signed
 10	=> quick
 11	=> quick
@@ -357,7 +361,7 @@ Some suggested improvements to this concept are:
 |39|finish backend?|2023-01-02|13:41 - 14:24|43|
 |40|finished sql query helper method|2023-01-02|15:10 - 16:25|75|
 |41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53||
-|42|fin `content.js`?|2023-01-02|18:38 - :||
+|42|fin `content.js`?|2023-01-02|18:38 - 20:30||
 |43||2023-01-02|20: - :||
 
 |4||2023-01-02|: - :||
