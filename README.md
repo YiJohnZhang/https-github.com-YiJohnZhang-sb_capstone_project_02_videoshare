@@ -362,7 +362,7 @@ Some suggested improvements to this concept are:
 |40|finished sql query helper method|2023-01-02|15:10 - 16:25|75|
 |41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53||
 |42|fin `content.js`?|2023-01-02|18:38 - 20:30||
-|43||2023-01-02|20: - :||
+|43|.-. backend work|2023-01-02|22:02 - :||
 
 |4||2023-01-02|: - :||
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
