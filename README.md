@@ -346,7 +346,7 @@ Some suggested improvements to this concept are:
 |39|finish backend?|2023-01-02|13:41 - 14:24|43|
 |40|finished sql query helper method|2023-01-02|15:10 - 16:25|75|
 |41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53||
-|42||2023-01-02|18: - :||
+|42|fin `content.js`?|2023-01-02|18:38 - :||
 |43||2023-01-02|20: - :||
 
 |4||2023-01-02|: - :||
