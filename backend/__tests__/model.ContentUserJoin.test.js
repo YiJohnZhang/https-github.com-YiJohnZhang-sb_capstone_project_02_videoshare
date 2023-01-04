@@ -138,3 +138,10 @@ describe('getAllUserPublicContent()', () => {
 
 
 });
+
+module.exports = {
+	USER_1_PUBLIC_CONTENT,
+	USER_2_PUBLIC_CONTENT,
+	USER_1_ALL_CONTENT,
+	USER_2_ALL_CONTENT
+}
