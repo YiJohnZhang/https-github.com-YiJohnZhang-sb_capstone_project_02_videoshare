@@ -15,11 +15,11 @@ INSERT INTO users("username","first_name","last_name","birthdate","verified","ac
 	('testuser2', 'Test', 'uSER2', '1990-01-01', TRUE, 'active', 'testUser@test.net', '$2a$14$3QlPlVm0blm4M5sLgUmcc.ii6DLtVW6S6AOWRn3rWNZhwBVsWzq/K', 'xsgamesm-49.jpg', 'fasd1', FALSE),
 	('adminUser1', 'Admin', 'USER1', '1990-10-23', TRUE, 'active', 'admin@amail.com', '$2a$14$MtrF8MqSh4.DV6rFAYcYouwJSA3q5pJNPTerCfzWJGpVss1/ES4GG', 'xsgamesm-23.jpg', 'asdfz', TRUE);
 
-INSERT INTO contents(title,summary,description,link,status,owner,contract_type,contract_details,contract_signed,date_created,date_standby,date_published)
+INSERT INTO contents(title,summary,description,link,status,owner,contract_type,participants,contract_details,contract_signed,date_created,date_standby,date_published)
 	VALUES
-	('tempContent1', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'solo', NULL, NULL, '2022-12-12', '2022-12-26', '2022-12-26'),
-	('tempContent2', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'byview', NULL, NULL, '2022-12-12', '2022-12-26', '2022-12-26'),
-	('tempContent3', 'temporarySummary', 'default_description', 'invalidLink', 'open', 'testuser1', 'presplit', NULL, NULL, '2022-12-12', NULL, NULL);
+	('tempContent1', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'solo', '["testuser1"]', '{"views":[{"username":"testuser1","share":1}], "engagement":[{"username":"testuser1","share":1}]}', '["testuser1"]', '2022-12-29', '2022-12-29', '2022-12-30'),
+	('tempContent2', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'byview', '["testuser1","testuser2"]', '{"views":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}], "engagement":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}]}', '["testuser1","testuser2"]', '2022-12-29', '2022-12-29', '2022-12-30'),
+	('tempContent3', 'temporarySummary', 'default_description', 'invalidLink', 'open', 'testuser1', 'presplit', '["testuser1","testuser2"]', '{"views":[{"username":"testuser1","share":0.7}, {"username":"testuser2","share":0.3}], "engagement":[{"username":"testuser1","share":0.4}, {"username":"testuser2","share":0.6}]}', '["testuser1"]', '2022-12-30', '2022-12-30', NULL);
 
 INSERT INTO roles(name)
 	VALUES

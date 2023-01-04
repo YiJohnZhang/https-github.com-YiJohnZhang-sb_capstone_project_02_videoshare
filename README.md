@@ -423,8 +423,9 @@ Some suggested improvements to this concept are:
 
 
 ### 2023-01-03 todo list
-1. getAllUserContent()/getAlluserPublicContent (cujoin model + test in model); see below
-	a. update user model to contain content, as `user.contents = [...]`
+1. getAllUserContent()/getAlluserPublicContent (); see below
+	a. `DONE`	cujoin model + test (to `headersset` error)
+	b. update user model to contain content, as `user.contents = [...]`
 ```js
 
 backend 04 => frontend 05

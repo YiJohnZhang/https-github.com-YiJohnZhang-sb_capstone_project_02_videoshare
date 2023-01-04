@@ -21,28 +21,27 @@ async function commonBeforeAll() {
 		VALUES
 			('testuser1', 'Test', 'uSER1', '1990-01-01', TRUE, 'active', 'testUser@test.com', $1, 'xsgamesm-33.jpg', 'afsd2', FALSE),
 			('testuser2', 'Test', 'uSER2', '1990-01-01', TRUE, 'active', 'testUser@test.net', $1, 'xsgamesm-49.jpg', 'fasd1', FALSE),
-			('adminUser1', 'Admin', 'USER1', '1990-10-23', TRUE, 'active', 'admin@amail.com', $2, 'xsgamesm-23.jpg', 'asdfz', TRUE);
-		RETURNING username`,[
+			('adminUser1', 'Admin', 'USER1', '1990-10-23', TRUE, 'active', 'admin@amail.com', $2, 'xsgamesm-23.jpg', 'asdfz', TRUE);`,[
 			await bcrypt.hash('password', BCRYPT_WORK_FACTOR),
 			await bcrypt.hash('admin', BCRYPT_WORK_FACTOR)
 		]);
 	
 	await db.query(`
-	INSERT INTO contents(title,summary,description,link,status,owner,contract_type,contract_details,contract_signed,date_created,date_standby,date_published)
+	INSERT INTO contents(title,summary,description,link,status,owner,contract_type,participants,contract_details,contract_signed,date_created,date_standby,date_published)
 		VALUES
-			('tempContent1', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'solo', NULL, NULL, '2022-12-12', '2022-12-26', '2022-12-26'),
-			('tempContent2', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'byview', NULL, NULL, '2022-12-12', '2022-12-26', '2022-12-26'),
-			('tempContent3', 'temporarySummary', 'default_description', 'invalidLink', 'open', 'testuser1', 'presplit', NULL, NULL, '2022-12-12', NULL, NULL);
+			('tempContent1', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'solo', '["testuser1"]', '{"views":[{"username":"testuser1","share":1}], "engagement":[{"username":"testuser1","share":1}]}', '["testuser1"]', '2022-12-29', '2022-12-29', '2022-12-30'),
+			('tempContent2', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'byview', '["testuser1","testuser2"]', '{"views":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}], "engagement":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}]}', '["testuser1","testuser2"]', '2022-12-29', '2022-12-29', '2022-12-30'),
+			('tempContent3', 'temporarySummary', 'default_description', 'invalidLink', 'open', 'testuser1', 'presplit', '["testuser1","testuser2"]', '{"views":[{"username":"testuser1","share":0.7}, {"username":"testuser2","share":0.3}], "engagement":[{"username":"testuser1","share":0.4}, {"username":"testuser2","share":0.6}]}', '["testuser1"]', '2022-12-30', '2022-12-30', NULL);
 	`);
 
 	await db.query(`
 	INSERT INTO contents_users_join(user_id,content_id,description)
 		VALUES
-			('testuser1', 1, ''),
-			('testuser1', 2, ''),
-			('testuser2', 2, ''),
-			('testuser1', 3, ''),
-			('testuser2', 3, '')
+			('testuser1', 1, 'mw1'),
+			('testuser1', 2, 'mw2'),
+			('testuser2', 2, 'mw2'),
+			('testuser1', 3, 'afsd'),
+			('testuser2', 3, 'afsd')
 	`);
 
 }

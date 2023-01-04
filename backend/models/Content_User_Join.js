@@ -14,6 +14,7 @@ const QUERY_GENERAL_PROPERTIES = `
 	content_id AS "contentID",
 	description`;
 const QUERY_GENERAL_PROPERTIES_JOIN = `
+	cu.content_id AS "id",
 	cu.description AS "description"
 `;
 const QUERY_CONTENT_JOIN_PROPERTIES_PUBLIC = `
@@ -24,7 +25,6 @@ const QUERY_CONTENT_JOIN_PROPERTIES_PUBLIC = `
 `;
 	// rename this sometime when clearning. it is the same as a public query..
 const QUERY_CONTENT_JOIN_PROPERTIES_FOR_EDIT = `
-	c.id AS "id",
 	c.title AS "title",
 	c.link AS "link",
 	c.status AS "status",
@@ -60,15 +60,14 @@ class ContentUserJoin {
 	static async getAllUserContent(username) {
 
 		const result = await db.query(`
-			SELECT ${QUERY_CONTENT_JOIN_PROPERTIES_PUBLIC}
+			SELECT ${QUERY_GENERAL_PROPERTIES_JOIN}, ${QUERY_CONTENT_JOIN_PROPERTIES_PUBLIC}
 				FROM ${this.relationName} AS cu
 				JOIN contents AS c ON c.id = cu.content_id
 				WHERE cu.user_id = $1
-				ORDER BY c.date_published
+				ORDER BY c.date_published;
 			`, [username]);
 
 		const contentList = result.rows;
-		console.log(contentList);
 
 		return result.rows;
 	
@@ -82,15 +81,14 @@ class ContentUserJoin {
 	static async getAllUserPublicContent(username) {
 
 		const result = await db.query(`
-			SELECT ${QUERY_CONTENT_JOIN_PROPERTIES_PUBLIC}
+			SELECT ${QUERY_GENERAL_PROPERTIES_JOIN}, ${QUERY_CONTENT_JOIN_PROPERTIES_PUBLIC}
 				FROM ${this.relationName} AS cu
 				JOIN contents AS c ON c.id = cu.content_id
-				WHERE cu.user_id = $1 AND (c.status = 'active' OR c.status = 'legacy')
-				ORDER BY c.date_published
+				WHERE cu.user_id = $1 AND (c.status = 'published' OR c.status = 'legacy')
+				ORDER BY c.date_published;
 			`, [username]);
 
 		const contentList = result.rows;
-		console.log(contentList);
 
 		return result.rows;
 	
