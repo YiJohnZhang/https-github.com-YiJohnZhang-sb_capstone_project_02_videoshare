@@ -396,9 +396,10 @@ Some suggested improvements to this concept are:
 |44|more cursed "Cannot set headers after they are sent to the client. in `Content_User_Join.js`|2023-01-03|09:17 - 11:04|107|
 |45|renamed `router._testCommons` to `router._testCommons.test`; updated documentation for project clarity .___.|2023-01-03|14:00 - 15:52|112|
 |46|documentation for project clarity; start `ContentUserJoin` model test|2023-01-03|17:56 - 18:42|46|
-|48||2023-01-03|: - :||
-|49||2023-01-03|: - :||
-|5x||2022-01-06|: - :||
+|48|`cujoin` tests|2023-01-04|08:53 - :||
+|49||2023-01-04|: - :||
+|50||2022-01-04|: - :||
+|5x||2022-01-04|: - :||
 45	46
 678	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
@@ -416,7 +417,7 @@ Some suggested improvements to this concept are:
 1190	
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
-|47||2022-01-03|21:55 - 22:17||
+|47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |5x||2022-01-06|: - :||
 ||||**Total Time**|_ minutes (--h--m)|
 
