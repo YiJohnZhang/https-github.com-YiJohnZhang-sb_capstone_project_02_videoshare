@@ -396,7 +396,7 @@ Some suggested improvements to this concept are:
 |44|more cursed "Cannot set headers after they are sent to the client. in `Content_User_Join.js`|2023-01-03|09:17 - 11:04|107|
 |45|renamed `router._testCommons` to `router._testCommons.test`; updated documentation for project clarity .___.|2023-01-03|14:00 - 15:52|112|
 |46|documentation for project clarity; start `ContentUserJoin` model test|2023-01-03|17:56 - 18:42|46|
-|48|`cujoin` tests|2023-01-04|08:53 - :||
+|48|`cujoin` tests|2023-01-04|08:53 - 10:03|70|
 |49||2023-01-04|: - :||
 |50||2022-01-04|: - :||
 |5x||2022-01-04|: - :||

@@ -360,7 +360,7 @@ describe('PATCH \`contents/:contentID/:username/publish\`', () => {
 });
 
 /***	DELETE /contents/:id */
-/*	out of scope.
+//	unused
 describe('DELETE \`/contents/:id\`', () => {
 
 	test('deletes content (admin)', async() => {
@@ -404,4 +404,3 @@ describe('DELETE \`/contents/:id\`', () => {
 	});
 
 });
-*/

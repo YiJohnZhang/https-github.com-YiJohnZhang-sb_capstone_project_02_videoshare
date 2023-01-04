@@ -29,9 +29,9 @@ async function commonBeforeAll() {
 	await db.query(`
 	INSERT INTO contents(title,summary,description,link,status,owner,contract_type,participants,contract_details,contract_signed,date_created,date_standby,date_published)
 		VALUES
-			('tempContent1', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'solo', '["testuser1"]', '{"views":[{"username":"testuser1","share":1}], "engagement":[{"username":"testuser1","share":1}]}', '["testuser1"]', '2022-12-29', '2022-12-29', '2022-12-30'),
-			('tempContent2', 'temporarySummary', 'default_description', 'invalidLink', 'published', 'testuser1', 'byview', '["testuser1","testuser2"]', '{"views":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}], "engagement":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}]}', '["testuser1","testuser2"]', '2022-12-29', '2022-12-29', '2022-12-30'),
-			('tempContent3', 'temporarySummary', 'default_description', 'invalidLink', 'open', 'testuser1', 'presplit', '["testuser1","testuser2"]', '{"views":[{"username":"testuser1","share":0.7}, {"username":"testuser2","share":0.3}], "engagement":[{"username":"testuser1","share":0.4}, {"username":"testuser2","share":0.6}]}', '["testuser1"]', '2022-12-30', '2022-12-30', NULL);
+			('test content', 'temporarySummary', 'default_description', 'https://youtu.be/nhVJhRhJbJE', 'published', 'testuser1', 'solo', '["testuser1"]', '{"views":[{"username":"testuser1","share":1}], "engagement":[{"username":"testuser1","share":1}]}', '["testuser1"]', '2022-12-29', '2022-12-29', '2022-12-30'),
+			('test content2', 'temporarySummary', 'default_description', 'https://youtu.be/FTvLFlNbSQQ', 'published', 'testuser1', 'byview', '["testuser1","testuser2"]', '{"views":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}], "engagement":[{"username":"testuser1","share":0}, {"username":"testuser2","share":0}]}', '["testuser1","testuser2"]', '2022-12-29', '2022-12-29', '2022-12-30'),
+			('test content3', 'temporarySummary', 'default_description', '', 'open', 'testuser1', 'presplit', '["testuser1","testuser2"]', '{"views":[{"username":"testuser1","share":0.7}, {"username":"testuser2","share":0.3}], "engagement":[{"username":"testuser1","share":0.4}, {"username":"testuser2","share":0.6}]}', '["testuser1"]', '2022-12-30', '2022-12-30', NULL);
 	`);
 
 	await db.query(`

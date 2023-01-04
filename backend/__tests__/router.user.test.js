@@ -1,6 +1,12 @@
 const request = require('supertest');
 
 const app = require('../app');
+const {
+	USER_1_PUBLIC_CONTENT,
+	USER_2_PUBLIC_CONTENT,
+	USER_1_ALL_CONTENT,
+	USER_2_ALL_CONTENT
+} = require('./commonTestObject._Test_Contents');
 
 const {
 	commonBeforeAll,
