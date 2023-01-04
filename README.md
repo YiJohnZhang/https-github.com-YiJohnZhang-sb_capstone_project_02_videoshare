@@ -381,13 +381,15 @@ Some suggested improvements to this concept are:
 |43|.-. backend work. finished `Users`|2023-01-02|22:02 - 23:54|112|
 |44|more cursed "Cannot set headers after they are sent to the client. in `Content_User_Join.js`|2023-01-03|09:17 - 11:04|107|
 |45|renamed `router._testCommons` to `router._testCommons.test`; updated documentation for project clarity .___.|2023-01-03|14:00 - 15:52|112|
-|46|documentation for project clarity; start `ContentUserJoin` model test|2023-01-03|17:56 - 18:42||
-|4||2023-01-03|: - :||
+|46|documentation for project clarity; start `ContentUserJoin` model test|2023-01-03|17:56 - 18:42|46|
+|48||2023-01-03|: - :||
+|49||2023-01-03|: - :||
+|5x||2022-01-06|: - :||
 45	46
-632	
+678	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
-|16|`formik` for frontend, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
+|16|exploring `formik` for frontend, attempted `material-ui`, alongside other express form validation and/or styling libraries; db work|2022-12-28|16:01 - 18:24|143|
 |27|onboarding and frontend styling|2022-12-30|17:02 - 18:03|61|
 |28|frontend styling + API|2022-12-30|18:24 - 20:34|130|
 |33|bulk of `HomePage`, styling and documentation|2022-12-31|21:43 - 23:36|113|
@@ -398,10 +400,10 @@ Some suggested improvements to this concept are:
 |4||2023-01-02|: - :||
 37		38
 1190	
-1043
-||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m), excluding `formik exploration`: |
+||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
-|4x||2022-01-0|: - :||
+|47||2022-01-03|21:55 - 22:||
+|5x||2022-01-06|: - :||
 ||||**Total Time**|_ minutes (--h--m)|
 
 
