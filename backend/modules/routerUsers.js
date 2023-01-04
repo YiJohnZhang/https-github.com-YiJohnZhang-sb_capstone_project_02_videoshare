@@ -2,7 +2,7 @@ const express = require('express');
 const router = new express.Router();
 
 const UserModel = require('../models/User');
-const ContentModel = require('../models/Content');
+const ContentUserJoinModel = require('../models/Content_User_Join');
 const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin } = require('./middlewareAAE');
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
 
@@ -32,7 +32,7 @@ router.get('/', async(req, res, nxt) => {
 
 });
 
-/** GET `/[username]`
+/** GET `/[username]/`
  *	=> { userResult }
  *		where `userResult` is: { QUERY_GENERAL_PROPERTIES }
  *	
@@ -42,8 +42,34 @@ router.get('/:username', async(req, res, nxt) => {
 
 	try{
 		
-		const userResult = await UserModel.getByPK(req.params.username);
+		let userResult = await UserModel.getByPK(req.params.username);
 
+		// const correspondingContentResult = await ContentUserJoinModel.getAllUserPublicContent(req.params.username);
+		// userResult.content = {correspondingContentResult}
+
+		return res.json({user: userResult});
+
+	}catch(error){
+		nxt(error);
+	}
+
+});
+
+/** GET `/[username]/private`
+ *	=> { userResult }
+ *		where `userResult` is: { QUERY_GENERAL_PROPERTIES }
+ *	
+ *	Authorization Required: isLoggedIn, isReferenceUser
+*/
+router.get('/:username/private', isLoggedIn, isReferenceUser, async(req, res, nxt) => {
+
+	try{
+		
+		let userResult = await UserModel.getByPK(req.params.username);
+
+		// const correspondingContentResult = await ContentUserJoinModel.getAllUserContent(req.params.username);
+		// userResult.content = {correspondingContentResult}
+		
 		return res.json({user: userResult});
 
 	}catch(error){

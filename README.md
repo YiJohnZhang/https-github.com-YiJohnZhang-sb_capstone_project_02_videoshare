@@ -301,8 +301,43 @@ Some suggested improvements to this concept are:
 	- `users/` focuses on returning the users content
 	- `contents/` focuses on returning the contract and content with user(s) involved
 
-# 03. Misecllaneous Notes & Dump
-## 03.01. Time Tracker
+# 03. Project Conclusions
+
+
+
+## 03.0x. Debugging Notes
+1. Express Middleware has a a bias for falsey i.e. (`middlewareAAE.js: isReferenceUserOrAdmin`):
+```js
+//	works correctly (only throws error if `notRefUserOrAdmin` is true, otherwise `nxt()`):
+{
+
+//	...
+	// if(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
+	if(notRefUserOrAdmin)
+		nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
+
+	nxt();
+
+}
+
+// works incorrectly (throws error even if `isRefUserOrAdmin` is true)
+
+{
+	//	...
+	// if(req.params.username === res.locals.user.username || await checkAdminHelper(res.locals.user))
+	if(isRefUserOrAdmin)
+			nxt();
+
+	nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
+
+}
+```
+2. `supertest` request throws `ECONNREFUSED 127.0.0.1:80` if there is no `/` prefix: https://stackoverflow.com/a/58919202
+3. 
+
+# 04. Time Tracker
+**Summary**: 9h8m seeding user data; 50h52m being mostly confused on how the backend should be implemented (insufficient prior documentation) with schema revisions; 10h_m less confused on implementing the backend; 20h React Front-End
+
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
 |01|db design, seed|2022-12-12|18:25 - 22:19|234|
@@ -346,10 +381,10 @@ Some suggested improvements to this concept are:
 |43|.-. backend work. finished `Users`|2023-01-02|22:02 - 23:54|112|
 |44|more cursed "Cannot set headers after they are sent to the client. in `Content_User_Join.js`|2023-01-03|09:17 - 11:04|107|
 |45|renamed `router._testCommons` to `router._testCommons.test`; updated documentation for project clarity .___.|2023-01-03|14:00 - 15:52|112|
-|46|documentation for project clarity; |2023-01-03|17:56 - :||
+|46|documentation for project clarity; start `ContentUserJoin` model test|2023-01-03|17:56 - 18:42||
 |4||2023-01-03|: - :||
 45	46
-632
+632	
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|`formik` for frontend, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
@@ -391,7 +426,7 @@ note: finish contents first, (JOIN creation)
 - redo:
 	- contents & contents_users_join where public resposnes with lesser data is just shaving off distinct private data ._.
 
-## More Time Wishlist
+# More Time Wishlist
 - use Python Flask/React: form validation is much more straightforward and it is good for prototyping
 - better UI to set contract & signed
 - hide in progress 
@@ -404,23 +439,3 @@ note: finish contents first, (JOIN creation)
 - content creation: when adding a username, on the frontend, validate it.
 
 - `Content_User_JOIN.js: update` 2022-12-29 Note: generalize for composite PK by passing in pk as object and do a parameterizedWHERE query builder on it
-
-## `express.js` Notes
-1. there is a bias for falsey for express middleware, i.e. (`middlewareAAE.js: isReferenceUserOrAdmin`):
-```js
-//	works correctly (only throws error if `notRefUserOrAdmin` is true, otherwise `nxt()`):
-
-// if(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
-if(notRefUserOrAdmin)
-	nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
-
-nxt();
-
-// works incorrectly (throws error even if `isRefUserOrAdmin` is true)
-// if(req.params.username === res.locals.user.username || await checkAdminHelper(res.locals.user))
-if(isRefUserOrAdmin)
-		nxt();
-
-nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
-```
-2. `supertest` request throws `ECONNREFUSED 127.0.0.1:80` if there is no `/` prefix: https://stackoverflow.com/a/58919202

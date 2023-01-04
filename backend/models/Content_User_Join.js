@@ -16,7 +16,14 @@ const QUERY_GENERAL_PROPERTIES = `
 const QUERY_GENERAL_PROPERTIES_JOIN = `
 	cu.description AS "description"
 `;
-const QUERY_CONTENT_JOIN_PROPERTIES = `
+const QUERY_CONTENT_JOIN_PROPERTIES_PUBLIC = `
+	c.title as "title",
+	c.link as "link",
+	c.participants AS "participants",
+	c.date_published AS "datePublished"
+`;
+	// rename this sometime when clearning. it is the same as a public query..
+const QUERY_CONTENT_JOIN_PROPERTIES_FOR_EDIT = `
 	c.id AS "id",
 	c.title AS "title",
 	c.link AS "link",
@@ -26,15 +33,6 @@ const QUERY_CONTENT_JOIN_PROPERTIES = `
 	c.date_standby AS "dateStandby",
 	c.date_published AS "datePublished"`;
 	
-// const QUERY_USER_PROPERTIES = `
-// 	username, 
-// 	first_name AS "firstName", 
-// 	last_name AS "lastName", 
-// 	verified, 
-// 	picture,
-// 	description`;
-	//lowpriority: clean this up and modularize. minus "accountStatus", consider next time designing the schema as "about" instead of "description"
-
 //	JSON-SQL Mapping Constants
 const JSON_SQL_SET_MAPPING = {
 	userID: 'user_id',
@@ -61,13 +59,13 @@ class ContentUserJoin {
 	 */
 	static async getAllUserContent(username) {
 
-		let result = await db.query(`
-			SELECT ${QUERY_CONTENT_JOIN_PROPERTIES}, ${QUERY_GENERAL_PROPERTIES_JOIN}
-				FROM contents_users_join
-				JOIN "contents" on "contents"."id" = "${this.relationName}"."content_id"
-				WHERE user_id = $1
-				ORDER BY "contents".date_published`, 
-			[username]);
+		const result = await db.query(`
+			SELECT ${QUERY_CONTENT_JOIN_PROPERTIES_PUBLIC}
+				FROM ${this.relationName} AS cu
+				JOIN contents AS c ON c.id = cu.content_id
+				WHERE cu.user_id = $1
+				ORDER BY c.date_published
+			`, [username]);
 
 		const contentList = result.rows;
 		console.log(contentList);
@@ -83,13 +81,13 @@ class ContentUserJoin {
 	 */
 	static async getAllUserPublicContent(username) {
 
-		let result = await db.query(`
-			SELECT content_id AS "contentID", description, ${QUERY_CONTENT_JOIN_PROPERTIES}
-				FROM contents_users_join
-				JOIN "contents" on "contents"."id" = "${this.relationName}"."content_id"
-				WHERE user_id = $1 AND ("contents"."status" = 'active' OR "contents"."status" = 'legacy')
-				ORDER BY "contents"."date_published"`, 
-			[username]);
+		const result = await db.query(`
+			SELECT ${QUERY_CONTENT_JOIN_PROPERTIES_PUBLIC}
+				FROM ${this.relationName} AS cu
+				JOIN contents AS c ON c.id = cu.content_id
+				WHERE cu.user_id = $1 AND (c.status = 'active' OR c.status = 'legacy')
+				ORDER BY c.date_published
+			`, [username]);
 
 		const contentList = result.rows;
 		console.log(contentList);
@@ -138,7 +136,7 @@ class ContentUserJoin {
 	 static async getByPKPrivate(userID, contentID) {
 		
 		const result = await db.query(`
-			SELECT ${QUERY_GENERAL_PROPERTIES_JOIN}, ${QUERY_CONTENT_JOIN_PROPERTIES}
+			SELECT ${QUERY_GENERAL_PROPERTIES_JOIN}, ${QUERY_CONTENT_JOIN_PROPERTIES_FOR_EDIT}
 				FROM ${this.relationName} AS cu
 				JOIN contents AS c ON c.id = cu.content_id
 				WHERE cu.user_id = $1 AND cu.content_id = $2
@@ -219,7 +217,7 @@ class ContentUserJoin {
 				)
 				JOIN contents AS "c" ON c.id = contents_id
 				WHERE user_id = $2 AND content_id = $3
-				RETURNING description, ${QUERY_CONTENT_JOIN_PROPERTIES}
+				RETURNING description, ${QUERY_CONTENT_JOIN_PROPERTIES_FOR_EDIT}
 			`, [description, userID, contentID]);
 */
 		console.log('aFDS')
