@@ -344,10 +344,12 @@ Some suggested improvements to this concept are:
 |41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53|33|
 |42|fin `content.js`?|2023-01-02|18:38 - 20:30|112|
 |43|.-. backend work. finished `Users`|2023-01-02|22:02 - 23:54|112|
-|44|more cursed "Cannot set headers after they are sent to the client. in `Content_User_Join.js`|2023-01-03|09:17 - 11:04||
-|45|renamed `router._testCommons` to `router._testCommons.test`; updated documentation for project clarity .___.|2023-01-03|14:00 - 15:52||
+|44|more cursed "Cannot set headers after they are sent to the client. in `Content_User_Join.js`|2023-01-03|09:17 - 11:04|107|
+|45|renamed `router._testCommons` to `router._testCommons.test`; updated documentation for project clarity .___.|2023-01-03|14:00 - 15:52|112|
+|46|documentation for project clarity; |2023-01-03|17:56 - :||
 |4||2023-01-03|: - :||
-|4||2023-01-03|: - :||
+45	46
+632
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|`formik` for frontend, attempted `material-ui`; db work|2022-12-28|16:01 - 18:24|143|
