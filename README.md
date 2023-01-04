@@ -173,13 +173,12 @@ npm test	# alias for `react-scripts test` in `package.json`
 │	├── `GET`		/[username]/			# return user by id, public info
 │	├── `GET`		/[username]/edit		# return user by id, private info
 │	└── `PATCH`		/[username]/edit		# update user by id, private info
-│	├── `DELETE`	/[username]/			# delete user by id
+│	└──	`DELETE`	/[username]/			# delete user by id
 ├── cujoin
 |	├──	`GET`		/[username]/[contentID]			# return cujoin, public info
 |	├──	`GET`		/[username]/[contentID]/edit	# return cujoin, content private information
 |	├──	`PATCH`		/[username]/[contentID]/edit	# update cujoin
-|	├──	`DELETE`	/[username]/[contentID]/		# delete cujoin by pk
-|	└──	`GET`		/[username]/					#
+|	└──	`DELETE`	/[username]/[contentID]/		# delete cujoin by pk
 └── contents/
 	├──	`POST`		/						# create content
 	├──	`GET`		/						# return contents (w/ filter)
@@ -219,16 +218,6 @@ npm test	# alias for `react-scripts test` in `package.json`
 |20|`PATCH`, `/:contentID/publish`|`Content`, `publishUpdate()`|**`todo: test`**|Used to set the content record `status` from `standby` to `published`.|
 |21|`PATCH`, `/:contentID/update`|`Content`, `...`|**skipped**|**skipped**. Used by the admin to set a content record `status` from `published` to `legacy`.|
 |22|`DELETE`, `/:contentID`|`Content`, `delete()`|Deleted record's `id` and `title`.|Tested but not used concerning practices.|
-
-### Remaining Routes
-08	=> not used?
-09	=> => `error: headersSent` by `node-pg`
-10	=> see `09`
-12	=> test, the current pattern is /user/contid... (cujoin/string/integer/)
-13	=> test, the current pattern is /user/contid... (cujoin/string/integer/)
-17	=> `error: headersSent` (node-pg sending an express resposne). **SIMPLIFIED** This route now switches the state between `created` and `standby` depending on whether or not `participants===signed`js. For the sake of time, it also modifies the join entries to reflect that of the `participants`.|
-18	=> held up by `17`
-20	=> needs test; Does a final check whether or not `participants===signed`
 
 ## 02.04. Resources & Data Source
 - The sample data is dummy data.
@@ -281,7 +270,7 @@ let requestData = {filters: video_ids};
 response.data.videos[INDEX];
 ```
 
-## 02.05. Further Study
+## 02.05. Further Study (`todo`: organize)
 Some suggested improvements to this concept are:
 1. **admin dashboard**. admin dashboard to demonstrate potential of the present database schema design, specifically the `ENUM`sql types
 2. **realistic schema**. implement "hidden" status for suspended users/content?
@@ -289,23 +278,44 @@ Some suggested improvements to this concept are:
 4. **real-time editing**. use a websockets connection for editing a `byview` or `presplit` collab to quickly negotiate an agreement 
 5. **intergrated communication**. maybe an integrated chat system, i.e. 3rd party or built-in integrated with the application to facilitate communication between users to organize collabs.
 6. **user safety**. given that social media connects many users, implement a "parental controls" or "guardian" feature to protect underage users that may want to use the collabs feature. this could be a "guardian account" acting as an "agent" for the underage user where any invitations to an underage user must be accepted by the respective "guardian account".
-7. **MORE TIME SPENT ON DOCUMENTATION**. see **02.06 Glaring Lack-of-Direction Modifications Examples**
-
-## 02.06 Glaring Lack-of-Direction Modifications Examples
-1. `./backend/models/Content_User_Join:111-138: getAllPublic`: I written this method prior to finalizing `./backend/models/Content.js`. Before I proposed that any user joining a content will get a join content added to `contents_user_join`. Therefore, a `JOIN`sql to the `contents` relation is needed to return only content that is published: with status `published` or `legacy`. However, after 2022-12-30, I have set that only published content will appear in `contents_user_join`, deprecating `Content_User_Join.getAllPublic(queryObject)`. `39-48:create`, `53-58:publish`, `67-109:create` are deprecated for the same reason.
-2. `./backend/models/Content_User_Join:139-160: getAllPrivate` is partially written and incomplete for reason (**1**).
-3. 
-
-
--	Ok, so `/` for auth, `contents/` and `users/` for respective models.
-	- `users/` focuses on returning the users content
-	- `contents/` focuses on returning the contract and content with user(s) involved
+7. **MORE TIME SPENT ON DOCUMENTATION BEFOREHAND**.
+- **Technical**
+	- **Use Flask Backend**: Since this is a prototype application, form validation w/ wtforms is much more straightforward and less time-consuming to use.
+	- 
+- Concerning the Contracts ("SetAgreement") feature UI to set contract & sign:
+	- Considering decimal slider input or relative input (send to a `PUT`/`PATCH`-called function that ).
+	- **Front-End**: "make it even button", Math.floor(first"Repeated"Digits(1/[number of participants]))/[number of participants])
+- Concerning the Contracts ("SetAgreement") feature UI to invite users:
+	- Users will receive an "invite" before being listed as a participant; Users may set their invite settings to (`Anyone`, `No One`), (`Followers & Following`, `Followers`, `Following`), (`Friends / Mutal Friends`?)
+	- Real-time backend validation user search (make the search bar in the frontend a Component and import it into the Content creation page).
+	- Complimentary backend validation of submitted participants users (I am guessing `SELECT username FROM users WHERE username = $1 OR ... = $n` and check against the results).
+	- Hide users < 18 to be found unless linked parent/guardian account that can act as an intemediatary?
+- Concerning Elevated Users
+	- **Schema**: change `isElevated` to `isAdmin` 
+	- **More Routes**: admin/moderator dashboard to demonstrate full potential of the database schema design.
+	- admin delete content ()
+- Concerning Users & Contents
+	- Best practices for implementing `DELETE` routes
+- do an invitation-based `participants` invite system so that the invited user has to confirm before added to a content page
+- add an additional "social aspect" (chatting, messaging?) to organize collabs; use the `verified`/`parental_controls`/`birthdate` to 
+- had difficulty giving access to "invited" users to edit the main content.
+- content creation: when adding a username, on the frontend, validate it.
+- use Python Flask/React: form validation is much more straightforward and it is good for prototyping
+- better UI to set contract & signed
+- hide in progress 
+- admin dashboard to demonstrate full potential of the database schema design.
+- admin delete content ()
+- more time: delete content joins individually (`./models/Content.js`); remove master delete by owner (from database schema design)
+- do an invitation-based `participants` invite system so that the invited user has to confirm before added to a content page
+- add an additional "social aspect" (chatting, messaging?) to organize collabs; use the `verified`/`parental_controls`/`birthdate` to 
+- had difficulty giving access to "invited" users to edit the main content.
+- content creation: when adding a username, on the frontend, validate it.
 
 # 03. Project Conclusions
+## 03.01. Placeholder
 
 
-
-## 03.0x. Debugging Notes
+## 03.02. Debugging Notes
 1. Express Middleware has a a bias for falsey i.e. (`middlewareAAE.js: isReferenceUserOrAdmin`):
 ```js
 //	works correctly (only throws error if `notRefUserOrAdmin` is true, otherwise `nxt()`):
@@ -336,7 +346,11 @@ Some suggested improvements to this concept are:
 3. 
 
 # 04. Time Tracker
-**Summary**: 9h8m seeding user data; 50h52m being mostly confused on how the backend should be implemented (insufficient prior documentation) with schema revisions; 10h_m less confused on implementing the backend; 20h React Front-End
+- **Seeding User Database + Schema Design**: 09h08m
+- **Backend**: 
+	- Being Generally Confused What Does What because of lack of Documentation and Schema Revisions: 50h52m
+	- Being Less Confused about the Backend (post-Frontend Work): 1_h__m
+- **Frontend**: 20h__m
 
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
@@ -402,15 +416,55 @@ Some suggested improvements to this concept are:
 1190	
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
-|47||2022-01-03|21:55 - 22:||
+|47||2022-01-03|21:55 - 22:17||
 |5x||2022-01-06|: - :||
 ||||**Total Time**|_ minutes (--h--m)|
 
+
+### 2023-01-03 todo list
+1. getAllUserContent()/getAlluserPublicContent (cujoin model + test in model); see below
+	a. update user model to contain content, as `user.contents = [...]`
+```js
+
+backend 04 => frontend 05
+|04|`GET`, `/:username`|`User`, `getByPK()`|user public properties|**?**|
+|05|`returnUser(username)`|`Users`/`GET`|`/users/:username/`|
+ok, this will fetch the user data
+- GET /:username/public
+- Get /:username/private front-end: (if curr session === username); && backend isRefUser
+- interesting note: the user doesn't have issues with getByPKPrivate (yet)
+|12|`GET`, `/:username`|`CU_Join`*, `getAllUserContent()`|`[ contents ]`, `status == 'published' || 'legacy'`**`todo`**|Front-end user profile page.|
+
+|13|`GET`, `/:username`|`CU_Join`*, `getAllUserPublicContent()`|`[ contents ]`, all **`todo`**|Front-end user profile page.|
+
+```
+2. work on any non-`headerssent` error routes:
+08	=> not used?
+09	=> => `error: headersSent` by `node-pg`
+10	=> see `09`
+12	=> test, the current pattern is /user/contid... (cujoin/string/integer/)
+13	=> test, the current pattern is /user/contid... (cujoin/string/integer/)
+17	=> `error: headersSent` (node-pg sending an express resposne). **SIMPLIFIED** This route now switches the state between `created` and `standby` depending on whether or not `participants===signed`js. For the sake of time, it also modifies the join entries to reflect that of the `participants`.|
+18	=> held up by `17`
+20	=> needs test; Does a final check whether or not `participants===signed`
+3. plugin working routes to front end. update documentation and go walkthrough ignoring `headerssent` bug model-route-tests
+	a. flagged headerssent bug: `Contents`: `edit`; `CUJoin`: `edit`.
+	b. interesting to note the cujoin public `getbypk()` uses `getbyprivatepk()` but doesn't yield the error for now...
+	c. interesting to note that the `Users` pk is ok for now
+4. fix the `headersSent` bug ;___________;
+
+
+==============separator===============
 
 2. `Contents.js:publishUpdate:~300`, 'lowpriority': UX confusion?
 	- `Contents.js:publishUpdate:~305`, 'lowpriority': made the diff between standby and open negli.
 	- `Contents.js:publishUpdate:~337`, 'lowpriority': consider being independent of: `POSTGRESQL ISNERT INTO ON CONFLICT DO NOTHING`; needs further work for <PSQL 9.5
 	- `Contents.js:publishUpdate:~347`, `lowpriority`: 
+
+
+-	Ok, so `/` for auth, `contents/` and `users/` for respective models.
+	- `users/` focuses on returning the users content
+	- `contents/` focuses on returning the contract and content with user(s) involved
 
 
 see `router.content.js: ~104` (todo)
@@ -427,17 +481,3 @@ note: finish contents first, (JOIN creation)
 	- `Content_User_Join`
 - redo:
 	- contents & contents_users_join where public resposnes with lesser data is just shaving off distinct private data ._.
-
-# More Time Wishlist
-- use Python Flask/React: form validation is much more straightforward and it is good for prototyping
-- better UI to set contract & signed
-- hide in progress 
-- admin dashboard to demonstrate full potential of the database schema design.
-- admin delete content ()
-- more time: delete content joins individually (`./models/Content.js`); remove master delete by owner (from database schema design)
-- do an invitation-based `participants` invite system so that the invited user has to confirm before added to a content page
-- add an additional "social aspect" (chatting, messaging?) to organize collabs; use the `verified`/`parental_controls`/`birthdate` to 
-- had difficulty giving access to "invited" users to edit the main content.
-- content creation: when adding a username, on the frontend, validate it.
-
-- `Content_User_JOIN.js: update` 2022-12-29 Note: generalize for composite PK by passing in pk as object and do a parameterizedWHERE query builder on it
