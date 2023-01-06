@@ -214,36 +214,22 @@ class Content {
 	 */
 	static async getByPKPrivate(pk, res) {
 		
-		console.log('ENTER MODEL BODY ===================================');
-		console.log(`headersSent (\'Content.js\' ~217): ${res.headersSent}`);
-		// const RELATION_NAME = this.relationName;
+		// console.log('ENTER MODEL BODY ===================================');
+		// console.log(`headersSent (\'Content.js\' ~217): ${res.headersSent}`);
 
-		// async function asdf() {
-		// 	console.log(res.headersSent);
-		// 	const result = await db.query(`
-		// 		SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
-		// 			FROM ${RELATION_NAME}
-		// 			WHERE id = $1`,
-		// 		[pk]
-		// 	);
-		// 	console.log(res.headersSent);
-		// }
-
-		// await asdf();
-
-		console.log(`headersSent (\'Content.js: ~233\'): ${res.headersSent}`);
+		// console.log(`headersSent (\'Content.js: ~233\'): ${res.headersSent}`);
 		const result = await db.query(`
 			SELECT ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}
 				FROM ${this.relationName}
 				WHERE id = $1`,
 			[pk]);
-		// console.log(result.rows[0]);
-		console.log('QUERY COMPLETED ===================================');
-		console.log(`headersSent (\'Content.js: ~240\'): ${res.headersSent}`);
-			// wth is res sent here? 
+
+		// console.log('QUERY COMPLETED ===================================');
+		// console.log(`headersSent (\'Content.js: ~240\'): ${res.headersSent}`);
+
 		const contentObject = result.rows[0];
-		// console.log(result.rows[0]);
-		console.log(`headersSent (\'Content.js: ~245\'): ${res.headersSent}`);
+
+		// console.log(`headersSent (\'Content.js: ~245\'): ${res.headersSent}`);
 
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
@@ -458,8 +444,6 @@ class Content {
 
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find content with id: ${pk}.`);
-		
-		const participantArray = JSON.parse(contentObject.participants);
 
 		return participantArray;
 

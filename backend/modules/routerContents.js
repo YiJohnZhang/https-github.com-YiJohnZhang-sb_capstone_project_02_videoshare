@@ -93,34 +93,13 @@ router.get('/:contentID', async(req, res, nxt) => {
 router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, nxt) => {
 	try{
 		
-		console.log(`heardersSent (\'routerContents.js\': ~96): ${res.headersSent}`)
+		// console.log(`heardersSent (\'routerContents.js\': ~96): ${res.headersSent}`)
 		// const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, res);
 		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, res);
 			// so apparently getByPKPrivate is calling `res`?
-		console.log(`heardersSent (\'routerContents.js\': ~99): ${res.headersSent}`)
+		// console.log(`heardersSent (\'routerContents.js\': ~99): ${res.headersSent}`)
 
 			
-		// Quick dirty fix:
-		// console.log(res.headersSent);
-		// const contentID = req.params.contentID;
-		// // const dirtyResult = await db.query(`
-		// // 	SELECT
-		// // 		id, title, summary, description, link,
-		// // 		participants, date_created AS "dateCreated", date_standby AS "dateStandby", date_published AS "datePublished", 
-		// // 		status,  owner, contract_type AS "contractType", contract_details AS "contractDetails", contract_signed AS "contractSigned"
-		// // 		FROM contents
-		// // 		WHERE id = $1 AND (status = 'open' OR status = 'standby')`, [contentID]);
-		// it has an issue with this particular ruote in particular.
-
-		// // res.headersSent = false;
-		// console.log(res.headersSent);
-
-		// console.log(dirtyResult.rows[0]);
-
-			// todo: add JOIN query to return list users??? participants already exists .___.
-			// NOTE (OUT OF SCOPE): if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
-
-		// console.log(res.headersSent)
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 		
 	}catch(error){
@@ -130,45 +109,6 @@ router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, 
 	}
 
 });
-
-/* 	
-router.get('/:contentID/gedit', isLoggedIn, isParticipatingUser, async(req, res, nxt) => {
-		try{
-		
-		// console.log(res.headersSent)
-		// const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, res);
-			// so apparently getByPKPrivate is calling `res`?
-
-			
-		// Quick dirty fix:
-		// console.log(res.headersSent);
-		// const contentID = req.params.contentID;
-		// // const dirtyResult = await db.query(`
-		// // 	SELECT
-		// // 		id, title, summary, description, link,
-		// // 		participants, date_created AS "dateCreated", date_standby AS "dateStandby", date_published AS "datePublished", 
-		// // 		status,  owner, contract_type AS "contractType", contract_details AS "contractDetails", contract_signed AS "contractSigned"
-		// // 		FROM contents
-		// // 		WHERE id = $1 AND (status = 'open' OR status = 'standby')`, [contentID]);
-		// it has an issue with this particular ruote in particular.
-
-		// // res.headersSent = false;
-		// console.log(res.headersSent);
-
-		// console.log(dirtyResult.rows[0]);
-
-			// todo: add JOIN query to return list users??? participants already exists .___.
-			// NOTE (OUT OF SCOPE): if published, block this edit for now (to edit the join, it is `/users/:username/:contentID/edit`)
-
-		// console.log(res.headersSent)
-		return res.json({content: parseResponseBodyProperties(contentResult)});
-		
-	}catch(error){
-		console.log(error);
-			// "Cannot set headers after they are sent to the client"
-		nxt(error);
-	}
-});*/
 
 /** PATCH `/[contentID]/edit`
  *	( input ) => { contentResult }

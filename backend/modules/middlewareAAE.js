@@ -129,18 +129,12 @@ async function checkAdminHelper(userToken){
  */
 async function isAdmin(req, res, nxt) {
 
-	try {
+	// const isAdmin = await checkAdminHelper(res.locals.user);
 
-		// const isAdmin = await checkAdminHelper(res.locals.user);
+	if(res.locals.user.isElevated)
+		nxt();
 
-		if(res.local.user.isElevated)
-			nxt();
-			
-		nxt(new UnauthorizedError('Not an admin!'));
-
-	} catch(err) {
-		nxt(err);
-	}
+	nxt(new UnauthorizedError('Not an admin!'));
 
 }
 
@@ -206,19 +200,21 @@ async function isParticipatingUser(req, res, nxt) {
 
 	// for editing the content (sign and stuff.)
 
+	let result
+
 	try{
 
-		const result = await ContentModel.getParticipants(req.params.contentID);
-		const participantSet = new Set(result);
+		result = await ContentModel.getParticipants(req.params.contentID);
 
-		if(participantSet.has(res.locals.user.username))
-			nxt();
-
-		throw new UnauthorizedError('not a participant');
 
 	}catch(error){
-		nxt(new UnauthorizedError('not a participant'))
+		nxt(new UnauthorizedError('not a participant'));
 	}
+
+	const participantSet = new Set(JSON.parse(result));
+	
+	if(participantSet.has(res.locals.user.username))
+		nxt();
 
 }
 

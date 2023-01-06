@@ -236,12 +236,20 @@ describe('GET \`/contents/:contentID/edit\`', () => {
 	// => {content: parseResponseBodyProperties(contentResult)}
 	//	private level
 
-	test('works', async() => {
+	test('works, content 1', async() => {
 
 		const response = await request(app)
-			.get('/contents/3/edit')
+			.get('/contents/1/edit')
 			.set('authorization', `Bearer ${user1Token}`);
-		console.log(response.body);
+		expect(response.body.content).toEqual(CONTENT_1_PRIVATE_RESPONSE);
+	
+	});
+
+	test('works, content 3', async() => {
+
+		const response = await request(app)
+			.get('/contents/1/edit')
+			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body.content).toEqual(CONTENT_1_PRIVATE_RESPONSE);
 	
 	});
