@@ -398,8 +398,11 @@ Some suggested improvements to this concept are:
 |46|documentation for project clarity; start `ContentUserJoin` model test|2023-01-03|17:56 - 18:42|46|
 |48|`cujoin` tests|2023-01-04|08:53 - 10:03|70|
 |49|resolved `headersSet` error|2023-01-05|18:59 - 19:18|19|
-|50||2022-01-05|: - :||
-|5x||2022-01-05|: - :||
+|50|`contents` work|2022-01-06|15:11 - :||
+|51||2022-01-06|: - :||
+|52||2022-01-06|: - :||
+|53||2022-01-06|: - :||
+|54||2022-01-06|: - :||
 45	46
 678	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
