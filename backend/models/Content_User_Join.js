@@ -236,13 +236,13 @@ class ContentUserJoin {
 			DELETE
 				FROM ${this.relationName}
 				WHERE user_id = $1 AND content_id = $2
-				RETURNING user_id as "username", content_id
+				RETURNING user_id as "username", content_id AS "id"
 			`,[userID, contentID]);
 
 		const cuJoinObject = result.rows[0];
 
 		if (!cuJoinObject)
-			throw new NotFoundError(`No ${this.relationName}: (${userID}, ${contentID})`);
+			throw new NotFoundError(`Cannot find ${this.relationName}: (${userID}, ${contentID})`);
 
 		return cuJoinObject;
 

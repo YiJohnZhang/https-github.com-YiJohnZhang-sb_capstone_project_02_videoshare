@@ -86,12 +86,13 @@ Tests	DIR
 		├──	__tests__/	
 29		│	├── helpers.*.js
 10		│	├── router.authentication.test.js
-27		│	├── router.users.test.js
-xx		│	├── router.contents.test.js
-xx		│	├── router.content_user_join.test.js	# rename to "contentsusersjoin"
---		│	├── router._testCommons.test.js
-		│	├── model.ContentUserJoin.test.js
---		│	└── model._testCommons.test.js
+32		│	├── router.users.test.js
+15U1I	│	├── router.contents.test.js
+11		│	├── router.content_user_join.test.js	# rename to "contentsusersjoin"
+--		│	├── router._testCommons.test.js			# 01 but doesn't count
+06		│	├── model.ContentUserJoin.test.js
+--		│	├── model._testCommons.test.js			# 01 but doesn't count
+--		│	└── commonTestObject._Test_Contents		# 01 but doesn't count			
 			add e2e tests after submitting app, add
 		├──	... 
 		/frontend
@@ -425,7 +426,7 @@ Some suggested improvements to this concept are:
 |48|`cujoin` tests|2023-01-04|08:53 - 10:03|70|
 |49|resolved `headersSet` error|2023-01-05|18:59 - 19:18|19|
 |50|`contents` and `cujoin` work|2022-01-06|15:11 - 17:43|152|
-|52||2022-01-07|10:22 - :||
+|52||2022-01-07|10:22 - 11:42||
 |53||2022-01-07|: - :||
 |54||2022-01-07|: - :||
 52	53
@@ -450,110 +451,3 @@ Some suggested improvements to this concept are:
 149
 
 ||||**Total Time**|_ minutes (--h--m)|
-
-
-## 2023-01-06 todo list
-1. Backend
-|##|Method, Rel. Path|Model, Method|Returns|Purpose|
-|-|-|-|-|-|
-||`/contents`|**Content**|||
-|07|`GET`, `/`|`Content`, `getAllPublic()`|arr contents (public)|**`todo`: test**Content search feature.|
-|10|`PATCH`, `/:contentID/edit`|`Content`, `update()`|content private properites|**`todo`** Used to update master content record before publishing.|
-|11|`PATCH`, `/:contentID/publish`|`Content`, `publishUpdate()`|**`todo: test`**|Used to set the content record `status` from `standby` to `published`.|
-||`/cujoin`|**Content-User `Join`**|||
-|12|`GET`, `/:username/:contentID/`|`CU_Join`*, `getByPK()`|content public properties|get `participants` first then get a `random join` (for **both** `byview` and `presplit` for now).|
-|||**Existing but not used/deprecated Routes**|||
-||`/contents`|**Content**|||
-|15A|`GET`, `/`|`Content`, `getAll()`|**deprecated**|**deprecated**|
-|16|`GET`, `/:contentID`|`Content`, `getByPK(contentID)`|content public properties|**not used for this project?**|
-|19|`PATCH`, `/:contentID/sign`|`Content`, `signUpdate()`|**skipped**|**skipped**. Allow a user to toggle whether or not they are signed.|
-|21|`PATCH`, `/:contentID/update`|`Content`, `...`|**skipped**|**skipped**. Used by the admin to set a content record `status` from `published` to `legacy`.|
-||`/cujoin`|**Content-User `Join`**|||
-
-- users
-	- **04A/05A** => integrate into respective routes & test
-- contents
-	- **07** => tests
-	- **10** => tests
-	- **11** => tests and possibly implementation
-	- delete (string something error)
-- cu_join
-	- **12** => random cu_join feature?
-	- delete (???)
-- consider the random generator route
-
-2. Frontend
-|##|API Method Signature|Model/Method|Backend Route|
-|-|-|-|-|
-||`Authorization`|||
-|01|`register(reqBody)`|`Authentication`/`POST`|`/authentication/register`|
-|02|`login(reqBody)`|`Authentication`/`POST`|`/authentication/login`|
-||`Users`|||
-|03|`searchUsers(reqQuery)`|`Users`/`GET`|`/users/`|
-|04|`returnUser(username)`|`Users`/`GET`|`/users/:username/`|
-|05|`returnFullUserData(username)`|`Users`/`GET`|`/users/:username/edit`|
-|06|`patchUser(username, reqBody)`|`Users`/`PATCH`|`/users/:username/edit`|
-||`Contents`|||
-|--|`returnAllPublicContents()`|`Contents`/`GET`|`/contents/`|
-|07|(searchContents, doubles as #7) `searchPublicContents(reqQuery)`|`Contents`/`GET`|`/contents/`|
-|08|`createContent(reqBody)`|`Contents`/`POST`|`/contents/:contentID/`|
-|09|`getFullContentData(contentID)`|`Contents`/`GET`|`/contents/:contentID/edit`|
-|10|`patchContent(contentID, reqBody)`|`Contents`/`PATCH` (update)|`/contents/:contentID/edit`|
-|11|`publishContent(contentID, reqBody)`|`Contents`/`PATCH` (updatePublish)|`/contents/:contentID/publish`|
-||`cuJoin`|||
-|12|`viewPublicContent(contentID)` (username randomly generated)|`Contents_Users_Join`/`GET`|`/cujoin/:contentID/:username`|
-|13|`getJoinContentData(contentID, username)`|`Contents_Users_Join`/`GET`|`/contents/:contentID/:username/`|
-|14|`patchJoinContent(contentID, username, reqBody)`|`Contents_Users_Join`/`PATCH`|`/contents/:contentID/:username/edit`|
-||**Unused Methods**|||
-||`Users`|||
-|03|`returnAllUsers()`: DISABLED|`Users`/`GET`|`/users/`|
-|08|`deleteUser(username)`: DISABLED|`Users`/`DELETE`|`/users/:username`|
-||`Contents`|||
-|09|`returnContent(contentID)`|`Contents`/`GET`|`/contents/:contentID/`|
-|10|`returnAllContents()`|`Contents`/`GET`|`/contents/`|
-|12|`returnContent()`|`Contents`/`GET`|`/contents/:contentID/`|
-|17|`deleteContent(contentID)`: DISABLED|`Contents`/`DELETE`|`/contents/:contentID/`|
-||`cuJoin`|||
-|20|`deleteJoinContent(contentID, username)`: DISABLED|`Contents_Users_Join`/`DELETE`|`/contents/:contentID/:username/`|
-
-- fin:
-	- `LogoutComponent`
-	- `ErrorPage`
-	- `UserCard`
-	- `ContentCard` (need to add links)	
-- just need API
-	- `ProfilePage`
-- need test:
-	- `NavBar`: maybe a frosted bg :)
-- need API:
-	- `HomePage`
-	- `OnboardingPage` and EN_FORM_ERR_HANDLING
-	- `EditUserPage` and EN_FORM_ERR_HANDLING, EN_authdepredirect
-	- `EditContentPage` (`save` to update content object; `signed`/`publish`: `signed` is toggl-ble and updates accordingly and appears aas `settled` for the owner; `publish` is disabled for non-owner users; publish is disabled if link is invalid)
-		- reduce the scope: just make it a text field (array and json field = text input and parse as array/json when sent to backend and show `save`/`publish`)
-		- double check form elements
-	- `EditJoinContentPage`
-- todo
-	- `content page` mockup
-	- content_imgs, add more contents (~2022-01-06)
-- more time
-	- add a means to link edits (isProfilePage will fetch the username; non-null publishedDate will decide the link format)
-	- bookmarkable search queries.
-
-3. Master list of copmonents
-|Page|Page Component|API Call|
-|-|-|-|
-|Home|`HomePage`|`searchUsers`, `searchContent` (`getAllContents`)|
-|Login|`OnboardingPage`|`authenticateUser`|
-|Signup|`OnboardingPage`|`registerUser`|
-|Logout|`LogoutComponent`|None|
-|Error|`ErrorPage`|None|
-|Profile|`ProfilePage`|`getUserData` (public or neq ref user) / `getFullUserData` (if reference user)|
-|Profile, Edit|`EditUserPage`|`getFullUserData` / `patchUserData`|
-|Content, Create|`EditContentPage`|`createContent`|
-|Content, Edit|`EditContentPage`|`getFullContentData` / `patchContent`|
-|Content, Publish|`EditContentPage`|`getFullContentData` / `publishContent`|
-|Join Content, Edit|`EditJoinContent`|`getJoinContentData` / `patchJoinContent`|
-|**Introduce** a Content Page|`ContentPage`|`getContentData`|
-
-4. extra tests (e2e)

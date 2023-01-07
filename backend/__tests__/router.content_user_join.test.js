@@ -161,15 +161,14 @@ describe('PATCH \`/cujoin/:username/:contentID/edit\`', () => {
 });
 
 /***	UNUSED: DELETE /:username/:contentID:id */
-/*
 describe('DELETE \`/cujoin/:username/:contentID\`', () => {
 
-	test('deletes content (admin)', async() => {
+	test('deletes content (admin): INTEGRATION TEST', async() => {
 		
 		const response = await request(app)
 			.delete('/cujoin/testuser1/1')
 			.set('authorization', `Bearer ${adminToken}`);
-		expect(response.body.content).toEqual({deleted: 'content1'});
+		expect(response.body).toEqual({deleted: 1});
 	
 		const response2 = await request(app)
 			.delete('/cujoin/testuser1/1')
@@ -178,7 +177,8 @@ describe('DELETE \`/cujoin/:username/:contentID\`', () => {
 
 	});
 
-	test('401: unauthorized (owner user)', async() => {
+	// 2022-12-30 SPECS: make it admin delete only for now.
+	test('401: unauthorized (reference user)', async() => {
 		
 		const response = await request(app)
 			.delete('/cujoin/testuser1/1')
@@ -186,17 +186,25 @@ describe('DELETE \`/cujoin/:username/:contentID\`', () => {
 		expect(response.statusCode).toEqual(401);
 	});
 
-	test('401: unauthorized (wrong user)', async() => {
+	test('401: unauthorized (non-reference user)', async() => {
 		
 		const response = await request(app)
 			.delete('/cujoin/testuser1/1')
-			.set('authorization', `Bearer: ${user3Token}`);
+			.set('authorization', `Bearer ${user3Token}`);
+		expect(response.statusCode).toEqual(401);
+
+	});
+
+	test('401: unauthorized (public)', async() => {
+		
+		const response = await request(app)
+			.delete('/cujoin/testuser1/1');
 		expect(response.statusCode).toEqual(401);
 
 	});
 		// includes for non-existing cujoin/testuser1 (404) b/c it isn't reference user
 
-	test('401 error: unauthorized (no token)', async() => {
+	test('401: unauthorized (no token)', async() => {
 		
 		const response = await request(app)
 			.delete('/cujoin/testuser1/1');
@@ -205,4 +213,3 @@ describe('DELETE \`/cujoin/:username/:contentID\`', () => {
 	});
 
 });
-*/

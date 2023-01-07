@@ -160,7 +160,7 @@ async function isReferenceUserOrAdmin(req, res, nxt) {
 	
 	try{
 
-		if(req.params.username != res.locals.user.username && !res.locals.user.isElevated)
+		if(req.params.username !== res.locals.user.username && !res.locals.user.isElevated)
 			throw new UnauthorizedError('neither reference user nor admin');
 
 		nxt();

@@ -2,10 +2,10 @@ const request = require('supertest');
 
 const app = require('../app');
 const {
-	USER_1_PUBLIC_CONTENT,
-	USER_2_PUBLIC_CONTENT,
-	USER_1_ALL_CONTENT,
-	USER_2_ALL_CONTENT
+	USER_1_PUBLIC_CONTENT_ROUTER,
+	USER_2_PUBLIC_CONTENT_ROUTER,
+	USER_1_ALL_CONTENT_ROUTER,
+	USER_2_ALL_CONTENT_ROUTER
 } = require('./commonTestObject._Test_Contents');
 
 const {
@@ -98,27 +98,34 @@ describe('GET \`/users\`: search', () => {
 
 });
 
-/***	GET /users/:username */
-describe('GET \`/users/:username\`', () => {
+/***	GET /users/:username/public */
+describe('GET \`/users/:username/public\`', () => {
 
-	test('public view testuser1 (reference user token)', async() => {
+	//	being a refernce token will never triugger `/users/:username/public
+	// test('public view testuser1 (reference user token)', async() => {
 
-		const response = await request(app)
-			.get('/users/testuser1')
-			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body).toEqual({
-			user: USER1_PUBLIC_RESPONSE
-		});
+	// 	const response = await request(app)
+	// 		.get('/users/testuser1/public')
+	// 		.set('authorization', `Bearer ${user1Token}`);
+	// 	expect(response.body).toEqual({
+	// 		user: {...
+	// 			USER1_PUBLIC_RESPONSE,
+	// 			content: USER_1_PUBLIC_CONTENT_ROUTER
+	// 		}
+	// 	});
 
-	});
+	// });
 
 	test('public view testuser1 (admin token)', async() => {
 
 		const response = await request(app)
-			.get('/users/testuser1')
-			.set('authorization', `Bearer ${user1Token}`);
+			.get('/users/testuser1/public')
+			.set('authorization', `Bearer ${adminToken}`);
 		expect(response.body).toEqual({
-			user: USER1_PUBLIC_RESPONSE
+			user: {...
+				USER1_PUBLIC_RESPONSE,
+				content: USER_1_PUBLIC_CONTENT_ROUTER
+			}
 		});
 
 	});
@@ -126,10 +133,13 @@ describe('GET \`/users/:username\`', () => {
 	test('public view testuser1 (non-reference user token)', async() => {
 		
 		const response = await request(app)
-			.get('/users/testuser1')
+			.get('/users/testuser1/public')
 			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.body).toEqual({
-			user: USER1_PUBLIC_RESPONSE
+			user: {...
+				USER1_PUBLIC_RESPONSE,
+				content: USER_1_PUBLIC_CONTENT_ROUTER
+			}
 		});
 
 	});
@@ -137,9 +147,12 @@ describe('GET \`/users/:username\`', () => {
 	test('public view (no token)', async() => {
 		
 		const response = await request(app)
-			.get('/users/testuser1');
+			.get('/users/testuser1/public');
 		expect(response.body).toEqual({
-			user: USER1_PUBLIC_RESPONSE
+			user: {...
+				USER1_PUBLIC_RESPONSE,
+				content: USER_1_PUBLIC_CONTENT_ROUTER
+			}
 		});
 
 	});
@@ -147,7 +160,7 @@ describe('GET \`/users/:username\`', () => {
 	test('404 error: user not found', async() => {
 
 		const response = await request(app)
-			.get('/users/testuser12');
+			.get('/users/testuser12/public');
 		expect(response.statusCode).toEqual(404);
 
 	});
@@ -155,10 +168,13 @@ describe('GET \`/users/:username\`', () => {
 	test('public view testuser3 (reference user token)', async() => {
 
 		const response = await request(app)
-			.get('/users/testuser3')
+			.get('/users/testuser3/public')
 			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.body).toEqual({
-			user: USER3_PUBLIC_RESPONSE
+			user: {
+				...USER3_PUBLIC_RESPONSE,
+				content: []
+			}
 		});
 
 	});
@@ -166,11 +182,92 @@ describe('GET \`/users/:username\`', () => {
 	test('public view testuser3 (non-reference user token)', async() => {
 
 		const response = await request(app)
-			.get('/users/testuser3')
+			.get('/users/testuser3/public')
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body).toEqual({
-			user: USER3_PUBLIC_RESPONSE
+			user: {
+				...USER3_PUBLIC_RESPONSE,
+				content: []
+			}
+
 		});
+
+	});
+
+});
+
+/***	GET /users/:username/private */
+describe('GET \`/users/:username/private\`', () => {
+
+	test('works: testuser1 (reference user token)', async() => {
+
+		const response = await request(app)
+			.get('/users/testuser1/private')
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.body).toEqual({
+			user: {...
+				USER1_PUBLIC_RESPONSE,
+				content: USER_1_ALL_CONTENT_ROUTER
+			}
+		});
+
+	});
+
+	// block any forced attempts to access private (even though front-end does not permit this route)
+	test('401: testuser1 (admin token attempt)', async() => {
+
+		const response = await request(app)
+			.get('/users/testuser1/private')
+			.set('authorization', `Bearer ${adminToken}`);
+		expect(response.statusCode).toEqual(401);
+
+	});
+
+	test('401: testuser1 (non-reference user token attempt)', async() => {
+		
+		const response = await request(app)
+			.get('/users/testuser1/private')
+			.set('authorization', `Bearer ${user3Token}`);
+		expect(response.statusCode).toEqual(401);
+
+	});
+
+	test('401: testuser1 (public view, no token)', async() => {
+		
+		const response = await request(app)
+			.get('/users/testuser1/private');
+		expect(response.statusCode).toEqual(401);
+
+	});
+
+	test('401: user not found (404)', async() => {
+
+		const response = await request(app)
+			.get('/users/testuser12/private');
+		expect(response.statusCode).toEqual(401);
+
+	});
+
+	test('works: testuser3 (reference user token)', async() => {
+
+		const response = await request(app)
+			.get('/users/testuser3/private')
+			.set('authorization', `Bearer ${user3Token}`);
+		expect(response.body).toEqual({
+			user: {
+				...USER3_PUBLIC_RESPONSE,
+				content: []
+			}
+		});
+
+	});
+
+	test('401: testuser3 (non-reference user token)', async() => {
+
+		const response = await request(app)
+			.get('/users/testuser3/private')
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.statusCode).toEqual(401);
 
 	});
 

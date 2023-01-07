@@ -6,6 +6,7 @@ const ContentUserJoinModel = require('../models/Content_User_Join');
 const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin } = require('./middlewareAAE');
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
 
+const { parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
 const updateUserSchema_userVariant = require('./schemas/updateUser.typeUser.schema.json');
 const updateUserSchema_adminVariant = require('./schemas/updateUser.typeAdmin.schema.json');
 
@@ -32,20 +33,21 @@ router.get('/', async(req, res, nxt) => {
 
 });
 
-/** GET `/[username]/`
- *	=> { userResult }
- *		where `userResult` is: { QUERY_GENERAL_PROPERTIES }
+/** GET `/[username]/public`
+ *	=> { user: userResult }
+ *		where `userResult` is: { QUERY_GENERAL_PROPERTIES, content: { correspondingContentResult } }
  *	
  *	Authorization Required: None
 */
-router.get('/:username', async(req, res, nxt) => {
+router.get('/:username/public', async(req, res, nxt) => {
 
 	try{
 		
 		let userResult = await UserModel.getByPK(req.params.username);
 
-		// const correspondingContentResult = await ContentUserJoinModel.getAllUserPublicContent(req.params.username);
-		// userResult.content = {correspondingContentResult}
+		const correspondingContentResult = await ContentUserJoinModel.getAllUserPublicContent(req.params.username);
+		const parsedContentResult = correspondingContentResult.map((element) => parseResponseBodyProperties(element));
+		userResult.content = parsedContentResult;
 
 		return res.json({user: userResult});
 
@@ -57,7 +59,7 @@ router.get('/:username', async(req, res, nxt) => {
 
 /** GET `/[username]/private`
  *	=> { userResult }
- *		where `userResult` is: { QUERY_GENERAL_PROPERTIES }
+ *		where `userResult` is: { QUERY_GENERAL_PROPERTIES, content: { correspondingContentResult } }
  *	
  *	Authorization Required: isLoggedIn, isReferenceUser
 */
@@ -67,8 +69,9 @@ router.get('/:username/private', isLoggedIn, isReferenceUser, async(req, res, nx
 		
 		let userResult = await UserModel.getByPK(req.params.username);
 
-		// const correspondingContentResult = await ContentUserJoinModel.getAllUserContent(req.params.username);
-		// userResult.content = {correspondingContentResult}
+		const correspondingContentResult = await ContentUserJoinModel.getAllUserContent(req.params.username);
+		const parsedContentResult = correspondingContentResult.map((element) => parseResponseBodyProperties(element));
+		userResult.content = parsedContentResult;
 		
 		return res.json({user: userResult});
 
