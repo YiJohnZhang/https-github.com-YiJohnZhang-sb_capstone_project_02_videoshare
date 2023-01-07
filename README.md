@@ -4,23 +4,29 @@
 **Live Link `as of 2023-01-0`**: []() (`todo:inserlink`)
 **NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, projects hosted on the free-tier has unreliable performance compared to being hosted locally. **Consider [downloading and building this project locally](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)**: the default backend port is `:3000` and the default frontend port `:3001`.
 
+## Special Thanks
+I like to thank the following two individuals for the respective reasons:
+- **Christoks Gkoros**: *Course Mentor and Project Advisor*. Provided guidance, experience, feedback, and industry insight throughout the course.
+- **Anh Mai**: *Course On-Demand Mentor*. Resolved a bug that has bogged down progress for the majority of the project's development.
+
 # Table of Contents (`todo:inserthyperlinks`)
 - [01. Project Features]()
-- [02. Project Specifications]()
+- [02. Project Details]()
 	- [02.01. Running & Testing Instructions](GITHUB:RUNNING AND TESTING INSTRUCTIONS)
 	- [02.02. Frontend Userflow]()
 	- [02.03. Backend Routes]()
 	- [02.04. Resources & Data Source]()
-	- [02.05. Further Study]()
-	- [02.06. Glaring Lack-of-Direction Modifications Examples]()
 - [03. Misecllaneous Notes & Dump]()
-	- [03.01. Time Tracker]()
-	- [Other Dump Notes (to delete)]()
+	- [03.01. Further Study]()
+	- [03.02. Debugging Notes]()
 
 # 01. Project Features (`todo`)
 - 
 - 
 - 
+
+
+USER FLOWS
 
 # 02. Project Specifications
 This web application uses the **PERN** stack:
@@ -270,7 +276,10 @@ let requestData = {filters: video_ids};
 response.data.videos[INDEX];
 ```
 
-## 02.05. Further Study (`todo`: organize)
+# 03. Project Conclusions
+`todo` inser text??
+
+## 03.01. Further Study (`todo`: organize)
 Some suggested improvements to this concept are:
 1. **admin dashboard**. admin dashboard to demonstrate potential of the present database schema design, specifically the `ENUM`sql types
 2. **realistic schema**. implement "hidden" status for suspended users/content?
@@ -310,10 +319,6 @@ Some suggested improvements to this concept are:
 - add an additional "social aspect" (chatting, messaging?) to organize collabs; use the `verified`/`parental_controls`/`birthdate` to 
 - had difficulty giving access to "invited" users to edit the main content.
 - content creation: when adding a username, on the frontend, validate it.
-
-# 03. Project Conclusions
-## 03.01. Placeholder
-
 
 ## 03.02. Debugging Notes
 1. Express Middleware has a a bias for falsey i.e. (`middlewareAAE.js: isReferenceUserOrAdmin`):
@@ -398,7 +403,7 @@ Some suggested improvements to this concept are:
 |46|documentation for project clarity; start `ContentUserJoin` model test|2023-01-03|17:56 - 18:42|46|
 |48|`cujoin` tests|2023-01-04|08:53 - 10:03|70|
 |49|resolved `headersSet` error|2023-01-05|18:59 - 19:18|19|
-|50|`contents` work|2022-01-06|15:11 - :||
+|50|`contents` work|2022-01-06|15:11 - 17:43||
 |51||2022-01-06|: - :||
 |52||2022-01-06|: - :||
 |53||2022-01-06|: - :||

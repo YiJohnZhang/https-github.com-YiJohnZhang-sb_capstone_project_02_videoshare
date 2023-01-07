@@ -26,18 +26,13 @@ const CU_CONTENT_1_PUBLIC_RESPONSE = {
 }
 
 const CU_CONTENT_1_PRIVATE_RESPONSE = {
-	id: 1,
-	title: 'test content',
-	description: 'mw1',
-	link: 'https://youtu.be/nhVJhRhJbJE',
+	...CU_CONTENT_1_PUBLIC_RESPONSE,
 	status: 'published',
-	participants: ["testuser1"],
-	dateCreated: '2022-12-30T08:00:00.000Z',
-	dateStandby: '2022-12-30T08:00:00.000Z',
-	datePublished: '2022-12-30T08:00:00.000Z'
+	dateCreated: '2022-12-29T08:00:00.000Z',
+	dateStandby: '2022-12-29T08:00:00.000Z'
 }
 
-/***	GET /contents	*/
+/***	GET /cujoin/testuser1	*/
 describe('GET \`/cujoin/:username/:contentID/\`', () => {
 
 	// auth: none
@@ -108,8 +103,7 @@ describe('GET \`/cujoin/:username/:contentID/edit\`', () => {
 	test('401: public request, content1', async() => {
 
 		const response = await request(app)
-			.get('/cujoin/testuser1/1/edit')
-			.set('authorization', `Bearer ${user1Token}`);;
+			.get('/cujoin/testuser1/1/edit');
 		expect(response.statusCode).toEqual(401);
 	
 	});
@@ -139,7 +133,7 @@ describe('PATCH \`/cujoin/:username/:contentID/edit\`', () => {
 			.send({description: 'asdfffff'})
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body.content).toEqual({
-			...CU_CONTENT_1_PRIVATE_RESPONSE,
+			id: 1,
 			description: 'asdfffff'
 		});
 	
@@ -166,5 +160,49 @@ describe('PATCH \`/cujoin/:username/:contentID/edit\`', () => {
 
 });
 
-/***	DELETE /:username/:contentID:id */
-/*	out of scope.*/
+/***	UNUSED: DELETE /:username/:contentID:id */
+/*
+describe('DELETE \`/cujoin/:username/:contentID\`', () => {
+
+	test('deletes content (admin)', async() => {
+		
+		const response = await request(app)
+			.delete('/cujoin/testuser1/1')
+			.set('authorization', `Bearer ${adminToken}`);
+		expect(response.body.content).toEqual({deleted: 'content1'});
+	
+		const response2 = await request(app)
+			.delete('/cujoin/testuser1/1')
+			.set('authorization', `Bearer ${adminToken}`);
+		expect(response2.statusCode).toEqual(404);
+
+	});
+
+	test('401: unauthorized (owner user)', async() => {
+		
+		const response = await request(app)
+			.delete('/cujoin/testuser1/1')
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.statusCode).toEqual(401);
+	});
+
+	test('401: unauthorized (wrong user)', async() => {
+		
+		const response = await request(app)
+			.delete('/cujoin/testuser1/1')
+			.set('authorization', `Bearer: ${user3Token}`);
+		expect(response.statusCode).toEqual(401);
+
+	});
+		// includes for non-existing cujoin/testuser1 (404) b/c it isn't reference user
+
+	test('401 error: unauthorized (no token)', async() => {
+		
+		const response = await request(app)
+			.delete('/cujoin/testuser1/1');
+		expect(response.statusCode).toEqual(401);
+
+	});
+
+});
+*/

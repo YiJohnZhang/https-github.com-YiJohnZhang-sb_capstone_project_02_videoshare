@@ -69,7 +69,7 @@ class ContentUserJoin {
 
 		const contentList = result.rows;
 
-		return result.rows;
+		return contentList;
 	
 	}
 
@@ -90,37 +90,37 @@ class ContentUserJoin {
 
 		const contentList = result.rows;
 
-		return result.rows;
+		return contentList;
 	
 	}
-
-	//	NOT IMPLEMENTED: USEFUL FOR USERS TO PRIORITIZE WHAT TO WORK ON (also searchable).
-	/**	getAllPrivateContent(username)
+	
+	/**	NOT IMPLEMENTED: getAllPrivateContent(username)
+	 *	useful for users to prioritize what to work on (generalized to searchable)
 	 *	Find all matching content_users_join records that is publicly available for a username.
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [{ pk, propertyOne, ... }, ...]
 	 */
-	static async getAllPrivateContent(username){
+	static async getAllPrivateContent(username, queryObject){
 
-		// const sqlQueryBeforeWHERE = (`
-		// 	SELECT ${QUERY_GENERAL_PROPERTIES}
-		// 	FROM ${this.relationName}
-		// 	JOIN "contents" ON "contents.id" = "${this.relationName}.content_id"`);
-		// const sqlQueryAfterWHERE = (`ORDER BY contents.date_published`);
-		// 	// too late to change 'contents.participants' to ARRAY type
+		const sqlQueryBeforeWHERE = `
+			SELECT ${QUERY_GENERAL_PROPERTIES}
+				FROM ${this.relationName} AS cu
+				JOIN ontents AS c ON c.id = cu.content_id`;
+		const sqlQueryAfterWHERE = `ORDER BY c.date_published`;
+			// too late to change 'c.participants' to ARRAY type
 
-		// let result;
+		let result;
 
-		// if(queryObject){
+		if(queryObject){
 
-		// 	const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
-		// 	result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} ${sqlQueryAfterWHERE}`, whereParameters);
+			const { parameterizedWHERE, whereParameters } = sqlFilterQueryBuilder(queryObject, JSON_SQL_QUERY_MAPPING);
+			result = await db.query(`${sqlQueryBeforeWHERE} ${parameterizedWHERE} AND cu.user_id = $${whereParameters.length + 1} ${sqlQueryAfterWHERE}`, [...whereParameters, username]);
 
-		// }else{
-		// 	result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
-		// }
+		}else{
+			result = await db.query(`${sqlQueryBeforeWHERE} ${sqlQueryAfterWHERE}`);
+		}
 
-		// return result.rows;		
+		return result.rows;		
 
 	}
 
@@ -196,13 +196,11 @@ class ContentUserJoin {
 			UPDATE ${this.relationName}
 				SET description = $1
 				WHERE user_id = $2 AND content_id = $3
-				RETURNING description
+				RETURNING content_id AS "id", description
 			`, [description, userID, contentID]);
 
-		console.log({description, userID, contentID})
-
-		const adsf = await db.query(`select * from ${this.relationName} where user_id = 'testuser1' AND content_id = 1`);
-		console.log(adsf.rows[0])
+		// const adsf = await db.query(`select * from ${this.relationName} where user_id = 'testuser1' AND content_id = 1`);
+		// console.log(adsf.rows[0])
 
 /*
 		const result = await db.query(`
@@ -218,9 +216,7 @@ class ContentUserJoin {
 				RETURNING description, ${QUERY_CONTENT_JOIN_PROPERTIES_FOR_EDIT}
 			`, [description, userID, contentID]);
 */
-		console.log('aFDS')
 		const cuJoinObject = result.rows[0];
-		console.log(result.rows[0])
 
 		if (!cuJoinObject)
 			throw new NotFoundError(`Cannot find ${this.relationName}: (${userID}, ${contentID})`);

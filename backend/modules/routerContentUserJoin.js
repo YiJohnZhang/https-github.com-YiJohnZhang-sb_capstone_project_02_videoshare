@@ -7,13 +7,10 @@ const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin, isOwner } 
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
 const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
 
-const newContentSchema = require('./schemas/newContent.schema.json');
-// const queryModelSchema = require('./schemas/queryContent.schema.json');
-const updateContentSchema = require('./schemas/updateContent.schema.json');
 const updateContentJOINSchema = require('./schemas/updateContentJOIN.schema.json');
 // use isParticipatingUser for editing contract by participating users
 
-/** GET `/[username]/[contentID]`
+/**	GET `/[username]/[contentID]`
  *	( input ) => { contentResult }
  *		where `input` is: ( , {  })
  *		where `contentResult` is: {  }
@@ -35,7 +32,7 @@ router.get('/:username/:contentID', async(req, res, nxt) => {
 
 });
 
-/** GET `/[username]/[contentID]/edit`
+/**	GET `/[username]/[contentID]/edit`
  *	( input ) => { contentResult }
  *		where `input` is: ( , {  })
  *		where `contentResult` is: {  }
@@ -48,9 +45,6 @@ router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req,
 
 		const contentResult = await ContentUserModel.getByPKPrivate(req.params.username, req.params.contentID);
 		
-		// it's res.headersSent again ._.
-		console.log(res.headersSent)
-		
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
@@ -60,7 +54,7 @@ router.get('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(req,
 
 });
 
-/** PATCH `/[username]/[contentID]/edit`
+/**	PATCH `/[username]/[contentID]/edit`
  *	( input ) => { contentResult }
  *		where `input` is: ( , {  })
  *		where `contentResult` is: {  }
@@ -89,5 +83,25 @@ router.patch('/:username/:contentID/edit', isLoggedIn, isReferenceUser, async(re
 
 //delete: regular: a user can hide it?
 //delete: admin: delete all instances
+/**	DELETE `/[username]/[contentID]`
+ *	( input ) => { modelName }
+ *		where `input` is: ( req.params.username, req.params.contentID )
+ *		where `contentResult` is: {  }
+ *	2022-12-30: Only Admin
+ *	Authorization Required: isLoggedIn, isReferenceUserOrAdmin
+ */
+ router.delete('/:username/:contentID', isLoggedIn, isReferenceUserOrAdmin, async(req, res, nxt) => {
+
+	try{
+
+		const contentResult = await ContentModel.delete(req.params.username, req.params.contentID);
+
+		return res.json({deleted: parseResponseBodyProperties(contentResult)});
+
+	}catch(error){
+		nxt(error);
+	};
+	
+});
 
 module.exports = router;

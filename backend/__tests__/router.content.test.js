@@ -280,7 +280,6 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 	// req.body => {content: parseResponseBodyProperties(contentResult)}
 	//	private level
 
-
 	test('test', async() => {
 
 		const response = await request(app)
@@ -367,8 +366,8 @@ describe('PATCH \`contents/:contentID/:username/publish\`', () => {
 
 });
 
-/***	DELETE /contents/:id */
-//	unused
+/***	UNUSED: DELETE /contents/:id */
+/*
 describe('DELETE \`/contents/:id\`', () => {
 
 	test('deletes content (admin)', async() => {
@@ -376,7 +375,7 @@ describe('DELETE \`/contents/:id\`', () => {
 		const response = await request(app)
 			.delete('/contents/1')
 			.set('authorization', `Bearer ${adminToken}`);
-		expect(response.body.content).toEqual({deleted: 'content1'});
+		expect(response.body.content).toEqual({deleted: 1});
 	
 		const response2 = await request(app)
 			.delete('/contents/1')
@@ -412,3 +411,4 @@ describe('DELETE \`/contents/:id\`', () => {
 	});
 
 });
+*/

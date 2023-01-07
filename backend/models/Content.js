@@ -7,7 +7,8 @@ const {
 } = require('../helpers/sqlQueryingHelper');
 const {
 	parseResponseBodyProperties
-} = require('../helpers/objectStringifyAndParseHelper')
+} = require('../helpers/objectStringifyAndParseHelper');
+const checkArrayEqualiy = require('../helpers/arrayEqualityHelper');
 
 const {
 	NotFoundError,
@@ -62,7 +63,7 @@ class Content {
 	 *
 	 *	Throws ConflictError for duplicates.
 	 **/
-	 static async create(newRecordObject){
+	static async create(newRecordObject){
 
 		const RELATION_NAME = this.relationName
 
@@ -118,13 +119,12 @@ class Content {
 
 	}
 
-	// NOT USED
-	/**	getAll(...)
+	/**	NOT USED: getAll(...)
 	 *	Find all matching content records.
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [ QUERY_GENERAL_PROPERTIES, ...]
 	 **/
-	 static async getAll(queryObject) {
+	static async getAll(queryObject) {
 
 		const sqlQueryBeforeWHERE = (`
 			SELECT ${QUERY_GENERAL_PROPERTIES}
@@ -157,7 +157,7 @@ class Content {
 	 *	Optional: filter data in the form of `queryObject`.
 	 *	=> [ QUERY_GENERAL_PROPERTIES, ...]
 	 **/
-	 static async getAllPublic(queryObject) {
+	static async getAllPublic(queryObject) {
 
 		const sqlQueryBeforeWHERE = (`
 			SELECT ${QUERY_GENERAL_PROPERTIES}
@@ -184,7 +184,8 @@ class Content {
 	
 	}
 
-	/**	Given a pk, return data about content records.
+	/**	getByPK(...)
+	 *	Given a pk, return data about content records.
 	 *
 	 *	=> QUERY_GENERAL_PROPERTIES
 	 *
@@ -208,11 +209,12 @@ class Content {
 
 	}
 
-	/**	Given a username, and is reference user, return full data.
+	/**	getByPKPrivate(...)
+	 *	Given a username, and is reference user, return full data.
 	 *	
 	 *	=> QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES
 	 */
-	static async getByPKPrivate(pk, res) {
+	static async getByPKPrivate(pk) {
 		
 		// console.log('ENTER MODEL BODY ===================================');
 		// console.log(`headersSent (\'Content.js\' ~217): ${res.headersSent}`);
@@ -229,8 +231,6 @@ class Content {
 
 		const contentObject = result.rows[0];
 
-		// console.log(`headersSent (\'Content.js: ~245\'): ${res.headersSent}`);
-
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
 
@@ -238,7 +238,9 @@ class Content {
 
 	}
 
-	/**	Update content records data with `updateRecordObject`.
+	//	Note: Design Decision Tree HERE:
+	/**	update(...)
+	 *	Update content records data with `updateRecordObject`.
 	 *
 	 *	This is for a partial update of a record; and it only changes provided ones.
 	 *
@@ -255,6 +257,7 @@ class Content {
 	static async update(pk, updateRecordObject) {
 
 		await this.getByPK(pk);
+			// check existence
 
 		// do something with `updateRecordObject` if necessary, i.e. remove certain properties that are forbidden to be updated or modify passed values
 			// not the time to remove `isOwner` ._. just get it working
@@ -266,18 +269,27 @@ class Content {
 			UPDATE ${this.relationName} 
 				SET ${parameterizedSET} 
 				WHERE id = ${pkParameterIndex} 
-				RETURNING ${QUERY_GENERAL_PROPERTIES}`;
+				RETURNING ${QUERY_GENERAL_PROPERTIES} ${QUERY_PRIVATE_PROPERTIES}`;
 		const result = await db.query(updateQuerySQL, [...setParameters, pk]);
 
-		// insert the query builder to update the join models
-
-
 		const contentObject = result.rows[0];
+
+		//	Design Decision: Should the Join Descriptions be overwritten? Should
+		// if(contentObject.status === ('open' || 'standby')){
+	
+		// 	db.await("BEGIN");
+		// 	// update join descriptions
+		// 	// insert the query builder to update the join models
+		
+		// 	db.await("COMMIT")
+
+		// }
+
 		return contentObject;
 
 	}
 
-	/**	delete(pk)
+	/**	NOT USED: delete(pk)
 	 *	Delete content records from database by `pk`.
 	 *
 	 *	=> `undefined`.
@@ -286,7 +298,7 @@ class Content {
 
 		let result = await db.query(`
 			DELETE
-				FROM ${this.relationname}
+				FROM ${this.relationName}
 				WHERE id = $1
 				RETURNING id, title`,
 			[pk]);
@@ -294,7 +306,7 @@ class Content {
 		const contentObject = result.rows[0];
 		
 		if (!contentObject)
-			throw new NotFoundError(`No user: ${username}`);
+			throw new NotFoundError(`Cannot find content with id: ${pk}`);
 
 		return contentObject;
 
@@ -302,7 +314,10 @@ class Content {
 	
 /** */
 
-	static async signUpdate(contentID, username){
+	/**	DEPRECATED: updateSign(...)
+	 *	...
+	 */
+	static async updateSign(contentID, username){
 
 		const result = await db.query(`
 			SELECT participants, contract_signed AS "contractSigned"
@@ -342,8 +357,7 @@ class Content {
 
 	}
 
-	// double check it is all signed.
-	static async publishUpdate(contentID){
+	static async updatePublish(contentID){
 		// lowpriority: ok so this `publishUpdate` is a single purpose method. it does NOT take a response body to update the partcipiants. all it does is set it to publish. this may be a bit confusing for userflow and lead to a bit of bugs.
 
 		const result = await db.query(`
@@ -357,6 +371,7 @@ class Content {
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find valid content with id: ${contentID}.`);
 
+		// double check it is all signed.
 		const participants = JSON.parse(contentObject.participants);
 		const contractSigned = JSON.parse(contentObject.contractSigned);
 
@@ -407,7 +422,8 @@ class Content {
 
 	}
 
-	/**	Return the content owner from content records in the database.
+	/**	getContentOwner(...)
+	 *	Return the content owner from content records in the database.
 	 *
 	 *	=> `username`.
 	 */
@@ -428,7 +444,8 @@ class Content {
 
 	}
 
-	/**	Return the participants from content records in the database.
+	/**	getParticipants(...)
+	 *	Return the participants from content records in the database.
 	 *
 	 *	=> `["username", ...]` (stringified array?).
 	 */
@@ -445,7 +462,7 @@ class Content {
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find content with id: ${pk}.`);
 
-		return participantArray;
+		return contentObject.participants;
 
 	}
 

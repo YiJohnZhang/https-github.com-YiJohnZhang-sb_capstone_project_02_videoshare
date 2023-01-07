@@ -10,9 +10,8 @@ const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require(
 const newContentSchema = require('./schemas/newContent.schema.json');
 // const queryModelSchema = require('./schemas/queryContent.schema.json');
 const updateContentSchema = require('./schemas/updateContent.schema.json');
-const updateContentJOINSchema = require('./schemas/updateContentJOIN.schema.json');
 
-/** POST `/`
+/**	POST `/`
  *	{ input } => { contentResult }
  *		where `input` is: { req.body }
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES }
@@ -36,7 +35,7 @@ router.post('/', isLoggedIn, async(req, res, nxt) => {
 	
 });
 
-/** GET `/`
+/**	GET `/`
  *	=> { contentResult }
  *		where `contentResult` is: [{ QUERY_GENERAL_PROPERTIES }, ...]
  *	
@@ -50,7 +49,6 @@ router.get('/', async(req, res, nxt) => {
 	try{
 		
 		const contentResults = await ContentModel.getAllPublic(req.query);
-			// tod: note add JOIN query to return list of users, throw it under "contents"
 
 		const parsedContentResults = contentResults.map((contentResult) => parseResponseBodyProperties(contentResult));
 		return res.json({contents: parsedContentResults});
@@ -62,7 +60,7 @@ router.get('/', async(req, res, nxt) => {
 
 });
 
-/** GET `/[contentID]`
+/**	GET `/[contentID]`
  *	=> { contentResult }
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES }
  *	
@@ -83,7 +81,7 @@ router.get('/:contentID', async(req, res, nxt) => {
 
 });
 
-/** GET `/[contentID]/edit`
+/**	GET `/[contentID]/edit`
  *	( input ) => { contentResult }
  *		where `input` is: (req.params.contentID, { req.body })
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
@@ -91,26 +89,25 @@ router.get('/:contentID', async(req, res, nxt) => {
  *	Authorization Required: isLoggedIn, isParticipatingUser
 */
 router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, nxt) => {
+	
 	try{
-		
+	
 		// console.log(`heardersSent (\'routerContents.js\': ~96): ${res.headersSent}`)
 		// const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, res);
-		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, res);
-			// so apparently getByPKPrivate is calling `res`?
+		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
 		// console.log(`heardersSent (\'routerContents.js\': ~99): ${res.headersSent}`)
 
 			
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 		
 	}catch(error){
-		console.log(error);
 			// "Cannot set headers after they are sent to the client"
 		nxt(error);
 	}
 
 });
 
-/** PATCH `/[contentID]/edit`
+/**	PATCH `/[contentID]/edit`
  *	( input ) => { contentResult }
  *		where `input` is: (req.params.contentID, { req.body })
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
@@ -137,8 +134,7 @@ router.patch('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res
 	
 });
 
-/** IGNORE
- *	PATCH `/[contentID]/sign`
+/**	IGNORE: PATCH `/[contentID]/sign`
  *	( input ) => { contentResult }
  *		where `input` is: (req.params.contentID, { req.body })
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
@@ -164,7 +160,7 @@ router.patch('/:contentID/:username/sign', isLoggedIn, isReferenceUser, isPartic
 	
 });
 
-/** PATCH `/[contentID]/publish`
+/**	PATCH `/[contentID]/publish`
  *	( input ) => { contentResult }
  *		where `input` is: (req.params.contentID, { req.body })
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
@@ -187,6 +183,13 @@ router.patch('/:contentID/:username/publish', isLoggedIn, isReferenceUser, isOwn
 	
 });
 
+/**	IGNORE: PATCH `/[contentID]/publish`
+ *	( input ) => { contentResult }
+ *		where `input` is: (req.params.contentID, { req.body })
+ *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
+ *	
+ *	Authorization Required: isLoggedIn, isAdmin
+*/
 /* out of scope of project
 router.patch('/:contentID/update', isLoggedIn, isAdmin, async(req, res, nxt) => {
 	// todo: isParticipatingUser returns false if the status is 'active' or 'legacy'
@@ -209,7 +212,7 @@ router.patch('/:contentID/update', isLoggedIn, isAdmin, async(req, res, nxt) => 
 });
 */
 
-/** DELETE `/[contentID]`
+/**	NOT USED: DELETE `/[contentID]`
  *	( input ) => { modelName }
  *		where `input` is: ( req.params.contentID )
  *		where `contentResult` is: {  }
@@ -222,7 +225,7 @@ router.delete('/:contentID', isLoggedIn, isAdmin, async(req, res, nxt) => {
 
 		const contentResult = await ContentModel.delete(req.params.contentID);
 
-		return res.json({deleted: parseResponseBodyProperties(contentResult)(contentResult)});
+		return res.json({deleted: parseResponseBodyProperties(contentResult)});
 
 	}catch(error){
 		nxt(error);
@@ -230,6 +233,6 @@ router.delete('/:contentID', isLoggedIn, isAdmin, async(req, res, nxt) => {
 	
 });
 
-/** */
+/**	*/
 
 module.exports = router;

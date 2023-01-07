@@ -38,7 +38,7 @@ function authenticateJWT(req, res, nxt) {
 		nxt();
 
 	} catch (err) {
-		nxt();
+		nxt(err);
 	}
 	
 }
@@ -51,8 +51,10 @@ function isLoggedIn(req, res, nxt) {
 
 	try {
 
-		if (!res.locals.user) throw new UnauthorizedError();
-		nxt();
+		if (!res.locals.user)
+			throw new UnauthorizedError('must be logged in');
+		
+			nxt();
 
 	} catch(err) {
 		nxt(err);
@@ -68,7 +70,9 @@ function isLoggedOut(req, res, nxt) {
 
 	try {
 
-		if (res.locals.user) throw new ForbiddenError();
+		if (res.locals.user)
+			throw new ForbiddenError('must be logged out');
+		
 		nxt();
 
 	} catch(err) {
@@ -83,12 +87,16 @@ function isLoggedOut(req, res, nxt) {
  */
 function isReferenceUser(req, res, nxt) {
 
-	// console.log(`${req.params.username}: ${res.locals.user.username}`)
+	try {
 
-	if(req.params.username === res.locals.user.username)
+		if (req.params.username !== res.locals.user.username)
+			throw new UnauthorizedError('not reference user');
+		
 		nxt();
-	
-	nxt(new UnauthorizedError(`Not the user, ${req.params.username}.`));
+
+	} catch(err) {
+		nxt(err);
+	}
 
 }
 
@@ -131,10 +139,16 @@ async function isAdmin(req, res, nxt) {
 
 	// const isAdmin = await checkAdminHelper(res.locals.user);
 
-	if(res.locals.user.isElevated)
+	try{
+
+		if(!res.locals.user.isElevated)
+			throw new UnauthorizedError('not admin');
+		
 		nxt();
 
-	nxt(new UnauthorizedError('Not an admin!'));
+	}catch(err){
+		nxt(err);
+	}
 
 }
 
@@ -144,21 +158,29 @@ async function isAdmin(req, res, nxt) {
  */
 async function isReferenceUserOrAdmin(req, res, nxt) {
 	
+	try{
+
+		if(req.params.username != res.locals.user.username && !res.locals.user.isElevated)
+			throw new UnauthorizedError('neither reference user nor admin');
+
+		nxt();
+
+	}catch(err){
+		nxt(err);
+	}	
+
 	// console.log(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
 	// if(!req.params.username === res.locals.user.username || !await checkAdminHelper(res.locals.user))
 	// if(!req.params.username === res.locals.user.username && !await checkAdminHelper(res.locals.user))
 	// if(req.params.username === res.locals.user.username || res.locals.isElevated)
 	// 	nxt();
-	if(req.params.username != res.locals.user.username && !res.locals.user.isElevated)
-		nxt(new UnauthorizedError(`Neither the user, ${req.params.username}, and/or admin`));
-	
+
 	// if(req.params.username === res.locals.user.username)
 	// 	nxt();
 	
 	// if(res.locals.users.isElevated)
 	// 	nxt();
 
-	nxt();
 	/* if(req.params.username === res.locals.user.username || await checkAdminHelper(res.locals.user))
 		nxt();
 	if(req.params.username === res.locals.user.username)
@@ -178,43 +200,42 @@ async function isReferenceUserOrAdmin(req, res, nxt) {
  */
 async function isOwner(req, res, nxt) {
 
-	let result;
 	try{
-		result = await ContentModel.getContentOwner(req.params.contentID);
-	}catch(error){
-		nxt(error);
-	}
 
-	if(res.locals.user.username === result.owner)
+		const result = await ContentModel.getContentOwner(req.params.contentID);
+
+		if(res.locals.user.username !== result.owner)
+			throw new UnauthorizedError('not content owner');
+
 		nxt();
 
-	nxt(new UnauthorizedError(`User token, \'${res.locals.user.username}\', is not the owner of the content.`))
+	}catch(err){
+		nxt(err);
+	}
 
 }
 
 /**	isParticipant(req, res, nxt)
- *	Middleware to check whether or not the user is a participant.
+ *	Middleware to check whether or not the user is a participant. For editing content (signing and stuff)
  *	If not, raises UnauthorizedError.
  */
 async function isParticipatingUser(req, res, nxt) {
 
 	// for editing the content (sign and stuff.)
 
-	let result
-
 	try{
 
-		result = await ContentModel.getParticipants(req.params.contentID);
+		const result = await ContentModel.getParticipants(req.params.contentID);
+		const participantSet = new Set(JSON.parse(result));
+		
+		if(!participantSet.has(res.locals.user.username))
+			throw new UnauthorizedError('not a participant');
 
-
-	}catch(error){
-		nxt(new UnauthorizedError('not a participant'));
-	}
-
-	const participantSet = new Set(JSON.parse(result));
-	
-	if(participantSet.has(res.locals.user.username))
 		nxt();
+
+	}catch(err){
+		nxt(err);
+	}
 
 }
 
