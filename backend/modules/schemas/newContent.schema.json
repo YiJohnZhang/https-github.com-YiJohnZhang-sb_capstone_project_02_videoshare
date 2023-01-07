@@ -1,6 +1,8 @@
 {
 	"_comment": "it is business logic that checks whether or not the 'share' properties add up to <1.00",
 	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Content, New",
+	"description": "A schema specification for new Content records.",
 	"type": "object",
 	"properties": {
 		"title": {
@@ -21,8 +23,10 @@
 		"participants": {
 			"type": "array",
 			"items": [{
-					"type": "string", "minLength": 4, "maxLength": 32
-			}]
+				"type": "string", "minLength": 4, "maxLength": 32
+			}],
+			"minItems": 1,
+			"uniqueItems": true
 		},
 		"contractDetails": {
 			"type": "object",
@@ -36,7 +40,9 @@
 							"share": {"type": "number"}
 						},
 						"required": ["username", "share"]
-					}]
+					}],
+					"minItems": 1,
+					"uniqueItems": true
 				},
 				"engagement": {
 					"type": "array",
@@ -47,7 +53,9 @@
 							"share": {"type": "number"}
 						},
 						"required": ["username", "share"]
-					}]
+					}],
+					"minItems": 1,
+					"uniqueItems": true
 				}
 			},
 			"required": ["views", "engagement"]
@@ -56,7 +64,8 @@
 			"type": "array",
 			"items": [{
 				"type": "string", "minLength": 4, "maxLength": 32
-			}]
+			}],
+			"uniqueItems": true
 		}
 	},
 	"required": [

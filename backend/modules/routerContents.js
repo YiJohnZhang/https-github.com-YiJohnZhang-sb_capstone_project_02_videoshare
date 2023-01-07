@@ -9,7 +9,8 @@ const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require(
 
 const newContentSchema = require('./schemas/newContent.schema.json');
 // const queryModelSchema = require('./schemas/queryContent.schema.json');
-const updateContentSchema = require('./schemas/updateContent.schema.json');
+const updateContentSchema_generalEdit = require('./schemas/updateContent.schema.json');
+const updateContentSchema_publish = require('./schemas/updateContent.schema.json');
 
 /**	POST `/`
  *	{ input } => { contentResult }
@@ -121,7 +122,7 @@ router.patch('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res
 
 	try{
 
-		validateRequestBody(req.body, updateContentSchema)
+		validateRequestBody(req.body, updateContentSchema_generalEdit);
 	
 		const contentResult = await ContentModel.update(req.params.contentID, stringifyRequestBodyProperties(req.body));
 			// todo: disable if the current status is pbulished or legacy'
@@ -170,6 +171,8 @@ router.patch('/:contentID/:username/sign', isLoggedIn, isReferenceUser, isPartic
 router.patch('/:contentID/:username/publish', isLoggedIn, isReferenceUser, isOwner, async(req, res, nxt) => {
 
 	try{
+
+		validateRequestBody(req.body, updateContentSchema_publish);
 		
 		const contentResult = await ContentModel.publishUpdate(req.params.contentID);
 			// todo: disable if the current status is pbulished or legacy'

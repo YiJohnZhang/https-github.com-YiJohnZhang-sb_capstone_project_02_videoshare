@@ -8,7 +8,7 @@ const {
 const {
 	parseResponseBodyProperties
 } = require('../helpers/objectStringifyAndParseHelper');
-const checkArrayEqualiy = require('../helpers/arrayEqualityHelper');
+const checkArrayEquality = require('../helpers/arrayEqualityHelper');
 
 const {
 	NotFoundError,
@@ -292,7 +292,7 @@ class Content {
 	/**	NOT USED: delete(pk)
 	 *	Delete content records from database by `pk`.
 	 *
-	 *	=> `undefined`.
+	 *	=> `{ id, title }`.
 	 */
 	static async delete(pk) {
 
@@ -376,8 +376,8 @@ class Content {
 		const contractSigned = JSON.parse(contentObject.contractSigned);
 
 		// fail signing if `participants` not equal to `contractSigned`
-		if(participants != contractSigned)
-			throw new ExpressError(499, 'All participants must have signed the contract.');	
+		if(!checkArrayEquality(participants, contractSigned))
+			throw new ExpressError(498, 'All participants must have signed the contract.');	
 		
 		try{
 
@@ -388,7 +388,7 @@ class Content {
 			const publishQuery = await db.query(`
 				UPDATE ${this.relationName}
 					SET status = $1, published_date = $2
-					WHERE content_id = $3
+					WHERE id = $3
 					RETURNING content_id, participants, description`, 
 				['published', contentPublishDate.toJSON(), contentID]);
 

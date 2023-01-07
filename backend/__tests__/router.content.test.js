@@ -24,12 +24,12 @@ const CREATE_CONTENT4_REQUEST = {
 	contractType: 'presplit',
 	participants: ["testuser1"],
 	contractDetails: {views:[{username:"testuser1",share:1}], engagement:[{username:"testuser1",share:1}]},
-	contractSigned:[]
+	contractSigned: []
 }
 	/*owner:			upon creation, make it currentUser*/
-	/*participants:		upon creation, make it '[currentUser]'*/
-	/*contractDetails:	upon creation, make it '{views:[{username:'currentUser',share:1}], engagement:[{username:'currentUser',share:1}]}'*/
-	/*contractSigned:	upon creation, make it '[]'*/
+	/*participants:		upon creation, make it (frontend default) '[currentUser]'*/
+	/*contractDetails:	upon creation, make it (frontend default) '{views:[{username:'currentUser',share:1}], engagement:[{username:'currentUser',share:1}]}'*/
+	/*contractSigned:	upon creation, make it (frontend default) '[]'*/
 
 const CREATE_CONTENT4_REQUEST_INVALID_INSUFF = {
 	title: 'testcontent4',
@@ -37,8 +37,7 @@ const CREATE_CONTENT4_REQUEST_INVALID_INSUFF = {
 }
 
 const CREATE_CONTENT4_REQUEST_INVALID_ILLEGAL_PROPERTIES = {
-	title: 'testcontent4',
-	summary: 'some summary idea',
+	...CREATE_CONTENT4_REQUEST,
 	status: 'legacy'
 }
 
@@ -67,20 +66,12 @@ const CONTENT_1_PUBLIC_RESPONSE = {
 }
 
 const CONTENT_1_PRIVATE_RESPONSE = {
-	id: 1,
-	title: 'test content',
-	summary: 'afdsa',
-	description: 'fdas',
-	link: 'https://youtu.be/nhVJhRhJbJE',
+	...CONTENT_1_PUBLIC_RESPONSE,
 	status: 'published',
 	owner: 'testuser1',
 	contractType: 'solo',
-	participants: ["testuser1"],
 	contractDetails: {views:[{username:"testuser1",share:1}], engagement:[{username:"testuser1",share:1}]},
-	contractSigned: ["testuser1"],
-	dateCreated: '2022-12-29T08:00:00.000Z',
-	dateStandby: '2022-12-29T08:00:00.000Z',
-	datePublished: '2022-12-30T08:00:00.000Z'
+	contractSigned: ["testuser1"]
 }
 
 /***	POST /contents	*/
@@ -103,8 +94,6 @@ describe('POST \`/contents/\`', () => {
 
 	// todo: once done with cu_join, insert a test that checks for multiple records creation
 	const MODIFIED_CREATE_CONTENT4_REQUEST = {...CREATE_CONTENT4_REQUEST, participants:["testuser1", "testuser2", "testuser3"]};
-
-
 
 	test('400: incomplete request body', async() => {
 
@@ -144,26 +133,35 @@ describe('GET \`/contents/\`', () => {
 	// optional req.query => {content: parseResponseBodyProperties(contentResult)}
 	//	public level
 
-	test('public and matching', async() => {
-
-		const response = await request(app)
-			.get('/contents/')
-			.query({title: " conte"})
-		expect(response.body.contents.length).toEqual(3);
-	
-	});
-
 	test('public no query', async() => {
 
 		const response = await request(app)
 			.get('/contents/')
-			.query()
-		expect(response.body.contents.length).toEqual(4);
-			// 4 because CONTENT_4 has been commited
+			.query();
+		expect(response.body.contents.length).toEqual(2);
+			// 4 total contents in db
+
+	});
+
+	test('public and matching \' conte\'', async() => {
+
+		const response = await request(app)
+			.get('/contents/')
+			.query({title: " conte"});
+		expect(response.body.contents.length).toEqual(2);
 	
 	});
 
-	test('public and non-matching', async() => {
+	test('public and matching \' 2\'', async() => {
+
+		const response = await request(app)
+			.get('/contents/')
+			.query({title: "2"});
+		expect(response.body.contents.length).toEqual(1);
+	
+	});
+
+	test('public and none matching \' asdf\'', async() => {
 
 		const response = await request(app)
 			.get('/contents/')
@@ -171,8 +169,28 @@ describe('GET \`/contents/\`', () => {
 		expect(response.body.contents.length).toEqual(0);
 	
 	});
+	test('loggedin and no query', async() => {
 
-	test('loggedin and matching', async() => {
+		const response = await request(app)
+			.get('/contents/')
+			.query()
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.body.contents.length).toEqual(2);
+			// 4 total contents in db
+
+	});
+
+	test('loggedin and matching \' conte\'', async() => {
+
+		const response = await request(app)
+			.get('/contents/')
+			.query({title: " conte"})
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.body.contents.length).toEqual(2);
+	
+	});
+
+	test('loggedin and matching \' 2\'', async() => {
 
 		const response = await request(app)
 			.get('/contents/')
@@ -182,7 +200,7 @@ describe('GET \`/contents/\`', () => {
 	
 	});
 
-	test('loggedin and non-matching', async() => {
+	test('loggedin and non-matching \' asdf\'', async() => {
 
 		const response = await request(app)
 			.get('/contents/')
@@ -284,16 +302,28 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 
 		const response = await request(app)
 			.patch('/contents/3/edit')
-			.send({})
+			.send({
+				...CREATE_CONTENT4_REQUEST, 
+				description: 'asdffdas',
+				participants: ["testuser1", "testuser2", "testuser3"],
+				contractDetails: {views:[{username:"testuser1",share:0.125}, {username:"testuser2",share:0.125}, {username:"testuser3",share:0.75}], engagement:[{username:"testuser1",share:0.18}, {username:"testuser2",share:0.18}, {username:"testuser3",share:0.64}]},
+				contractSigned: ["testuser1"]
+			})
 			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body.content).toEqual('a');
+		expect(response.body.content).toEqual({
+			...CREATE_CONTENT4_REQUEST, 
+			description: 'asdffdas', 
+			participants: ["testuser1", "testuser2", "testuser3"],
+			contractDetails: {views:[{username:"testuser1",share:0.125}, {username:"testuser2",share:0.125}, {username:"testuser3",share:0.75}], engagement:[{username:"testuser1",share:0.18}, {username:"testuser2",share:0.18}, {username:"testuser3",share:0.64}]},
+			contractSigned: ["testuser1"]
+		});
 	
 	});
 
 	test('401: unauthorized (wrong user)', async() => {
 
 		const response = await request(app)
-			.get('/contents/3/edit')
+			.patch('/contents/3/edit')
 			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.statusCode).toEqual(401);
 	
@@ -302,15 +332,14 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 	test('401: unauthorized (public)', async() => {
 
 		const response = await request(app)
-			.get('/contents/3/edit');
+			.patch('/contents/3/edit');
 			expect(response.statusCode).toEqual(401);
 	
 	});
 
 });
 
-// deprecated
-/***	PATCH /contents/:contentID/sign	*/
+/***	DEPRECATED: PATCH /contents/:contentID/sign	*/
 describe('PATCH \`contents/:contentID/sign\`', () => {
 
 	// auth: isLoggedIn, isReferenceUser, isParticipant
@@ -329,13 +358,12 @@ describe('PATCH \`contents/:contentID/sign\`', () => {
 
 });
 
-/***	PATCH /contents/:contentID/:username/publish	*/
-describe('PATCH \`contents/:contentID/:username/publish\`', () => {
+/***	PATCH /contents/:contentID/publish	*/
+describe('PATCH \`contents/:contentID/publish\`', () => {
 
 	// auth: isLoggedIn, isReferenceUser, isOwner
 	// none => {content: parseResponseBodyProperties(contentResult)}
 	//	private level
-
 
 	test('test', async() => {
 
@@ -350,7 +378,8 @@ describe('PATCH \`contents/:contentID/:username/publish\`', () => {
 	test('401: unauthorized (wrong user)', async() => {
 
 		const response = await request(app)
-			.get('/contents/3/edit')
+			.patch('/contents/3/edit')
+			.send({})
 			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.statusCode).toEqual(401);
 	
@@ -359,28 +388,49 @@ describe('PATCH \`contents/:contentID/:username/publish\`', () => {
 	test('401: unauthorized (public)', async() => {
 
 		const response = await request(app)
-			.get('/contents/3/edit');
-			expect(response.statusCode).toEqual(401);
+			.patch('/contents/3/edit')
+			.send({});
+		expect(response.statusCode).toEqual(401);
+	
+	});
+
+	test('404: not found', async() => {
+
+		const response = await request(app)
+			.patch('/contents/6/edit')
+			.send({})
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.statusCode).toEqual(404);
+	
+	});
+
+	test('498: error (everyone needs to be signed)', async() => {
+
+		const response = await request(app)
+			.patch('/contents/3/edit')
+			.send({})
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.statusCode).toEqual(498);
 	
 	});
 
 });
 
 /***	UNUSED: DELETE /contents/:id */
-/*
 describe('DELETE \`/contents/:id\`', () => {
 
 	test('deletes content (admin)', async() => {
-		
-		const response = await request(app)
-			.delete('/contents/1')
-			.set('authorization', `Bearer ${adminToken}`);
-		expect(response.body.content).toEqual({deleted: 1});
+
+		// ignore, possible schema redesign?
+		// const response = await request(app)
+		// 	.delete('/contents/1')
+		// 	.set('authorization', `Bearer ${adminToken}`);
+		// expect(response.body).toEqual({deleted: 1});
 	
-		const response2 = await request(app)
-			.delete('/contents/1')
-			.set('authorization', `Bearer ${adminToken}`);
-		expect(response2.statusCode).toEqual(404);
+		// const response2 = await request(app)
+		// 	.delete('/contents/1')
+		// 	.set('authorization', `Bearer ${adminToken}`);
+		// expect(response2.statusCode).toEqual(404);
 
 	});
 
@@ -390,17 +440,17 @@ describe('DELETE \`/contents/:id\`', () => {
 			.delete('/contents/1')
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.statusCode).toEqual(401);
+
 	});
 
 	test('401: unauthorized (wrong user)', async() => {
 		
 		const response = await request(app)
 			.delete('/contents/1')
-			.set('authorization', `Bearer: ${user3Token}`);
+			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.statusCode).toEqual(401);
 
 	});
-		// includes for non-existing contents (404) b/c it isn't reference user
 
 	test('401 error: unauthorized (no token)', async() => {
 		
@@ -411,4 +461,3 @@ describe('DELETE \`/contents/:id\`', () => {
 	});
 
 });
-*/

@@ -87,8 +87,8 @@ Tests	DIR
 29		│	├── helpers.*.js
 10		│	├── router.authentication.test.js
 32		│	├── router.users.test.js
-15U1I	│	├── router.contents.test.js
-11		│	├── router.content_user_join.test.js	# rename to "contentsusersjoin"
+31		│	├── router.contents.test.js
+U15I1	│	├── router.content_user_join.test.js	# rename to "contentsusersjoin"
 --		│	├── router._testCommons.test.js			# 01 but doesn't count
 06		│	├── model.ContentUserJoin.test.js
 --		│	├── model._testCommons.test.js			# 01 but doesn't count
@@ -427,8 +427,10 @@ Some suggested improvements to this concept are:
 |49|resolved `headersSet` error|2023-01-05|18:59 - 19:18|19|
 |50|`contents` and `cujoin` work|2022-01-06|15:11 - 17:43|152|
 |52|fin `user` (again)|2022-01-07|10:22 - 11:42|80|
-|53|`contents` & ...|2022-01-07|12:28 - 1:||
-|54||2022-01-07|: - :||
+|53|`contents` & need to redefine schema, looking up `draft-04 to -07` documentation|2022-01-07|12:28 - 13:37|69|
+|54|revise schemas, finish up `contents`; |2022-01-07|14: - :||
+|55||2022-01-07|1: - :||
+|56||2022-01-07|: - :||
 52	53
 999	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
