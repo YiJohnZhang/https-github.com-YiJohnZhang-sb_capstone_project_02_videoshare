@@ -446,7 +446,7 @@ Some suggested improvements to this concept are:
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
-|51||2022-01-06|20:15 - :||
+|51|build to-do list|2022-01-06|20:15 - 21:10||
 ||||**Total Time**|_ minutes (--h--m)|
 
 
@@ -480,7 +480,8 @@ Some suggested improvements to this concept are:
 	- delete (???)
 - consider the random generator route
 
-2. Plugin front-end according to this table.
+2. Frontend
+|##|API Method Signature|Model/Method|Backend Route|
 |-|-|-|-|
 ||`Authorization`|||
 |01|`register(reqBody)`|`Authentication`/`POST`|`/authentication/register`|
@@ -531,10 +532,26 @@ Some suggested improvements to this concept are:
 		- double check form elements
 	- `EditJoinContentPage`
 - todo
+	- `content page` mockup
 	- content_imgs, add more contents (~2022-01-06)
-	- 
 - more time
 	- add a means to link edits (isProfilePage will fetch the username; non-null publishedDate will decide the link format)
 	- bookmarkable search queries.
 
-3. update master list of copmonents?
+3. Master list of copmonents
+|Page|Page Component|API Call|
+|-|-|-|
+|Home|`HomePage`|`searchUsers`, `searchContent` (`getAllContents`)|
+|Login|`OnboardingPage`|`authenticateUser`|
+|Signup|`OnboardingPage`|`registerUser`|
+|Logout|`LogoutComponent`|None|
+|Error|`ErrorPage`|None|
+|Profile|`ProfilePage`|`getUserData` (public or neq ref user) / `getFullUserData` (if reference user)|
+|Profile, Edit|`EditUserPage`|`getFullUserData` / `patchUserData`|
+|Content, Create|`EditContentPage`|`createContent`|
+|Content, Edit|`EditContentPage`|`getFullContentData` / `patchContent`|
+|Content, Publish|`EditContentPage`|`getFullContentData` / `publishContent`|
+|Join Content, Edit|`EditJoinContent`|`getJoinContentData` / `patchJoinContent`|
+|**Introduce** a Content Page|`ContentPage`|`getContentData`|
+
+4. extra tests (e2e)
