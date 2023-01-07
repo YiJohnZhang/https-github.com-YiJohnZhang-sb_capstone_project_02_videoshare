@@ -413,7 +413,7 @@ Some suggested improvements to this concept are:
 |31|`contents` work|2022-12-31|10:48 - 12:06|78|
 |32|`contents` and `cu_join` work|2022-12-31|15:34 - 18:23|169|
 ||**DEPRECATED: 50.01.04**. Routes (Backend)||**Net Total Time**|3052 min (50h52m)|
-|38|salvaging backend #2...|2023-01-02|10:51 - 11:29|38|
+|38|**salvaging backend #2**...|2023-01-02|10:51 - 11:29|38|
 |39|finish backend?|2023-01-02|13:41 - 14:24|43|
 |40|finished sql query helper method|2023-01-02|15:10 - 16:25|75|
 |41|beckned...ok querying thing works, now to patch it up :)|2023-01-02|17:20 - 17:53|33|
@@ -424,12 +424,12 @@ Some suggested improvements to this concept are:
 |46|documentation for project clarity; start `ContentUserJoin` model test|2023-01-03|17:56 - 18:42|46|
 |48|`cujoin` tests|2023-01-04|08:53 - 10:03|70|
 |49|resolved `headersSet` error|2023-01-05|18:59 - 19:18|19|
-|50|`contents` and `cujoin` work|2022-01-06|15:11 - 17:43||
-|52||2022-01-06|: - :||
-|53||2022-01-06|: - :||
-|54||2022-01-06|: - :||
-45	46
-678	---
+|50|`contents` and `cujoin` work|2022-01-06|15:11 - 17:43|152|
+|52||2022-01-07|10:22 - :||
+|53||2022-01-07|: - :||
+|54||2022-01-07|: - :||
+52	53
+919	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|exploring `formik` for frontend, attempted `material-ui`, alongside other express form validation and/or styling libraries; db work|2022-12-28|16:01 - 18:24|143|
@@ -440,13 +440,15 @@ Some suggested improvements to this concept are:
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
-|4||2023-01-02|: - :||
+|5||2023-01-07|: - :||
 37		38
 1190	
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
-|51|build to-do list|2022-01-06|20:15 - 21:10||
+|51|build to-do list|2022-01-06|20:15 - 21:10|55|
+149
+
 ||||**Total Time**|_ minutes (--h--m)|
 
 
