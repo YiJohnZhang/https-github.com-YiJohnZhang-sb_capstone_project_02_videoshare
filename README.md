@@ -49,7 +49,7 @@ The project proposes the following additional attributes to a `content` relation
 
 **Note**: This project was designed to exceed Springboard Bootcamp's final capstone project requirements.
 
-## 02.01. Running & Testing Instructions
+## 02.01. Running & Testing Instructions (`todo`: finish test numbering and file renaming)
 **To run the application**,
 - Backend:
 ```sh
@@ -76,6 +76,38 @@ jest
 - Frontend tests are located on `./frontend/src/__tests__`:
 ```sh
 npm test	# alias for `react-scripts test` in `package.json`
+```
+
+```sh
+# Test Tree
+Tests	DIR
+=====	====
+		/backend
+		├──	__tests__/	
+29		│	├── helpers.*.js
+10		│	├── router.authentication.test.js
+27		│	├── router.users.test.js
+xx		│	├── router.contents.test.js
+xx		│	├── router.content_user_join.test.js	# rename to "contentsusersjoin"
+--		│	├── router._testCommons.test.js
+		│	├── model.ContentUserJoin.test.js
+--		│	└── model._testCommons.test.js
+			add e2e tests after submitting app, add
+		├──	... 
+		/frontend
+		└──	src/__tests__/
+			├── 
+			├── 
+			├── 
+			├── 
+			├── 
+			└── 
+# rename files
+routerContentsUserJoin => routerContentsUsersJoin
+# models
+Content => Contents
+Content_U... => Contents_Users_...
+User => Users
 ```
 
 ## 02.02. Frontend Userflow (`todo`)
@@ -153,30 +185,6 @@ npm test	# alias for `react-scripts test` in `package.json`
 |17|`deleteContent(contentID)`: DISABLED|`Contents`/`DELETE`|`/contents/:contentID/`|
 ||`cuJoin`|||
 |20|`deleteJoinContent(contentID, username)`: DISABLED|`Contents_Users_Join`/`DELETE`|`/contents/:contentID/:username/`|
-
-- fin:
-	- `LogoutComponent`
-	- `ErrorPage`
-	- `UserCard`
-	- `ContentCard` (need to add links)	
-- just need API
-	- `ProfilePage`
-- need test:
-	- `NavBar`: maybe a frosted bg :)
-- need API:
-	- `HomePage`
-	- `OnboardingPage` and EN_FORM_ERR_HANDLING
-	- `EditUserPage` and EN_FORM_ERR_HANDLING, EN_authdepredirect
-	- `EditContentPage` (`save` to update content object; `signed`/`publish`: `signed` is toggl-ble and updates accordingly and appears aas `settled` for the owner; `publish` is disabled for non-owner users; publish is disabled if link is invalid)
-		- reduce the scope: just make it a text field (array and json field = text input and parse as array/json when sent to backend and show `save`/`publish`)
-		- double check form elements
-	- `EditJoinContentPage`
-- todo
-	- content_imgs, add more contents (~2022-01-06)
-	- 
-- more time
-	- add a means to link edits (isProfilePage will fetch the username; non-null publishedDate will decide the link format)
-	- bookmarkable search queries.
 
 ## 02.03. Backend Routes (`todo`)
 ```sh
@@ -417,7 +425,6 @@ Some suggested improvements to this concept are:
 |48|`cujoin` tests|2023-01-04|08:53 - 10:03|70|
 |49|resolved `headersSet` error|2023-01-05|18:59 - 19:18|19|
 |50|`contents` and `cujoin` work|2022-01-06|15:11 - 17:43||
-|51||2022-01-06|20:15 - :||
 |52||2022-01-06|: - :||
 |53||2022-01-06|: - :||
 |54||2022-01-06|: - :||
@@ -439,68 +446,95 @@ Some suggested improvements to this concept are:
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
-|5x||2022-01-06|: - :||
+|51||2022-01-06|20:15 - :||
 ||||**Total Time**|_ minutes (--h--m)|
 
 
-### 2023-01-03 todo list
-1. getAllUserContent()/getAlluserPublicContent (); see below
-	a. `DONE`	cujoin model + test (to `headersset` error)
-	b. update user model to contain content, as `user.contents = [...]`
-```js
+## 2023-01-06 todo list
+1. Backend
+|##|Method, Rel. Path|Model, Method|Returns|Purpose|
+|-|-|-|-|-|
+||`/contents`|**Content**|||
+|07|`GET`, `/`|`Content`, `getAllPublic()`|arr contents (public)|**`todo`: test**Content search feature.|
+|10|`PATCH`, `/:contentID/edit`|`Content`, `update()`|content private properites|**`todo`** Used to update master content record before publishing.|
+|11|`PATCH`, `/:contentID/publish`|`Content`, `publishUpdate()`|**`todo: test`**|Used to set the content record `status` from `standby` to `published`.|
+||`/cujoin`|**Content-User `Join`**|||
+|12|`GET`, `/:username/:contentID/`|`CU_Join`*, `getByPK()`|content public properties|get `participants` first then get a `random join` (for **both** `byview` and `presplit` for now).|
+|||**Existing but not used/deprecated Routes**|||
+||`/contents`|**Content**|||
+|15A|`GET`, `/`|`Content`, `getAll()`|**deprecated**|**deprecated**|
+|16|`GET`, `/:contentID`|`Content`, `getByPK(contentID)`|content public properties|**not used for this project?**|
+|19|`PATCH`, `/:contentID/sign`|`Content`, `signUpdate()`|**skipped**|**skipped**. Allow a user to toggle whether or not they are signed.|
+|21|`PATCH`, `/:contentID/update`|`Content`, `...`|**skipped**|**skipped**. Used by the admin to set a content record `status` from `published` to `legacy`.|
+||`/cujoin`|**Content-User `Join`**|||
 
-backend 04 => frontend 05
-|04|`GET`, `/:username`|`User`, `getByPK()`|user public properties|**?**|
-|05|`returnUser(username)`|`Users`/`GET`|`/users/:username/`|
-ok, this will fetch the user data
-- GET /:username/public
-- Get /:username/private front-end: (if curr session === username); && backend isRefUser
-- interesting note: the user doesn't have issues with getByPKPrivate (yet)
-|12|`GET`, `/:username`|`CU_Join`*, `getAllUserContent()`|`[ contents ]`, `status == 'published' || 'legacy'`**`todo`**|Front-end user profile page.|
+- users
+	- **04A/05A** => integrate into respective routes & test
+- contents
+	- **07** => tests
+	- **10** => tests
+	- **11** => tests and possibly implementation
+	- delete (string something error)
+- cu_join
+	- **12** => random cu_join feature?
+	- delete (???)
+- consider the random generator route
 
-|13|`GET`, `/:username`|`CU_Join`*, `getAllUserPublicContent()`|`[ contents ]`, all **`todo`**|Front-end user profile page.|
+2. Plugin front-end according to this table.
+|-|-|-|-|
+||`Authorization`|||
+|01|`register(reqBody)`|`Authentication`/`POST`|`/authentication/register`|
+|02|`login(reqBody)`|`Authentication`/`POST`|`/authentication/login`|
+||`Users`|||
+|03|`searchUsers(reqQuery)`|`Users`/`GET`|`/users/`|
+|04|`returnUser(username)`|`Users`/`GET`|`/users/:username/`|
+|05|`returnFullUserData(username)`|`Users`/`GET`|`/users/:username/edit`|
+|06|`patchUser(username, reqBody)`|`Users`/`PATCH`|`/users/:username/edit`|
+||`Contents`|||
+|--|`returnAllPublicContents()`|`Contents`/`GET`|`/contents/`|
+|07|(searchContents, doubles as #7) `searchPublicContents(reqQuery)`|`Contents`/`GET`|`/contents/`|
+|08|`createContent(reqBody)`|`Contents`/`POST`|`/contents/:contentID/`|
+|09|`getFullContentData(contentID)`|`Contents`/`GET`|`/contents/:contentID/edit`|
+|10|`patchContent(contentID, reqBody)`|`Contents`/`PATCH` (update)|`/contents/:contentID/edit`|
+|11|`publishContent(contentID, reqBody)`|`Contents`/`PATCH` (updatePublish)|`/contents/:contentID/publish`|
+||`cuJoin`|||
+|12|`viewPublicContent(contentID)` (username randomly generated)|`Contents_Users_Join`/`GET`|`/cujoin/:contentID/:username`|
+|13|`getJoinContentData(contentID, username)`|`Contents_Users_Join`/`GET`|`/contents/:contentID/:username/`|
+|14|`patchJoinContent(contentID, username, reqBody)`|`Contents_Users_Join`/`PATCH`|`/contents/:contentID/:username/edit`|
+||**Unused Methods**|||
+||`Users`|||
+|03|`returnAllUsers()`: DISABLED|`Users`/`GET`|`/users/`|
+|08|`deleteUser(username)`: DISABLED|`Users`/`DELETE`|`/users/:username`|
+||`Contents`|||
+|09|`returnContent(contentID)`|`Contents`/`GET`|`/contents/:contentID/`|
+|10|`returnAllContents()`|`Contents`/`GET`|`/contents/`|
+|12|`returnContent()`|`Contents`/`GET`|`/contents/:contentID/`|
+|17|`deleteContent(contentID)`: DISABLED|`Contents`/`DELETE`|`/contents/:contentID/`|
+||`cuJoin`|||
+|20|`deleteJoinContent(contentID, username)`: DISABLED|`Contents_Users_Join`/`DELETE`|`/contents/:contentID/:username/`|
 
-```
-2. work on any non-`headerssent` error routes:
-08	=> not used?
-09	=> => `error: headersSent` by `node-pg`
-10	=> see `09`
-12	=> test, the current pattern is /user/contid... (cujoin/string/integer/)
-13	=> test, the current pattern is /user/contid... (cujoin/string/integer/)
-17	=> `error: headersSent` (node-pg sending an express resposne). **SIMPLIFIED** This route now switches the state between `created` and `standby` depending on whether or not `participants===signed`js. For the sake of time, it also modifies the join entries to reflect that of the `participants`.|
-18	=> held up by `17`
-20	=> needs test; Does a final check whether or not `participants===signed`
-3. plugin working routes to front end. update documentation and go walkthrough ignoring `headerssent` bug model-route-tests
-	a. flagged headerssent bug: `Contents`: `edit`; `CUJoin`: `edit`.
-	b. interesting to note the cujoin public `getbypk()` uses `getbyprivatepk()` but doesn't yield the error for now...
-	c. interesting to note that the `Users` pk is ok for now
-4. fix the `headersSent` bug ;___________;
+- fin:
+	- `LogoutComponent`
+	- `ErrorPage`
+	- `UserCard`
+	- `ContentCard` (need to add links)	
+- just need API
+	- `ProfilePage`
+- need test:
+	- `NavBar`: maybe a frosted bg :)
+- need API:
+	- `HomePage`
+	- `OnboardingPage` and EN_FORM_ERR_HANDLING
+	- `EditUserPage` and EN_FORM_ERR_HANDLING, EN_authdepredirect
+	- `EditContentPage` (`save` to update content object; `signed`/`publish`: `signed` is toggl-ble and updates accordingly and appears aas `settled` for the owner; `publish` is disabled for non-owner users; publish is disabled if link is invalid)
+		- reduce the scope: just make it a text field (array and json field = text input and parse as array/json when sent to backend and show `save`/`publish`)
+		- double check form elements
+	- `EditJoinContentPage`
+- todo
+	- content_imgs, add more contents (~2022-01-06)
+	- 
+- more time
+	- add a means to link edits (isProfilePage will fetch the username; non-null publishedDate will decide the link format)
+	- bookmarkable search queries.
 
-
-==============separator===============
-
-2. `Contents.js:publishUpdate:~300`, 'lowpriority': UX confusion?
-	- `Contents.js:publishUpdate:~305`, 'lowpriority': made the diff between standby and open negli.
-	- `Contents.js:publishUpdate:~337`, 'lowpriority': consider being independent of: `POSTGRESQL ISNERT INTO ON CONFLICT DO NOTHING`; needs further work for <PSQL 9.5
-	- `Contents.js:publishUpdate:~347`, `lowpriority`: 
-
-
--	Ok, so `/` for auth, `contents/` and `users/` for respective models.
-	- `users/` focuses on returning the users content
-	- `contents/` focuses on returning the contract and content with user(s) involved
-
-
-see `router.content.js: ~104` (todo)
-see `Content.js: ~104` (todo) remove "COMMIT" comment after testing passes.
-
-
-note: finish contents first, (JOIN creation)
-- cleaned-up
-	- `Authorization`, `Users`
-- done:
-- test:
-- salvage:
-	- `Contents`
-	- `Content_User_Join`
-- redo:
-	- contents & contents_users_join where public resposnes with lesser data is just shaving off distinct private data ._.
+3. update master list of copmonents?
