@@ -1,5 +1,5 @@
 {
-	"_comment": "it is business logic that checks whether or not the 'share' properties add up to <1.00",
+	"_comment": "it is business logic that checks whether or not the 'share' properties add up to <1.00 (both in front-end and back-end); if it is multiple-user do a front-end and back-end validation that each participant is present in the contractDetails object entries",
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
 	"properties": {
@@ -72,5 +72,26 @@
 		"participants",
 		"contractDetails",
 		"contractSigned"
-	]
+	],
+	"$defs": {
+		"contractArray": {
+			"type": "array",
+			"items": [{
+				"type": "string", "minLength": 4, "maxLength": 32
+			}],
+			"uniqueItems":true
+		},
+		"contractArrayOfObjects": {
+			"type": "array",
+			"items": [{
+				"type": "object",
+				"properties": {
+					"username": {"type": "string", "minLength": 4, "maxLength": 32},
+					"share": {"type": "number"}
+				},
+				"required": ["username", "share"]
+			}]
+		}
+
+	}
 }

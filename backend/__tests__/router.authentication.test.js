@@ -57,6 +57,16 @@ describe('POST \`/authentication/token\`', () => {
 
 	});
 
+	test('400: password length insufficient', async() => {
+
+		const response = await request(app)
+			.post('/authentication/login')
+			.send({...LOGIN_USER1_REQUEST, password: 'adsf'});
+		expect(response.statusCode).toEqual(400);
+
+	});
+
+
 	test('401: error invalid credentials (username, still 401)', async() => {
 
 		const response = await request(app)
@@ -71,7 +81,7 @@ describe('POST \`/authentication/token\`', () => {
 
 		const response = await request(app)
 			.post('/authentication/login')
-			.send({...LOGIN_USER1_REQUEST, password: 'adsf'});
+			.send({...LOGIN_USER1_REQUEST, password: 'adsffa'});
 		expect(response.statusCode).toEqual(401);
 
 	});

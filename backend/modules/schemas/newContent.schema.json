@@ -15,7 +15,7 @@
 			"type": "string", "maxLength": 2200
 		},
 		"owner": {
-			"type": "string", "minLength": 4, "maxLength": 32
+			"$ref": "#/$defs/usernameString"
 		},
 		"contractType": {
 			"type": "string", "enum": ["single", "byview", "presplit"]
@@ -26,38 +26,15 @@
 				"type": "string", "minLength": 4, "maxLength": 32
 			}],
 			"minItems": 1,
-			"uniqueItems": true
+			"uniqueItems":true
 		},
 		"contractDetails": {
 			"type": "object",
 			"properties": {
-				"views": {
-					"type": "array",
-					"items": [{
-						"type": "object",
-						"properties": {
-							"username": {"type": "string"},
-							"share": {"type": "number"}
-						},
-						"required": ["username", "share"]
-					}],
-					"minItems": 1,
-					"uniqueItems": true
-				},
-				"engagement": {
-					"type": "array",
-					"items": [{
-						"type": "object",
-						"properties": {
-							"username": {"type": "string"},
-							"share": {"type": "number"}
-						},
-						"required": ["username", "share"]
-					}],
-					"minItems": 1,
-					"uniqueItems": true
-				}
+				"views": { "$ref": "#/$defs/contractDetailProperties" },
+				"engagement": { "$ref": "#/$defs/contractDetailProperties" }
 			},
+			"additionalProperties": false,
 			"required": ["views", "engagement"]
 		},
 		"contractSigned": {
@@ -73,8 +50,31 @@
 		"summary",
 		"owner",
 		"contractType",
-		"participants"
+		"participants",
+		"contractDetails"
 	],
-	"additionalProperties": false
+	"additionalProperties": false,
+	"$defs": {
+		"usernameString": {
+			"type": "string",
+			"minLength": 4,
+			"maxLength": 32
+		},
+		"contractDetailProperties": {
+			"type": "array",
+			"items": [{
+				"type": "object",
+				"properties": {
+					"username": {"type": "string"},
+					"share": {"type": "number"}
+				},
+				"additionalProperties": false,
+				"required": ["username", "share"]
+			}],
+			"minItems": 1,
+			"uniqueItems": true
+		}
+
+	}
 
 }

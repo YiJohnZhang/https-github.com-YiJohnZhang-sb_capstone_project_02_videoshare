@@ -7,8 +7,8 @@ const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin } = require
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
 
 const { parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
-const updateUserSchema_userVariant = require('./schemas/updateUser.typeUser.schema.json');
-const updateUserSchema_adminVariant = require('./schemas/updateUser.typeAdmin.schema.json');
+const updateUserSchema_userVariant = require('./schemas/user.updateTypeUser.schema.json');
+const updateUserSchema_adminVariant = require('./schemas/user.updateTypeAdmin.schema.json');
 
 /** GET `/`
  *	=> { userResult }

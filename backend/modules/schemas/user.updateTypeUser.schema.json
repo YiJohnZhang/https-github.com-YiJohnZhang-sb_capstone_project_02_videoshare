@@ -16,21 +16,7 @@
 			"type": "string",
 			"maxLength": 32
 		},
-		"birthdateYear": {
-			"type": "number",
-			"minimum": 1900,
-			"maximum": 2022
-		},
-		"birthdateMonth": {
-			"type": "number",
-			"minimum": 1,
-			"maximum": 12
-		},
-		"birthdateDay": {
-			"type": "number",
-			"minimum": 1,
-			"maximum": 31
-		},
+
 		"email": {
 			"type": "string",
 			"format":"email"
@@ -51,5 +37,12 @@
 		}
 	},
 	"required": [],
-	"additionalProperties": false
+	"additionalProperties": false,
+	"$defs":{
+		"nameString":{
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 32
+		}
+	}
 }

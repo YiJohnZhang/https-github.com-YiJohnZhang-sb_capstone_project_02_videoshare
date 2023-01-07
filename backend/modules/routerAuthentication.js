@@ -8,8 +8,8 @@ const UserModel = require('../models/User');
 const createTokenHelper = require('../helpers/createTokenHelper');
 const { isLoggedOut } = require('../modules/middlewareAAE');
 const { validateRequestBody } = require('./middlewareSchemaValidation');
-const loginUserSchema = require('./schemas/loginUserAuthentication.schema.json');
-const newUserSchema = require('./schemas/newUser.schema.json');
+const loginUserSchema = require('./schemas/user.login.schema.json');
+const newUserSchema = require('./schemas/user.new.schema.json');
 
 /**	POST `/login`
  *	{ username, password } => { token, username }
