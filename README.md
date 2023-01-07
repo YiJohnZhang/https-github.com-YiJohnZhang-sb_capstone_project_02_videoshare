@@ -121,27 +121,37 @@ npm test	# alias for `react-scripts test` in `package.json`
 |Content, Publish|`EditContentPage`|`getFullContentData` / `publishContent`|
 |Join Content, Edit|`EditJoinContent`|`getJoinContentData` / `patchJoinContent`|
 
-|##|API Method|Model/Method|Method Name/Backend Route|
+|##|API Method Signature|Model/Method|Backend Route|
 |-|-|-|-|
+||`Authorization`|||
 |01|`register(reqBody)`|`Authentication`/`POST`|`/authentication/register`|
 |02|`login(reqBody)`|`Authentication`/`POST`|`/authentication/login`|
+||`Users`|||
+|03|`searchUsers(reqQuery)`|`Users`/`GET`|`/users/`|
+|04|`returnUser(username)`|`Users`/`GET`|`/users/:username/`|
+|05|`returnFullUserData(username)`|`Users`/`GET`|`/users/:username/edit`|
+|06|`patchUser(username, reqBody)`|`Users`/`PATCH`|`/users/:username/edit`|
+||`Contents`|||
+|--|`returnAllPublicContents()`|`Contents`/`GET`|`/contents/`|
+|07|(searchContents, doubles as #7) `searchPublicContents(reqQuery)`|`Contents`/`GET`|`/contents/`|
+|08|`createContent(reqBody)`|`Contents`/`POST`|`/contents/:contentID/`|
+|09|`getFullContentData(contentID)`|`Contents`/`GET`|`/contents/:contentID/edit`|
+|10|`patchContent(contentID, reqBody)`|`Contents`/`PATCH` (update)|`/contents/:contentID/edit`|
+|11|`publishContent(contentID, reqBody)`|`Contents`/`PATCH` (updatePublish)|`/contents/:contentID/publish`|
+||`cuJoin`|||
+|12|`viewPublicContent(contentID)` (username randomly generated)|`Contents_Users_Join`/`GET`|`/cujoin/:contentID/:username`|
+|13|`getJoinContentData(contentID, username)`|`Contents_Users_Join`/`GET`|`/contents/:contentID/:username/`|
+|14|`patchJoinContent(contentID, username, reqBody)`|`Contents_Users_Join`/`PATCH`|`/contents/:contentID/:username/edit`|
+||**Unused Methods**|||
+||`Users`|||
 |03|`returnAllUsers()`: DISABLED|`Users`/`GET`|`/users/`|
-|04|`searchUsers(reqQuery)`|`Users`/`GET`|`/users/`|
-|05|`returnUser(username)`|`Users`/`GET`|`/users/:username/`|
-|06|`returnFullUserData(username)`|`Users`/`GET`|`/users/:username/edit`|
-|07|`patchUser(username, reqBody)`|`Users`/`PATCH`|`/users/:username/edit`|
 |08|`deleteUser(username)`: DISABLED|`Users`/`DELETE`|`/users/:username`|
-|09|`returnContent()`|`Contents`/`GET`|`/contents/:contentID/`|
+||`Contents`|||
+|09|`returnContent(contentID)`|`Contents`/`GET`|`/contents/:contentID/`|
 |10|`returnAllContents()`|`Contents`/`GET`|`/contents/`|
-|11|`searchContents(reqQuery)`|`Contents`/`GET`|`/contents/`|
 |12|`returnContent()`|`Contents`/`GET`|`/contents/:contentID/`|
-|13|`getFullContentData(contentID)`|`Contents`/`GET`|`/contents/:contentID/edit`|
-|14|`createContent(reqBody)`|`Contents`/`POST`|`/contents/:contentID/`|
-|15|`patchContent(contentID, reqBody)`|`Contents`/`PATCH` (update)|`/contents/:contentID/edit`|
-|16|`publishContent(contentID, reqBody)`|`Contents`/`PATCH` (publish)|`/contents/:contentID/publish`|
 |17|`deleteContent(contentID)`: DISABLED|`Contents`/`DELETE`|`/contents/:contentID/`|
-|18|`getJoinContentData(contentID, username)`|`Contents_Users_Join`/`GET`|`/contents/:contentID/:username/`|
-|19|`patchJoinContent(contentID, username, reqBody)`|`Contents_Users_Join`/`PATCH`|`/contents/:contentID/:username/edit`|
+||`cuJoin`|||
 |20|`deleteJoinContent(contentID, username)`: DISABLED|`Contents_Users_Join`/`DELETE`|`/contents/:contentID/:username/`|
 
 - fin:
@@ -201,29 +211,32 @@ npm test	# alias for `react-scripts test` in `package.json`
 |01|`POST`, `/token`|`User`, `login()`|user auth. properties|Authenticates user credentials.|
 |02|`POST`, `/register`|`User`, `register()`|user auth. properties|Creates a user.|
 ||`/users`|**User**|||
-|03|`GET`, `/`|`User`, `getAll()`|user public properties|Front-end user search.|
-|04|`GET`, `/:username`|`User`, `getByPK()`|user public properties|**?**|
-|05|`GET`, `/:username/edit`|`User`, `getByPKPrivate()`|user private properties|Front-end user edit.|
+|03|`GET`, `/`|`User`, `getAll()`|user public properties|User search feature.|
+|04|`GET`, `/:username`|`User`, `getByPK()`|user public properties|User profile page.|
+|`04A`|`GET`, `-`|`CU_Join`*, `getAllUserPublicContent()`|user public content|**Supports `04`**|
+|05|`GET`, `/:username/edit`|`User`, `getByPKPrivate()`|user private properties|Edit user profile page.|
+|`05A`|`GET`, `-`|`CU_Join`*, `getAllUserContent()`|**`todo`**|**Supports `05`**|
 |06|`PATCH`, `/:username/edit`|`User`, `update()`|user private properties|Front-end user edit.|
-|07|`DELETE`, `/:username`|`User`, `delete()`|Deleted record's `username`.|Tested but not used concerning practices.|
-||`/cujoin`|**Content-User `Join`**|||
-|08|`GET`, `/:username/:contentID/`|`CU_Join`*, `getByPK()`|content public properties|**not used for this project?**|
-|09|`GET`, `/:username/:contentID/edit`|`CU_Join`*, `getByPKPrivate()`|**`todo`: `headersSent` error**. content private properties|Edit the publicly viewable description.|
-|10|`PATCH`, `/:username/:contentID/edit`|`CU_Join`*, `update()`|content private properties|**`todo`: `headersSent` error**. Edit the publicly viewable description.|
-|11|`DELETE`, `/:username/:contentID`|`CU_Join`*, `delete()`|Deleted record's `user_id` and `content_id`|Tested but not used concerning practices (what if a user wants to restore? How?)|
-|12|`GET`, `/:username`|`CU_Join`*, `getAllUserContent()`|**`todo`**|User profile public/private view (hm... how to use the same route to pass diff info?)|
-|13|`GET`, `/:username`|`CU_Join`*, `getAllUserPublicContent()`|**`todo`**|User profile public/private view (hm... how to use the same route to pass diff info?)|
 ||`/contents`|**Content**|||
-|14|`POST`, `/`|`Content`, `create()`|Returns created content id|Front-end create, automatically create N joins based on participants.|
-|15|`GET`, `/`|`Content`, `getAllPublic()`|arr contents (public)|**`todo`: test**Front-end content search.|
+|07|`GET`, `/`|`Content`, `getAllPublic()`|arr contents (public)|**`todo`: test**Content search feature.|
+|08|`POST`, `/`|`Content`, `create()`|Returns created content id|Create a new piece of content; automatically create N joins based on participants.|
+|09|`GET`, ,`/:contentID/edit`|`Content`, `getByPKPrivate(contentID)`|content private properties|Get private data for editing master content template. **`todo?`**|
+|10|`PATCH`, `/:contentID/edit`|`Content`, `update()`|content private properites|**`todo`** Used to update master content record before publishing.|
+|11|`PATCH`, `/:contentID/publish`|`Content`, `publishUpdate()`|**`todo: test`**|Used to set the content record `status` from `standby` to `published`.|
+||`/cujoin`|**Content-User `Join`**|||
+|12|`GET`, `/:username/:contentID/`|`CU_Join`*, `getByPK()`|content public properties|get `participants` first then get a `random join` (for **both** `byview` and `presplit` for now).|
+|13|`GET`, `/:username/:contentID/edit`|`CU_Join`*, `getByPKPrivate()`|content private properties|Edit the publicly viewable description.|
+|14|`PATCH`, `/:username/:contentID/edit`|`CU_Join`*, `update()`|content private properties|**`todo`: `headersSent` error**. Edit the publicly viewable description.|
+|||**Existing but not used/deprecated Routes**|||
+|--|`DELETE`, `/:username`|`User`, `delete()`|Deleted record's `username`.|**Limited testing but not used concerning practices**.|
+|--|`DELETE`, `/:contentID`|`Content`, `delete()`|Deleted record's `id` and `title`.|Tested but not used concerning practices.|
+|--|`DELETE`, `/:username/:contentID`|`CU_Join`*, `delete()`|Deleted record's `user_id` and `content_id`|Tested but not used concerning practices (what if a user wants to restore? How?)|
+||`/contents`|**Content**|||
 |15A|`GET`, `/`|`Content`, `getAll()`|**deprecated**|**deprecated**|
 |16|`GET`, `/:contentID`|`Content`, `getByPK(contentID)`|content public properties|**not used for this project?**|
-|17|`GET`, ,`/:contentID/edit`|`Content`, `getByPKPrivate(contentID)`|content private properties|**`todo`: `headersSent` error**|
-|18|`PATCH`, `/:contentID/edit`|`Content`, `update()`|**`todo: held up by 17`** content private properites|Used to update a content record before publishing.|
 |19|`PATCH`, `/:contentID/sign`|`Content`, `signUpdate()`|**skipped**|**skipped**. Allow a user to toggle whether or not they are signed.|
-|20|`PATCH`, `/:contentID/publish`|`Content`, `publishUpdate()`|**`todo: test`**|Used to set the content record `status` from `standby` to `published`.|
 |21|`PATCH`, `/:contentID/update`|`Content`, `...`|**skipped**|**skipped**. Used by the admin to set a content record `status` from `published` to `legacy`.|
-|22|`DELETE`, `/:contentID`|`Content`, `delete()`|Deleted record's `id` and `title`.|Tested but not used concerning practices.|
+||`/cujoin`|**Content-User `Join`**|||
 
 ## 02.04. Resources & Data Source
 - The sample data is dummy data.
