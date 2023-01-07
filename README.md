@@ -426,11 +426,11 @@ Some suggested improvements to this concept are:
 |48|`cujoin` tests|2023-01-04|08:53 - 10:03|70|
 |49|resolved `headersSet` error|2023-01-05|18:59 - 19:18|19|
 |50|`contents` and `cujoin` work|2022-01-06|15:11 - 17:43|152|
-|52||2022-01-07|10:22 - 11:42||
-|53||2022-01-07|: - :||
+|52|fin `user` (again)|2022-01-07|10:22 - 11:42|80|
+|53|`contents` & ...|2022-01-07|12:28 - 1:||
 |54||2022-01-07|: - :||
 52	53
-919	---
+999	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|exploring `formik` for frontend, attempted `material-ui`, alongside other express form validation and/or styling libraries; db work|2022-12-28|16:01 - 18:24|143|
