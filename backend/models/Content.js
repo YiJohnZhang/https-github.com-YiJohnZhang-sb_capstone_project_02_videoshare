@@ -76,7 +76,7 @@ class Content {
 				const result = await db.query(`
 					INSERT INTO ${RELATION_NAME} ${parameterizedINSERTPropertyNames}
 						VALUES ${parameterizedINSERTPropertyIndices}
-						RETURNING ${QUERY_GENERAL_PROPERTIES}`, [...insertParameters]);
+						RETURNING ${QUERY_GENERAL_PROPERTIES};`, [...insertParameters]);
 
 				const contentObject = result.rows[0];
 				return contentObject;
@@ -102,7 +102,7 @@ class Content {
 			const result = await db.query(`
 			INSERT INTO contents_users_join (user_id, content_id, description)
 				${stringifiedVALUES}
-				RETURNING content_id`);
+				RETURNING content_id;`);
 
 
 			await db.query('COMMIT');
@@ -113,7 +113,7 @@ class Content {
 		}catch(error){
 
 			await db.query('ROLLBACK');
-			throw new ExpressError(500, error);
+			throw new ExpressError(499, error);
 
 		}
 
@@ -256,12 +256,34 @@ class Content {
 	 */
 	static async update(pk, updateRecordObject) {
 
-		await this.getByPK(pk);
-			// check existence
+		/*
+		Error Code		Why
+		496 (404)		Invalid Status (status === 'standby' OR status === 'open' b/c `updateSign` isn't working)
+			// for now if(contentObject.status === ('open' || 'standby')){
+		*/
 
-		// do something with `updateRecordObject` if necessary, i.e. remove certain properties that are forbidden to be updated or modify passed values
-			// not the time to remove `isOwner` ._. just get it working
+		// 01.	Check Existence
+		const checkExistenceResult = await db.query(`
+			SELECT id, participants, status
+				FROM ${this.relationName}
+				WHERE id = $1;
+			`, [pk]);
+		
+		const contentExists = checkExistenceResult.rows[0];
+		if(!contentExists)
+			throw new NotFoundError(`Cannot find ${this.relationName}: ${pk}`);
 
+		//	02. Status Allow Editing
+			// for now, ok if(contentObject.status === ('open' || 'standby')){
+		if(contentExists.status === 'published' || contentExists.status === 'legacy')
+			throw new ExpressError(496, 'Content Status does NOT allow editing');
+
+		const { oldParticipants_stringified } = contentExists;
+		const oldParticipants = JSON.parse(oldParticipants_stringified);
+
+		await db.query('BEGIN');
+
+		//	03.	Update the Master Content Record
 		const { parameterizedSET, setParameters } = sqlUpdateQueryBuilder(updateRecordObject, JSON_SQL_SET_MAPPING);
 		const pkParameterIndex = "$".concat(setParameters.length + 1);
 
@@ -269,23 +291,54 @@ class Content {
 			UPDATE ${this.relationName} 
 				SET ${parameterizedSET} 
 				WHERE id = ${pkParameterIndex} 
-				RETURNING ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}`;
-		const result = await db.query(updateQuerySQL, [...setParameters, pk]);
+				RETURNING ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES};`;
 
+		const result = await db.query(updateQuerySQL, [...setParameters, pk]);
 		const contentObject = result.rows[0];
 
-		//	Design Decision: Should the Join Descriptions be overwritten? Should
-		// if(contentObject.status === ('open' || 'standby')){
-	
-		// 	db.await("BEGIN");
-		// 	// update join descriptions
-		// 	// insert the query builder to update the join models
-		
-		// 	db.await("COMMIT")
+		// 04.	Update the JOIN table.
+		try {
+			
+			//	Design Decision: Should the Join Descriptions be overwritten? Should
 
-		// }
+			const { id, description, participants } = parseResponseBodyProperties(contentObject);
+			const { stringifiedWHERE, stringifiedVALUES } = sqlJoinMultipleQueryBuilder_Configured(oldParticipants, participants, 'user_id = ', id, description);
+T
+			let INSERINTO_query;
+			if(stringifiedVALUES){
 
-		return contentObject;
+				INSERINTO_query = await db.query(`
+				INSERT INTO contents_users_join (user_id, content_id, description)
+					${stringifiedVALUES}
+					RETURNING content_id;`);
+				
+				// if content_id neq, throw error
+
+			}
+
+			let DELETEFROM_query;
+			if(stringifiedWHERE){
+
+				DELETEFROM_query = await db.query(`
+				DELETE
+					FROM contents_users_join
+					${stringifiedWHERE}
+					RETURNING content_id;`);
+				
+				// if content_id neq, throw error
+
+			}
+
+			await db.query('COMMIT');			
+
+			return 'success';
+
+		}catch(error){
+
+			await db.query('ROLLBACK');
+			throw new ExpressError(499, error);
+
+		}
 
 	}
 
@@ -314,56 +367,69 @@ class Content {
 	
 /** */
 
-	/**	DEPRECATED: updateSign(...)
+	/**	NOT USED: updateSign(...)
 	 *	...
 	 */
 	static async updateSign(contentID, username){
 
-		const result = await db.query(`
+		const queryResult = await db.query(`
 			SELECT participants, contract_signed AS "contractSigned"
 				FROM ${this.relationName}
 				WHERE id = $1`,
 			[contentID]);
 
-		const contentObject = result.rows[0];
+		const contentObject = queryResult.rows[0];
 
-		const participants = JSON.parse(contentObject.participants);
-			// double check username is in participants
-		const userIsParticipant = participants.indexOf(username);
-		if(userIsParticipant === -1)
-			throw new UnauthorizedError('not a participant')	
+		// double check username is in participants because why not
+		// const participants = JSON.parse(contentObject.participants);
+		// const userIsParticipant = participants.indexOf(username);
+		// if(userIsParticipant === -1)
+		// 	throw new UnauthorizedError('not a participant')	
 
 		// toggle whehter or not it is signed
 		const contractSigned = JSON.parse(contentObject.contractSigned);
-		let newContract = [...contractSigned];
+		let newContract;
 
 		const userIndex = contractSigned.indexOf(username);
 
 		if(userIndex === -1){
+
+			newContract = [...contractSigned];
+
 			newContract.push(username);
 		}else{
+
 			newContract = newContract.filter((userID) => userID !== username);
+
 		}
 
 		// commit
-		const commitResult = await db.query(`
+		const result = await db.query(`
 			UPDATE ${this.relationName}
 				SET contract_signed = $1
 				WHERE content_id = $2
 				RETURNING contract_signed AS "contractSigned"`, 
 			[newContract, contentID]);
 		
-		return commitResult.rows[0].contractSigned;		
+		return result.rows[0].contractSigned;		
 
 	}
 
 	static async updatePublish(contentID){
-		// lowpriority: ok so this `publishUpdate` is a single purpose method. it does NOT take a response body to update the partcipiants. all it does is set it to publish. this may be a bit confusing for userflow and lead to a bit of bugs.
+
+		/*
+		Error Code		Why
+		496 (404)		Invalid Status (for NOW: status === 'standby' OR status === 'open' b/c `updateSign` isn't working)
+			// for now if(contentObject.status === ('open' || 'standby')){
+		497				Does not Contain Link
+		498				Not everyone is signed
+		499				Failed for some db reason
+		*/
 
 		const result = await db.query(`
-		SELECT participants, contract_signed AS "contractSigned"
+		SELECT link, participants, contract_signed AS "contractSigned"
 			FROM ${this.relationName}
-			WHERE id = $1 AND status = 'standby' OR status 'open'`, [contentID]);
+			WHERE id = $1 AND (status = 'standby' OR status = 'open')`, [contentID]);
 			// lowpriority: really, don't have the time to make this proper. so therefore it is because `signUpdate` is deprecated for now.
 
 		const contentObject = result.rows[0];
@@ -371,19 +437,24 @@ class Content {
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find valid content with id: ${contentID}.`);
 
-		// double check it is all signed.
-		const participants = JSON.parse(contentObject.participants);
-		const contractSigned = JSON.parse(contentObject.contractSigned);
+		const { link, participants, contractSigned } = contentObject;
 
-		// fail signing if `participants` not equal to `contractSigned`
-		if(!checkArrayEquality(participants, contractSigned))
-			throw new ExpressError(498, 'All participants must have signed the contract.');	
+		// 497: check if link is non-null
+		if(!link)
+			throw new ExpressError(497, 'Invalid link');
+
+		// 498: chick if everyone is signed
+		const participantArray = JSON.parse(participants);
+		const contractSignedArray = JSON.parse(contractSigned);
+
+		if(!checkArrayEquality(participantArray, contractSignedArray))
+			throw new ExpressError(498, 'All participants must have signed the contract.');
+		
+		const contentPublishDate = new Date();
 		
 		try{
 
 			await db.query('BEGIN');
-
-			const contentPublishDate = new Date();
 
 			const publishQuery = await db.query(`
 				UPDATE ${this.relationName}
@@ -393,31 +464,17 @@ class Content {
 				['published', contentPublishDate.toJSON(), contentID]);
 
 			const { id, participants, description } = publishQuery.rows[0];
-			// console.log(publishQuery.rows[0]);
-
-			// const { stringfiedWHERE, stringifiedVALUES } = sqlJoinMultipleQueryBuilder_Configured([], participants, 'user_id = ', id, description);
-
-			// if(stringifiedVALUES){
-			// 	await db.query(`
-			// 		INSERT INTO contents_users_join (user_id, content_id, description)
-			// 			VALUES ${stringifiedVALUES};`);
-			// 		// lowpriority:this only works for psql > 9.5
-			// }
-			
-			// if(stringifiedWHERE){
-
-			// }
-			// 	// low priority, get the previous version 
-			
-			// lowpriority: the above is an attempt to address the foreseen UX confusion, but this is not the focus of the project for now.
+			console.log(publishQuery.rows[0]);
 			
 			await db.query('COMMIT');
 
 			return 'success';
 		
 		}catch(error){
+
 			await db.query('ROLLBACK');
-			throw new ExpressError(498, error)
+			throw new ExpressError(499, error);
+		
 		}
 
 	}

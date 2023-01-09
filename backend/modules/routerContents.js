@@ -168,35 +168,6 @@ router.patch('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res
 	
 });
 
-/**	IGNORE: PATCH `/[contentID]/publish`
- *	( input ) => { contentResult }
- *		where `input` is: (req.params.contentID, { req.body })
- *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
- *	
- *	Authorization Required: isLoggedIn, isAdmin
-*/
-router.patch('/:contentID/publish', isLoggedIn, isAdmin, async(req, res, nxt) => {
-
-	// this used to be an isOwner route
-	// disallows if status is 'active' or 'legacy'; not contentowner (update isParticipating)
-
-	try{
-
-		validateRequestBody(req.body, updateContentSchema)
-			//todo modified schema (only update status available)
-	
-		const contentResult = await ContentModel.update(req.params.contentID, req.body, true);
-			// isElevated = true => the status can be toggled
-			// also can be hidden, but allow very little changes
-
-		return res.json({content: contentResult});
-
-	}catch(error){
-		nxt(error);
-	};
-	
-});
-
 /**	PATCH `/[contentID]/publish`
  *	( input ) => { contentResult }
  *		where `input` is: (req.params.contentID, { req.body })
@@ -208,11 +179,7 @@ router.patch('/:contentID/publish', isLoggedIn, isReferenceUser, isOwner, async(
 
 	try{
 
-		validateRequestBody(req.body, updateContentSchema_publish);
-		
-		const contentResult = await ContentModel.publishUpdate(req.params.contentID);
-			// todo: disable if the current status is pbulished or legacy'
-			// also, whenever contractDetails change, automatically reset 'contractSigned to `[]`'
+		const contentResult = await ContentModel.updatePublish(req.params.contentID);
 
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 
@@ -248,6 +215,30 @@ router.patch('/:contentID/:username/sign', isLoggedIn, isReferenceUser, isPartic
 	
 });
 
+/**	NOT USED: DELETE `/[contentID]`
+ *	( input ) => { modelName }
+ *		where `input` is: ( req.params.contentID )
+ *		where `contentResult` is: {  }
+ *	2022-12-30: Only Admin
+ *	Authorization Required: isLoggedIn, isAdmin
+ */
+router.delete('/:contentID', isLoggedIn, isAdmin, async(req, res, nxt) => {
+
+	try{
+
+		const contentResult = await ContentModel.delete(req.params.contentID);
+
+		return res.json({deleted: parseResponseBodyProperties(contentResult)});
+
+	}catch(error){
+		nxt(error);
+	};
+	
+});
+
+/**	*/
+
+
 /**	NOT IMPLEMENTED: PATCH `/[contentID]/updateStatus`
  *	( input ) => { contentResult }
  *		where `input` is: (req.params.contentID, { req.body })
@@ -277,27 +268,33 @@ router.patch('/:contentID/updateStatus', isLoggedIn, isAdmin, async(req, res, nx
 });
 */
 
-/**	NOT USED: DELETE `/[contentID]`
- *	( input ) => { modelName }
- *		where `input` is: ( req.params.contentID )
- *		where `contentResult` is: {  }
- *	2022-12-30: Only Admin
+/**	IGNORE: PATCH `/[contentID]/publish`
+ *	( input ) => { contentResult }
+ *		where `input` is: (req.params.contentID, { req.body })
+ *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
+ *	
  *	Authorization Required: isLoggedIn, isAdmin
- */
-router.delete('/:contentID', isLoggedIn, isAdmin, async(req, res, nxt) => {
+*/
+// router.patch('/:contentID/publish', isLoggedIn, isAdmin, async(req, res, nxt) => {
 
-	try{
+// 	// this used to be an isOwner route
+// 	// disallows if status is 'active' or 'legacy'; not contentowner (update isParticipating)
 
-		const contentResult = await ContentModel.delete(req.params.contentID);
+// 	try{
 
-		return res.json({deleted: parseResponseBodyProperties(contentResult)});
-
-	}catch(error){
-		nxt(error);
-	};
+// 		validateRequestBody(req.body, updateContentSchema)
+// 			//todo modified schema (only update status available)
 	
-});
+// 		const contentResult = await ContentModel.update(req.params.contentID, req.body, true);
+// 			// isElevated = true => the status can be toggled
+// 			// also can be hidden, but allow very little changes
 
-/**	*/
+// 		return res.json({content: contentResult});
+
+// 	}catch(error){
+// 		nxt(error);
+// 	};
+	
+// });
 
 module.exports = router;
