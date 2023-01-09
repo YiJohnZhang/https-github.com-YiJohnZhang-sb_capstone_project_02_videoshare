@@ -52,17 +52,20 @@ CREATE TABLE contents (
 	-- visible
 	"status"			status_state DEFAULT 'open',
 	"owner"				VARCHAR(32)
-		REFERENCES users(username),
+		REFERENCES users(username) ON DELETE CASCADE,
 	participants		TEXT,
-		-- DEFAULT '["username", ...]'	
+		-- DEFAULT '["username",...]'	
+			-- use JSON.parse to get the object; and JSON.stringify to store in db
 	contract_type		contract_type_state DEFAULT 'solo',
 		-- 2022-12-12 "monetization type"?
 		-- business logic: `solo` sets `participants`, `contract_details`, `contract_signed` to NULL on submission (basically sends NULL to `db`)
 	contract_details	TEXT,
-		-- DEFAULT '{views:[{username: "temporary", share:1}], engagement:[{username: "temporary", share:1}]}',
+		-- DEFAULT '{"views":[{"username": "temporary", share:1}], "engagement":[{"username": "temporary", "share":1}]}',
+			-- use JSON.parse to get the object; and JSON.stringify to store in db
 	contract_signed		TEXT,
-		-- DEFAULT '[{username:"temporary", signed: false}, ...]',
-		-- DEFAULT '["username", ...]'
+		-- pre-2022-12-28: DEFAULT '[{username:"temporary", signed: false}, ...]',
+		-- 2022-12-30: DEFAULT '["username",...]'
+			-- use JSON.parse to get the object; and JSON.stringify to store in db
 	date_created		DATE
 		DEFAULT CURRENT_DATE,
 	date_standby		DATE,
@@ -84,7 +87,7 @@ CREATE TABLE contents_users_join (
 	user_id			VARCHAR(32) NOT NULL
 		REFERENCES users(username) ON DELETE CASCADE,
 	content_id		SMALLINT NOT NULL
-		REFERENCES contents(id),
+		REFERENCES contents(id) ON DELETE CASCADE,
 	"description"	VARCHAR(2200),
 		-- by default it inherits the contents `description`
 		-- each user sets their own content description

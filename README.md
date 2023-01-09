@@ -429,7 +429,7 @@ Some suggested improvements to this concept are:
 |52|fin `user` (again)|2022-01-07|10:22 - 11:42|80|
 |53|`contents` & need to redefine schema, looking up `draft-04 to -07` documentation|2022-01-07|12:28 - 13:37|69|
 |54|revise schemas, renamed schema schema, finish up `contents`; **power outage**|2022-01-07|14:40 - 15:41|61|
-|55||2022-01-08|16:58 - ||
+|55|rollback app|2022-01-08|16:58 - 18:01||
 |56||2022-01-08|: - :||
 54		55
 1129	---
