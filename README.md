@@ -428,11 +428,11 @@ Some suggested improvements to this concept are:
 |50|`contents` and `cujoin` work|2022-01-06|15:11 - 17:43|152|
 |52|fin `user` (again)|2022-01-07|10:22 - 11:42|80|
 |53|`contents` & need to redefine schema, looking up `draft-04 to -07` documentation|2022-01-07|12:28 - 13:37|69|
-|54|revise schemas, renamed schema schema, finish up `contents`; **power outage**|2022-01-07|14:40 - 15:41||
-|55||2022-01-07|14:40 - 16:||
-|56||2022-01-07|: - :||
-52	53
-999	---
+|54|revise schemas, renamed schema schema, finish up `contents`; **power outage**|2022-01-07|14:40 - 15:41|61|
+|55||2022-01-08|16:58 - ||
+|56||2022-01-08|: - :||
+54		55
+1129	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|exploring `formik` for frontend, attempted `material-ui`, alongside other express form validation and/or styling libraries; db work|2022-12-28|16:01 - 18:24|143|
