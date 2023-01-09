@@ -1,6 +1,6 @@
 {
 	"_comment": "it is business logic that checks whether or not the 'share' properties add up to <1.00 (both in front-end and back-end); if it is multiple-user do a front-end and back-end validation that each participant is present in the contractDetails object entries",
-	"$schema": "http://json-schema.org/draft-04/schema#",
+	"$schema": "http://json-schema.org/draft-07/schema#", 
 	"type": "object",
 	"properties": {
 		"title": {
@@ -16,50 +16,28 @@
 			"type": "integer", "maximum": 128
 		},
 		"owner": {
-			"type": "string", "minLength": 4, "maxLength": 32
+			"$ref": "#/definitions/usernameString"
 		},
 		"contractType": {
 			"type": "string", "enum": ["single", "byview", "presplit"]
 		},
 		"participants": {
 			"type": "array",
-			"items": [{
-					"type": "string", "minLength": 4, "maxLength": 32
-			}]
+			"items": { "$ref": "#/definitions/usernameString" },
+			"uniqueItems":true,
+			"minItems": 1
 		},
 		"contractDetails": {
 			"type": "object",
 			"properties": {
-				"views": {
-					"type": "array",
-					"items": [{
-						"type": "object",
-						"properties": {
-							"username": {"type": "string", "minLength": 4, "maxLength": 32},
-							"share": {"type": "number"}
-						},
-						"required": ["username", "share"]
-					}]
-				},
-				"engagement": {
-					"type": "array",
-					"items": [{
-						"type": "object",
-						"properties": {
-							"username": {"type": "string", "minLength": 4, "maxLength": 32},
-							"share": {"type": "number"}
-						},
-						"required": ["username", "share"]
-					}]
-				}
+				"views": { "$ref": "#/definitions/contractDetailProperties" },
+				"engagement": { "$ref": "#/definitions/contractDetailProperties" }
 			},
+			"additionalProperties": false,
 			"required": ["views", "engagement"]
 		},
 		"contractSigned": {
-			"type": "array",
-			"items": [{
-					"type": "string", "minLength": 4, "maxLength": 32
-			}]
+			"$ref": "#/definitions/contractArray"
 		}
 	},
 	"additionalProperties": false,
@@ -73,25 +51,32 @@
 		"contractDetails",
 		"contractSigned"
 	],
-	"$defs": {
+	"definitions": {
 		"contractArray": {
 			"type": "array",
-			"items": [{
-				"type": "string", "minLength": 4, "maxLength": 32
-			}],
+			"items": { "$ref": "#/definitions/usernameString" },
 			"uniqueItems":true
 		},
-		"contractArrayOfObjects": {
+		"contractDetailProperties": {
 			"type": "array",
-			"items": [{
+			"items": {
 				"type": "object",
 				"properties": {
-					"username": {"type": "string", "minLength": 4, "maxLength": 32},
-					"share": {"type": "number"}
+					"username": { "$ref": "#/definitions/usernameString" },
+					"share": { "type": "number", "minimum": 0, "maximum": 1 }
 				},
+				"additionalProperties": false,
 				"required": ["username", "share"]
-			}]
+			},
+			"minItems": 1,
+			"uniqueItems": true
+		},
+		"usernameString": {
+			"type": "string",
+			"minLength": 4,
+			"maxLength": 32
 		}
 
 	}
+
 }

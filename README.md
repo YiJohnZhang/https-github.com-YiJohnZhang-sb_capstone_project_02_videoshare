@@ -71,7 +71,8 @@ npm start
 **To run the tests**,
 - Backend tests are located on `./backend/__tests__`:
 ```sh
-jest
+jest --runInBand
+# CAUTION: this must be runInBand
 ```
 - Frontend tests are located on `./frontend/src/__tests__`:
 ```sh
@@ -430,9 +431,9 @@ Some suggested improvements to this concept are:
 |53|`contents` & need to redefine schema, looking up `draft-04 to -07` documentation|2022-01-07|12:28 - 13:37|69|
 |54|revise schemas, renamed schema schema, finish up `contents`; **power outage**|2022-01-07|14:40 - 15:41|61|
 |55|rollback app|2022-01-08|16:58 - 18:01|63|
-|56||2022-01-08|18:37 - :||
-|56||2022-01-08|: - :||
-|56||2022-01-08|: - :||
+|56||2022-01-08|18:37 - 21:12||
+|57||2022-01-08|: - :||
+|58||2022-01-08|: - :||
 54		55
 1129	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|

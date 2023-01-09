@@ -1,0 +1,12 @@
+{
+	"_comment": "allows admin to modify a content's status, i.e. from published => legacy",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"properties": {
+		"status":{
+			"type": "string", "enum": ["open", "standby", "published", "legacy"]
+		}
+	},
+	"additionalProperties": false,
+	"required":["status"]
+}

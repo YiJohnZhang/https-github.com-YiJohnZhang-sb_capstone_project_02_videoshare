@@ -16,6 +16,16 @@ beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
 
+//	DATE OBJECT
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth() + 1);
+const dd = String(today.getDate());
+
+const JSONDate_string = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+const JSONDate_JSON = JSONDate_string.toJSON();
+
+//	
 const CREATE_CONTENT4_REQUEST = {
 	title: 'testcontent4',
 	summary: 'some summary idea',
@@ -298,10 +308,10 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 	// req.body => {content: parseResponseBodyProperties(contentResult)}
 	//	private level
 
-	test('test', async() => {
+	test('works', async() => {
 
 		const response = await request(app)
-			.patch('/contents/3/edit')
+			.patch('/contents/4/edit')
 			.send({
 				...CREATE_CONTENT4_REQUEST, 
 				description: 'asdffdas',
@@ -310,12 +320,19 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 				contractSigned: ["testuser1"]
 			})
 			.set('authorization', `Bearer ${user1Token}`);
+
 		expect(response.body.content).toEqual({
 			...CREATE_CONTENT4_REQUEST, 
 			description: 'asdffdas', 
 			participants: ["testuser1", "testuser2", "testuser3"],
 			contractDetails: {views:[{username:"testuser1",share:0.125}, {username:"testuser2",share:0.125}, {username:"testuser3",share:0.75}], engagement:[{username:"testuser1",share:0.18}, {username:"testuser2",share:0.18}, {username:"testuser3",share:0.64}]},
-			contractSigned: ["testuser1"]
+			contractSigned: ["testuser1"],
+			id: 4,
+			link: '',
+			status: 'open',
+			dateCreated: JSONDate_JSON,
+			dateStandby: null,
+			datePublished: null
 		});
 	
 	});
@@ -325,6 +342,7 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 		const response = await request(app)
 			.patch('/contents/3/edit')
 			.set('authorization', `Bearer ${user3Token}`);
+
 		expect(response.statusCode).toEqual(401);
 	
 	});
@@ -333,8 +351,150 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 
 		const response = await request(app)
 			.patch('/contents/3/edit');
-			expect(response.statusCode).toEqual(401);
+
+		expect(response.statusCode).toEqual(401);
 	
+	});
+
+});
+
+/***		===		Schema Testing for Robustness	=== */
+describe('Update Schema Testing', () => {
+
+	const TEMPORARY_CONTENT4_REQUEST = {
+		...CREATE_CONTENT4_REQUEST,
+		description: 'asdffdas',
+		participants: ["testuser1", "testuser2", "testuser3"],
+		contractDetails: {views:[{username:"testuser1",share:0.125}, {username:"testuser2",share:0.125}, {username:"testuser3",share:0.75}], engagement:[{username:"testuser1",share:0.18}, {username:"testuser2",share:0.18}, {username:"testuser3",share:0.64}]},
+		contractSigned: ["testuser1"]
+	}
+	
+	test('works: participants field (see PATCH \`contents/:contentID/edit\: works) ', async() => {
+
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send(TEMPORARY_CONTENT4_REQUEST)
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.body.content).toEqual({
+			...TEMPORARY_CONTENT4_REQUEST,
+			id: 4,
+			link: '',
+			status: 'open',
+			dateCreated: "2023-01-08T08:00:00.000Z",
+			datePublished: null,
+			dateStandby: null
+		});
+
+	});
+	
+	test('400, BRE: \'participants\', username invalid (too short)', async() => {
+
+		// this will be true for contractSigned entr(ies)
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				participants: ["testuser1", ""]
+			})
+			.set('authorization', `Bearer ${user1Token}`)
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+	
+	test('400, BRE: \'participants\', username invalid (too long)', async() => {
+
+		// this will be true for contractSigned entr(ies)
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				participants: ["testuser1", "123456789012345678901234567890123"]
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+	
+	test('400, BRE: \'participants\', duplicate entries', async() => {
+
+		// this will be true for contractSigned entr(ies)
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				participants: ["testuser1", "testuser1"]
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+	
+	test('400, BRE: \'participants\', needs at least 1 entry', async() => {
+
+		// this will be true for contractSigned entr(ies)
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				participants: []
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+	
+	/*	
+	test('contractSigned field', async() => {
+
+
+
+	});*/
+	
+	test('400, BRE: \'contractDetails\', empty', async() => {
+
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				contractDetails: { views:[], engagement:[{username:"testuser1",share:1}] }
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+
+	test('400, BRE: \'contractDetails\', number < 0', async() => {
+
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				contractDetails: { views:[{username:"testuser1",share:-0.1}], engagement:[{username:"testuser1",share:1}] }
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+
+	test('400, BRE: \'contractDetails\', number > 1', async() => {
+
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				contractDetails: { views:[{username:"testuser1",share:1}], engagement:[{username:"testuser1",share:1.1}] }
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
 	});
 
 });

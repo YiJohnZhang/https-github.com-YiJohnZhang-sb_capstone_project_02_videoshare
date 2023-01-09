@@ -226,7 +226,13 @@ async function isParticipatingUser(req, res, nxt) {
 	try{
 
 		const result = await ContentModel.getParticipants(req.params.contentID);
-		const participantSet = new Set(JSON.parse(result));
+		const { participants } = result;
+		const participantSet = new Set(JSON.parse(participants));
+			//	see `Content:455` / `Content:462`; in the ideal implementation this is:
+		/*
+		const result = await ContentModel.getParticipants(req.params.contentID);
+		const participantSet = new Set(JSON.parse(results));
+		*/
 		
 		if(!participantSet.has(res.locals.user.username))
 			throw new UnauthorizedError('not a participant');

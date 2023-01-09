@@ -269,7 +269,7 @@ class Content {
 			UPDATE ${this.relationName} 
 				SET ${parameterizedSET} 
 				WHERE id = ${pkParameterIndex} 
-				RETURNING ${QUERY_GENERAL_PROPERTIES} ${QUERY_PRIVATE_PROPERTIES}`;
+				RETURNING ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES}`;
 		const result = await db.query(updateQuerySQL, [...setParameters, pk]);
 
 		const contentObject = result.rows[0];
@@ -451,18 +451,31 @@ class Content {
 	 */
 	static async getParticipants(pk) {
 
-		let result = await db.query(`
-			SELECT participants
+		const result = await db.query(`
+			SELECT participants, status, contract_type AS "contractType"
 				FROM ${this.relationName}
 				WHERE id = $1`, 
 			[pk]);
+
+		// under pure circumstances, the query would be:
+		/*
+		const result = await db.query(`
+			SELECT participants 
+				FROM ${this.relationName}
+				WHERE id = $1`, 
+			[pk]);
+		*/
+		//	however, since publish isn't fully fleshed out to detect a solo and update can freely change the content contractType, for now this is the best solution.
+		//	further study: updateSign (by using the `standby` state, no one can change the contractType); equally, make it so the application disallows publishing a piece of content if participants.length > 1 && contractTYpe === `solo`
+		//	further study: introduce the following array-like properties "editors" (that is a list of individuals to edit anything but contractType and signing for other users)
+		//	further study: introduce 
 
 		const contentObject = result.rows[0];
 
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find content with id: ${pk}.`);
 
-		return contentObject.participants;
+		return contentObject;
 
 	}
 

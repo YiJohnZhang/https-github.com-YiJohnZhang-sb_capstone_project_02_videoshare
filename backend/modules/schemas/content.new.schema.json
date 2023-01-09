@@ -1,0 +1,80 @@
+{
+	"_comment": "it is business logic that checks whether or not the 'share' properties add up to <1.00",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Content, New",
+	"description": "A schema specification for new Content records.",
+	"type": "object",
+	"properties": {
+		"title": {
+			"type": "string", "minLength": 4, "maxLength": 64
+		},
+		"summary": {
+			"type": "string", "maxLength": 512
+		},
+		"description": {
+			"type": "string", "maxLength": 2200
+		},
+		"owner": {
+			"$ref": "#/definitions/usernameString"
+		},
+		"contractType": {
+			"type": "string", "enum": ["single", "byview", "presplit"]
+		},
+		"participants": {
+			"type": "array",
+			"items": [{
+				"type": "string", "minLength": 4, "maxLength": 32
+			}],
+			"minItems": 1,
+			"uniqueItems":true
+		},
+		"contractDetails": {
+			"type": "object",
+			"properties": {
+				"views": { "$ref": "#/definitions/contractDetailProperties" },
+				"engagement": { "$ref": "#/definitions/contractDetailProperties" }
+			},
+			"additionalProperties": false,
+			"required": ["views", "engagement"]
+		},
+		"contractSigned": {
+			"type": "array",
+			"items": [{
+				"type": "string", "minLength": 4, "maxLength": 32
+			}],
+			"uniqueItems": true
+		}
+	},
+	"required": [
+		"title",
+		"summary",
+		"owner",
+		"contractType",
+		"participants",
+		"contractDetails"
+	],
+	"additionalProperties": false,
+	"definitions": {
+		"contractDetailProperties": {
+			"type": "array",
+			"items": [{
+				"type": "object",
+				"properties": {
+					"username": {"type": "string", "minLength": 4, "maxLength": 32},
+					"share": {"type": "number", "minimum": 0, "maximum": 1}
+				},
+				"additionalProperties": false,
+				"required": ["username", "share"]
+			}],
+			"minItems": 1,
+			"uniqueItems": true
+		},
+		"usernameString": {
+			"type": "string",
+			"minLength": 4,
+			"maxLength": 32
+		}
+
+	}
+
+}

@@ -7,7 +7,7 @@ const { isLoggedIn,	isReferenceUser, isAdmin, isReferenceUserOrAdmin, isOwner } 
 const { validateRequestBody, validateRequestQuery } = require('./middlewareSchemaValidation');
 const { stringifyRequestBodyProperties, parseResponseBodyProperties } = require('../helpers/objectStringifyAndParseHelper');
 
-const updateContentJOINSchema = require('./schemas/updateContentJOIN.schema.json');
+const updateContentJOINSchema = require('./schemas/cujoin.update.schema.json');
 // use isParticipatingUser for editing contract by participating users
 
 /**	GET `/[username]/[contentID]`
