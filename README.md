@@ -431,9 +431,10 @@ Some suggested improvements to this concept are:
 |53|`contents` & need to redefine schema, looking up `draft-04 to -07` documentation|2022-01-07|12:28 - 13:37|69|
 |54|revise schemas, renamed schema schema, finish up `contents`; **power outage**|2022-01-07|14:40 - 15:41|61|
 |55|rollback app|2022-01-08|16:58 - 18:01|63|
-|56||2022-01-08|18:37 - 21:12||
-|57||2022-01-08|: - :||
-|58||2022-01-08|: - :||
+|56|updated schema, all that is left is `contents:publish`|2022-01-08|18:37 - 21:12||
+|57|set `config`, finish `contents:publish`|2022-01-08|22:22 - :||
+|58||2022-01-10|: - :||
+|6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-10|: - :||
 54		55
 1129	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
@@ -446,13 +447,16 @@ Some suggested improvements to this concept are:
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
-|5||2023-01-07|: - :||
+|59|plugin API & front-end works|2023-01-08|2: - :||
+|6||2023-01-10|: - :||
+|6|clean up and format codebase to be presentable|2023-01-1|: - :||
 37		38
 1190	
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
+|6||2023-01-1|: - :||
 149
 
 ||||**Total Time**|_ minutes (--h--m)|
