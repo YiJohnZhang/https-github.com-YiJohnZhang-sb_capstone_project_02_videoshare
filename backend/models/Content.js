@@ -419,24 +419,28 @@ class Content {
 		/*
 		Error Code		Why
 		496 (404)		Invalid Status (for NOW: status === 'standby' OR status === 'open' b/c `updateSign` isn't working)
-			// for now if(contentObject.status === ('open' || 'standby')){
+			// for now if(contentObject.status already ('published' || 'legacy')){
 		497				Does not Contain Link
 		498				Not everyone is signed
 		499				Failed for some db reason
 		*/
 
 		const result = await db.query(`
-		SELECT link, participants, contract_signed AS "contractSigned"
+		SELECT link, status, participants, contract_signed AS "contractSigned"
 			FROM ${this.relationName}
-			WHERE id = $1 AND (status = 'standby' OR status = 'open')`, [contentID]);
-			// lowpriority: really, don't have the time to make this proper. so therefore it is because `signUpdate` is deprecated for now.
+			WHERE id = $1`, [contentID]);
 
 		const contentObject = result.rows[0];
 
 		if (!contentObject)
 			throw new NotFoundError(`Cannot find valid content with id: ${contentID}.`);
 
-		const { link, participants, contractSigned } = contentObject;
+		const { link, status, participants, contractSigned } = contentObject;
+
+		// 496: already published
+		if(status === 'published' || status === 'legacy')
+			throw new ExpressError(496, 'Invalid content status.');
+			// lowpriority: really, don't have the time to make this proper. so therefore it is because `signUpdate` is deprecated for now. later include `open` in this logic.
 
 		// 497: check if link is non-null
 		if(!link)
@@ -450,7 +454,6 @@ class Content {
 			throw new ExpressError(498, 'All participants must have signed the contract.');
 		
 		const contentPublishDate = new Date();
-		console.log('=================2')
 
 		try{
 
@@ -464,7 +467,6 @@ class Content {
 				['published', contentPublishDate.toJSON(), contentID]);
 
 			const { id, participants, description } = publishQuery.rows[0];
-			console.log(publishQuery.rows[0]);
 			
 			await db.query('COMMIT');
 

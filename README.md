@@ -434,7 +434,7 @@ Some suggested improvements to this concept are:
 |56|updated schema, all that is left is `contents:publish`|2022-01-08|18:37 - 21:12||
 |57|set `config`, finish `contents:publish`|2022-01-08|22:22 - 23:14||
 |58|`contents` tests|2022-01-09|19:46 - 20:33||
-|59|`contents` tests|2022-01-10|20:39 - :||
+|59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-10|20:39 - 22:00||
 |6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-10|: - :||
 54		55
 1129	---

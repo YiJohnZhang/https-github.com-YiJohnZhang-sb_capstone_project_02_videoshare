@@ -204,7 +204,7 @@ async function isOwner(req, res, nxt) {
 
 		const result = await ContentModel.getContentOwner(req.params.contentID);
 
-		if(res.locals.user.username !== result.owner)
+		if(res.locals.user.username !== result)
 			throw new UnauthorizedError('not content owner');
 
 		nxt();

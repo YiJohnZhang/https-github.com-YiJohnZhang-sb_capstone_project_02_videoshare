@@ -57,7 +57,6 @@ router.get('/', async(req, res, nxt) => {
 		return res.json({contents: parsedContentResults});
 
 	}catch(error){
-		console.log(error);
 		nxt(error);
 	}
 
@@ -89,25 +88,27 @@ router.get('/:contentID', async(req, res, nxt) => {
  *	
  *	Authorization Required: None
  */
- router.get('/:contenID/random', async(req, res, nxt) => {
+ router.get('/:contentID/random', async(req, res, nxt) => {
 
 	try{
 
-		const contentParticipants = await ContentModel.getParticipants(req.params.contentID);
+		const result = await ContentModel.getParticipants(req.params.contentID);
 		
-		let selectedParticipant;
-		const participants = JSON.parse(contentParticipants);
-		
-		if(participants.length === 1){
-		
-			selectedParticipant = participants[0];
-		
-		}else{
+		const { participants } = result;
+		const participantsArray = JSON.parse(participants);
 
-			const randomIndex = Math.floor(Math.random()*participants.length);
-			selectParticipant = participants[randomIndex];
-
+		if(participantsArray.length === 1){
+		
+			console.log(participantsArray[0]);
+			// todo: remove
+			return { username: participantsArray[0] };
+		
 		}
+
+		const randomIndex = Math.floor(Math.random()*participantsArray.length);
+		console.log(randomIndex);
+			// todo: remove
+		return { username: participantsArray[randomIndex] };
 
 	}catch(error){
 		nxt(error);
@@ -172,17 +173,15 @@ router.patch('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res
  *		where `input` is: (req.params.contentID, { req.body })
  *		where `contentResult` is: { QUERY_GENERAL_PROPERTIES, QUERY_PRIVATE_PROPERTIES }
  *	
- *	Authorization Required: isLoggedIn, isReferenceUser, isOwner
+ *	Authorization Required: isLoggedIn, isOwner
 */
-router.patch('/:contentID/publish', isLoggedIn, isReferenceUser, isOwner, async(req, res, nxt) => {
+router.patch('/:contentID/publish', isLoggedIn, isOwner, async(req, res, nxt) => {
 
 	try{
-		console.log('as111d');
 
 		const contentResult = await ContentModel.updatePublish(req.params.contentID);
-		console.log('asd');
 
-		return res.json({content: parseResponseBodyProperties(contentResult)});
+		return res.json({content: contentResult});
 
 	}catch(error){
 		nxt(error);

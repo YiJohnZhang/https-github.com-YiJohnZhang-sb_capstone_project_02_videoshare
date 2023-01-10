@@ -253,6 +253,65 @@ describe('GET \`/contents/:contentID\`', () => {
 
 });
 
+/***	GET /contents/:contentID/random	*/
+describe('GET \`/contents/:contentID/random\`', () => {
+
+	// auth: none
+	// => {content: parseResponseBodyProperties(contentResult)}
+	//	public level
+
+	test('public request, content1', async() => {
+
+		const response = await request(app)
+			.get('/contents/1/random');
+		console.log(response.body.username);
+		expect(response.body.username).toEqual('testuser1');
+		fail('todo: fix 5s test');
+	
+	});
+
+	test('loggedin request, content1', async() => {
+
+		const response = await request(app)
+			.get('/contents/1/random')
+			.set('authorization', `Bearer ${user1Token}`);
+		console.log(response.body.username);
+		expect(response.body.username).toEqual('testuser1');
+		fail('todo: fix 5s test');
+	
+	});
+
+	test('public request, content2', async() => {
+
+		const response = await request(app)
+			.get('/contents/2/random');
+		console.log(response.body.username);
+		expect(['testuser1', 'testuser2']).toContain(response.body.username);
+		fail('todo: fix 5s test');
+	
+	});
+
+	test('loggedin request, content2', async() => {
+
+		const response = await request(app)
+			.get('/contents/2/random')
+			.set('authorization', `Bearer ${user1Token}`);
+		console.log(response.body.username);
+		expect(['testuser1', 'testuser2']).toContain(response.body.username);
+		fail('todo: fix 5s test');
+	
+	});
+
+	test('404: content not found', async() => {
+
+		const response = await request(app)
+			.get('/contents/100/random');
+		expect(response.statusCode).toEqual(404);
+	
+	});
+
+});
+
 /***	GET /contents/:contentID/edit	*/
 describe('GET \`/contents/:contentID/edit\`', () => {
 
@@ -333,7 +392,11 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 	
 	});
 
-	// todo: a test with changing the join content
+	test('integration, ', async() => {
+
+		fail('todo integration test (test join columns)');
+
+	});
 
 	test('401: unauthorized (wrong user)', async() => {
 
@@ -463,13 +526,55 @@ describe('Update Schema Testing', () => {
 
 	});*/
 	
-	test('400, BRE: \'contractDetails\', empty', async() => {
+	test('400, BRE: \'contractDetails\', illegal property', async() => {
+
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				contractDetails: { views:[{username:"testuser1",share:1, illegalProperty:'wait, that\'s illegal'}], engagement:[{username:"testuser1",share:1}] }
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+	
+	test('400, BRE: \'contractDetails\', missing property', async() => {
+
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				contractDetails: { views:[{username:"testuser1"}], engagement:[{username:"testuser1",share:1}] }
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+	
+	test('400, BRE: \'contractDetails\', needs at least 1 entry', async() => {
 
 		const response = await request(app)
 			.patch('/contents/4/edit')
 			.send({
 				...TEMPORARY_CONTENT4_REQUEST,
 				contractDetails: { views:[], engagement:[{username:"testuser1",share:1}] }
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+	
+	test('400, BRE: \'contractDetails\', duplicate entries', async() => {
+
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				contractDetails: { views:[{username:"testuser1",share:1}, {username:"testuser1",share:1}], engagement:[{username:"testuser1",share:1}] }
 			})
 			.set('authorization', `Bearer ${user1Token}`);
 
@@ -505,6 +610,35 @@ describe('Update Schema Testing', () => {
 
 	});
 
+
+	test('400, BRE: \'contractDetails\', username.length < 4', async() => {
+
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				contractDetails: { views:[{username:"tes",share:1}], engagement:[{username:"testuser1",share:1.1}] }
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+
+	test('400, BRE: \'contractDetails\', username.length > 32', async() => {
+
+		const response = await request(app)
+			.patch('/contents/4/edit')
+			.send({
+				...TEMPORARY_CONTENT4_REQUEST,
+				contractDetails: { views:[{username:"123456789012345678901234568790123",share:1}], engagement:[{username:"testuser1",share:1.1}] }
+			})
+			.set('authorization', `Bearer ${user1Token}`);
+
+		expect(response.statusCode).toEqual(400);
+
+	});
+
 });
 
 /***	DEPRECATED: PATCH /contents/:contentID/sign	*/
@@ -533,13 +667,21 @@ describe('PATCH \`contents/:contentID/publish\`', () => {
 	// none => {content: parseResponseBodyProperties(contentResult)}
 	//	private level
 
-	test('test', async() => {
+	test('496: invalid content status', async () => {
+
+		const response = await request(app)
+			.patch('/contents/1/publish')
+			.set('authorization', `Bearer ${user1Token}`);
+		expect(response.statusCode).toEqual(496);
+	
+	});
+
+	test('497: invalid link', async() => {
 
 		const response = await request(app)
 			.patch('/contents/3/publish')
-			.send({})
 			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body.content).toEqual('a');
+		expect(response.statusCode).toEqual(497);
 	
 	});
 
@@ -547,7 +689,6 @@ describe('PATCH \`contents/:contentID/publish\`', () => {
 
 		const response = await request(app)
 			.patch('/contents/3/publish')
-			.send({})
 			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.statusCode).toEqual(401);
 	
@@ -556,30 +697,53 @@ describe('PATCH \`contents/:contentID/publish\`', () => {
 	test('401: unauthorized (public)', async() => {
 
 		const response = await request(app)
-			.patch('/contents/3/publish')
-			.send({});
+			.patch('/contents/3/publish');
 		expect(response.statusCode).toEqual(401);
 	
 	});
 
-	test('401 (404): not found', async() => {
+	test('404: not found', async() => {
 
 		const response = await request(app)
 			.patch('/contents/6/publish')
-			.send({})
 			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.statusCode).toEqual(401);
-			// it it will unauthorize first before it tries to find it
+		expect(response.statusCode).toEqual(404);
 	
 	});
 
-	test('498: error (everyone needs to be signed)', async() => {
+	test('e2e, 498: error (everyone needs to be signed)', async() => {
 
-		const response = await request(app)
-			.patch('/contents/3/publish')
-			.send({})
-			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.statusCode).toEqual(498);
+		fail('todo: \`498\` e2e test');
+
+		// const response = await request(app)
+		// 	.patch('/contents/5/publish')
+		// 	.set('authorization', `Bearer ${user1Token}`);
+		// expect(response.statusCode).toEqual(498);
+	
+	});
+
+	test('e2e, works', async() => {
+
+		fail('todo: working e2e test');
+
+		/*
+		const NEW_CONTENT = {
+
+
+
+		}
+		*/
+
+		// const response = await request(app)
+		// 	.patch('/contents/5/publish')
+		// 	.set('authorization', `Bearer ${user1Token}`);
+		// expect(response.statusCode).toEqual(200);
+
+		/*
+
+
+
+		*/
 	
 	});
 
