@@ -431,13 +431,13 @@ Some suggested improvements to this concept are:
 |53|`contents` & need to redefine schema, looking up `draft-04 to -07` documentation|2022-01-07|12:28 - 13:37|69|
 |54|revise schemas, renamed schema schema, finish up `contents`; **power outage**|2022-01-07|14:40 - 15:41|61|
 |55|rollback app|2022-01-08|16:58 - 18:01|63|
-|56|updated schema, all that is left is `contents:publish`|2022-01-08|18:37 - 21:12||
-|57|set `config`, finish `contents:publish`|2022-01-08|22:22 - 23:14||
-|58|`contents` tests|2022-01-09|19:46 - 20:33||
-|59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-10|20:39 - 22:00||
+|56|updated schema, all that is left is `contents:publish`|2022-01-08|18:37 - 21:12|155|
+|57|set `config`, finish `contents:publish`|2022-01-08|22:22 - 23:14|52|
+|58|`contents` tests|2022-01-09|19:46 - 20:33|47|
+|59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-09|20:39 - 22:00|81|
 |6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-10|: - :||
-54		55
-1129	---
+59		60
+	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|exploring `formik` for frontend, attempted `material-ui`, alongside other express form validation and/or styling libraries; db work|2022-12-28|16:01 - 18:24|143|
