@@ -433,8 +433,8 @@ Some suggested improvements to this concept are:
 |55|rollback app|2022-01-08|16:58 - 18:01|63|
 |56|updated schema, all that is left is `contents:publish`|2022-01-08|18:37 - 21:12||
 |57|set `config`, finish `contents:publish`|2022-01-08|22:22 - 23:14||
-|58|finish `contents` tests|2022-01-09|19:46 - 2:||
-|59||2022-01-10|: - :||
+|58|`contents` tests|2022-01-09|19:46 - 20:33||
+|59||2022-01-10|20: - :||
 |6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-10|: - :||
 54		55
 1129	---

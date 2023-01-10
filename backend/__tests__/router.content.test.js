@@ -18,10 +18,6 @@ afterAll(commonAfterAll);
 
 //	DATE OBJECT
 const today = new Date();
-const yyyy = today.getFullYear();
-const mm = String(today.getMonth() + 1);
-const dd = String(today.getDate());
-
 const JSONDate_string = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 const JSONDate_JSON = JSONDate_string.toJSON();
 
@@ -337,6 +333,8 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 	
 	});
 
+	// todo: a test with changing the join content
+
 	test('401: unauthorized (wrong user)', async() => {
 
 		const response = await request(app)
@@ -358,7 +356,7 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 
 });
 
-/***		===		Schema Testing for Robustness	=== */
+/***		===Schema Testing for Robustness=== */
 describe('Update Schema Testing', () => {
 
 	const TEMPORARY_CONTENT4_REQUEST = {
@@ -376,15 +374,25 @@ describe('Update Schema Testing', () => {
 			.send(TEMPORARY_CONTENT4_REQUEST)
 			.set('authorization', `Bearer ${user1Token}`);
 
+		const dateCreated_JSON = response.body.content.dateCreated;
+		const split_dateCreated_JSON = dateCreated_JSON.split('-');
+
 		expect(response.body.content).toEqual({
 			...TEMPORARY_CONTENT4_REQUEST,
 			id: 4,
 			link: '',
 			status: 'open',
-			dateCreated: "2023-01-08T08:00:00.000Z",
+			dateCreated: expect.any(String),
 			datePublished: null,
 			dateStandby: null
 		});
+
+		// testing dateCreated
+		expect(split_dateCreated_JSON.length).toEqual(3);
+		expect(split_dateCreated_JSON[0].length).toEqual(4);
+		expect(split_dateCreated_JSON[1].length).toEqual(2);
+		expect(split_dateCreated_JSON[2].split('T').length).toEqual(2);
+		expect(split_dateCreated_JSON[2].split('T')[0].length).toEqual(2);
 
 	});
 	
@@ -509,7 +517,7 @@ describe('PATCH \`contents/:contentID/sign\`', () => {
 	// test('', async() => {
 
 	// 	const response = await request(app)
-	// 	.patch('/contents/CONTENTID/edit')
+	// 	.patch('/contents/CONTENTID/sign')
 	// 	.send({})
 	// 	.set('authorization', `Bearer ${user1Token}`);
 	// 	expect(response.body.content).toEqual();
@@ -528,7 +536,7 @@ describe('PATCH \`contents/:contentID/publish\`', () => {
 	test('test', async() => {
 
 		const response = await request(app)
-			.patch('/contents/3/edit')
+			.patch('/contents/3/publish')
 			.send({})
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.body.content).toEqual('a');
@@ -538,7 +546,7 @@ describe('PATCH \`contents/:contentID/publish\`', () => {
 	test('401: unauthorized (wrong user)', async() => {
 
 		const response = await request(app)
-			.patch('/contents/3/edit')
+			.patch('/contents/3/publish')
 			.send({})
 			.set('authorization', `Bearer ${user3Token}`);
 		expect(response.statusCode).toEqual(401);
@@ -548,26 +556,27 @@ describe('PATCH \`contents/:contentID/publish\`', () => {
 	test('401: unauthorized (public)', async() => {
 
 		const response = await request(app)
-			.patch('/contents/3/edit')
+			.patch('/contents/3/publish')
 			.send({});
 		expect(response.statusCode).toEqual(401);
 	
 	});
 
-	test('404: not found', async() => {
+	test('401 (404): not found', async() => {
 
 		const response = await request(app)
-			.patch('/contents/6/edit')
+			.patch('/contents/6/publish')
 			.send({})
 			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.statusCode).toEqual(404);
+		expect(response.statusCode).toEqual(401);
+			// it it will unauthorize first before it tries to find it
 	
 	});
 
 	test('498: error (everyone needs to be signed)', async() => {
 
 		const response = await request(app)
-			.patch('/contents/3/edit')
+			.patch('/contents/3/publish')
 			.send({})
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.statusCode).toEqual(498);

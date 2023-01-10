@@ -130,7 +130,6 @@ router.get('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res, 
 		// const contentResult = await ContentModel.getByPKPrivate(req.params.contentID, res);
 		const contentResult = await ContentModel.getByPKPrivate(req.params.contentID);
 		// console.log(`heardersSent (\'routerContents.js\': ~99): ${res.headersSent}`)
-
 			
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 		
@@ -159,8 +158,8 @@ router.patch('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res
 	
 		const contentResult = await ContentModel.update(req.params.contentID, stringifyRequestBodyProperties(req.body));
 			// todo: disable if the current status is pbulished or legacy'
-		
-		return res.json({content: parseResponseBodyProperties(contentResult)});
+
+		return res.json({content: contentResult});
 
 	}catch(error){
 		nxt(error);
@@ -178,8 +177,10 @@ router.patch('/:contentID/edit', isLoggedIn, isParticipatingUser, async(req, res
 router.patch('/:contentID/publish', isLoggedIn, isReferenceUser, isOwner, async(req, res, nxt) => {
 
 	try{
+		console.log('as111d');
 
 		const contentResult = await ContentModel.updatePublish(req.params.contentID);
+		console.log('asd');
 
 		return res.json({content: parseResponseBodyProperties(contentResult)});
 

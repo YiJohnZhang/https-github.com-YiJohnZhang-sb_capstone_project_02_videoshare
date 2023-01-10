@@ -278,7 +278,7 @@ class Content {
 		if(contentExists.status === 'published' || contentExists.status === 'legacy')
 			throw new ExpressError(496, 'Content Status does NOT allow editing');
 
-		const { oldParticipants_stringified } = contentExists;
+		const { participants: oldParticipants_stringified } = contentExists;
 		const oldParticipants = JSON.parse(oldParticipants_stringified);
 
 		await db.query('BEGIN');
@@ -292,7 +292,7 @@ class Content {
 				SET ${parameterizedSET} 
 				WHERE id = ${pkParameterIndex} 
 				RETURNING ${QUERY_GENERAL_PROPERTIES}, ${QUERY_PRIVATE_PROPERTIES};`;
-
+			
 		const result = await db.query(updateQuerySQL, [...setParameters, pk]);
 		const contentObject = result.rows[0];
 
@@ -303,7 +303,7 @@ class Content {
 
 			const { id, description, participants } = parseResponseBodyProperties(contentObject);
 			const { stringifiedWHERE, stringifiedVALUES } = sqlJoinMultipleQueryBuilder_Configured(oldParticipants, participants, 'user_id = ', id, description);
-T
+
 			let INSERINTO_query;
 			if(stringifiedVALUES){
 
@@ -311,7 +311,7 @@ T
 				INSERT INTO contents_users_join (user_id, content_id, description)
 					${stringifiedVALUES}
 					RETURNING content_id;`);
-				
+								
 				// if content_id neq, throw error
 
 			}
@@ -329,9 +329,8 @@ T
 
 			}
 
-			await db.query('COMMIT');			
-
-			return 'success';
+			await db.query('COMMIT');
+			return contentObject;
 
 		}catch(error){
 
@@ -451,7 +450,8 @@ T
 			throw new ExpressError(498, 'All participants must have signed the contract.');
 		
 		const contentPublishDate = new Date();
-		
+		console.log('=================2')
+
 		try{
 
 			await db.query('BEGIN');
