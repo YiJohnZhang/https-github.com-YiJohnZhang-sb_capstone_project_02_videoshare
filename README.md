@@ -437,7 +437,7 @@ Some suggested improvements to this concept are:
 |59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-09|20:39 - 22:00|81|
 |6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-10|: - :||
 59		60
-	---
+1527	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|exploring `formik` for frontend, attempted `material-ui`, alongside other express form validation and/or styling libraries; db work|2022-12-28|16:01 - 18:24|143|
