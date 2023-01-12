@@ -435,7 +435,7 @@ Some suggested improvements to this concept are:
 |57|set `config`, finish `contents:publish`|2022-01-08|22:22 - 23:14|52|
 |58|`contents` tests|2022-01-09|19:46 - 20:33|47|
 |59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-09|20:39 - 22:00|81|
-|6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-10|: - :||
+|61|clean up and format backend codebase to be presentable; add docstrings?|2023-01-11|: - :||
 59		60
 1527	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
@@ -457,7 +457,7 @@ Some suggested improvements to this concept are:
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
-|6||2023-01-1|: - :||
+|60||2023-01-11|16:03 - :||
 149
 
 ||||**Total Time**|_ minutes (--h--m)|
