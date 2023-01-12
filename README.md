@@ -114,79 +114,69 @@ User => Users
 
 ## 02.02. Frontend Userflow (`todo`)
 ```sh
-/										# integrates search
-├──	signin/								# logout required
-├──	register/							# logout required
+/
+├──	signin/
+├──	register/	
 ├──	user/
 │	├── [username]
-│	└── [username]/[contentid]/edit		# login required, check reference user.
-├──	account/							# login required
-├── upload/								# login required
-├── edit/[contentid]					# login required, check if participant.
-├──	error/[errorCode]					# basically, show an error code and go home.
-└──	logout								# login required
+│	└── [username]/[contentid]/edit
+├──	account/
+├── create/
+├── edit/[contentid]
+├──	error/[errorCode]
+└──	logout
 ```
-|Page|Path|Page Component|Notes|Authentication|
-|-|-|-|-|-|
-|Home|`/`|`HomePage`|Home page. Displays content. **Integrated Search**|None|
-|Onboarding|`/login` or `/signup`|`OnboardingPage`|Use this as a common page|notLoggedIn|
-|Profile|`/user/:userHandle`[1]|`ProfilePage`|Either the reference user or public.|None|
-||`/account`|`EditUserPage`|loggedIn|
-|Logout|`/logout`|`LogoutComponent`|A component that doesn't render anything|loggedIn|
-|Error|`/error`|`ErrorPage`|Some error thrown.|None|
-|EditContentPage|`/upload`|`EditContentPage`|Create a piece of content. Backend Notes: keep as is. once the create button is hit, redirect to edit content page.|loggedIn|
-|EditContentPage|`/edit/:contentID`[2]|`EditContentPage`|A form to edit a piece of content.|loggedIn & check participant (push to `404` o.w.). **block request** if content status is not `open` or `standby` (last auth check).|
-|EditJoinContent|`/user/:userHandle/:contentId/edit`|`EditJoinContent`|A form to edit a join content|logged in, reference user, join content exists|
+
+|##|Page|Path|Page Component|Fe Router Auth.|Notes|API Call(s)|
+|-|-|-|-|-|-|-|
+|01|Home|`/`|`HomePage`|None|Home page, landing page. **Integrates search** w/out search history.|`searchUser`, `searchPublicContent`, `getAllPublicContent`|
+|02A|Login|`/login`|`OnboardingPage`|notLoggedIn|To login.|`authenticateUser`|
+|02B|Signup|`/register`|`OnboardingPage`|""|To signup.|`registerUser`|
+|03|Logout|`/logout`|`LogoutComponent`|loggedIn|To logout. Doesn't render anything. `/` if error|None|
+|04|Error|`**??**`|`ErrorPage`|None|Error page. Hot link to home.|None|
+|05|Profile|`/user/:userHandle`|`ProfilePage`|None|push to `/error` if error|`getUserData` (public or neq ref user), `getUserDataPrivate` (ref user)|
+|06|Profile, Edit|`/account`|`EditUserPage`|loggedIn|push to `/` if error|`getFullUserData`, `patchUser`|
+|07|Content|`/content/:contentID`|`ContentPage?`|None|**`todo`**|`selectContent`, `getContentData`|
+|08A|Content, Create|`/create`|`EditContentPage`|loggedIn|push to `/` if error|`createContent`|
+|08B|Content, Edit|`/edit/:contentID`|`EditContentPage`|loggedIn|push to `/error` if error|`getFullContentData`, `patchContent`, `publishContent`|
+|09|Join Content, Edit|`/user/:userHandle/:contentId/edit`|`EditJoinContentPage`|loggedIn, referenceUser|push to `/error` if error|`getJointContentData`, `patchJointContent`|
+
 - `params` aliases:
 	1. `userHandle` is an alias for `username`
-	2. `contentId` is an alias for `contentID`
 
-|Page|Page Component|API Call|
-|-|-|-|
-|Home|`HomePage`|`searchUsers`, `searchContent`, `getAllContents`|
-|Login|`OnboardingPage`|`authenticateUser`|
-|Signup|`OnboardingPage`|`registerUser`|
-|Logout|`LogoutComponent`|None|
-|Error|`ErrorPage`|None|
-|Profile|`ProfilePage`|`getUserData` (public or neq ref user) / `getFullUserData` (if reference user)|
-|Profile, Edit|`EditUserPage`|`getFullUserData` / `patchUserData`|
-|Content, Create|`EditContentPage`|`createContent`|
-|Content, Edit|`EditContentPage`|`getFullContentData` / `patchContent`|
-|Content, Publish|`EditContentPage`|`getFullContentData` / `publishContent`|
-|Join Content, Edit|`EditJoinContent`|`getJoinContentData` / `patchJoinContent`|
-
-|##|API Method Signature|Model/Method|Backend Route|
+|##|API Method Signature|`Route` / `Method`|`Backend Route`|
 |-|-|-|-|
 ||`Authorization`|||
-|01|`register(reqBody)`|`Authentication`/`POST`|`/authentication/register`|
-|02|`login(reqBody)`|`Authentication`/`POST`|`/authentication/login`|
+|01|`authenticateUser(reqBody)`|`Authentication` / `POST`|`/authentication/token`|
+|02|`registerUser(reqBody)`|`Authentication` / `POST`|`/authentication/register`|
 ||`Users`|||
-|03|`searchUsers(reqQuery)`|`Users`/`GET`|`/users/`|
-|04|`returnUser(username)`|`Users`/`GET`|`/users/:username/`|
-|05|`returnFullUserData(username)`|`Users`/`GET`|`/users/:username/edit`|
-|06|`patchUser(username, reqBody)`|`Users`/`PATCH`|`/users/:username/edit`|
+|03|`searchUser(reqQuery)`|`Users` / `GET`|`/users/`|
+|04|`getUserData(reqParam)`|`Users` / `GET`|`/users/:username/public`|
+|05|`getAlluserData(reqParam)`|`Users` / `GET`|`/users/:username/private`|
+|06|`getFullUserData(reqParam)`|`Users` / `GET`|`/users/:username/edit`|
+|07|`patchUser(reqParam, reqBody)`|`Users` / `PATCH`|`/users/:username/edit`|
 ||`Contents`|||
-|--|`returnAllPublicContents()`|`Contents`/`GET`|`/contents/`|
-|07|(searchContents, doubles as #7) `searchPublicContents(reqQuery)`|`Contents`/`GET`|`/contents/`|
-|08|`createContent(reqBody)`|`Contents`/`POST`|`/contents/:contentID/`|
-|09|`getFullContentData(contentID)`|`Contents`/`GET`|`/contents/:contentID/edit`|
-|10|`patchContent(contentID, reqBody)`|`Contents`/`PATCH` (update)|`/contents/:contentID/edit`|
-|11|`publishContent(contentID, reqBody)`|`Contents`/`PATCH` (updatePublish)|`/contents/:contentID/publish`|
-||`cuJoin`|||
-|12|`viewPublicContent(contentID)` (username randomly generated)|`Contents_Users_Join`/`GET`|`/cujoin/:contentID/:username`|
-|13|`getJoinContentData(contentID, username)`|`Contents_Users_Join`/`GET`|`/contents/:contentID/:username/`|
-|14|`patchJoinContent(contentID, username, reqBody)`|`Contents_Users_Join`/`PATCH`|`/contents/:contentID/:username/edit`|
-||**Unused Methods**|||
-||`Users`|||
-|03|`returnAllUsers()`: DISABLED|`Users`/`GET`|`/users/`|
-|08|`deleteUser(username)`: DISABLED|`Users`/`DELETE`|`/users/:username`|
-||`Contents`|||
-|09|`returnContent(contentID)`|`Contents`/`GET`|`/contents/:contentID/`|
-|10|`returnAllContents()`|`Contents`/`GET`|`/contents/`|
-|12|`returnContent()`|`Contents`/`GET`|`/contents/:contentID/`|
-|17|`deleteContent(contentID)`: DISABLED|`Contents`/`DELETE`|`/contents/:contentID/`|
-||`cuJoin`|||
-|20|`deleteJoinContent(contentID, username)`: DISABLED|`Contents_Users_Join`/`DELETE`|`/contents/:contentID/:username/`|
+|08|`createContent(reqBody)`|`Contents` / `POST`|`/contents/`|
+|09|`searchPublicContent(reqQuery)`|`Contents` / `GET`|`/contents/`|
+|10|`getAllPublicContent()`|`Contents` / `GET`|`/contents/`|
+|11|`selectContent(reqParam)`|`Contents` / `GET`|`/contents/:contentID/random`|
+|12|`getFullContentData(reqParam)`|`Contents` / `GET`|`/contents/:contentID/edit`|
+|13|`patchContent(reqBody)`|`Contents` / `PATCH`|`/contents/:contentID/edit`|
+|14|`publishContent(reqParam)`|`Contents` / `PATCH`|`/contents/:contentID/publish`|
+||`Contents-Users-Join`|||
+|15|`getContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:username/:contentID`|
+|16|`getJoinContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:username/:contentID/edit`|
+|17|`patchJointContent(reqParams, reqBody)`|`Contents-Users-Join` / `PATCH`|`/cujoin/:username/:contentID/edit`|
+||`Unimplemented Routes, but Developed and Disabled`|||
+|18|`returnAllUsers`|`DISABLED` / `GET`|`/users/`|
+|19|`deleteUser`|`DISABLED` / `DELETE`|`/users/:username`|
+|20|`returnAllContents`|`DISABLED` / `GET`|`/contents/`|
+|21|`returnContent`|`DISABLED` / `GET`|`/contents/:contentID`|
+|22|`signContent`|`DISABLED` / `PATCH`|`/contents/:contentID/:username/sign`|
+|23|`updateContent`|`**`todo`**` / `PATCH`|`/contents/:contentID/status`|
+|24|`deleteContent`|`DISABLED` / `DELETE`|`/contents/:contentID`|
+|25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:username/:contentID`|
+
 
 ## 02.03. Backend Routes (`todo`)
 ```sh
@@ -214,39 +204,40 @@ User => Users
 	├──	`PATCH`		/[contentID]/publish	# update content by id, publish it
 	└──	`DELETE`	/[contentID]/			# delete content by id
 ```
-
 |##|Method, Rel. Path|Model, Method|Returns|Purpose|
 |-|-|-|-|-|
-||`/authenticate`|**Authentication**|||
-|01|`POST`, `/token`|`User`, `login()`|user auth. properties|Authenticates user credentials.|
-|02|`POST`, `/register`|`User`, `register()`|user auth. properties|Creates a user.|
-||`/users`|**User**|||
-|03|`GET`, `/`|`User`, `getAll()`|user public properties|User search feature.|
-|04|`GET`, `/:username`|`User`, `getByPK()`|user public properties|User profile page.|
-|`04A`|`GET`, `-`|`CU_Join`*, `getAllUserPublicContent()`|user public content|**Supports `04`**|
-|05|`GET`, `/:username/edit`|`User`, `getByPKPrivate()`|user private properties|Edit user profile page.|
-|`05A`|`GET`, `-`|`CU_Join`*, `getAllUserContent()`|**`todo`**|**Supports `05`**|
-|06|`PATCH`, `/:username/edit`|`User`, `update()`|user private properties|Front-end user edit.|
-||`/contents`|**Content**|||
-|07|`GET`, `/`|`Content`, `getAllPublic()`|arr contents (public)|**`todo`: test**Content search feature.|
-|08|`POST`, `/`|`Content`, `create()`|Returns created content id|Create a new piece of content; automatically create N joins based on participants.|
-|09|`GET`, ,`/:contentID/edit`|`Content`, `getByPKPrivate(contentID)`|content private properties|Get private data for editing master content template. **`todo?`**|
-|10|`PATCH`, `/:contentID/edit`|`Content`, `update()`|content private properites|**`todo`** Used to update master content record before publishing.|
-|11|`PATCH`, `/:contentID/publish`|`Content`, `publishUpdate()`|**`todo: test`**|Used to set the content record `status` from `standby` to `published`.|
-||`/cujoin`|**Content-User `Join`**|||
-|12|`GET`, `/:username/:contentID/`|`CU_Join`*, `getByPK()`|content public properties|get `participants` first then get a `random join` (for **both** `byview` and `presplit` for now).|
-|13|`GET`, `/:username/:contentID/edit`|`CU_Join`*, `getByPKPrivate()`|content private properties|Edit the publicly viewable description.|
-|14|`PATCH`, `/:username/:contentID/edit`|`CU_Join`*, `update()`|content private properties|**`todo`: `headersSent` error**. Edit the publicly viewable description.|
-|||**Existing but not used/deprecated Routes**|||
-|--|`DELETE`, `/:username`|`User`, `delete()`|Deleted record's `username`.|**Limited testing but not used concerning practices**.|
-|--|`DELETE`, `/:contentID`|`Content`, `delete()`|Deleted record's `id` and `title`.|Tested but not used concerning practices.|
-|--|`DELETE`, `/:username/:contentID`|`CU_Join`*, `delete()`|Deleted record's `user_id` and `content_id`|Tested but not used concerning practices (what if a user wants to restore? How?)|
-||`/contents`|**Content**|||
-|15A|`GET`, `/`|`Content`, `getAll()`|**deprecated**|**deprecated**|
-|16|`GET`, `/:contentID`|`Content`, `getByPK(contentID)`|content public properties|**not used for this project?**|
-|19|`PATCH`, `/:contentID/sign`|`Content`, `signUpdate()`|**skipped**|**skipped**. Allow a user to toggle whether or not they are signed.|
-|21|`PATCH`, `/:contentID/update`|`Content`, `...`|**skipped**|**skipped**. Used by the admin to set a content record `status` from `published` to `legacy`.|
-||`/cujoin`|**Content-User `Join`**|||
+||`Authentication`|`/users`|||
+|01|`POST`, `/token`|`Users`, `authenticate()`|user auth. properties|Authenticates a user.|
+|02|`POST`, `/register`|`Users`, `register()`|user auth. properties|Creates a user.|
+||`Users`|`/users`|||
+|03|`GET`, `/`|`Users`, `getAll()`|arr, user public properties|User search feature.|
+|04|`GET`, `/:username/public`|`Users`, `getByPK()`|user public properties|User profile page.|
+|`04A`|`GET`, `-`|`CU_Join`, `getAllUserPublicContent()`||Supports 04|
+|05|`GET`, `/:username/private`|`Users`, `getByPKPrivate()`|user private properties|User profile page.|
+|`05A`|`GET`, `-`|`CU_Join`, `getAllUserContent()`||Supports 5|
+|06|`GET`, `/:username/edit`|`Users`, `getByPKPrivate???()`|user private properties|Edit user page.|
+|07|`PATCH`, `/:username/edit`|`Users`, `update()`|user private properties|Edit user page.|
+||`Contents`|`/contents`|||
+|08|`POST`, `/`|`Contents`, `create()`|content public properties|Create content.|
+|09|`GET`, `/`|`Contents`, `getAll()`|arr, content public properties|Content search feature.|
+|10|`GET`, `/`|`Contents`, `getAll()`|arr, content public properties|Content search feature.|
+|11|`GET`, `/:contentID/random`|`???`, `???()`|content public properties|`TODO`: Content page.|
+|12|`GET`, `/:contentID/edit`|`Contents`, `getByPKPrivate()`|content private properties|Edit content page.|
+|13|`PATCH`, `/:contentID/edit`|`Contents`, `update()`|content private properties|Edit content page.|
+|14|`PATCH`, `/:contentID/publish`|`Contents`, `updatePublish()`|content id?|sets content status to `published`|
+||`Content-User Join`|`/cujoin`|||
+|15|`GET`, `/:username/:contentID/`|`CU_Join`, `getByPK()`|cujoin public properties|`TODO`: Content page.|
+|16|`PATCH`, `/:username/:contentID/edit`|`CU_Join`, `getByPKPrivate()`|cujoin private properties|Edit content join page.|
+|16|`PATCH`, `/:username/:contentID/edit`|`CU_Join`, `update()`|cujoin private properties|Edit content join page.|
+||`Deprecated/Disabled`|`/`|||
+|18|`GET`, `/users/`|`Users`, `()`|deprecated|deprecated|
+|19|`DELETE`, `/users/:username`|`Users`, `()`|disabled|Delete user[1].|
+|20|`GET`, `/contents/`|`Contents`, `()`|deprecated|deprecated|
+|21|`GET`, `/contents/:contentID`|`Contents`, `()`|deprecated|deprecated|
+|22|`PATCH`, `/contents/:contentID/:username/sign`|`Contents`, `()`|disabled|Allow user to toggle signed status of a piece of content|
+|23|`PATCH`, `/contents/:contentID/status`|`Contents`, `()`|disabled|Admin to update content status from `published` to `legacy`|
+|24|`DELETE`, `/contents/:contentID`|`Contents`, `()`|disabled|Delete content[1].|
+|25|`DELETE`, `/cujoin/:username/:contentID`|`CU_Join`, `()`|disabled|Delete content join[1].|
 
 ## 02.04. Resources & Data Source
 - The sample data is dummy data.
@@ -457,7 +448,7 @@ Some suggested improvements to this concept are:
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
-|60||2023-01-11|16:03 - :||
+|60|update routes documentation|2023-01-11|16:03 - 18:27||
 149
 
 ||||**Total Time**|_ minutes (--h--m)|
