@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ExpressError } from './utilities';
 
 /**	An API Class to help with API calls.
  */
@@ -38,12 +39,34 @@ class ShortCollabsAPI {
 
 	// Individual API routes
 
-	/**	Register */
-	static async signup(newUserData){
+	/**	authenticateUser(reqBody)
+	 *	`POST`	/authentication/token
+	 */
+	static async authenticateUser(userLoginData){
+
+		try{
+
+			const response = await this.request('authentication/login', 'post', userLoginData);
+			if(response.token){
+				this.token = response.token;
+			}
+			return response;
+
+		}catch(error){
+			throw new ExpressError(error.status, error.message);
+		}
+
+	}
+
+	/**	registerUser(reqBody)
+ 	 *	`POST`	/authentication/register
+ 	 *	Register a user.
+ 	 */
+	static async registerUser(newUserData){
 		
 		try{
 
-			const response = await this.request('authentication/register', 'post', newUserData);;
+			const response = await this.request('authentication/register', 'post', newUserData);
 			console.log(response.token)
 			console.log(response.username)
 			if(response.token){
@@ -52,45 +75,34 @@ class ShortCollabsAPI {
 			return response;
 	
 		}catch(error){
-			return {error};
+			throw new ExpressError(error.status, error.message);
 		}
 		
 	}
 
-	/**	Login */
-	static async login(userLoginData){
-
-		try{
-
-			const response = await this.request('authentication/login', 'post', userLoginData);;
-			if(response.token){
-				this.token = response.token;
-			}
-			return response;
-
-		}catch(error){
-			return {error};
-		}
-
-	}
-
-	/**	Users: Return all.
+	/*******	USERS		*******/
+	/**	Not Used (MINIMIZE): returnAllUsers
+	 *	`GET`	/users/
+	 *	Users: Return all. 
 	 *	Realistically this endpoint shouldn't exist(?) but just for demonstration.
-	 */ 
+	 */
 	static async returnAllUsers(){
 
 		try{
 
-			const response = await this.request(`/users/`);
-			return response.users;
+			// const response = await this.request(`/users/`);
+			// return response.users;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 	
-	/**	Users: Search*/ 
+	/**	searchUsers()
+	 *	`GET`	/users/
+	 *	Users: Search.
+	 */
 	static async searchUsers(username){
 
 		try{
@@ -99,29 +111,50 @@ class ShortCollabsAPI {
 			return response.users;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 
-
-
-	/**	Users: Return by username.*/ 
+	/**	getUserData(reqParam)
+	 *	`GET`	/user/:userHandle/public
+	 *	Users: Return user profile data (public).
+	 */
 	static async getUserData(username){
 
 		try{
 
-			const response = await this.request(`/users/${username}`);
+			const response = await this.request(`/users/${username}/public`);
 			return response.user;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 
 
-	/**	Users: Return private user details.*/ 
+	/**	getAllUserData(reqParam)
+	 *	`GET`	/user/:userHandle/private
+	 *	Users: Return user profile data (private).
+	 */
+	static async getAllUserData(username){
+
+		try{
+
+			const response = await this.request(`/users/${username}/private`);
+			return response.user;
+
+		}catch(error){
+			throw new ExpressError(error.status, error.message);
+		}
+	
+	}
+	
+	/**	getFullUserData(reqParam)
+	 *	`GET`	/user/:userHandle/edit
+	 *	Users: Return private user details.
+	 */
 	static async getFullUserData(username){
 
 		try{
@@ -130,12 +163,15 @@ class ShortCollabsAPI {
 			return response.user;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 
-	/**	Users: Update user details.*/ 
+	/**	patchUser(reqParam, reqBody)
+	 *	`PATCH`	/user/:userHandle/edit
+	 *	Users: Update user details.
+	 */
 	static async patchUser(username, userData){
 
 		try{
@@ -144,84 +180,33 @@ class ShortCollabsAPI {
 			return response.user;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 
-	/**	Users: Delete user. NOT ATTACHED.*/ 
+	/**	Not Used (MINIMIZE): deleteUser(reqParam)
+	 *	`DELETE` /user/:userHandle
+	 *	Users: Delete user. NOT ATTACHED.
+	 */ 
 	static async deleteUser(username){
 
 		try{
 
-			const response = await this.request(`/users/${username}/`, 'delete');
-			return response.user;
+			// const response = await this.request(`/users/${username}/`, 'delete');
+			// return response.user;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 
-	/**	Contents: Return all.
-	 *	Realistically this endpoint shouldn't exist(?) but just for demonstration.
-	 */ 
-	static async returnAllContents(){
-
-		try{
-
-			const response = await this.request(`/contents/`);
-			return response.contents;
-
-		}catch(error){
-			return {error}
-		}
-
-	}
-	
-	/**	Contents: Search*/ 
-	static async searchContents(contentTitle){
-
-		try{
-
-			const response = await this.request(`/contents/?title=${contentTitle}`);
-			return response.contents;
-
-		}catch(error){
-			return {error}
-		}
-
-	}
-
-	/**	Contents: Return by contentID*/ 
-	static async returnContent(contentID){
-
-		try{
-
-			const response = await this.request(`/contents/${contentID}`);
-			return response.content;
-
-		}catch(error){
-			return {error}
-		}
-
-	}
-
-	/**	Contents: Return private content details (master relation).*/ 
-	static async getFullContentData(contentID){
-
-		try{
-
-			const response = await this.request(`/contents/${contentID}/edit`);
-			return response.content;
-
-		}catch(error){
-			return {error}
-		}
-
-	}
-
-	/**	Contents: New content (master relation).*/
+	/*******	CONTENTS		*******/
+	/**	createContent(reqBody)
+	 *	`POST`	/content/
+	 *	Contents: New content (master relation).
+	 */
 	static async createContent(contentData){
 
 		try{
@@ -230,12 +215,82 @@ class ShortCollabsAPI {
 			return response.content;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 
-	/**	Contents: Update content details (master relation)*/ 
+	/**	searchPublicContent(reqQuery)
+	 *	`GET`	/contents/
+	 *	Contents: Search.
+	 */
+	static async searchPublicContent(contentTitle){
+
+		try{
+
+			const response = await this.request(`/contents/?title=${contentTitle}`);
+			return response.contents;
+
+		}catch(error){
+			throw new ExpressError(error.status, error.message);
+		}
+
+	}
+
+	/**	getAllPublicContent()
+	 *	`GET`	/contents/
+	 *	Contents: Return all. Realistically this endpoint shouldn't exist(?) but just for demonstration.
+	 */ 
+	static async getAllPublicContent(){
+
+		try{
+
+			const response = await this.request(`/contents/`);
+			return response.contents;
+
+		}catch(error){
+			throw new ExpressError(error.status, error.message);
+		}
+
+	}
+	/**	selectContent(reqParam)
+	 *	`GET`	/content/:contentID/random
+	 *	Contents: Return by contentID.
+	 */ 
+	static async selectContent(contentID){
+
+		try{
+
+			const response = await this.request(`/contents/${contentID}`);
+			return response.content;
+
+		}catch(error){
+			throw new ExpressError(error.status, error.message);
+		}
+
+	}
+
+	/**	getFullContentData(reqParam)
+	 *	`GET`	/content/:contentID/edit
+	 *	Contents: Return private content details (master relation).
+	 */ 
+	static async getFullContentData(contentID){
+
+		try{
+
+			const response = await this.request(`/contents/${contentID}/edit`);
+			return response.content;
+
+		}catch(error){
+			throw new ExpressError(error.status, error.message);
+		}
+
+	}
+
+	/**	patchContent(reqParam, reqBody)
+	 *	`PATCH`	/content/:contentID/edit
+	 *	Contents: Update content details (master relation).
+	 */ 
 	static async patchContent(contentID, contentData){
 
 		try{
@@ -244,39 +299,54 @@ class ShortCollabsAPI {
 			return response.content;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 
-	/**	Contents: Update content details (master relation)*/ 
-	static async publishContent(contentID, contentData){
+	/**	14	publishContent(reqParam)
+	 *	`PATCH`	/content/:contentID/publish
+	 *	Contents: Update content details (master relation).
+	 */ 
+	static async publishContent(contentID){
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/publish`, 'patch', contentData);
+			const response = await this.request(`/contents/${contentID}/publish`, 'patch',);
 			return response.content;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 
-	/**	Content: Delete content. NOT IMPLEMENTED.*/ 
+	/**	22	Not Used (MINIMIZE): 
+	 *	
+	 */
+
+	/**	23	Not Used (MINIMIZE): 
+	 *	
+	 */
+
+	/**	24	Not Used (MINIMIZE): deleteContent(reqParam)
+	 *	`DELETE`	/content/:contentID
+	 *	Content: Delete content.
+	 */ 
 	static async deleteContent(contentID){
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/`, 'delete');
-			return response.content;
+			// const response = await this.request(`/contents/${contentID}/`, 'delete');
+			// return response.content;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
 
+	/*******	CONTENTS_USERS_JOIN		*******/
 	/**	cu_join (ContentJoin):	Get. I imagine sending more information to this route is a way to count engagement. 2022-12-30 Note: using `cuJoin` placeholder.*/
 	static async getJoinContentData(contentID, username){
 
@@ -286,7 +356,7 @@ class ShortCollabsAPI {
 			return response.cuJoin;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
@@ -300,7 +370,7 @@ class ShortCollabsAPI {
 			return response.property;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
@@ -314,7 +384,7 @@ class ShortCollabsAPI {
 			return response.content;
 
 		}catch(error){
-			return {error}
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}

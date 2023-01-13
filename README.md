@@ -151,32 +151,31 @@ User => Users
 |02|`registerUser(reqBody)`|`Authentication` / `POST`|`/authentication/register`|
 ||`Users`|||
 |03|`searchUser(reqQuery)`|`Users` / `GET`|`/users/`|
-|04|`getUserData(reqParam)`|`Users` / `GET`|`/users/:username/public`|
-|05|`getAlluserData(reqParam)`|`Users` / `GET`|`/users/:username/private`|
-|06|`getFullUserData(reqParam)`|`Users` / `GET`|`/users/:username/edit`|
-|07|`patchUser(reqParam, reqBody)`|`Users` / `PATCH`|`/users/:username/edit`|
+|04|`getUserData(reqParam)`|`Users` / `GET`|`/user/:userHandle/public`|
+|05|`getAllUserData(reqParam)`|`Users` / `GET`|`/user/:userHandle/private`|
+|06|`getFullUserData(reqParam)`|`Users` / `GET`|`/user/:userHandle/edit`|
+|07|`patchUser(reqParam, reqBody)`|`Users` / `PATCH`|`/user/:userHandle/edit`|
 ||`Contents`|||
-|08|`createContent(reqBody)`|`Contents` / `POST`|`/contents/`|
+|08|`createContent(reqBody)`|`Contents` / `POST`|`/content/`|
 |09|`searchPublicContent(reqQuery)`|`Contents` / `GET`|`/contents/`|
 |10|`getAllPublicContent()`|`Contents` / `GET`|`/contents/`|
-|11|`selectContent(reqParam)`|`Contents` / `GET`|`/contents/:contentID/random`|
-|12|`getFullContentData(reqParam)`|`Contents` / `GET`|`/contents/:contentID/edit`|
-|13|`patchContent(reqBody)`|`Contents` / `PATCH`|`/contents/:contentID/edit`|
-|14|`publishContent(reqParam)`|`Contents` / `PATCH`|`/contents/:contentID/publish`|
+|11|`selectContent(reqParam)`|`Contents` / `GET`|`/content/:contentID/random`|
+|12|`getFullContentData(reqParam)`|`Contents` / `GET`|`/content/:contentID/edit`|
+|13|`patchContent(reqBody)`|`Contents` / `PATCH`|`/content/:contentID/edit`|
+|14|`publishContent(reqParam)`|`Contents` / `PATCH`|`/content/:contentID/publish`|
 ||`Contents-Users-Join`|||
-|15|`getContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:username/:contentID`|
-|16|`getJoinContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:username/:contentID/edit`|
-|17|`patchJointContent(reqParams, reqBody)`|`Contents-Users-Join` / `PATCH`|`/cujoin/:username/:contentID/edit`|
+|15|`getContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:userHandle/:contentID`|
+|16|`getJoinContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:userHandle/:contentID/edit`|
+|17|`patchJointContent(reqParams, reqBody)`|`Contents-Users-Join` / `PATCH`|`/cujoin/:userHandle/:contentID/edit`|
 ||`Unimplemented Routes, but Developed and Disabled`|||
 |18|`returnAllUsers`|`DISABLED` / `GET`|`/users/`|
-|19|`deleteUser`|`DISABLED` / `DELETE`|`/users/:username`|
+|19|`deleteUser`|`DISABLED` / `DELETE`|`/users/:userHandle`|
 |20|`returnAllContents`|`DISABLED` / `GET`|`/contents/`|
 |21|`returnContent`|`DISABLED` / `GET`|`/contents/:contentID`|
-|22|`signContent`|`DISABLED` / `PATCH`|`/contents/:contentID/:username/sign`|
+|22|`signContent`|`DISABLED` / `PATCH`|`/contents/:contentID/:userHandle/sign`|
 |23|`updateContent`|`**`todo`**` / `PATCH`|`/contents/:contentID/status`|
 |24|`deleteContent`|`DISABLED` / `DELETE`|`/contents/:contentID`|
-|25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:username/:contentID`|
-
+|25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:userHandle/:contentID`|
 
 ## 02.03. Backend Routes (`todo`)
 ```sh
@@ -206,18 +205,18 @@ User => Users
 ```
 |##|Method, Rel. Path|Model, Method|Returns|Purpose|
 |-|-|-|-|-|
-||`Authentication`|`/users`|||
+||`Authentication`, `/authentication`||||
 |01|`POST`, `/token`|`Users`, `authenticate()`|user auth. properties|Authenticates a user.|
 |02|`POST`, `/register`|`Users`, `register()`|user auth. properties|Creates a user.|
-||`Users`|`/users`|||
-|03|`GET`, `/`|`Users`, `getAll()`|arr, user public properties|User search feature.|
-|04|`GET`, `/:username/public`|`Users`, `getByPK()`|user public properties|User profile page.|
+||`Users`, `/user`||||
+|03|`GET`, `s/`|`Users`, `getAll()`|arr, user public properties|User search feature.|
+|04|`GET`, `/:userHandle/public`|`Users`, `getByPK()`|user public properties|User profile page.|
 |`04A`|`GET`, `-`|`CU_Join`, `getAllUserPublicContent()`||Supports 04|
-|05|`GET`, `/:username/private`|`Users`, `getByPKPrivate()`|user private properties|User profile page.|
+|05|`GET`, `/:userHandle/private`|`Users`, `getByPKPrivate()`|user private properties|User profile page.|
 |`05A`|`GET`, `-`|`CU_Join`, `getAllUserContent()`||Supports 5|
-|06|`GET`, `/:username/edit`|`Users`, `getByPKPrivate???()`|user private properties|Edit user page.|
-|07|`PATCH`, `/:username/edit`|`Users`, `update()`|user private properties|Edit user page.|
-||`Contents`|`/contents`|||
+|06|`GET`, `/:userHandle/edit`|`Users`, `getByPKPrivate???()`|user private properties|Edit user page.|
+|07|`PATCH`, `/:userHandle/edit`|`Users`, `update()`|user private properties|Edit user page.|
+||`Contents`, `/contents`||||
 |08|`POST`, `/`|`Contents`, `create()`|content public properties|Create content.|
 |09|`GET`, `/`|`Contents`, `getAll()`|arr, content public properties|Content search feature.|
 |10|`GET`, `/`|`Contents`, `getAll()`|arr, content public properties|Content search feature.|
@@ -225,19 +224,19 @@ User => Users
 |12|`GET`, `/:contentID/edit`|`Contents`, `getByPKPrivate()`|content private properties|Edit content page.|
 |13|`PATCH`, `/:contentID/edit`|`Contents`, `update()`|content private properties|Edit content page.|
 |14|`PATCH`, `/:contentID/publish`|`Contents`, `updatePublish()`|content id?|sets content status to `published`|
-||`Content-User Join`|`/cujoin`|||
-|15|`GET`, `/:username/:contentID/`|`CU_Join`, `getByPK()`|cujoin public properties|`TODO`: Content page.|
-|16|`PATCH`, `/:username/:contentID/edit`|`CU_Join`, `getByPKPrivate()`|cujoin private properties|Edit content join page.|
-|16|`PATCH`, `/:username/:contentID/edit`|`CU_Join`, `update()`|cujoin private properties|Edit content join page.|
-||`Deprecated/Disabled`|`/`|||
+||`Content-User Join`, `/cujoin`||||
+|15|`GET`, `/:userHandle/:contentID/`|`CU_Join`, `getByPK()`|cujoin public properties|`TODO`: Content page.|
+|16|`PATCH`, `/:userHandle/:contentID/edit`|`CU_Join`, `getByPKPrivate()`|cujoin private properties|Edit content join page.|
+|16|`PATCH`, `/:userHandle/:contentID/edit`|`CU_Join`, `update()`|cujoin private properties|Edit content join page.|
+||`Deprecated/Disabled`, `/`||||
 |18|`GET`, `/users/`|`Users`, `()`|deprecated|deprecated|
 |19|`DELETE`, `/users/:username`|`Users`, `()`|disabled|Delete user[1].|
 |20|`GET`, `/contents/`|`Contents`, `()`|deprecated|deprecated|
-|21|`GET`, `/contents/:contentID`|`Contents`, `()`|deprecated|deprecated|
-|22|`PATCH`, `/contents/:contentID/:username/sign`|`Contents`, `()`|disabled|Allow user to toggle signed status of a piece of content|
-|23|`PATCH`, `/contents/:contentID/status`|`Contents`, `()`|disabled|Admin to update content status from `published` to `legacy`|
-|24|`DELETE`, `/contents/:contentID`|`Contents`, `()`|disabled|Delete content[1].|
-|25|`DELETE`, `/cujoin/:username/:contentID`|`CU_Join`, `()`|disabled|Delete content join[1].|
+|21|`GET`, `/content/:contentID`|`Contents`, `()`|deprecated|deprecated|
+|22|`PATCH`, `/content/:contentID/user/:userHandle/sign`|`Contents`, `()`|disabled|Allow user to toggle signed status of a piece of content|
+|23|`PATCH`, `/content/:contentID/status`|`Contents`, `()`|disabled|Admin to update content status from `published` to `legacy`|
+|24|`DELETE`, `/content/:contentID`|`Contents`, `()`|disabled|Delete content[1].|
+|25|`DELETE`, `/cujoin/:userHandle/content/:contentID`|`CU_Join`, `()`|disabled|Delete content join[1].|
 
 ## 02.04. Resources & Data Source
 - The sample data is dummy data.
@@ -439,8 +438,9 @@ Some suggested improvements to this concept are:
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
-|61|plugin API & front-end works|2023-01-13|11:11 - :||
-|6||2023-01-10|: - :||
+|61|plugin API & front-end works|2023-01-13|11:11 - 12:19||
+|62||2023-01-13|: - :||
+|63||2023-01-13|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
 37		61
 1190+	
