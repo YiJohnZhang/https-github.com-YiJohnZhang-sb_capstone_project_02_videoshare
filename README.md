@@ -6,7 +6,7 @@
 
 ## Special Thanks
 I like to thank the following two individuals for the respective reasons:
-- **Christoks Gkoros**: *Course Mentor and Project Advisor*. Provided guidance, experience, feedback, and industry insight throughout the course.
+- **Christos Gkoros**: *Course Mentor and Project Advisor*. Provided guidance, experience, feedback, and industry insight throughout the course.
 - **Anh Mai**: *Course On-Demand Mentor*. Resolved a bug that has bogged down progress for the majority of the project's development.
 
 # Table of Contents (`todo:inserthyperlinks`)
@@ -426,8 +426,8 @@ Some suggested improvements to this concept are:
 |57|set `config`, finish `contents:publish`|2022-01-08|22:22 - 23:14|52|
 |58|`contents` tests|2022-01-09|19:46 - 20:33|47|
 |59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-09|20:39 - 22:00|81|
-|61|clean up and format backend codebase to be presentable; add docstrings?|2023-01-11|: - :||
-59		60
+|62|clean up and format backend codebase to be presentable; add docstrings?|2023-01-13|: - :||
+59		62
 1527	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
@@ -439,16 +439,16 @@ Some suggested improvements to this concept are:
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
-|59|plugin API & front-end works|2023-01-08|2: - :||
+|61|plugin API & front-end works|2023-01-13|11:11 - :||
 |6||2023-01-10|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
-37		38
-1190	
+37		61
+1190+	
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
-|60|update routes documentation|2023-01-11|16:03 - 18:27||
-149
+|60|update routes documentation|2023-01-11|16:03 - 18:27|144|
+293
 
 ||||**Total Time**|_ minutes (--h--m)|
