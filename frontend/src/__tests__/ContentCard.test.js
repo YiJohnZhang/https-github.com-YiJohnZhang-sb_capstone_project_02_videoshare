@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import ContentCard from '../ContentCard';
+import ContentCard from '../DumbComponents/ContentCard';
 
 //	Smoke Test
 test('ContentCard: smoke test', () => {

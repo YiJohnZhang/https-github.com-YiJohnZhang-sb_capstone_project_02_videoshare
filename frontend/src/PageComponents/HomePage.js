@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 // import { useHistory } from 'react-router-dom';
 
-import useControlledForm from './hooks/useControlledForm';
+import useControlledForm from '../hooks/useControlledForm';
 
 import './HomePage.css';
-import ShortCollabsAPI from './helpers/api';
-import UserDetailsContext from './context/UserDetailsContext';
-import ContentCard from './ContentCard';
-import UserCard from './UserCard';
+import ShortCollabsAPI from '../helpers/api';
+import UserDetailsContext from '../context/UserDetailsContext';
+import ContentCard from '../DumbComponents/ContentCard';
+import UserCard from '../DumbComponents/UserCard';
 
 function HomePage(props){
 
@@ -27,7 +27,7 @@ function HomePage(props){
 
 			let userResult;
 			if(formState.searchField){
-				// userResult = await ShortCollabsAPI.searchUsers(formState.searchField);
+				userResult = await ShortCollabsAPI.searchUsers(formState.searchField);
 				setMatchingQuery(userResult);
 			}else{
 				setMatchingQuery([]);
@@ -39,11 +39,11 @@ function HomePage(props){
 
 			let contentResult;
 			if(formState.searchField){
-				// contentResult = await ShortCollabsAPI.searchContents(formState.searchField);
+				contentResult = await ShortCollabsAPI.searchPublicContent(formState.searchField);
 				setMatchingQuery(contentResult);
 			}else{
-				// default: list trending content
-				// contentResult = await ShortCollabsAPI.getAllContents();
+				// default: list latest content
+				contentResult = await ShortCollabsAPI.getAllPublicContent();
 				setMatchingQuery(contentResult);
 			}
 
@@ -51,9 +51,9 @@ function HomePage(props){
 
 		if(formState.searchSelection === 'searchContent'){
 			searchContents();
+		}else{
+			searchUsers();
 		}
-		
-		searchUsers();
 		
 	}, [formState])
 
@@ -123,7 +123,7 @@ function HomePage(props){
 			<div id="home-contentRoot">
 			{formState.searchSelection==='searchContent' ? (
 			<React.Fragment>
-				{/*	// contents
+				{/*	// contents map matchingQuery
 				<ContentCard
 					aspectRatio="horizontal"
 					key={}

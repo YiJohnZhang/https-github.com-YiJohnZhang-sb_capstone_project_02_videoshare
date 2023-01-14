@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
-import ShortCollabsAPI from './helpers/api';
-import UserDetailsContext from './context/UserDetailsContext';
+import ShortCollabsAPI from '../helpers/api';
+import UserDetailsContext from '../context/UserDetailsContext';
 
-import UserCard from './UserCard';
-import ContentCard from './ContentCard';
+import UserCard from '../DumbComponents/UserCard';
+import ContentCard from '../DumbComponents/ContentCard';
 
 function ProfilePage({}){
 	
@@ -21,7 +21,7 @@ function ProfilePage({}){
 			let userData;
 
 			if(userHandle === sessionUsername){
-				userData = await ShortCollabsAPI.getFullUserData();
+				userData = await ShortCollabsAPI.getAllUserData();
 					// returns hidden in progress for owner only. more time: schema design so it does for participants
 			}else{
 				userData = await ShortCollabsAPI.getUserData();
@@ -40,7 +40,7 @@ function ProfilePage({}){
 	<div className="page">
 		<UserCard isProfilePage={true}
 			username={userHandle}
-		
+			// inject userData
 			/>
 		<div id="profile-content-root">
 			{/*userData.contents.map((content) => (

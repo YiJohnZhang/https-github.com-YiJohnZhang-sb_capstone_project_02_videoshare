@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import './ContentCard.css';
+import ContentPreviewComponent from './ContentPreviewComponent';
 
 function ContentCard({aspectRatio, contentID, title, description, link, participants, datePublished}){
 	
@@ -52,20 +53,13 @@ function ContentCard({aspectRatio, contentID, title, description, link, particip
 
 	return (
 	<div className={`contentCard ${aspectRatio === 'tall' ? 'contentCard-tall' : 'contentCard-wide'}`}>
-		<div className="contentCardImageContainer">
-			<a href="" >
-				{/* go to youtube. */}
-				<img className="contentImage" src={`/${link}.jpg`} alt={`${title}`}></img>
-				{/* just throw the image on public link */}
-			</a>
-		</div>
+		<ContentPreviewComponent
+				contentTitle={title}
+				contentLink={link}/>
 		<div>
-			<h4>{title}</h4>
+			<Link to={`/content/${contentID}`}><h4>{title}</h4></Link>
 			<p>{truncatedDescription}</p>
 			<p>{participantsLinkList.map((participantLink) => participantLink)}</p>
-		</div>
-		<div>
-
 		</div>
 	</div>
 	);

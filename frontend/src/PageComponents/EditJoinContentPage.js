@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
-import ShortCollabsAPI from './helpers/api';
-import UserDetailsContext from './context/UserDetailsContext';
-import useAuthenticationDependentRedirect from './hooks/useAuthenticationDependentRedirect';
-import useControlledForm from './hooks/useControlledForm';
+import ShortCollabsAPI from '../helpers/api';
+import UserDetailsContext from '../context/UserDetailsContext';
+import useAuthenticationDependentRedirect from '../hooks/useAuthenticationDependentRedirect';
+import useControlledForm from '../hooks/useControlledForm';
 
-import ContentCard from './ContentCard';
+import ContentCard from '../DumbComponents/ContentCard';
 
 function EditContentPage(){
 
@@ -14,7 +14,7 @@ function EditContentPage(){
 	// not: authenticate user permissions in useEffect to save an API call
 
 	const history = useHistory();
-	const { contentId } = useParams();
+	const { contentID } = useParams();
 	const { sessionUsername } = useContext(UserDetailsContext);
 
 	const INITIAL_FORM_STATE = {
@@ -36,18 +36,22 @@ function EditContentPage(){
 
 			try{
 
-				// const result = await ShortCollabsAPI.getJoinContentData();
+				const result = await ShortCollabsAPI.getJoinContentData(sessionUsername, contentID);
 				
-				// const { description } = result;
-				// 	overwriteFormState({ description });
+				const { description } = result;
+					overwriteFormState({ description });
 				
-				// const { id, title, link, participants, dateCreated, dateStandby, datePublished } = result;
-				// setContentStaticData({ id, title, link, participants, dateCreated, dateStandby, datePublished });
-				// updateFormState()
+				const { id, title, link, participants, dateCreated, dateStandby, datePublished } = result;
+				setContentStaticData({ id, title, link, participants, dateCreated, dateStandby, datePublished });
+				updateFormState();
 
 			}catch(error){
-				// user does not have permissions or this contentStaticData is published.
-				// if()
+				
+				console.log(error);
+				// user does not have permissions or this content is published.
+				history.push('/');
+					// push to home for now, consider going to error page
+
 			}
 
 		}
@@ -67,14 +71,20 @@ function EditContentPage(){
 		
 		evt.preventDefault();
 		const thisForm = document.getElementById('editJoinContentForm');
-		// thisForm.reportValidity();
+		thisForm.reportValidity();
+		// no formik or complicated form validation for now: see 01.01. Top Priorities
 			// https://stackoverflow.com/a/52547062
 
-		// try{
-		// 	await ShortCollabsAPI.patchJoinContent();
-		// }catch(error){
+		try{
+			await ShortCollabsAPI.patchJoinContent(sessionUsername, contentID, formState);
+		}catch(error){
+			
+			console.log(error);
+			// usually form validation errors, user does not have permissions or this content is published.
 
-		// }
+		}
+
+		history.push(`/user/${sessionUsername}`);
 
 	}
 

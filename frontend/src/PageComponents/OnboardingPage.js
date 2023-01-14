@@ -1,17 +1,17 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import useAuthenticationDependentRedirect from './hooks/useAuthenticationDependentRedirect';
-import useControlledForm from './hooks/useControlledForm';
-import useLocalStorage from './hooks/useLocalStorage';
-import ShortCollabsAPI from './helpers/api';
-// import useAPICall from './hooks/useAPICall';
-import UserDetailsContext from './context/UserDetailsContext';
+import useAuthenticationDependentRedirect from '../hooks/useAuthenticationDependentRedirect';
+import useControlledForm from '../hooks/useControlledForm';
+import useLocalStorage from '../hooks/useLocalStorage';
+import ShortCollabsAPI from '../helpers/api';
+// import useAPICall from '../hooks/useAPICall';
+import UserDetailsContext from '../context/UserDetailsContext';
 
 
 function OnboardingPage({onboardingMethod}){
 
-	useAuthenticationDependentRedirect(false);
+	// useAuthenticationDependentRedirect(false);
 
 	const history = useHistory();
 	const [jwt, setJWT] = useLocalStorage('jwt');
@@ -34,10 +34,7 @@ function OnboardingPage({onboardingMethod}){
 			firstName: '',
 			lastName: '',
 			email: '',
-			birthdateYear: '',
-			birthdateMonth: '',
-			birthdateDay: ''
-			//	...
+			birthdate: ''
 		}
 
 	}
@@ -54,7 +51,8 @@ function OnboardingPage({onboardingMethod}){
 
 		evt.preventDefault();
 		const thisForm = document.getElementById('onboardingForm');
-		// thisForm.reportValidity();
+		thisForm.reportValidity();
+		// no formik or complicated form validation for now: see 01.01. Top Priorities
 			// https://stackoverflow.com/a/52547062
 			// webkit > 40, f > 49, o > 27: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/reportValidity
 
@@ -64,7 +62,7 @@ function OnboardingPage({onboardingMethod}){
 			// setLocalSessionUsername(response.username);
 			setSessionUsername(response.username);
 
-			// history.push('/');
+			history.push('/');
 
 		}
 
@@ -72,24 +70,22 @@ function OnboardingPage({onboardingMethod}){
 
 			try{
 
-				const response = ShortCollabsAPI.signup(formState);
+				const response = ShortCollabsAPI.registerUser(formState);
 				login(response);
 
 			}catch(error){
 				console.log(error);
-				// stay at page? and display error?
 			}
 
 		}else{
 
 			try{
 
-				const response = ShortCollabsAPI.signup(formState);
+				const response = ShortCollabsAPI.authenticateUser(formState);
 				login(response);
 
 			}catch(error){
 				console.log(error);
-				// stay at page? and display error?
 			}
 
 		}

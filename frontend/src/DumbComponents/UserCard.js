@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 
 import './UserCard.css';
 
-function UserCard({ isProfilePage, username, firstName, lastName, picture, description }){
-
-	return(
+const UserCard = ({ isProfilePage, username, firstName, lastName, picture, description }) => (
+	
 	<React.Fragment>
 	<div className={isProfilePage ? 'userCard-tall' : 'userCard-wide'}>
 		<div className="userCardImageContainer">
@@ -24,8 +23,7 @@ function UserCard({ isProfilePage, username, firstName, lastName, picture, descr
 		</div>)}
 	</div>
 	</React.Fragment>
-	);
 
-}
+);
 
 export default UserCard;

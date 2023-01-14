@@ -28,6 +28,14 @@ I like to thank the following two individuals for the respective reasons:
 
 USER FLOWS
 
+## 01.01. Top Priorities (2022-01-13)
+- Searchable user field when adding participants, privacy settings to block being added, and server-side valid participant validation.
+- GUI contract "detail" modification (share modification) & "signing" w/ client-side calculator to make sure proposed range is 0 < x < 1 && 0.9(5?) < \Sigma(x_i) < 1
+- **An Open-Source Project for React (forms)**: A class-definable form-validation (i.e. formik + configurable class fields/input-label element patterns), [Flask-WTF!@#$]() with Jinja templating is an excellent example.
+
+
+
+
 # 02. Project Specifications
 This web application uses the **PERN** stack:
 - `react` Frontend w/ Client-Side Routing using `react-router`
@@ -439,11 +447,11 @@ Some suggested improvements to this concept are:
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
 |61|update routes to follow RESTful guidelines; plugin API & update documentation|2023-01-13|11:11 - 12:19|68|
-|62|update routes to follow RESTful guidelines, plugin API & update documentation; |2023-01-13|19:26 - :||
+|62|update routes to follow RESTful guidelines, plugin API & update documentation; reorganize src|2023-01-13|19:26 - 22:27||
 |63||2023-01-13|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
-37		61
-1190+68	
+37			63
+1190+68+
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
@@ -452,3 +460,14 @@ Some suggested improvements to this concept are:
 293
 
 ||||**Total Time**|_ minutes (--h--m)|
+
+2022-01-13 front end:
+- add in page validation
+- add in authenticationredirect (still need to do a test w/out)
+- `ProfilePage`
+- double check all relative paths to `hooks`/`helpesr`/`context` are updated `src/` post-reorganization
+- comments updated to reflect readme?
+
+backend:
+-update routes
+- return user status as "accountStatus"

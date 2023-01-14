@@ -1,18 +1,20 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import useAuthenticationDependentRedirect from './hooks/useAuthenticationDependentRedirect';
-import useControlledForm from './hooks/useControlledForm';
-import UserDetailsContext from './context/UserDetailsContext';
+import useAuthenticationDependentRedirect from '../hooks/useAuthenticationDependentRedirect';
+import useControlledForm from '../hooks/useControlledForm';
+import UserDetailsContext from '../context/UserDetailsContext';
 
-import ShortCollabsAPI from './helpers/api'
+import ShortCollabsAPI from '../helpers/api';
 
 function EditUserPage(){
+
+	// username, title, summary, status, accountStatus, birthdate, picture, description, password 
 
 	// useAuthenticationDependentRedirect(true);
 	const history = useHistory();
 
-	const {sessionUsername} = useContext(UserDetailsContext);
+	const { sessionUsername } = useContext(UserDetailsContext);
 	const [userStaticData, setUserStaticData] = useState({
 		email: '', accountStatus: '', birthdate: ''
 	});
@@ -36,31 +38,13 @@ function EditUserPage(){
 
 	}
 
-	function onSubmitHandler(evt){
-
-		const thisForm = document.getElementById('onboardingForm');
-		// thisForm.reportValidity();
-			// https://stackoverflow.com/a/52547062
-
-		evt.preventDefault();
-		try{
-	
-			//const patchUser = await ShortCollabsAPI.patchUserData(formState);
-			history.push('/');
-	
-		}catch(error){
-			// error handling: stay on page and maybe dispaly errors or somethign.
-		}
-
-	}
-
 	useEffect(() => {
 
 		async function fetchUserPrivateDetails(){
 
 			try{
 						
-				const userDetails = await ShortCollabsAPI.getUserPrivateData(sessionUsername);
+				const userDetails = await ShortCollabsAPI.getFullUserData(sessionUsername);
 			
 				const { firstName, lastName, picture, description } = userDetails;
 				overwriteFormState({ firstName, lastName, picture, description });
@@ -71,7 +55,11 @@ function EditUserPage(){
 					// static user details
 
 			}catch(error){
-				// error handling
+
+				console.log(error);
+				// usually form validation errors, user does not have permissions or this content is published.
+				history.push('/');
+					// push to home for now, consider going to error page
 			}
 
 		}
@@ -80,6 +68,25 @@ function EditUserPage(){
 
 	}, []);
 
+	function onSubmitHandler(evt){
+
+		evt.preventDefault();
+		const thisForm = document.getElementById('editUserForm');
+		thisForm.reportValidity();
+		// no formik or complicated form validation for now: see 01.01. Top Priorities
+			// https://stackoverflow.com/a/52547062
+
+		try{
+	
+			await ShortCollabsAPI.patchUser(sessionUsername, formState);
+	
+		}catch(error){
+			// error handling: stay on page and maybe dispaly errors or somethign.
+		}
+
+		history.push(`/user/${sessionUsername}`);
+
+	}
 
 	return(
 	<div className="page">

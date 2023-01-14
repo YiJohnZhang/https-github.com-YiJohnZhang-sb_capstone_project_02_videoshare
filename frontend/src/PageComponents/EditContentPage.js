@@ -1,22 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
-
-
-import ShortCollabsAPI from './helpers/api';
-import UserDetailsContext from './context/UserDetailsContext';
-import useAuthenticationDependentRedirect from './hooks/useAuthenticationDependentRedirect';
-import useControlledForm from './hooks/useControlledForm';
+import ShortCollabsAPI from '../helpers/api';
+import UserDetailsContext from '../context/UserDetailsContext';
+import useAuthenticationDependentRedirect from '../hooks/useAuthenticationDependentRedirect';
+import useControlledForm from '../hooks/useControlledForm';
 
 function EditContentPage({ contentMethod }){
 
 	// useAuthenticationDependentRedirect(true);
 	// not: authenticate user permissions in useEffect to save an API call
 
-	// username, title, summary, status, accountStatus, birthdate, picture, description, password 
-
 	const history = useHistory();
-	const { contentId } = useParams();
+	const { contentID } = useParams();
 	const { sessionUsername } = useContext(UserDetailsContext);
 
 	let INITIAL_FORM_STATE;
@@ -27,7 +23,7 @@ function EditContentPage({ contentMethod }){
 			title: '',
 			description: '',
 			summary: '',
-			// lnk
+			// link: '',
 			contractType: 'solo',
 			participants: `["${sessionUsername}"]`,
 			contractDetails: `{views:[{username:${sessionUsername},share:1}],engagement:[{username:${sessionUsername},share:1}]}`
@@ -58,18 +54,21 @@ function EditContentPage({ contentMethod }){
 
 			try{
 
-				// const result = await ShortCollabsAPI.getFullContentData();
+				const result = await ShortCollabsAPI.getFullContentData(contentID);
 				
-				// const { title, summary, description, link, participants, contractDetails, contractSigned } = result;
-				// 	overwriteFormState({ title, summary, description, link, participants, contractDetails, contractSigned });
+				const { title, summary, description, link, participants, contractDetails, contractSigned } = result;
+					overwriteFormState({ title, summary, description, link, participants, contractDetails, contractSigned });
 				
-				// const { status, owner, contractType, dateCreated, dateStandby } = result;
-				// setContentStaticData({ status, owner, contractType, dateCreated, dateStandby });		
-				// updateFormState()
+				const { status, owner, contractType, dateCreated, dateStandby } = result;
+				setContentStaticData({ status, owner, contractType, dateCreated, dateStandby });		
+				updateFormState()
 
 			}catch(error){
+				
 				// user does not have permissions or this content is published.
-				// if()
+				history.push('/');
+					// push to home for now, consider going to error page
+				
 			}
 
 		}
@@ -91,26 +90,37 @@ function EditContentPage({ contentMethod }){
 
 		evt.preventDefault();
 		const thisForm = document.getElementById('editContentForm');
-		// thisForm.reportValidity();
+		thisForm.reportValidity();
+		// no formik or complicated form validation for now: see 01.01. Top Priorities
 			// https://stackoverflow.com/a/52547062
 
 		if(contentMethod==='create'){
 
-			// try{
-			// 	await ShortCollabsAPI.createContent();
-			// }catch(error){
+			try{
+				await ShortCollabsAPI.createContent(formState);
+			}catch(error){
 
-			// }
+				// usually form validation error or user session provides invalid token
+				console.log(error);
+					// do nothing else for now
+				
+			}
 
 		}else{
 
-			// try{
-			// 	await ShortCollabsAPI.patchContent();
-			// }catch(error){
+			try{
+				await ShortCollabsAPI.patchContent(contentID, formState);
+			}catch(error){
 
-			// }
+				// usually form validation error or user session provides invalid token
+				console.log(error);
+					// do nothing else for now
+
+			}
 
 		}
+
+		history.push(`/user/${sessionUsername}`);
 
 	}
 
@@ -118,14 +128,22 @@ function EditContentPage({ contentMethod }){
 		
 		evt.preventDefault();
 		const thisForm = document.getElementById('editContentForm');
-		// thisForm.reportValidity();
+		thisForm.reportValidity();
+			// no formik or complicated form validation for now: see 01.01. Top Priorities
 			// https://stackoverflow.com/a/52547062
 
-		// try{
-		// 	await ShortCollabsAPI.publishContent();
-		// }catch(error){
+		try{
+			await ShortCollabsAPI.publishContent(contentID);
+		}catch(error){
 
-		// }
+			// usually form validation error or user session provides invalid token
+			console.log(error);
+				// do nothing else for now
+
+		}
+
+		history.push(`/user/${sessionUsername}`);
+			// subject to change: maybe push to the contents, idk
 
 	}
 
@@ -140,21 +158,19 @@ function EditContentPage({ contentMethod }){
 		if(participantsSet.size !== contractSignatories.length)
 			return false;
 
-		function _contractIsSigned(signatoryIndex = 0){
+		for(let i = 0; i < contractSignatories.length; i++){
 
-			if(signatoryIndex === contractSignatories.length)
+			if(participantsSet.has(contractSignatories[i]))
 				return true;
-
-			return participantsSet.has(contractSignatories[signatoryIndex]) && _contractIsSigned(signatoryIndex + 1);
 
 		}
 
-		return _contractIsSigned();
+		return false;
+
 	}
 
 	return(
 	<div className="page">
-		{/* todo: */}
 	<form id="editContentForm" className="row g-4 width-85percent margin-auto bootstrap-form marginTop-5pct">
 		
 		<div id="form-information" className="col-md-12">
@@ -163,13 +179,12 @@ function EditContentPage({ contentMethod }){
 
 		<div className="form-floating col-md-12">
 			<input name="title"
-				type="text" maxLength="???"
+				type="text" maxLength="64"
 				className="form-control"
 				placeholder="Content Title (max 64 characters)"
 				onChange={formChangeHandler}
 				value={formState.title} required/>
-		<label className="" htmlFor="title">Title</label>
-			
+			<label className="" htmlFor="title">Title</label>
 		</div>
 
 		<div className="col-md-12">
@@ -190,6 +205,16 @@ function EditContentPage({ contentMethod }){
 				placeholder="Description (max 2200 characters)"
 				onChange={formChangeHandler}
 				value={formState.description} required/>
+		</div>
+
+		<div className="form-floating col-md-12">
+			<input name="link"
+				type="text" maxLength="100"
+				className="form-control"
+				placeholder="Content Link (max 100 characters)"
+				onChange={formChangeHandler}
+				value={formState.link} /*required={}*//>
+			<label className="" htmlFor="link">Link</label>
 		</div>
 
 		{contentMethod==='create' && (
@@ -272,12 +297,13 @@ function EditContentPage({ contentMethod }){
 					type="submit"
 					className="form-control btn btn-outline-danger animation-400"
 					onClick={publishHandler}
-					disabled={(formState.link == null || formState.link == '') || contentStaticData.owner!==sessionUsername || participantsMatchSignedParties()}>
+					disabled={(formState.link == false) || contentStaticData.owner!==sessionUsername || participantsMatchSignedParties()}>
 					Publish!
 				</button>
 			</div>
 
 		)}
+
 		<div className={`col-md-${contentMethod==='create' ? 12 : 6}`}>
 			<button name={contentMethod==='create' ? 'create!' : 'update'}
 				type="submit"

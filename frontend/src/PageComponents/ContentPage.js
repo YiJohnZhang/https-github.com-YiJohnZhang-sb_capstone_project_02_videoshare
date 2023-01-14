@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
-function ContentPage({title, description, participants link, datePublished}){
+import ShortCollabsAPI from '../helpers/api';
+import ContentPreviewComponent from '../DumbComponents/ContentPreviewComponent';
+
+function ContentPage({title, description, participants, link, datePublished}){
 	// props in case it will be a modal?
 
 	const history = useHistory();
@@ -15,13 +18,10 @@ function ContentPage({title, description, participants link, datePublished}){
 	
 	return (
 	<div class="page">
-
-		<div>
-			<a href={`youtu.be/${link}`}>
-				<img src={`/contents/${link}`} alt={title}/>
-				<!-- getting from `public/` just for this app since there is no content db -->
-			</a>
-		</div>
+		<ContentPreviewComponent
+				contentTitle={title}
+				contentLink={link}
+				isFullSize={true}/>
 		<div>
 			<h2>{title}</h2>
 			<p><strong>Published On: {datePublished}</strong> {description}</p>
