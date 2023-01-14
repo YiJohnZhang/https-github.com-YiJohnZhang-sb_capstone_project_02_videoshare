@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import ProfilePage from '../ProfilePage';
+import ProfilePage from '../PageComponents/ProfilePage';
 
 //	Smoke Test
 test('ProfilePage: smoke test', () => {

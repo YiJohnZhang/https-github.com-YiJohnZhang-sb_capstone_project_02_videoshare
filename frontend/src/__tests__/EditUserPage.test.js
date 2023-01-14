@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import EditUserPage from '../EditUserPage';
+import EditUserPage from '../PageComponents/EditUserPage';
 
 //	Smoke Test
 test('EditUserPage: smoke test', () => {

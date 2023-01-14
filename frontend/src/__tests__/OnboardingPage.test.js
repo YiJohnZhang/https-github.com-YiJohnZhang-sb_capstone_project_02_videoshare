@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import OnboardingPage from '../OnboardingPage';
+import OnboardingPage from '../PageComponents/OnboardingPage';
 
 //	Smoke Test
 test('OnboardingPage: smoke test', () => {
