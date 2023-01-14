@@ -166,15 +166,15 @@ User => Users
 ||`Contents-Users-Join`|||
 |15|`getContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:userHandle/:contentID`|
 |16|`getJoinContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:userHandle/:contentID/edit`|
-|17|`patchJointContent(reqParams, reqBody)`|`Contents-Users-Join` / `PATCH`|`/cujoin/:userHandle/:contentID/edit`|
+|17|`patchJoinContent(reqParams, reqBody)`|`Contents-Users-Join` / `PATCH`|`/cujoin/:userHandle/:contentID/edit`|
 ||`Unimplemented Routes, but Developed and Disabled`|||
 |18|`returnAllUsers`|`DISABLED` / `GET`|`/users/`|
 |19|`deleteUser`|`DISABLED` / `DELETE`|`/users/:userHandle`|
 |20|`returnAllContents`|`DISABLED` / `GET`|`/contents/`|
-|21|`returnContent`|`DISABLED` / `GET`|`/contents/:contentID`|
-|22|`signContent`|`DISABLED` / `PATCH`|`/contents/:contentID/:userHandle/sign`|
-|23|`updateContent`|`**`todo`**` / `PATCH`|`/contents/:contentID/status`|
-|24|`deleteContent`|`DISABLED` / `DELETE`|`/contents/:contentID`|
+|21|`returnContent`|`DISABLED` / `GET`|`/content/:contentID`|
+|22|`signContent`|`DISABLED` / `PATCH`|`/content/:contentID/:userHandle/sign`|
+|23|`updateContent`|`**`todo`**` / `PATCH`|`/content/:contentID/status`|
+|24|`deleteContent`|`DISABLED` / `DELETE`|`/content/:contentID`|
 |25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:userHandle/:contentID`|
 
 ## 02.03. Backend Routes (`todo`)
@@ -205,9 +205,9 @@ User => Users
 ```
 |##|Method, Rel. Path|Model, Method|Returns|Purpose|
 |-|-|-|-|-|
-||`Authentication`, `/authentication`||||
-|01|`POST`, `/token`|`Users`, `authenticate()`|user auth. properties|Authenticates a user.|
-|02|`POST`, `/register`|`Users`, `register()`|user auth. properties|Creates a user.|
+||`Authorization`, `/authorization`||||
+|01|`POST`, `/token`|`Users`, `authenticateUser()`|user auth. properties|Authenticates a user.|
+|02|`POST`, `/register`|`Users`, `registerUser()`|user auth. properties|Creates a user.|
 ||`Users`, `/user`||||
 |03|`GET`, `s/`|`Users`, `getAll()`|arr, user public properties|User search feature.|
 |04|`GET`, `/:userHandle/public`|`Users`, `getByPK()`|user public properties|User profile page.|
@@ -227,7 +227,7 @@ User => Users
 ||`Content-User Join`, `/cujoin`||||
 |15|`GET`, `/:userHandle/:contentID/`|`CU_Join`, `getByPK()`|cujoin public properties|`TODO`: Content page.|
 |16|`PATCH`, `/:userHandle/:contentID/edit`|`CU_Join`, `getByPKPrivate()`|cujoin private properties|Edit content join page.|
-|16|`PATCH`, `/:userHandle/:contentID/edit`|`CU_Join`, `update()`|cujoin private properties|Edit content join page.|
+|17|`PATCH`, `/:userHandle/:contentID/edit`|`CU_Join`, `update()`|cujoin private properties|Edit content join page.|
 ||`Deprecated/Disabled`, `/`||||
 |18|`GET`, `/users/`|`Users`, `()`|deprecated|deprecated|
 |19|`DELETE`, `/users/:username`|`Users`, `()`|disabled|Delete user[1].|
@@ -438,8 +438,8 @@ Some suggested improvements to this concept are:
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
-|61|plugin API & update documentation|2023-01-13|11:11 - 12:19|68|
-|62||2023-01-13|19:26 - :||
+|61|update routes to follow RESTful guidelines; plugin API & update documentation|2023-01-13|11:11 - 12:19|68|
+|62|update routes to follow RESTful guidelines, plugin API & update documentation; |2023-01-13|19:26 - :||
 |63||2023-01-13|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
 37		61

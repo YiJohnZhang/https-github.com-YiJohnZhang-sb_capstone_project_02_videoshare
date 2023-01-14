@@ -29,7 +29,7 @@ class ShortCollabsAPI {
 		
 		}catch(err){
 
-				console.error("API Error:", err.response);
+				// console.error("API Error:", err.response);
 				let message = err.response.data.error.message;
 				throw Array.isArray(message) ? message : [message];
 			
@@ -81,7 +81,7 @@ class ShortCollabsAPI {
 	}
 
 	/*******	USERS		*******/
-	/**	Not Used (MINIMIZE): returnAllUsers
+	/**	18	Not Used (MINIMIZE): returnAllUsers
 	 *	`GET`	/users/
 	 *	Users: Return all. 
 	 *	Realistically this endpoint shouldn't exist(?) but just for demonstration.
@@ -124,7 +124,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/users/${username}/public`);
+			const response = await this.request(`/user/${username}/public`);
 			return response.user;
 
 		}catch(error){
@@ -132,7 +132,6 @@ class ShortCollabsAPI {
 		}
 
 	}
-
 
 	/**	getAllUserData(reqParam)
 	 *	`GET`	/user/:userHandle/private
@@ -142,7 +141,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/users/${username}/private`);
+			const response = await this.request(`/user/${username}/private`);
 			return response.user;
 
 		}catch(error){
@@ -159,7 +158,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/users/${username}/edit`);
+			const response = await this.request(`/user/${username}/edit`);
 			return response.user;
 
 		}catch(error){
@@ -176,7 +175,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/users/${username}/edit`, 'patch', userData);
+			const response = await this.request(`/user/${username}/edit`, 'patch', userData);
 			return response.user;
 
 		}catch(error){
@@ -185,7 +184,7 @@ class ShortCollabsAPI {
 
 	}
 
-	/**	Not Used (MINIMIZE): deleteUser(reqParam)
+	/**	19	Not Used (MINIMIZE): deleteUser(reqParam)
 	 *	`DELETE` /user/:userHandle
 	 *	Users: Delete user. NOT ATTACHED.
 	 */ 
@@ -193,7 +192,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			// const response = await this.request(`/users/${username}/`, 'delete');
+			// const response = await this.request(`/user/${username}/`, 'delete');
 			// return response.user;
 
 		}catch(error){
@@ -213,6 +212,23 @@ class ShortCollabsAPI {
 
 			const response = await this.request(`/contents/`, 'post', contentData);
 			return response.content;
+
+		}catch(error){
+			throw new ExpressError(error.status, error.message);
+		}
+
+	}
+
+	/**	20	Not Used (MINIMIZE): returnAllContents(reqQuery)
+	 *	`GET`	/contents/
+	 *	Contents: Use for admin dashboard moderation.
+	 */
+	static async returnAlContents(/* ... */){
+
+		try{
+
+			// const response = await this.request(`/contents/?title=${contentTitle}`);
+			// return response.contents;
 
 		}catch(error){
 			throw new ExpressError(error.status, error.message);
@@ -253,6 +269,13 @@ class ShortCollabsAPI {
 		}
 
 	}
+
+	/**	21	Not Used (MINIMIZE): returnContent(reqParam)
+	 *	`GET`	/content/:contentID
+	 *	...deprecated by cujoin equivalent & `/random`
+	 */
+	static async returnContent(contentID){}
+
 	/**	selectContent(reqParam)
 	 *	`GET`	/content/:contentID/random
 	 *	Contents: Return by contentID.
@@ -261,7 +284,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}`);
+			const response = await this.request(`/content/${contentID}`);
 			return response.content;
 
 		}catch(error){
@@ -278,7 +301,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/edit`);
+			const response = await this.request(`/content/${contentID}/edit`);
 			return response.content;
 
 		}catch(error){
@@ -295,7 +318,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/edit`, 'patch', contentData);
+			const response = await this.request(`/content/${contentID}/edit`, 'patch', contentData);
 			return response.content;
 
 		}catch(error){
@@ -312,7 +335,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/publish`, 'patch',);
+			const response = await this.request(`/content/${contentID}/publish`, 'patch',);
 			return response.content;
 
 		}catch(error){
@@ -321,15 +344,17 @@ class ShortCollabsAPI {
 
 	}
 
-	/**	22	Not Used (MINIMIZE): 
-	 *	
+	/**	22	Not Used (MINIMIZE): signContent(reqParams)
+	 *	`PATCH`	
 	 */
+	static async signContent(/* ... */){}
 
-	/**	23	Not Used (MINIMIZE): 
-	 *	
+	/**	23	Not Used (MINIMIZE): updateContent(reqParams, reqBody)
+	 *	`PATCH`	
 	 */
+	static async updateContent(/* ... */){}
 
-	/**	24	Not Used (MINIMIZE): deleteContent(reqParam)
+	/**	24	Not Used (MINIMIZE): deleteContent(reqParams)
 	 *	`DELETE`	/content/:contentID
 	 *	Content: Delete content.
 	 */ 
@@ -337,7 +362,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			// const response = await this.request(`/contents/${contentID}/`, 'delete');
+			// const response = await this.request(`/content/${contentID}/`, 'delete');
 			// return response.content;
 
 		}catch(error){
@@ -347,12 +372,15 @@ class ShortCollabsAPI {
 	}
 
 	/*******	CONTENTS_USERS_JOIN		*******/
-	/**	cu_join (ContentJoin):	Get. I imagine sending more information to this route is a way to count engagement. 2022-12-30 Note: using `cuJoin` placeholder.*/
-	static async getJoinContentData(contentID, username){
+	/**	15	getJoinContentPublicData(reqParams)
+	 *	`GET`	/cujoin/:userHandle/:contentID
+	 *	cuJoin: get publicly displayed data.
+	 */ 
+	static async getContentData(username, contentID){
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/${username}`, 'get');
+			const response = await this.request(`/cujoin/${username}/${contentID}`)
 			return response.cuJoin;
 
 		}catch(error){
@@ -361,13 +389,17 @@ class ShortCollabsAPI {
 
 	}
 	
-	/**	*/ 
-	static async patchJoinContent(contentID, username, contentData){
+	/**	16	getJoinContentPrivateData(reqParams)
+	 *	`GET`	/cujoin/:userHandle/:contentID/edit
+	 *	cuJoin: get privately displayed data.
+	 */ 
+	static async getJoinContentData(username, contentID){
 
 		try{
 
-			const response = await this.request('/users/')
-			return response.property;
+			const response = await this.request(`/cujoin/${username}/${contentID}/edit`);
+			// consider a private & public route
+			return response.cuJoin;
 
 		}catch(error){
 			throw new ExpressError(error.status, error.message);
@@ -375,13 +407,33 @@ class ShortCollabsAPI {
 
 	}
 	
-	/** cu_join	(ContentJoin): Delete content join. NOT IMPLEMENTED because how to restore?.*/ 
-	static async deleteContent(contentID){
+	/**	17	patchJoinContent(reqParams, reqBody)
+	 *	`PATCH`	/cujoin/:userHandle/:contentID/edit
+	 *	cuJoin: patch the join content data.
+	 */ 
+	static async patchJoinContent(username, contentID, contentData){
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/`, 'delete');
+			const response = await this.request(`/cujoin/${username}/${contentID}/edit`, 'patch', contentData);
 			return response.content;
+
+		}catch(error){
+			throw new ExpressError(error.status, error.message);
+		}
+
+	}
+
+	/**	25	Not Used (MINIMIZE): deleteContent(reqParams)
+	 *	`DELETE`	/cujoin/${username}/${contentID}/
+	 *	cuJoin: Delete content join. NOT IMPLEMENTED because how to restore?.
+	 */ 
+	static async deleteContent(username, contentID){
+
+		try{
+
+			// const response = await this.request(`/cujoin/${username}/${contentID}/`, 'delete');
+			// return response.content;
 
 		}catch(error){
 			throw new ExpressError(error.status, error.message);
