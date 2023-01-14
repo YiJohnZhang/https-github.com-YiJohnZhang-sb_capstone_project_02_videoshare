@@ -438,12 +438,12 @@ Some suggested improvements to this concept are:
 |35|Finished all of `EditUserPage`, `EditContentPage`, `OnboardingPage`, `HomePage`. awaiting API.|2023-01-01|13:37 - 17:22|225|
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
-|61|plugin API & front-end works|2023-01-13|11:11 - 12:19||
-|62||2023-01-13|: - :||
+|61|plugin API & update documentation|2023-01-13|11:11 - 12:19|68|
+|62||2023-01-13|19:26 - :||
 |63||2023-01-13|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
 37		61
-1190+	
+1190+68	
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
