@@ -9,9 +9,13 @@ function ContentCard({aspectRatio, contentID, title, description, link, particip
 	const participantsSet = new Set(participants);
 		// if time: maybe use this for hot-linking edit
 
-	function returnParticipiantsList(participantList, shouldReduceParticipantList=true, reducedParticipantListLength = 3){
-
-		const particpantsWithLink = participantList.map((participant) => <Link class="inline" to={`/user/${participant}`}>{participant}</Link>);
+	function returnParticipiantsList(participantList = [], shouldReduceParticipantList=true, reducedParticipantListLength = 3){
+		const particpantsWithLink = participantList.map((participant) => (
+			<Link className="inline" 
+				to={`/user/${participant}`}
+				key={participant}>
+				{participant}
+			</Link>));
 
 		const participantListLength = participantList.length;
 

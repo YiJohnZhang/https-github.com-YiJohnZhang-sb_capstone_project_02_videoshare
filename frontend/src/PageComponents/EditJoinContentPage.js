@@ -67,7 +67,7 @@ function EditContentPage(){
 
 	}
 
-	function updateHandler(evt){
+	async function updateHandler(evt){
 		
 		evt.preventDefault();
 		const thisForm = document.getElementById('editJoinContentForm');

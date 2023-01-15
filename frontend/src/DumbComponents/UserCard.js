@@ -9,7 +9,9 @@ const UserCard = ({ isProfilePage, username, firstName, lastName, picture, descr
 	<div className={isProfilePage ? 'userCard-tall' : 'userCard-wide'}>
 		<div className="userCardImageContainer">
 			<Link to={`/user/${username}`}>
-				<img className="userImage" src={`/${picture}`} alt={`${username}`}></img>
+				<img className={`userImage ${isProfilePage ? 'large-userImage' : 'small-userImage'}`}
+					src={`/user_imgs/${picture}`}
+					alt={`${username}`}></img>
 				{/* throw the picture on public for now */}
 			</Link>
 		</div>

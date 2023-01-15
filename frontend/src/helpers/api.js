@@ -7,10 +7,13 @@ class ShortCollabsAPI {
 
 	// static BASE_URL = "https://___.herokuapp.com";
 	static BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
-	static token = localStorage.getItem('jwt');
-	//	temporary token:
-		//	
+	// static token = localStorage.getItem('jwt') || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndyaWdodGdlb3JnZSIsImlzRWxldmF0ZWQiOmZhbHNlLCJpYXQiOjE2NzM3NTk0MDN9.zpSxB0Dxzgjz7BDKuCKjitvLG5-B3p0HAZKxXNUYvig";
+	static token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndyaWdodGdlb3JnZSIsImlzRWxldmF0ZWQiOmZhbHNlLCJpYXQiOjE2NzM3NTk0MDN9.zpSxB0Dxzgjz7BDKuCKjitvLG5-B3p0HAZKxXNUYvig";
 	
+	//	temporary token:
+		//	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndyaWdodGdlb3JnZSIsImlzRWxldmF0ZWQiOmZhbHNlLCJpYXQiOjE2NzM3NTk0MDN9.zpSxB0Dxzgjz7BDKuCKjitvLG5-B3p0HAZKxXNUYvig
+		// username: "wrightgeorge"
+
 	static async request(endpoint, method="get", data={}) {
 		
 		// console.debug("API Call:", endpoint, method, data);
@@ -25,13 +28,15 @@ class ShortCollabsAPI {
 
 		try{
 		
-			return (await axios({ url, method, data, params, headers })).data;
-		
-		}catch(err){
+			const result = await axios({ url, method, data, params, headers });
+			return result.data;
+			
+		}catch(error){
 
-				// console.error("API Error:", err.response);
-				let message = err.response.data.error.message;
-				throw Array.isArray(message) ? message : [message];
+				console.error(error.response.data);
+				// // console.error("API Error:", err.response);
+				// let message = error.response.data.error.message;
+				// throw Array.isArray(message) ? message : [message];
 			
 		}
 
@@ -90,7 +95,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			// const response = await this.request(`/users/`);
+			// const response = await this.request(`users/`);
 			// return response.users;
 
 		}catch(error){
@@ -107,7 +112,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/users/?username=${username}`);
+			const response = await this.request(`users/?username=${username}`);
 			return response.users;
 
 		}catch(error){
@@ -124,7 +129,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/users/${username}/public`);
+			const response = await this.request(`users/${username}/public`);
 			return response.user;
 
 		}catch(error){
@@ -141,7 +146,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/users/${username}/private`);
+			const response = await this.request(`users/${username}/private`);
 			return response.user;
 
 		}catch(error){
@@ -158,7 +163,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/users/${username}/edit`);
+			const response = await this.request(`users/${username}/edit`);
 			return response.user;
 
 		}catch(error){
@@ -175,7 +180,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/users/${username}/edit`, 'patch', userData);
+			const response = await this.request(`users/${username}/edit`, 'patch', userData);
 			return response.user;
 
 		}catch(error){
@@ -192,7 +197,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			// const response = await this.request(`/users/${username}/`, 'delete');
+			// const response = await this.request(`users/${username}/`, 'delete');
 			// return response.user;
 
 		}catch(error){
@@ -210,7 +215,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/`, 'post', contentData);
+			const response = await this.request(`contents/`, 'post', contentData);
 			return response.content;
 
 		}catch(error){
@@ -227,7 +232,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			// const response = await this.request(`/contents/?title=${contentTitle}`);
+			// const response = await this.request(`contents/?title=${contentTitle}`);
 			// return response.contents;
 
 		}catch(error){
@@ -241,14 +246,15 @@ class ShortCollabsAPI {
 	 *	Contents: Search.
 	 */
 	static async searchPublicContent(contentTitle){
-
+		
 		try{
 
-			const response = await this.request(`/contents/?title=${contentTitle}`);
+			const response = await this.request(`contents/?title=${contentTitle}`);
 			return response.contents;
 
 		}catch(error){
-			throw new ExpressError(error.status, error.message);
+			console.log(error)
+			// throw new ExpressError(error.status, error.message);
 		}
 
 	}
@@ -261,7 +267,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/`);
+			const response = await this.request(`contents/`);
 			return response.contents;
 
 		}catch(error){
@@ -284,7 +290,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}`);
+			const response = await this.request(`contents/${contentID}`);
 			return response.content;
 
 		}catch(error){
@@ -301,7 +307,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/edit`);
+			const response = await this.request(`contents/${contentID}/edit`);
 			return response.content;
 
 		}catch(error){
@@ -318,7 +324,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/edit`, 'patch', contentData);
+			const response = await this.request(`contents/${contentID}/edit`, 'patch', contentData);
 			return response.content;
 
 		}catch(error){
@@ -335,7 +341,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/contents/${contentID}/publish`, 'patch',);
+			const response = await this.request(`contents/${contentID}/publish`, 'patch',);
 			return response.content;
 
 		}catch(error){
@@ -362,7 +368,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			// const response = await this.request(`/contents/${contentID}/`, 'delete');
+			// const response = await this.request(`contents/${contentID}/`, 'delete');
 			// return response.content;
 
 		}catch(error){
@@ -380,7 +386,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/cujoin/${username}/${contentID}`)
+			const response = await this.request(`cujoin/${username}/${contentID}`)
 			return response.cuJoin;
 
 		}catch(error){
@@ -397,7 +403,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/cujoin/${username}/${contentID}/edit`);
+			const response = await this.request(`cujoin/${username}/${contentID}/edit`);
 			// consider a private & public route
 			return response.cuJoin;
 
@@ -415,7 +421,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`/cujoin/${username}/${contentID}/edit`, 'patch', contentData);
+			const response = await this.request(`cujoin/${username}/${contentID}/edit`, 'patch', contentData);
 			return response.content;
 
 		}catch(error){
@@ -432,7 +438,7 @@ class ShortCollabsAPI {
 
 		try{
 
-			// const response = await this.request(`/cujoin/${username}/${contentID}/`, 'delete');
+			// const response = await this.request(`cujoin/${username}/${contentID}/`, 'delete');
 			// return response.content;
 
 		}catch(error){

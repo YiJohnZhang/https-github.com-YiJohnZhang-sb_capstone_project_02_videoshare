@@ -86,7 +86,7 @@ function EditContentPage({ contentMethod }){
 
 	}
 
-	function onSubmitHandler(evt){
+	async function onSubmitHandler(evt){
 
 		evt.preventDefault();
 		const thisForm = document.getElementById('editContentForm');
@@ -124,7 +124,7 @@ function EditContentPage({ contentMethod }){
 
 	}
 
-	function publishHandler(evt){
+	async function publishHandler(evt){
 		
 		evt.preventDefault();
 		const thisForm = document.getElementById('editContentForm');

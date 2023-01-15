@@ -5,7 +5,7 @@ import useControlledForm from '../hooks/useControlledForm';
 
 import './HomePage.css';
 import ShortCollabsAPI from '../helpers/api';
-import UserDetailsContext from '../context/UserDetailsContext';
+// import UserDetailsContext from '../context/UserDetailsContext';
 import ContentCard from '../DumbComponents/ContentCard';
 import UserCard from '../DumbComponents/UserCard';
 
@@ -19,7 +19,7 @@ function HomePage(props){
 	}
 
 	const [formState, setFormState] = useControlledForm(INITIAL_FORM_STATE);
-	const [matchingQuery, setMatchingQuery] = useState();
+	const [matchingQuery, setMatchingQuery] = useState([]);
 
 	useEffect(() => {
 
@@ -123,21 +123,34 @@ function HomePage(props){
 			<div id="home-contentRoot">
 			{formState.searchSelection==='searchContent' ? (
 			<React.Fragment>
-				{/*	// contents map matchingQuery
+				{matchingQuery.map((element) => (
 				<ContentCard
+					key={element.id}
 					aspectRatio="horizontal"
-					key={}
+					contentID={element.id}
+					title={element.title}
+					description={element.description}
+					link={element.link}
+					participants={element.participants}
+					dateCreated={element.dateCreated}
+					dateStandby={element.dateStandby}
+					datePublished={element.datePublished}
 					/>
-					*/}
+				))}
 			</React.Fragment>
 			) : (
 			<React.Fragment>
-				{/* // users
+				{matchingQuery.map((element) => (
 				<UserCard
-					aspectRatio="horizontal"
-					key={} 
+					key={element.username} 
+					isProfilePage={false}
+					username={element.username}
+					firstName={element.firstName}
+					lastName={element.lastName}
+					picture={element.picture}
+					description={element.description}
 					/>
-					*/}
+				))}
 			</React.Fragment>
 			)}	
 			</div>

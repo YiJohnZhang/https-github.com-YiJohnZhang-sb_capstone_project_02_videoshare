@@ -2,7 +2,7 @@ import './ContentPreviewComponent.css';
 
 const ContentPreviewComponent = ({ contentTitle, contentLink, isFullSize = false }) => (
 
-	<div className={`contentCardImageContainer ContentPreviewComponent ${isFullSize ? 'fullsizeContentPreviewComponent' : ''}`}>
+	<div className={`contentCardImageContainer ContentPreviewComponent ${isFullSize ? 'fullsizeContentPreviewComponent' : 'reducedsizeComponentPreviewComponent'}`}>
 
 		{/* todo: format contentCardImageContainer for fullSize*/}
 

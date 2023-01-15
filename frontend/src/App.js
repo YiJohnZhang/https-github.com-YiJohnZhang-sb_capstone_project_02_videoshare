@@ -3,15 +3,15 @@ import { Switch, Route } from 'react-router-dom';
 
 import './App.css';
 import NavBar from './NavBar';
-import OnboardingPage from './OnboardingPage';
-// import SearchPage from './SearchPage';
-import EditJoinContentPage from './EditJoinContentPage';
-import EditContentPage from './EditContentPage';
-import ProfilePage from './ProfilePage';
-import EditUserPage from './EditUserPage';
+import OnboardingPage from './PageComponents/OnboardingPage';
+import ContentPage from './PageComponents/ContentPage';
+import EditJoinContentPage from './PageComponents/EditJoinContentPage';
+import EditContentPage from './PageComponents/EditContentPage';
+import ProfilePage from './PageComponents/ProfilePage';
+import EditUserPage from './PageComponents/EditUserPage';
 import LogoutComponent from './LogoutComponent';
-import HomePage from './HomePage';
-import ErrorPage from './ErrorPage';
+import HomePage from './PageComponents/HomePage';
+import ErrorPage from './PageComponents/ErrorPage';
 
 import UserDetailsContext from './context/UserDetailsContext';
 
@@ -32,10 +32,13 @@ function App(){
 			<Route path="/signup">
 				<OnboardingPage onboardingMethod="signup" />
 			</Route>
+			<Route path="/content/:contentID">
+				<ContentPage />
+			</Route>
 			<Route path="/upload">
 				<EditContentPage contentMethod="create" />
 			</Route>
-			<Route path="/edit/:contentId">
+			<Route path="/edit/:contentID">
 				<EditContentPage contentMethod="update" />
 			</Route>
 			{/* below integrated into home page? */}

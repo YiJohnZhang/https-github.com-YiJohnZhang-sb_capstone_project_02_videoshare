@@ -36,17 +36,21 @@ app.use('/cujoin', routerContentsUsersJoin)
 
 // 404 Route Not Found
 app.use((req, res, nxt) => {
-	return nxt(new NotFoundError);
+	return nxt(new NotFoundError('path not found'));
 });
 
 // Generic Error Handler
 app.use((err, req, res, nxt) => {
 
+	if (process.env.NODE_ENV !== "test")
+		console.error(err.stack);
+
 	const ERROR_CODE = err.status || 500;
+	const ERROR_MESSAGE = err.message || RESPONSE_MESSAGE_MAPPING[ERROR_CODE].message;
 
 	return res
 		.status(ERROR_CODE)
-		.send(RESPONSE_MESSAGE_MAPPING[ERROR_CODE].message);
+		.send(ERROR_MESSAGE);
 
 });
 

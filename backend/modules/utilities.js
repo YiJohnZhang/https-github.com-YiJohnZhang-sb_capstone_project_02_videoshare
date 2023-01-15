@@ -12,6 +12,7 @@ const RESPONSE_MESSAGE_MAPPING = {
 	409: {message: '409: conflict'},
 	'409alreadyExists': {message: 'Resource already exists.'},
 	'200deleted': {message: 'deleted'},
+	500: {message: 'generic error'}
 	// ...etc. to not memorize the object; maybe just import it FROM APP
 };
 

@@ -6,4 +6,11 @@
 .fullsizeContentPreviewComponent{
 	
 }
+
+.reducedsizeComponentPreviewComponent{
+	width:300px;
+}
+	.reducedsizeComponentPreviewComponent img{
+		width:300px;
+	}
 /* for full page content? */

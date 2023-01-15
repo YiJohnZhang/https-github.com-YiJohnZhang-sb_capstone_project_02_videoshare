@@ -460,12 +460,14 @@ Some suggested improvements to this concept are:
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
-|64|test application|2023-01-14|20:20 - 2:||
+|64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 293
 
 ||||**Total Time**|_ minutes (--h--m)|
 
 2022-01-13 front end:
+- finished testing `HomePage`
+- test onboarding, user profile, edit user profile; create new content, editcontent,
 - add in page validation
 - add in authenticationredirect (still need to do a test w/out)
 - `ProfilePage`
@@ -473,7 +475,6 @@ Some suggested improvements to this concept are:
 - comments updated to reflect readme?
 
 backend:
--update routes
 - return user status as "accountStatus"
 
 

@@ -68,7 +68,7 @@ function EditUserPage(){
 
 	}, []);
 
-	function onSubmitHandler(evt){
+	async function onSubmitHandler(evt){
 
 		evt.preventDefault();
 		const thisForm = document.getElementById('editUserForm');
@@ -88,7 +88,7 @@ function EditUserPage(){
 
 	}
 
-	return(
+	return (
 	<div className="page">
 	<form id="editUserForm" className="row g-4 width-85percent margin-auto bootstrap-form marginTop-5pct">
 		
