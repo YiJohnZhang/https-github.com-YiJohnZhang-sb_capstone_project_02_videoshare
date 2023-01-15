@@ -433,7 +433,10 @@ Some suggested improvements to this concept are:
 |57|set `config`, finish `contents:publish`|2022-01-08|22:22 - 23:14|52|
 |58|`contents` tests|2022-01-09|19:46 - 20:33|47|
 |59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-09|20:39 - 22:00|81|
-|62|clean up and format backend codebase to be presentable; add docstrings?|2023-01-13|: - :||
+|63|update route patterns to follow RESTful specifications, `random` test|2023-01-14|19:14 - :||
+
+|6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-14|: - :||
+|6||2023-01-14|: - :||
 59		62
 1527	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
@@ -447,16 +450,19 @@ Some suggested improvements to this concept are:
 |36|Updated styling (Home, Onboarding, EditContent, EditUser); `UserCard`, `ContentCard`, `ErrorPage`, `ProfilePage` layout (await API), tests.|2023-01-01|20:03 - 22:58|175|
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
 |61|update routes to follow RESTful guidelines; plugin API & update documentation|2023-01-13|11:11 - 12:19|68|
-|62|update routes to follow RESTful guidelines, plugin API & update documentation; reorganize src|2023-01-13|19:26 - 22:27||
-|63||2023-01-13|: - :||
+|62|update routes to follow RESTful guidelines, plugin API & update documentation; reorganize src|2023-01-13|19:26 - 22:27|181|
+|64||2023-01-14|1 - :||
+|6||2023-01-14|: - :||
+|6||2023-01-14|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
-37			63
-1190+68+
+62		63
+1439
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
+|6||2023-01-14|: - :||
 293
 
 ||||**Total Time**|_ minutes (--h--m)|
@@ -471,3 +477,7 @@ Some suggested improvements to this concept are:
 backend:
 -update routes
 - return user status as "accountStatus"
+
+
+1. update route patterns
+content/:contentID/username/:userHandle
