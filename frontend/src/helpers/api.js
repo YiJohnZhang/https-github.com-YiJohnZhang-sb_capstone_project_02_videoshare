@@ -117,14 +117,14 @@ class ShortCollabsAPI {
 	}
 
 	/**	getUserData(reqParam)
-	 *	`GET`	/user/:userHandle/public
+	 *	`GET`	/users/:userHandle/public
 	 *	Users: Return user profile data (public).
 	 */
 	static async getUserData(username){
 
 		try{
 
-			const response = await this.request(`/user/${username}/public`);
+			const response = await this.request(`/users/${username}/public`);
 			return response.user;
 
 		}catch(error){
@@ -134,14 +134,14 @@ class ShortCollabsAPI {
 	}
 
 	/**	getAllUserData(reqParam)
-	 *	`GET`	/user/:userHandle/private
+	 *	`GET`	/users/:userHandle/private
 	 *	Users: Return user profile data (private).
 	 */
 	static async getAllUserData(username){
 
 		try{
 
-			const response = await this.request(`/user/${username}/private`);
+			const response = await this.request(`/users/${username}/private`);
 			return response.user;
 
 		}catch(error){
@@ -151,14 +151,14 @@ class ShortCollabsAPI {
 	}
 	
 	/**	getFullUserData(reqParam)
-	 *	`GET`	/user/:userHandle/edit
+	 *	`GET`	/users/:userHandle/edit
 	 *	Users: Return private user details.
 	 */
 	static async getFullUserData(username){
 
 		try{
 
-			const response = await this.request(`/user/${username}/edit`);
+			const response = await this.request(`/users/${username}/edit`);
 			return response.user;
 
 		}catch(error){
@@ -167,15 +167,15 @@ class ShortCollabsAPI {
 
 	}
 
-	/**	patchUser(reqParam, reqBody)
-	 *	`PATCH`	/user/:userHandle/edit
+	/**	patchUserData(reqParam, reqBody)
+	 *	`PATCH`	/users/:userHandle/edit
 	 *	Users: Update user details.
 	 */
-	static async patchUser(username, userData){
+	static async patchUserData(username, userData){
 
 		try{
 
-			const response = await this.request(`/user/${username}/edit`, 'patch', userData);
+			const response = await this.request(`/users/${username}/edit`, 'patch', userData);
 			return response.user;
 
 		}catch(error){
@@ -185,14 +185,14 @@ class ShortCollabsAPI {
 	}
 
 	/**	19	Not Used (MINIMIZE): deleteUser(reqParam)
-	 *	`DELETE` /user/:userHandle
+	 *	`DELETE` /users/:userHandle
 	 *	Users: Delete user. NOT ATTACHED.
 	 */ 
 	static async deleteUser(username){
 
 		try{
 
-			// const response = await this.request(`/user/${username}/`, 'delete');
+			// const response = await this.request(`/users/${username}/`, 'delete');
 			// return response.user;
 
 		}catch(error){
@@ -203,7 +203,7 @@ class ShortCollabsAPI {
 
 	/*******	CONTENTS		*******/
 	/**	createContent(reqBody)
-	 *	`POST`	/content/
+	 *	`POST`	/contents/
 	 *	Contents: New content (master relation).
 	 */
 	static async createContent(contentData){
@@ -271,20 +271,20 @@ class ShortCollabsAPI {
 	}
 
 	/**	21	Not Used (MINIMIZE): returnContent(reqParam)
-	 *	`GET`	/content/:contentID
+	 *	`GET`	/contents/:contentID
 	 *	...deprecated by cujoin equivalent & `/random`
 	 */
 	static async returnContent(contentID){}
 
 	/**	selectContent(reqParam)
-	 *	`GET`	/content/:contentID/random
+	 *	`GET`	/contents/:contentID/random
 	 *	Contents: Return by contentID.
 	 */ 
 	static async selectContent(contentID){
 
 		try{
 
-			const response = await this.request(`/content/${contentID}`);
+			const response = await this.request(`/contents/${contentID}`);
 			return response.content;
 
 		}catch(error){
@@ -294,14 +294,14 @@ class ShortCollabsAPI {
 	}
 
 	/**	getFullContentData(reqParam)
-	 *	`GET`	/content/:contentID/edit
+	 *	`GET`	/contents/:contentID/edit
 	 *	Contents: Return private content details (master relation).
 	 */ 
 	static async getFullContentData(contentID){
 
 		try{
 
-			const response = await this.request(`/content/${contentID}/edit`);
+			const response = await this.request(`/contents/${contentID}/edit`);
 			return response.content;
 
 		}catch(error){
@@ -310,15 +310,15 @@ class ShortCollabsAPI {
 
 	}
 
-	/**	patchContent(reqParam, reqBody)
-	 *	`PATCH`	/content/:contentID/edit
+	/**	patchContentData(reqParam, reqBody)
+	 *	`PATCH`	/contents/:contentID/edit
 	 *	Contents: Update content details (master relation).
 	 */ 
-	static async patchContent(contentID, contentData){
+	static async patchContentData(contentID, contentData){
 
 		try{
 
-			const response = await this.request(`/content/${contentID}/edit`, 'patch', contentData);
+			const response = await this.request(`/contents/${contentID}/edit`, 'patch', contentData);
 			return response.content;
 
 		}catch(error){
@@ -328,14 +328,14 @@ class ShortCollabsAPI {
 	}
 
 	/**	14	publishContent(reqParam)
-	 *	`PATCH`	/content/:contentID/publish
+	 *	`PATCH`	/contents/:contentID/publish
 	 *	Contents: Update content details (master relation).
 	 */ 
 	static async publishContent(contentID){
 
 		try{
 
-			const response = await this.request(`/content/${contentID}/publish`, 'patch',);
+			const response = await this.request(`/contents/${contentID}/publish`, 'patch',);
 			return response.content;
 
 		}catch(error){
@@ -355,14 +355,14 @@ class ShortCollabsAPI {
 	static async updateContent(/* ... */){}
 
 	/**	24	Not Used (MINIMIZE): deleteContent(reqParams)
-	 *	`DELETE`	/content/:contentID
+	 *	`DELETE`	/contents/:contentID
 	 *	Content: Delete content.
 	 */ 
 	static async deleteContent(contentID){
 
 		try{
 
-			// const response = await this.request(`/content/${contentID}/`, 'delete');
+			// const response = await this.request(`/contents/${contentID}/`, 'delete');
 			// return response.content;
 
 		}catch(error){

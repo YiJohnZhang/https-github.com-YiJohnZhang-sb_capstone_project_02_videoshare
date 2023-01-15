@@ -137,20 +137,17 @@ User => Users
 
 |##|Page|Path|Page Component|Fe Router Auth.|Notes|API Call(s)|
 |-|-|-|-|-|-|-|
-|01|Home|`/`|`HomePage`|None|Home page, landing page. **Integrates search** w/out search history.|`searchUser`, `searchPublicContent`, `getAllPublicContent`|
+|01|Home|`/`|`HomePage`|None|Home page, landing page. **Integrates search** w/out search history.|`searchUsers`, `searchPublicContent`, `getAllPublicContent`|
 |02A|Login|`/login`|`OnboardingPage`|notLoggedIn|To login.|`authenticateUser`|
 |02B|Signup|`/register`|`OnboardingPage`|""|To signup.|`registerUser`|
 |03|Logout|`/logout`|`LogoutComponent`|loggedIn|To logout. Doesn't render anything. `/` if error|None|
 |04|Error|`**??**`|`ErrorPage`|None|Error page. Hot link to home.|None|
-|05|Profile|`/user/:userHandle`|`ProfilePage`|None|push to `/error` if error|`getUserData` (public or neq ref user), `getUserDataPrivate` (ref user)|
-|06|Profile, Edit|`/account`|`EditUserPage`|loggedIn|push to `/` if error|`getFullUserData`, `patchUser`|
+|05|Profile|`/user/:userHandle`|`ProfilePage`|None|push to `/error` if error|`getUserData` (public or neq ref user), `getAllUserData` (ref user)|
+|06|Profile, Edit|`/account`|`EditUserPage`|loggedIn|push to `/` if error|`getFullUserData`, `patchUserData`|
 |07|Content|`/content/:contentID`|`ContentPage?`|None|**`todo`**|`selectContent`, `getContentData`|
 |08A|Content, Create|`/create`|`EditContentPage`|loggedIn|push to `/` if error|`createContent`|
-|08B|Content, Edit|`/edit/:contentID`|`EditContentPage`|loggedIn|push to `/error` if error|`getFullContentData`, `patchContent`, `publishContent`|
-|09|Join Content, Edit|`/user/:userHandle/:contentId/edit`|`EditJoinContentPage`|loggedIn, referenceUser|push to `/error` if error|`getJointContentData`, `patchJointContent`|
-
-- `params` aliases:
-	1. `userHandle` is an alias for `username`
+|08B|Content, Edit|`/edit/:contentID`|`EditContentPage`|loggedIn|push to `/error` if error|`getFullContentData`, `patchContentData`, `publishContent`|
+|09|Join Content, Edit|`/user/:userHandle/:contentId/edit`|`EditJoinContentPage`|loggedIn, referenceUser|push to `/error` if error|`getJoinContentData`, `patchJoinContent`|
 
 |##|API Method Signature|`Route` / `Method`|`Backend Route`|
 |-|-|-|-|
@@ -159,31 +156,31 @@ User => Users
 |02|`registerUser(reqBody)`|`Authentication` / `POST`|`/authentication/register`|
 ||`Users`|||
 |03|`searchUser(reqQuery)`|`Users` / `GET`|`/users/`|
-|04|`getUserData(reqParam)`|`Users` / `GET`|`/user/:userHandle/public`|
-|05|`getAllUserData(reqParam)`|`Users` / `GET`|`/user/:userHandle/private`|
-|06|`getFullUserData(reqParam)`|`Users` / `GET`|`/user/:userHandle/edit`|
-|07|`patchUser(reqParam, reqBody)`|`Users` / `PATCH`|`/user/:userHandle/edit`|
+|04|`getUserData(reqParam)`|`Users` / `GET`|`/users/:username/public`|
+|05|`getAllUserData(reqParam)`|`Users` / `GET`|`/users/:username/private`|
+|06|`getFullUserData(reqParam)`|`Users` / `GET`|`/users/:username/edit`|
+|07|`patchUser(reqParam, reqBody)`|`Users` / `PATCH`|`/users/:username/edit`|
 ||`Contents`|||
-|08|`createContent(reqBody)`|`Contents` / `POST`|`/content/`|
+|08|`createContent(reqBody)`|`Contents` / `POST`|`/contents/`|
 |09|`searchPublicContent(reqQuery)`|`Contents` / `GET`|`/contents/`|
 |10|`getAllPublicContent()`|`Contents` / `GET`|`/contents/`|
-|11|`selectContent(reqParam)`|`Contents` / `GET`|`/content/:contentID/random`|
-|12|`getFullContentData(reqParam)`|`Contents` / `GET`|`/content/:contentID/edit`|
-|13|`patchContent(reqBody)`|`Contents` / `PATCH`|`/content/:contentID/edit`|
-|14|`publishContent(reqParam)`|`Contents` / `PATCH`|`/content/:contentID/publish`|
+|11|`selectContent(reqParam)`|`Contents` / `GET`|`/contents/:contentID/random`|
+|12|`getFullContentData(reqParam)`|`Contents` / `GET`|`/contents/:contentID/edit`|
+|13|`patchContent(reqBody)`|`Contents` / `PATCH`|`/contents/:contentID/edit`|
+|14|`publishContent(reqParam)`|`Contents` / `PATCH`|`/contents/:contentID/publish`|
 ||`Contents-Users-Join`|||
-|15|`getContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:userHandle/:contentID`|
-|16|`getJoinContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:userHandle/:contentID/edit`|
-|17|`patchJoinContent(reqParams, reqBody)`|`Contents-Users-Join` / `PATCH`|`/cujoin/:userHandle/:contentID/edit`|
+|15|`getContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:username/:contentID`|
+|16|`getJoinContentData(reqParams)`|`Contents-Users-Join` / `GET`|`/cujoin/:username/:contentID/edit`|
+|17|`patchJoinContent(reqParams, reqBody)`|`Contents-Users-Join` / `PATCH`|`/cujoin/:username/:contentID/edit`|
 ||`Unimplemented Routes, but Developed and Disabled`|||
 |18|`returnAllUsers`|`DISABLED` / `GET`|`/users/`|
-|19|`deleteUser`|`DISABLED` / `DELETE`|`/users/:userHandle`|
+|19|`deleteUser`|`DISABLED` / `DELETE`|`/users/:username`|
 |20|`returnAllContents`|`DISABLED` / `GET`|`/contents/`|
-|21|`returnContent`|`DISABLED` / `GET`|`/content/:contentID`|
-|22|`signContent`|`DISABLED` / `PATCH`|`/content/:contentID/:userHandle/sign`|
-|23|`updateContent`|`**`todo`**` / `PATCH`|`/content/:contentID/status`|
-|24|`deleteContent`|`DISABLED` / `DELETE`|`/content/:contentID`|
-|25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:userHandle/:contentID`|
+|21|`returnContent`|`DISABLED` / `GET`|`/contents/:contentID`|
+|22|`signContent`|`DISABLED` / `PATCH`|`/contents/:contentID/:username/sign`|
+|23|`updateContent`|`**`todo`**` / `PATCH`|`/contents/:contentID/status`|
+|24|`deleteContent`|`DISABLED` / `DELETE`|`/contents/:contentID`|
+|25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:username/:contentID`|
 
 ## 02.03. Backend Routes (`todo`)
 ```sh
@@ -216,14 +213,14 @@ User => Users
 ||`Authorization`, `/authorization`||||
 |01|`POST`, `/token`|`Users`, `authenticateUser()`|user auth. properties|Authenticates a user.|
 |02|`POST`, `/register`|`Users`, `registerUser()`|user auth. properties|Creates a user.|
-||`Users`, `/user`||||
-|03|`GET`, `s/`|`Users`, `getAll()`|arr, user public properties|User search feature.|
-|04|`GET`, `/:userHandle/public`|`Users`, `getByPK()`|user public properties|User profile page.|
+||`Users`, `/users/`||||
+|03|`GET`, `/`|`Users`, `getAll()`|arr, user public properties|User search feature.|
+|04|`GET`, `/:username/public`|`Users`, `getByPK()`|user public properties|User profile page.|
 |`04A`|`GET`, `-`|`CU_Join`, `getAllUserPublicContent()`||Supports 04|
-|05|`GET`, `/:userHandle/private`|`Users`, `getByPKPrivate()`|user private properties|User profile page.|
+|05|`GET`, `/:username/private`|`Users`, `getByPKPrivate()`|user private properties|User profile page.|
 |`05A`|`GET`, `-`|`CU_Join`, `getAllUserContent()`||Supports 5|
-|06|`GET`, `/:userHandle/edit`|`Users`, `getByPKPrivate???()`|user private properties|Edit user page.|
-|07|`PATCH`, `/:userHandle/edit`|`Users`, `update()`|user private properties|Edit user page.|
+|06|`GET`, `/:username/edit`|`Users`, `getByPKPrivate???()`|user private properties|Edit user page.|
+|07|`PATCH`, `/:username/edit`|`Users`, `update()`|user private properties|Edit user page.|
 ||`Contents`, `/contents`||||
 |08|`POST`, `/`|`Contents`, `create()`|content public properties|Create content.|
 |09|`GET`, `/`|`Contents`, `getAll()`|arr, content public properties|Content search feature.|
@@ -233,9 +230,9 @@ User => Users
 |13|`PATCH`, `/:contentID/edit`|`Contents`, `update()`|content private properties|Edit content page.|
 |14|`PATCH`, `/:contentID/publish`|`Contents`, `updatePublish()`|content id?|sets content status to `published`|
 ||`Content-User Join`, `/cujoin`||||
-|15|`GET`, `/:userHandle/:contentID/`|`CU_Join`, `getByPK()`|cujoin public properties|`TODO`: Content page.|
-|16|`PATCH`, `/:userHandle/:contentID/edit`|`CU_Join`, `getByPKPrivate()`|cujoin private properties|Edit content join page.|
-|17|`PATCH`, `/:userHandle/:contentID/edit`|`CU_Join`, `update()`|cujoin private properties|Edit content join page.|
+|15|`GET`, `/:username/:contentID/`|`CU_Join`, `getByPK()`|cujoin public properties|`TODO`: Content page.|
+|16|`PATCH`, `/:username/:contentID/edit`|`CU_Join`, `getByPKPrivate()`|cujoin private properties|Edit content join page.|
+|17|`PATCH`, `/:username/:contentID/edit`|`CU_Join`, `update()`|cujoin private properties|Edit content join page.|
 ||`Deprecated/Disabled`, `/`||||
 |18|`GET`, `/users/`|`Users`, `()`|deprecated|deprecated|
 |19|`DELETE`, `/users/:username`|`Users`, `()`|disabled|Delete user[1].|
@@ -244,7 +241,8 @@ User => Users
 |22|`PATCH`, `/content/:contentID/user/:userHandle/sign`|`Contents`, `()`|disabled|Allow user to toggle signed status of a piece of content|
 |23|`PATCH`, `/content/:contentID/status`|`Contents`, `()`|disabled|Admin to update content status from `published` to `legacy`|
 |24|`DELETE`, `/content/:contentID`|`Contents`, `()`|disabled|Delete content[1].|
-|25|`DELETE`, `/cujoin/:userHandle/content/:contentID`|`CU_Join`, `()`|disabled|Delete content join[1].|
+|25|`DELETE`, `/cujoin/:username/:contentID`|`CU_Join`, `()`|disabled|Delete content join[1].|
+[1] Tested but not used concerning practices (what if a user wants to restore? How?)
 
 ## 02.04. Resources & Data Source
 - The sample data is dummy data.
@@ -433,11 +431,11 @@ Some suggested improvements to this concept are:
 |57|set `config`, finish `contents:publish`|2022-01-08|22:22 - 23:14|52|
 |58|`contents` tests|2022-01-09|19:46 - 20:33|47|
 |59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-09|20:39 - 22:00|81|
-|63|update route patterns to follow RESTful specifications, `random` test|2023-01-14|19:14 - :||
+|63|route patterns now reflect RESTful practices where it is easy to implement; however, plural base routes for single items are still in effect; `random` test|2023-01-14|19:14 - 20:00|46|
 
 |6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-14|: - :||
 |6||2023-01-14|: - :||
-59		62
+59		63
 1527	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|

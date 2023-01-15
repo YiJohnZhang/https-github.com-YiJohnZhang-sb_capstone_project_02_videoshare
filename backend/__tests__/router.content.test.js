@@ -266,7 +266,6 @@ describe('GET \`/contents/:contentID/random\`', () => {
 			.get('/contents/1/random');
 		console.log(response.body.username);
 		expect(response.body.username).toEqual('testuser1');
-		fail('todo: fix 5s test');
 	
 	});
 
@@ -275,9 +274,7 @@ describe('GET \`/contents/:contentID/random\`', () => {
 		const response = await request(app)
 			.get('/contents/1/random')
 			.set('authorization', `Bearer ${user1Token}`);
-		console.log(response.body.username);
 		expect(response.body.username).toEqual('testuser1');
-		fail('todo: fix 5s test');
 	
 	});
 
@@ -287,7 +284,6 @@ describe('GET \`/contents/:contentID/random\`', () => {
 			.get('/contents/2/random');
 		console.log(response.body.username);
 		expect(['testuser1', 'testuser2']).toContain(response.body.username);
-		fail('todo: fix 5s test');
 	
 	});
 
@@ -298,7 +294,6 @@ describe('GET \`/contents/:contentID/random\`', () => {
 			.set('authorization', `Bearer ${user1Token}`);
 		console.log(response.body.username);
 		expect(['testuser1', 'testuser2']).toContain(response.body.username);
-		fail('todo: fix 5s test');
 	
 	});
 
@@ -306,6 +301,7 @@ describe('GET \`/contents/:contentID/random\`', () => {
 
 		const response = await request(app)
 			.get('/contents/100/random');
+		console.log(response.statusCode);
 		expect(response.statusCode).toEqual(404);
 	
 	});

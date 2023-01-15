@@ -90,29 +90,45 @@ router.get('/:contentID', async(req, res, nxt) => {
  */
  router.get('/:contentID/random', async(req, res, nxt) => {
 
+	console.log(`${req.params.contentID}: begin=======================`)
+
 	try{
 
 		const result = await ContentModel.getParticipants(req.params.contentID);
-		
+
 		const { participants } = result;
 		const participantsArray = JSON.parse(participants);
-
+	
 		if(participantsArray.length === 1){
 		
-			console.log(participantsArray[0]);
-			// todo: remove
-			return { username: participantsArray[0] };
+			return res.json({ username: participantsArray[0] });
+				// this is an instance where it is helpful to walk away and then comeback... or work when you had more sleep.
 		
 		}
-
+	
 		const randomIndex = Math.floor(Math.random()*participantsArray.length);
-		console.log(randomIndex);
-			// todo: remove
-		return { username: participantsArray[randomIndex] };
+		return res.json({ username: participantsArray[randomIndex] });
 
 	}catch(error){
+		// console.log(error);
 		nxt(error);
 	}
+
+	// interesting: if this is here, even though it executes `nxt(error)`, it will execute this body too...
+	// const result = await ContentModel.getParticipants(req.params.contentID);
+
+	// const { participants } = result;
+	// const participantsArray = JSON.parse(participants);
+
+	// if(participantsArray.length === 1){
+	
+	// 	return res.json({ username: participantsArray[0] });
+	// 		// this is an instance where it is helpful to walk away and then comeback... or work when you had more sleep.
+	
+	// }
+
+	// const randomIndex = Math.floor(Math.random()*participantsArray.length);
+	// return res.json({ username: participantsArray[randomIndex] });
 
 });
 
