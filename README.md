@@ -449,8 +449,8 @@ Some suggested improvements to this concept are:
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
 |61|update routes to follow RESTful guidelines; plugin API & update documentation|2023-01-13|11:11 - 12:19|68|
 |62|update routes to follow RESTful guidelines, plugin API & update documentation; reorganize src|2023-01-13|19:26 - 22:27|181|
-|6||2023-01-14|: - :||
-|6||2023-01-14|: - :||
+|6||2023-01-16|: - :||
+|6||2023-01-16|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
 62		63
 1439
@@ -462,7 +462,8 @@ Some suggested improvements to this concept are:
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
 |64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 293
-|65||2023-01-15|12:37 - 16:45||
+|65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45||
+|66|finish private front-end styling & routing|2023-01-15|20:02 - :||
 
 ||||**Total Time**|_ minutes (--h--m)|
 
