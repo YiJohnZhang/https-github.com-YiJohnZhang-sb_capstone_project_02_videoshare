@@ -78,13 +78,14 @@ function EditUserPage(){
 
 		try{
 	
-			await ShortCollabsAPI.patchUser(sessionUsername, formState);
-	
+			await ShortCollabsAPI.patchUserData(sessionUsername, formState);
+			history.push(`/user/${sessionUsername}`);
+
 		}catch(error){
 			// error handling: stay on page and maybe dispaly errors or somethign.
-		}
+			console.error(error);
 
-		history.push(`/user/${sessionUsername}`);
+		}
 
 	}
 
@@ -122,7 +123,7 @@ function EditUserPage(){
 			<p><strong>Account Status</strong>: {userStaticData.accountStatus}</p>
 		</div>
 		<div className="col-md-4">
-			<p><strong>Birth Date</strong>: {userStaticData.birthdate}</p>
+			<p><strong>Birth Date</strong>: {userStaticData.birthdate.substring(0, 10)}</p>
 		</div>
 		
 		<div className="form-floating col-md-12">
@@ -157,7 +158,7 @@ function EditUserPage(){
 		<div className="col-md-12">
 			<button name="submitChanges"
 				type="submit"
-				className="form-control btn btn-outline-primary animation-400"
+				className="form-control btn btn-outline-primary default-transition"
 				onClick={onSubmitHandler}>
 					Confirm Changes
 				</button>

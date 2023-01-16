@@ -463,22 +463,36 @@ Some suggested improvements to this concept are:
 |64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 293
 |65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45||
-|66|finish private front-end styling & routing|2023-01-15|20:02 - :||
+|66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11||
 
 ||||**Total Time**|_ minutes (--h--m)|
 
-2022-01-13 front end:
-- finished testing `HomePage`
-- test onboarding, user profile, edit user profile; create new content, editcontent,
+2022-01-15 Notes:
+- home page, done
+- onboarding: login done, logout works, register works
+- navbar: navbar picture that is shortcut to profile page
+- createContent: it works, new todo: conveneint link to in progress for content partiocipants
+
+
+- todo:
+	- **DB UPDATE**: set default picture profile (db) to `default.png`
+	- **DB UPDATE**: content card work: maybe a shortcut to edit master content/join content on individual contents (need to re-seed database w/ db updates), `ContentCard.js: returnTruncatedParticipants:~35-36`
+	
+	- backend work, sort output content by most recent; prioritize non-published (`open`/`standby` first)
+
+- `ProfilePage`; create new content, editcontent, publish content
 - add in page validation
-- add in authenticationredirect (still need to do a test w/out)
-- `ProfilePage`
+- add in authenticationredirect (still need to do tests w/out)
 - double check all relative paths to `hooks`/`helpesr`/`context` are updated `src/` post-reorganization
 - comments updated to reflect readme?
 
 backend:
-- return user status as "accountStatus"
+- return user status as "accountStatus"?!?!?!
 
 
 1. update route patterns
 content/:contentID/username/:userHandle
+
+
+notes
+`user.updateTypeUser.schema.json` Note: since all content in this db is local, `picture` does NOT have to be a `uri` format string

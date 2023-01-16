@@ -8,7 +8,7 @@ const UserCard = ({ isProfilePage, username, firstName, lastName, picture, descr
 	<React.Fragment>
 	<div className={`userCard default-transition ${isProfilePage ? 'userCard-tall' : 'card userCard-wide'}`}>
 		<div className="userCardImageContainer">
-			<Link to={`/user/${username}`}>
+			<Link to={`/user/${username}`} title={username}>
 				<img className={`userImage ${isProfilePage ? 'large-userImage' : 'small-userImage'}`}
 					src={`/user_imgs/${picture}`}
 					alt={`${username}`}></img>
@@ -16,7 +16,7 @@ const UserCard = ({ isProfilePage, username, firstName, lastName, picture, descr
 			</Link>
 		</div>
 		<div>
-			<h4><Link to={`/user/${username}`}>@{username}</Link></h4>
+			<h4><Link to={`/user/${username}`} title={username}>@{username}</Link></h4>
 			<p>{firstName} {lastName}</p>			
 		</div>
 		{isProfilePage && (

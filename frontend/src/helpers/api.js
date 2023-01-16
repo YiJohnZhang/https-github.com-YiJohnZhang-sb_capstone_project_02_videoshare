@@ -20,7 +20,7 @@ class ShortCollabsAPI {
 
 		//	set request settings
 		const url = `${this.BASE_URL}/${endpoint}`;
-		const headers = ShortCollabsAPI.token ? { Authorization: `Bearer ${ShortCollabsAPI.token}` } : null;
+		const headers = ShortCollabsAPI.token ? { Authorization: `Bearer ${ShortCollabsAPI.token}` } : {};
 		const params = (method==="get")
 			? data
 			: {};
@@ -29,6 +29,7 @@ class ShortCollabsAPI {
 		try{
 		
 			const result = await axios({ url, method, data, params, headers });
+			console.log(result);
 			return result.data;
 			
 		}catch(error){
@@ -50,12 +51,14 @@ class ShortCollabsAPI {
 		try{
 
 			const response = await this.request('authentication/login', 'post', userLoginData);
+
 			if(response.token){
 				this.token = response.token;
 			}
 			return response;
 
 		}catch(error){
+			console.error(`error: ${error}`);
 			throw new ExpressError(error.status, error.message);
 		}
 
@@ -70,8 +73,7 @@ class ShortCollabsAPI {
 		try{
 
 			const response = await this.request('authentication/register', 'post', newUserData);
-			console.log(response.token)
-			console.log(response.username)
+
 			if(response.token){
 				this.token = response.token;
 			}
@@ -138,7 +140,7 @@ class ShortCollabsAPI {
 
 	/**	getAllUserData(reqParam)
 	 *	`GET`	/users/:userHandle/private
-	 *	Users: Return user profile data (private).
+	 *	Users: Return user profile data (private contents).
 	 */
 	static async getAllUserData(username){
 

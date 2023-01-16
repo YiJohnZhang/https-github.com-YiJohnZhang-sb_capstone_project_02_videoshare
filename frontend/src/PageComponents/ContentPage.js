@@ -25,6 +25,7 @@ function ContentPage(){
 		async function fetchContentDetails(){
 
 			const selectedRandomUser = await ShortCollabsAPI.selectContent(contentID);
+			console.log(selectedRandomUser);
 			const contentResult = await ShortCollabsAPI.getContentData(selectedRandomUser.username, contentID);
 			setContentDetails(contentResult);
 

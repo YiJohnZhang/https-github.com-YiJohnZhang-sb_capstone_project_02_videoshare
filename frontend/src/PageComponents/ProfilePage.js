@@ -71,6 +71,7 @@ function ProfilePage({}){
 					title={content.title}
 					description={content.description}
 					link={content.link}
+					participants={content.participants}
 					datePublished={content.datePublished}
 					/>
 			))}

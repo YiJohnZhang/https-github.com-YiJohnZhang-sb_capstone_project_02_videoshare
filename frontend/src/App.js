@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import './App.css';
+import ShortCollabsAPI from './helpers/api';
 import NavBar from './NavBar';
 import OnboardingPage from './PageComponents/OnboardingPage';
 import ContentPage from './PageComponents/ContentPage';
@@ -17,13 +18,14 @@ import UserDetailsContext from './context/UserDetailsContext';
 
 function App(){
 	
-	// Session Username Cookie
+	// Session Username
 	const [sessionUsername, setSessionUsername] = useState(localStorage.getItem('sessionUsername') || undefined);
-	
-	// ...
+
+	// Session Picture
+	const [sessionProfilePicture, setSessionProfilePicture] = useState(localStorage.getItem('sessionProfilePicture') || undefined);
 
 	return(
-	<UserDetailsContext.Provider value={{sessionUsername, setSessionUsername}}>
+	<UserDetailsContext.Provider value={{sessionUsername, setSessionUsername, sessionProfilePicture, setSessionProfilePicture}}>
 		<NavBar />
 		<Switch>
 			<Route path="/login">

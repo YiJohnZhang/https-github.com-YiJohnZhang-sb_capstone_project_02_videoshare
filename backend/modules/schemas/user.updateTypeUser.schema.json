@@ -28,7 +28,6 @@
 		},
 		"picture": {
 			"type": "string",
-			"format":"uri",
 			"minLength": 4
 		},
 		"description": {

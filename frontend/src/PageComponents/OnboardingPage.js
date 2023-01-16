@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import ShortCollabsAPI from '../helpers/api';
 import useAuthenticationDependentRedirect from '../hooks/useAuthenticationDependentRedirect';
 import useControlledForm from '../hooks/useControlledForm';
 import useLocalStorage from '../hooks/useLocalStorage';
-import ShortCollabsAPI from '../helpers/api';
 // import useAPICall from '../hooks/useAPICall';
 import UserDetailsContext from '../context/UserDetailsContext';
 
@@ -15,7 +15,10 @@ function OnboardingPage({onboardingMethod}){
 
 	const history = useHistory();
 	const [jwt, setJWT] = useLocalStorage('jwt');
-	const { setSessionUsername } = useContext(UserDetailsContext);
+	const [localStorageUsername, setLocalStorageUsername] = useLocalStorage('sessionUsername');
+	const [localStorageProfilePicture, setLocalStorageProfilePicture] = useLocalStorage('sessionProfilePicture');
+	const { setSessionUsername, setSessionProfilePicture } = useContext(UserDetailsContext);
+	const [formErrorText, setFormErrorText] = useState(undefined);
 
 	let INITIAL_FORM_STATE;
 	if(onboardingMethod === 'login'){
@@ -59,8 +62,12 @@ function OnboardingPage({onboardingMethod}){
 		async function login(response){
 
 			setJWT(response.token);
-			// setLocalSessionUsername(response.username);
+			setLocalStorageUsername(response.username);
 			setSessionUsername(response.username);
+
+			const { picture } = await ShortCollabsAPI.getUserData(response.username);
+			setLocalStorageProfilePicture(picture);
+			setSessionProfilePicture(picture);
 
 			history.push('/');
 
@@ -70,22 +77,23 @@ function OnboardingPage({onboardingMethod}){
 
 			try{
 
-				const response = ShortCollabsAPI.registerUser(formState);
-				login(response);
+				const response = await ShortCollabsAPI.registerUser(formState);
+				await login(response);
 
 			}catch(error){
-				console.log(error);
+				// console.log(`formErrorElement.current.innerHTML: ${formErrorElement.current.innerHTML}`)
+				setFormErrorText(`Error: ${error.message}`);
 			}
 
 		}else{
 
 			try{
 
-				const response = ShortCollabsAPI.authenticateUser(formState);
-				login(response);
+				const response = await ShortCollabsAPI.authenticateUser(formState);
+				await login(response);
 
 			}catch(error){
-				console.log(error);
+				setFormErrorText(`Error: ${error.message}`);
 			}
 
 		}
@@ -163,6 +171,10 @@ function OnboardingPage({onboardingMethod}){
 				onClick={onSubmitHandler}>
 				{onboardingMethod==='signup' ? 'Sign Up!' : 'Login'}
 				</button>
+		</div>
+
+		<div id="onboarding-formErrorContainer" className="col-md-12 formErrorContainer">
+			<p id="onboarding-formErrorText" className="formErrorText">{formErrorText}</p>
 		</div>
 		
 	</form>

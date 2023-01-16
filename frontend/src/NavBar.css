@@ -10,3 +10,8 @@
 	#navigationtd-message{
 		text-align: center;
 	}
+
+	.nav-pfp img{
+		height:32px;
+		border-radius:100%;
+	}

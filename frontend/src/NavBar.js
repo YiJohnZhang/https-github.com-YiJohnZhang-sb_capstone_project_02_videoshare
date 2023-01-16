@@ -9,7 +9,7 @@ import logo from './logoipsum-247.svg';
 
 function NavBar() {
 
-	const {sessionUsername} = useContext(UserDetailsContext);
+	const { sessionUsername, sessionProfilePicture } = useContext(UserDetailsContext);
 
 	const ACTIVE_STYLE = {
 		fontWeight: 'bold'
@@ -41,6 +41,7 @@ function NavBar() {
 	{/* if signed in */}
 		{sessionUsername &&
 		<React.Fragment>
+			<td className="navbarButton-container"><NavLink className="nav-pfp" to={`/user/${sessionUsername}`}><img src={`user_imgs/${sessionProfilePicture}`}/></NavLink></td>
 			<td className="navbarButton-container"><NavLink className="btn btn-outline-success default-transition" activeStyle={ACTIVE_STYLE} to="/account"><i className="fa-duotone fa-user-pen"></i></NavLink></td>
 			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger default-transition" activeStyle={ACTIVE_STYLE} to="/upload"><i className="fa-duotone fa-video-plus"></i></NavLink></td>
 			<td className="navbarButton-container"><NavLink className="btn btn-outline-dark default-transition" to="/logout">Logout</NavLink></td>

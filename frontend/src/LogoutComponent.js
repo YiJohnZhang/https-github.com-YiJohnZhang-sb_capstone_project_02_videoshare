@@ -17,6 +17,7 @@ function LogoutComponent(){
 		setSessionUsername(undefined);
 		localStorage.removeItem('jwt');
 		localStorage.removeItem('sessionUsername');
+		localStorage.removeItem('sessionProfilePicture');
 		history.push('/');
 		history.go(0);
 
