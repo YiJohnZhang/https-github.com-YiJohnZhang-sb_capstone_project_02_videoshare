@@ -70,7 +70,7 @@ function HomePage(props){
 		<div id="home-minorContainer" className="homeContainer width-15percent floatLeft">
 			{props.randomText.map((element) => (
 				<p key={element}
-					className="homepage-minorFillerContent animation-400">
+					className="homepage-minorFillerContent default-transition">
 					{element}
 				</p>
 			))}
@@ -97,7 +97,7 @@ function HomePage(props){
 						value="searchContent"
 						checked={formState.searchSelection==="searchContent"}
 						onChange={formChangeHandler} />
-					<label className="btn btn-outline-danger" htmlFor="searchContent"><i className="fa-duotone fa-video"></i></label>
+					<label className="btn btn-outline-danger default-transition" htmlFor="searchContent"><i className="fa-duotone fa-video"></i></label>
 
 					<input name="searchSelection"
 						type="radio"
@@ -106,7 +106,7 @@ function HomePage(props){
 						value="searchUser"
 						checked={formState.searchSelection==="searchUser"}
 						onChange={formChangeHandler} />
-					<label className="btn btn-outline-danger" htmlFor="searchUser"><i className="fa-duotone fa-user"></i></label>
+					<label className="btn btn-outline-danger default-transition" htmlFor="searchUser"><i className="fa-duotone fa-user"></i></label>
 
 				</div>
 			</form>
@@ -125,8 +125,8 @@ function HomePage(props){
 			<React.Fragment>
 				{matchingQuery.map((element) => (
 				<ContentCard
-					key={element.id}
-					aspectRatio="horizontal"
+					key={`content-${element.id}`}
+					isProfilePage={false}
 					contentID={element.id}
 					title={element.title}
 					description={element.description}
@@ -142,7 +142,7 @@ function HomePage(props){
 			<React.Fragment>
 				{matchingQuery.map((element) => (
 				<UserCard
-					key={element.username} 
+					key={element.username}
 					isProfilePage={false}
 					username={element.username}
 					firstName={element.firstName}

@@ -25,12 +25,15 @@ p{
 	height:100%;
 	display:inline-block;
 }
+	.paddedPage{
+		padding:0 16px;
+	}
 
-.animation-400{
-	animation: 400 all ease-in-out;
-	-webkit-animation: 400 all ease-in-out;
-	-moz-animation: 400 all ease-in-out;
-	-o-animation: 400 all ease-in-out;
+.default-transition{
+	transition: 400ms all ease-in-out;
+	-webkit-transition: 400ms all ease-in-out;
+	-moz-transition: 400ms all ease-in-out;
+	-o-transition: 400ms all ease-in-out;
 }
 
 .margin-auto{
@@ -85,4 +88,13 @@ form{}
 img{}
 	.userImage{
 		border-radius:100%;
+	}
+
+.card{
+	background-color: rgba(255, 255, 255, 0);
+	border-radius:9px;
+	border: none;
+}
+	.card:hover{
+		background-color: rgba(255, 255, 255, 0.49);
 	}

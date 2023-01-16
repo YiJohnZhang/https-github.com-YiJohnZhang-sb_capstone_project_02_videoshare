@@ -4,22 +4,41 @@ import { Link } from 'react-router-dom';
 import './ContentCard.css';
 import ContentPreviewComponent from './ContentPreviewComponent';
 
-function ContentCard({aspectRatio, contentID, title, description, link, participants, datePublished}){
+function ContentCard({isProfilePage = false, contentID, title, description, link, participants, datePublished}){
 	
 	const participantsSet = new Set(participants);
 		// if time: maybe use this for hot-linking edit
 
-	function returnParticipiantsList(participantList = [], shouldReduceParticipantList=true, reducedParticipantListLength = 3){
+	function returnTruncatedTitle(titleParameter, shouldTruncateTitle = true, truncatedTitleLength = 20){
+
+		if(shouldTruncateTitle && titleParameter.length > truncatedTitleLength)
+			return title.substring(0, truncatedTitleLength+1-3).concat(`...`);
+
+		return titleParameter;
+
+	}
+
+	function returnTruncatedDescription(descriptionParameter, shouldTruncateDescription = true, truncatedDescriptionLength = 100){
+
+		if(shouldTruncateDescription && descriptionParameter.length > truncatedDescriptionLength)
+			return description.substring(0, truncatedDescriptionLength-2).concat(`...`);
+
+		return descriptionParameter;
+
+	}
+
+	function returnTruncatedParticipants(participantList = [], shouldTruncateParticipantList=true, reducedParticipantListLength = 3){
 		const particpantsWithLink = participantList.map((participant) => (
 			<Link className="inline" 
+				key={participant}
 				to={`/user/${participant}`}
-				key={participant}>
-				{participant}
+				>
+				@{participant}
 			</Link>));
 
 		const participantListLength = participantList.length;
 
-		if(shouldReduceParticipantList && participantListLength > reducedParticipantListLength){
+		if(shouldTruncateParticipantList && participantListLength > reducedParticipantListLength){
 			
 			let featuredParticipantSet = new Set();
 			
@@ -43,27 +62,32 @@ function ContentCard({aspectRatio, contentID, title, description, link, particip
 
 	}
 
-	function returnDescription(descriptionParameter, shouldReduceDescription, truncatedDescriptionLength = 100){
+	// always truncate participants & description for now
+	const truncatedTitle = returnTruncatedTitle(title, isProfilePage);
+	const truncatedDescription = returnTruncatedDescription(description);
+	const participantsLinkList = returnTruncatedParticipants(participants);
 
-		if(shouldReduceDescription)
-			return description.substring(0, 101).concat(`...`);
-
-		return descriptionParameter;
-
-	}
-
-	const participantsLinkList = returnParticipiantsList(participants, aspectRatio!=='tall');
-	const truncatedDescription = returnDescription(description, aspectRatio!=='tall');
-
+	// const truncatedDescription = returnTruncatedDescription(description, !isProfilePage);
+	// const participantsLinkList = returnTruncatedParticipants(participants, !isProfilePage);
+	
 	return (
-	<div className={`contentCard ${aspectRatio === 'tall' ? 'contentCard-tall' : 'contentCard-wide'}`}>
+	<div className={`card contentCard ${isProfilePage ? 'contentCard-tall' : 'contentCard-wide'} default-transition`}>
 		<ContentPreviewComponent
 				contentTitle={title}
-				contentLink={link}/>
+				contentLink={link}
+				contentID={contentID}/>
 		<div>
-			<Link to={`/content/${contentID}`}><h4>{title}</h4></Link>
+			<Link to={`/content/${contentID}`}><h4>{truncatedTitle}</h4></Link>
 			<p>{truncatedDescription}</p>
-			<p>{participantsLinkList.map((participantLink) => participantLink)}</p>
+			<p>
+				{participantsLinkList.map((participantLink, index) => (
+					index === participantsLinkList.length - 1 ? participantLink : 
+					(<React.Fragment key={index}>
+						{participantLink}
+						<span>,&nbsp;</span>
+					</React.Fragment>)
+				))}
+			</p>
 		</div>
 	</div>
 	);

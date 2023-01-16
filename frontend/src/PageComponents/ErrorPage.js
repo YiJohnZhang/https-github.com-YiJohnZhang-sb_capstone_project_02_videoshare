@@ -1,23 +1,18 @@
 import React from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, /*useParams*/ } from 'react-router-dom';
 
-function ErrorPage({ errorCodeProp, errorMessage }){
+import './ErrorPage.css';
 
-	const history = useHistory();
-	const { errorCode } = useParams();
+function ErrorPage(){
 
-	function linkClickHandler(evt){
-
-		evt.preventDefault();
-		history.push('/');
-
-	}
+	// const { errorCode } = useParams();
 
 	return(
-	<div className="page">
-		<h1>{errorCode || errorCodeProp} Error</h1>
-		{errorMessage ? <p>{errorMessage}</p> : null}
-		<p>Go <Link onClick={linkClickHandler}>Home</Link></p>
+	<div id="errorPage" className="page">
+		<h1>This page isn't available.</h1>
+		{/* ok, so there is no easy access to the history entry details */}
+		<p>The previously requested page may be broken, blocked, or deleted.</p>
+		<p>Go <Link to="/">home</Link>.</p>
 	</div>
 	);
 

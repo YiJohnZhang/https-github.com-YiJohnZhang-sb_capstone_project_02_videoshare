@@ -7,8 +7,8 @@ class ShortCollabsAPI {
 
 	// static BASE_URL = "https://___.herokuapp.com";
 	static BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
-	// static token = localStorage.getItem('jwt') || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndyaWdodGdlb3JnZSIsImlzRWxldmF0ZWQiOmZhbHNlLCJpYXQiOjE2NzM3NTk0MDN9.zpSxB0Dxzgjz7BDKuCKjitvLG5-B3p0HAZKxXNUYvig";
-	static token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndyaWdodGdlb3JnZSIsImlzRWxldmF0ZWQiOmZhbHNlLCJpYXQiOjE2NzM3NTk0MDN9.zpSxB0Dxzgjz7BDKuCKjitvLG5-B3p0HAZKxXNUYvig";
+	static token = localStorage.getItem('jwt') || null;
+	// static token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndyaWdodGdlb3JnZSIsImlzRWxldmF0ZWQiOmZhbHNlLCJpYXQiOjE2NzM3NTk0MDN9.zpSxB0Dxzgjz7BDKuCKjitvLG5-B3p0HAZKxXNUYvig";
 	
 	//	temporary token:
 		//	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndyaWdodGdlb3JnZSIsImlzRWxldmF0ZWQiOmZhbHNlLCJpYXQiOjE2NzM3NTk0MDN9.zpSxB0Dxzgjz7BDKuCKjitvLG5-B3p0HAZKxXNUYvig
@@ -20,7 +20,7 @@ class ShortCollabsAPI {
 
 		//	set request settings
 		const url = `${this.BASE_URL}/${endpoint}`;
-		const headers = { Authorization: `Bearer ${ShortCollabsAPI.token}` };
+		const headers = ShortCollabsAPI.token ? { Authorization: `Bearer ${ShortCollabsAPI.token}` } : null;
 		const params = (method==="get")
 			? data
 			: {};
@@ -33,10 +33,8 @@ class ShortCollabsAPI {
 			
 		}catch(error){
 
-				console.error(error.response.data);
-				// // console.error("API Error:", err.response);
-				// let message = error.response.data.error.message;
-				// throw Array.isArray(message) ? message : [message];
+				// console.error(error.response);
+				throw new ExpressError(error.response.status, error.response.data);
 			
 		}
 
@@ -228,7 +226,7 @@ class ShortCollabsAPI {
 	 *	`GET`	/contents/
 	 *	Contents: Use for admin dashboard moderation.
 	 */
-	static async returnAlContents(/* ... */){
+	static async returnAllContents(/* ... */){
 
 		try{
 
@@ -253,8 +251,7 @@ class ShortCollabsAPI {
 			return response.contents;
 
 		}catch(error){
-			console.log(error)
-			// throw new ExpressError(error.status, error.message);
+			throw new ExpressError(error.status, error.message);
 		}
 
 	}
@@ -290,8 +287,8 @@ class ShortCollabsAPI {
 
 		try{
 
-			const response = await this.request(`contents/${contentID}`);
-			return response.content;
+			const response = await this.request(`contents/${contentID}/random`);
+			return response;
 
 		}catch(error){
 			throw new ExpressError(error.status, error.message);
@@ -380,14 +377,14 @@ class ShortCollabsAPI {
 	/*******	CONTENTS_USERS_JOIN		*******/
 	/**	15	getJoinContentPublicData(reqParams)
 	 *	`GET`	/cujoin/:userHandle/:contentID
-	 *	cuJoin: get publicly displayed data.
+	 *	content: get publicly displayed data.
 	 */ 
 	static async getContentData(username, contentID){
 
 		try{
 
 			const response = await this.request(`cujoin/${username}/${contentID}`)
-			return response.cuJoin;
+			return response.content;
 
 		}catch(error){
 			throw new ExpressError(error.status, error.message);
@@ -397,7 +394,7 @@ class ShortCollabsAPI {
 	
 	/**	16	getJoinContentPrivateData(reqParams)
 	 *	`GET`	/cujoin/:userHandle/:contentID/edit
-	 *	cuJoin: get privately displayed data.
+	 *	content: get privately displayed data.
 	 */ 
 	static async getJoinContentData(username, contentID){
 
@@ -405,7 +402,7 @@ class ShortCollabsAPI {
 
 			const response = await this.request(`cujoin/${username}/${contentID}/edit`);
 			// consider a private & public route
-			return response.cuJoin;
+			return response.content;
 
 		}catch(error){
 			throw new ExpressError(error.status, error.message);

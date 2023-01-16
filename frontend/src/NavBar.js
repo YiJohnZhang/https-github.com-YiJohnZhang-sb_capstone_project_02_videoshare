@@ -33,17 +33,17 @@ function NavBar() {
 	{/* if signed out */}
 		{!sessionUsername &&
 		<React.Fragment>
-			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger" activeStyle={ACTIVE_STYLE} to="/login">Login</NavLink></td>
-			<td className="navbarButton-container"><NavLink className="btn btn-primary" activeStyle={ACTIVE_STYLE} to="/signup">Sign&nbsp;Up</NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger default-transition" activeStyle={ACTIVE_STYLE} to="/login">Login</NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-primary default-transition" activeStyle={ACTIVE_STYLE} to="/signup">Sign&nbsp;Up</NavLink></td>
 		</React.Fragment>
 		}
 	
 	{/* if signed in */}
 		{sessionUsername &&
 		<React.Fragment>
-			<td className="navbarButton-container"><NavLink className="btn btn-outline-success" activeStyle={ACTIVE_STYLE} to="/account"><i className="fa-duotone fa-user-pen"></i></NavLink></td>
-			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger" activeStyle={ACTIVE_STYLE} to="/upload"><i className="fa-duotone fa-video-plus"></i></NavLink></td>
-			<td className="navbarButton-container"><NavLink className="btn btn-outline-dark" to="/logout">Logout</NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-outline-success default-transition" activeStyle={ACTIVE_STYLE} to="/account"><i className="fa-duotone fa-user-pen"></i></NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger default-transition" activeStyle={ACTIVE_STYLE} to="/upload"><i className="fa-duotone fa-video-plus"></i></NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-outline-dark default-transition" to="/logout">Logout</NavLink></td>
 		</React.Fragment>
 		}
 

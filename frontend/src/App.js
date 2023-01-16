@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import './App.css';
 import NavBar from './NavBar';
@@ -57,7 +57,7 @@ function App(){
 			<Route path="/logout">
 				<LogoutComponent />
 			</Route>
-			<Route path="/error/:errorCode">
+			<Route path="/error">
 				<ErrorPage />
 			</Route>
 			<Route path="/">

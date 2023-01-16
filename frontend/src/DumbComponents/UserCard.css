@@ -1,9 +1,12 @@
 /* UserCard.css */
+.userCard{}
+
 .userCard-tall{
 	margin:0 auto;
 	width:50%;
 	padding:9px;
 	display:block;
+	text-align: center;
 }
 	.userCard-tall div{
 		height:300px;

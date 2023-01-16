@@ -462,7 +462,7 @@ Some suggested improvements to this concept are:
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
 |64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 293
-|65||2023-01-15|12:37 - :||
+|65||2023-01-15|12:37 - 16:45||
 
 ||||**Total Time**|_ minutes (--h--m)|
 

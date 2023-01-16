@@ -6,7 +6,7 @@ import './UserCard.css';
 const UserCard = ({ isProfilePage, username, firstName, lastName, picture, description }) => (
 	
 	<React.Fragment>
-	<div className={isProfilePage ? 'userCard-tall' : 'userCard-wide'}>
+	<div className={`userCard default-transition ${isProfilePage ? 'userCard-tall' : 'card userCard-wide'}`}>
 		<div className="userCardImageContainer">
 			<Link to={`/user/${username}`}>
 				<img className={`userImage ${isProfilePage ? 'large-userImage' : 'small-userImage'}`}

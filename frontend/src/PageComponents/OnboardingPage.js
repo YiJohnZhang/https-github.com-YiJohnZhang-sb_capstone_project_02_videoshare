@@ -159,7 +159,7 @@ function OnboardingPage({onboardingMethod}){
 		<div className="col-md-12">
 			<button name={onboardingMethod==='signup' ? 'Sign Up!' : 'Login'}
 				type="submit"
-				className="form-control btn btn-outline-danger animation-400"
+				className="form-control btn btn-outline-danger default-transition"
 				onClick={onSubmitHandler}>
 				{onboardingMethod==='signup' ? 'Sign Up!' : 'Login'}
 				</button>

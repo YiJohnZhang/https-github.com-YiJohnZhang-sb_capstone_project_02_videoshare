@@ -1,16 +1,19 @@
 
 .ContentPreviewComponent{
-
+	height:100%;
 }
 
 .fullsizeContentPreviewComponent{
-	
 }
+	.fullsizeContentPreviewComponent img{
+		width:100%;
+	}
 
 .reducedsizeComponentPreviewComponent{
 	width:300px;
+	height:100%;
 }
 	.reducedsizeComponentPreviewComponent img{
-		width:300px;
+		width:100%;
 	}
 /* for full page content? */

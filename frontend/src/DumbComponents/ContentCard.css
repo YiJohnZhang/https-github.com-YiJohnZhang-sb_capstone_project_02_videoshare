@@ -1,23 +1,29 @@
 /* ContentCard.css */
+.contentCard{}
+
 .contentCard-tall{
-	margin:0 auto;
-	width:50%;
+	vertical-align: top;
+	margin:0 9px;
+	width:300px;
+		/* for now */
+	height:400px;
 	padding:9px;
-	display:block;
+	display:inline-block;
 }
 	.contentCard-tall div{
 		height:300px;
 		display:inline;
 	}
+
 .contentCard-wide{
-	margin:0;
+	margin:9px 0;
 	width:100%;
 	padding:16px;
 	display:inline-block;
 }
 	.contentCard-wide div{
-		margin:0 16px;
-		height:100px;
+		margin:0 16px 0 0;
+		/* height:100px; */
 		display:inline;
 	}
 	.contentCard-wide .contentCardImageContainer{
