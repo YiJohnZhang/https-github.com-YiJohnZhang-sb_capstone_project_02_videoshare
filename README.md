@@ -382,7 +382,7 @@ Some suggested improvements to this concept are:
 |02|db seeding, continued (content)|2022-12-14|13:36 - 15:58|142|
 |03|db seeding script and fixing typo|2022-12-14|19:47 - 22:29|162|
 |04|fix db seeding|2022-12-15|18:45 - 18:55|10|
-|67|fix database seeder & add more content to the db|2023-01-16|12:36 - 1:||
+|67|fix database seeder & add more content to the db|2023-01-16|12:36 - 14:35||
 ||**50.01.03**. Data Sourcing||**Net Total Time**|548 (09h08m)|
 |05|starting TDD of `backend`|2022-12-19 - 2022-12-20|21:43 - 00:31|168|
 |06||2022-12-20|10:54 - 12:26|92|

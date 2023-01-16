@@ -91,13 +91,16 @@ function trolololAsync(){
 			if(record.id)
 				delete record.id;
 
-			let stringifiedRecord = '';
+			// let stringifiedRecord = '';
 
-			for(let entry of Object.values(record)){
-				stringifiedRecord = stringifiedRecord.concat(`${entry}, `);
-			}
+			// for(let entry of Object.values(record)){
+			// 	stringifiedRecord = stringifiedRecord.concat(`${entry}, `);
+			// }
 
-			stringifiedRecord = stringifiedRecord.substring(0,stringifiedRecord.length-2);
+			// stringifiedRecord = stringifiedRecord.substring(0,stringifiedRecord.length-2);
+
+			const stringifiedRecord = Object.values(record).join(',');
+
 				// remove trailing comma and space.
 			writerStreamSeedFile.write(`(${stringifiedRecord}),\n\t`);
 			

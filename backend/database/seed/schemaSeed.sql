@@ -23,8 +23,7 @@ CREATE TABLE users (
     	CHECK (position('@' IN email) > 1),
 		-- < 100
 	"password" TEXT NOT NULL,
-	picture VARCHAR(64) DEFAULT '',
-		-- default default.jpg
+	picture VARCHAR(64) DEFAULT 'default.jpg',
 	"description" VARCHAR(512) DEFAULT '',
 		-- LEN <= 512 in client-side, server-side validation; also database
 	is_elevated BOOLEAN DEFAULT FALSE,
