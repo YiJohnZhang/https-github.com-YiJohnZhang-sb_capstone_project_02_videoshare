@@ -382,6 +382,7 @@ Some suggested improvements to this concept are:
 |02|db seeding, continued (content)|2022-12-14|13:36 - 15:58|142|
 |03|db seeding script and fixing typo|2022-12-14|19:47 - 22:29|162|
 |04|fix db seeding|2022-12-15|18:45 - 18:55|10|
+|67|fix database seeder & add more content to the db|2023-01-16|12:36 - 1:||
 ||**50.01.03**. Data Sourcing||**Net Total Time**|548 (09h08m)|
 |05|starting TDD of `backend`|2022-12-19 - 2022-12-20|21:43 - 00:31|168|
 |06||2022-12-20|10:54 - 12:26|92|
@@ -435,8 +436,8 @@ Some suggested improvements to this concept are:
 
 |6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-14|: - :||
 |6||2023-01-14|: - :||
-59		63
-1527	---
+63		6x
+1573	---
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|exploring `formik` for frontend, attempted `material-ui`, alongside other express form validation and/or styling libraries; db work|2022-12-28|16:01 - 18:24|143|
@@ -449,29 +450,30 @@ Some suggested improvements to this concept are:
 |37|logo, styling, `api.js` work, and documentation|2023-01-02|08:19 - 10:30|131|
 |61|update routes to follow RESTful guidelines; plugin API & update documentation|2023-01-13|11:11 - 12:19|68|
 |62|update routes to follow RESTful guidelines, plugin API & update documentation; reorganize src|2023-01-13|19:26 - 22:27|181|
-|6||2023-01-16|: - :||
-|6||2023-01-16|: - :||
+|64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
+|65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45|248|
+|66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
+|68||2023-01-16|: - :||
+|69||2023-01-16|: - :||
+|70||2023-01-16|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
-62		63
-1439
+66		67
+1998
 
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
-|64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 293
-|65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45||
-|66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11||
-
+||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
 ||||**Total Time**|_ minutes (--h--m)|
 
 2022-01-15 Notes:
 - home page, done
 - onboarding: login done, logout works, register works
 - navbar: navbar picture that is shortcut to profile page
-- createContent: it works, new todo: conveneint link to in progress for content partiocipants
+- createContent: it works, new todo: conveneint link to in progress for content participants
 
 
 - todo:
