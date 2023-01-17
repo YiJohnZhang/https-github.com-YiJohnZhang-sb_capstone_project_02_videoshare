@@ -382,8 +382,8 @@ Some suggested improvements to this concept are:
 |02|db seeding, continued (content)|2022-12-14|13:36 - 15:58|142|
 |03|db seeding script and fixing typo|2022-12-14|19:47 - 22:29|162|
 |04|fix db seeding|2022-12-15|18:45 - 18:55|10|
-|67|fix database seeder & add more content to the db|2023-01-16|12:36 - 14:35||
-||**50.01.03**. Data Sourcing||**Net Total Time**|548 (09h08m)|
+|67|fix database seeder & add more content to the db|2023-01-16|12:36 - 14:35|119|
+||**50.01.03**. Data Sourcing||**Net Total Time**|667 (11h07m)|
 |05|starting TDD of `backend`|2022-12-19 - 2022-12-20|21:43 - 00:31|168|
 |06||2022-12-20|10:54 - 12:26|92|
 |07||2022-12-20|15:09 - 19:41|512|
@@ -453,7 +453,7 @@ Some suggested improvements to this concept are:
 |64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 |65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45|248|
 |66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
-|68||2023-01-16|: - :||
+|68|finish up front end?|2023-01-16|19:23 - :||
 |69||2023-01-16|: - :||
 |70||2023-01-16|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
