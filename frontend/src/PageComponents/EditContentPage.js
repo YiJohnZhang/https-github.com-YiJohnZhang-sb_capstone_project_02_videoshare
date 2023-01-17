@@ -14,6 +14,7 @@ function EditContentPage({ contentMethod }){
 	const history = useHistory();
 	const { contentID } = useParams();
 	const { sessionUsername } = useContext(UserDetailsContext);
+	const [formErrorText, setFormErrorText] = useState(undefined);
 
 	let INITIAL_FORM_STATE;
 	
@@ -48,6 +49,7 @@ function EditContentPage({ contentMethod }){
 		status: '', owner: '', dateCreated: '', contractType: '',
 	});
 
+	// Effect, Fetch Data
 	useEffect(() => {
 
 		async function fetchContentPrivateData(){
@@ -57,17 +59,16 @@ function EditContentPage({ contentMethod }){
 				const result = await ShortCollabsAPI.getFullContentData(contentID);
 				
 				const { title, summary, description, link, participants, contractDetails, contractSigned } = result;
-					overwriteFormState({ title, summary, description, link, participants, contractDetails, contractSigned });
+					overwriteFormState({ title, summary, description, link, participants: JSON.stringify(participants), contractDetails: JSON.stringify(contractDetails), contractSigned: JSON.stringify(contractSigned) });
 				
 				const { status, owner, contractType, dateCreated, dateStandby } = result;
-				setContentStaticData({ status, owner, contractType, dateCreated, dateStandby });		
-				updateFormState()
+				setContentStaticData({ status, owner, contractType, dateCreated, dateStandby });
 
 			}catch(error){
 				
-				console.log(error);
 				// user does not have permissions or this content is published.
-				// history.push('/');
+				console.log(error);
+				history.push('/');
 					// push to home for now, consider going to error page
 				
 			}
@@ -102,6 +103,7 @@ function EditContentPage({ contentMethod }){
 			}catch(error){
 
 				// usually form validation error or user session provides invalid token
+				setFormErrorText(`Error: ${error.message}`);
 				console.log(error);
 					// do nothing else for now
 				
@@ -109,19 +111,32 @@ function EditContentPage({ contentMethod }){
 
 		}else{
 
+			// jsonify the data
+			// this can be removed if there is a comprehensive front-end validator and using the proposed GUI sign implementation
+			const parsedForm = {
+				...formState,
+				participants: JSON.parse(formState.participants),
+				contractDetails: JSON.parse(formState.contractDetails),
+				contractSigned: JSON.parse(formState.contractSigned),
+				owner: contentStaticData.owner,
+				contractType: contentStaticData.contractType
+			}
+
 			try{
-				await ShortCollabsAPI.patchContent(contentID, formState);
+				
+				await ShortCollabsAPI.patchContentData(contentID, parsedForm);
+				history.push(`/user/${sessionUsername}`);
+
 			}catch(error){
 
+				console.log(`${error.message.detail || error.message}`);
 				// usually form validation error or user session provides invalid token
-				console.log(error);
+				setFormErrorText(`Error: ${error.message.detail || error.message}`);
 					// do nothing else for now
 
 			}
 
 		}
-
-		history.push(`/user/${sessionUsername}`);
 
 	}
 
@@ -134,28 +149,36 @@ function EditContentPage({ contentMethod }){
 			// https://stackoverflow.com/a/52547062
 
 		try{
-			await ShortCollabsAPI.publishContent(contentID);
-		}catch(error){
 
-			// usually form validation error or user session provides invalid token
+			await ShortCollabsAPI.publishContent(contentID);
+			history.push(`/user/${sessionUsername}`);
+				// subject to change: maybe push to the contents, idk
+
+		}catch(error){
+			
 			console.log(error);
+			console.error(`${error.message}`);
+			// usually form validation error or user session provides invalid token
+			setFormErrorText(`Error: ${error.message}`);
+			console.log(error || error.message);
 				// do nothing else for now
 
 		}
-
-		history.push(`/user/${sessionUsername}`);
-			// subject to change: maybe push to the contents, idk
 
 	}
 
 	function participantsMatchSignedParties(){
 
+		// further study: add standby / open check
+
 		if(contentStaticData.contractType==='solo')
 			return true;
 		
-		const participantsSet = new Set(JSON.parse(formState.participants));
-		const contractSignatories = JSON.parse(formState.contractSigned);
-		
+		// const participantsSet = new Set(JSON.parse(formState.participants));
+		const participantsSet = new Set(formState.participants.split(','));
+		// const contractSignatories = JSON.parse(formState.contractSigned);
+		const contractSignatories = formState.contractSigned.split(',');
+
 		if(participantsSet.size !== contractSignatories.length)
 			return false;
 
@@ -291,14 +314,18 @@ function EditContentPage({ contentMethod }){
 		</div>
 		)}
 
+		<div id="editContent-formErrorContainer" className="col-md-12 formErrorContainer">
+			<p id="editContent-formErrorText" className="formErrorText">{formErrorText}</p>
+		</div>
+
 		{contentMethod==='update' && (
 
 			<div className="col-md-6">
-				<button name={contentMethod==='update'}
+				<button name='publish'
 					type="submit"
-					className="form-control btn btn-outline-danger animation-400"
+					className="form-control btn btn-outline-danger default-transition"
 					onClick={publishHandler}
-					disabled={(formState.link == false) || contentStaticData.owner!==sessionUsername || participantsMatchSignedParties()}>
+					disabled={(formState.link == '0' ) || contentStaticData.owner!==sessionUsername || !participantsMatchSignedParties()}>
 					Publish!
 				</button>
 			</div>
@@ -306,14 +333,14 @@ function EditContentPage({ contentMethod }){
 		)}
 
 		<div className={`col-md-${contentMethod==='create' ? 12 : 6}`}>
-			<button name={contentMethod==='create' ? 'create!' : 'update'}
+			<button name={contentMethod==='create' ? 'create' : 'update'}
 				type="submit"
-				className="form-control btn btn-outline-success animation-400"
+				className="form-control btn btn-outline-success default-transition"
 				onClick={onSubmitHandler}>
 				{contentMethod==='create' ? 'Create!' : 'Update'}
 			</button>
 		</div>
-
+		
 	</form>
 	</div>
 	);

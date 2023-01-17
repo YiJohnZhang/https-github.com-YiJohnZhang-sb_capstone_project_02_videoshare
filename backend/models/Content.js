@@ -461,9 +461,9 @@ class Content {
 
 			const publishQuery = await db.query(`
 				UPDATE ${this.relationName}
-					SET status = $1, published_date = $2
+					SET status = $1, date_published = $2
 					WHERE id = $3
-					RETURNING content_id, participants, description`, 
+					RETURNING id, participants, description`, 
 				['published', contentPublishDate.toJSON(), contentID]);
 
 			const { id, participants, description } = publishQuery.rows[0];

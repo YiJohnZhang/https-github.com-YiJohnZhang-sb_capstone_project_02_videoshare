@@ -16,6 +16,7 @@ function EditContentPage(){
 	const history = useHistory();
 	const { contentID } = useParams();
 	const { sessionUsername } = useContext(UserDetailsContext);
+	const [formErrorText, setFormErrorText] = useState(undefined);
 
 	const INITIAL_FORM_STATE = {
 	
@@ -74,15 +75,16 @@ function EditContentPage(){
 			// https://stackoverflow.com/a/52547062
 
 		try{
+
 			await ShortCollabsAPI.patchJoinContent(sessionUsername, contentID, formState);
+			history.push(`/user/${sessionUsername}`);
+	
 		}catch(error){
 			
-			console.log(error);
 			// usually form validation errors, user does not have permissions or this content is published.
+			setFormErrorText(`Error: ${error.message}`);
 
 		}
-
-		history.push(`/user/${sessionUsername}`);
 
 	}
 
@@ -114,6 +116,10 @@ function EditContentPage(){
 			<p><strong>Date Published</strong>: {contentStaticData.datePublished ? contentStaticData.datePublished.substring(0, 10) : 'Not yet published.'}</p>
 		</div>
 
+		<div id="editJoinContent-formErrorContainer" className="col-md-12 formErrorContainer">
+			<p id="editJoinContent-formErrorText" className="formErrorText">{formErrorText}</p>
+		</div>
+		
 		<div className="col-md-12">
 			<button name="submit"
 				type="submit"
@@ -123,6 +129,7 @@ function EditContentPage(){
 				Update
 			</button>
 		</div>
+
 		<div className="spacing-16px"></div>
 		<div className="spacing-16px"></div>
 
@@ -130,6 +137,7 @@ function EditContentPage(){
 		<div id="" className="col-md-12">
 			<h2>Edit Preview {formState.title}</h2>
 		</div>
+
 		<ContentCard isProfile = {true}
 			contentID={contentID || contentStaticData.id}
 			title={contentStaticData.title}

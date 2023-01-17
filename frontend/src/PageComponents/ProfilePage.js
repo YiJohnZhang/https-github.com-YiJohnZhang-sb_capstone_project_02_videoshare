@@ -7,7 +7,7 @@ import UserDetailsContext from '../context/UserDetailsContext';
 import UserCard from '../DumbComponents/UserCard';
 import ContentCard from '../DumbComponents/ContentCard';
 
-function ProfilePage({}){
+function ProfilePage(){
 	
 	const { userHandle } = useParams();
 	const history = useHistory();
@@ -73,6 +73,7 @@ function ProfilePage({}){
 					link={content.link}
 					participants={content.participants}
 					datePublished={content.datePublished}
+					privateView={sessionUsername===userHandle}
 					/>
 			))}
 		</div>

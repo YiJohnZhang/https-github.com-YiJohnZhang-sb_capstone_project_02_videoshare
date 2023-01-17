@@ -45,7 +45,7 @@ function ContentPage(){
 				contentLink={contentDetails.link}
 				isFullSize={true}/>
 			<h2>{contentDetails.title}</h2>
-			<p><strong>Views</strong>: [number]&nbsp;&#183;&nbsp;<strong>Published</strong>: {contentDetails.datePublished.substring(0, 10)}</p>
+			<p><strong>Views</strong>: [number]&nbsp;&#183;&nbsp;<strong>Published</strong>: {contentDetails.datePublished ? contentDetails.datePublished.substring(0, 10) : contentDetails.datePublished}</p>
 			<p>{contentDetails.description}</p>
 			<p>{contentDetails.participants.map((element, index) => (
 				<React.Fragment key={element}>

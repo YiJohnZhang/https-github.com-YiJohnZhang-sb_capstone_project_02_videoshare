@@ -125,7 +125,7 @@ class ShortCollabsAPI {
 	static async getUserData(username){
 
 		try{
-
+			console.log(username);
 			const response = await this.request(`users/${username}/public`);
 			return response.user;
 
@@ -302,9 +302,7 @@ class ShortCollabsAPI {
 	static async getFullContentData(contentID){
 
 		try{
-			console.log(contentID)
 			const response = await this.request(`contents/${contentID}/edit`);
-			console.log(response)
 			return response.content;
 
 		}catch(error){
@@ -393,7 +391,7 @@ class ShortCollabsAPI {
 
 	}
 	
-	/**	16	getJoinContentPrivateData(reqParams)
+	/**	16	getJoinContentData(reqParams)
 	 *	`GET`	/cujoin/:userHandle/:contentID/edit
 	 *	content: get privately displayed data.
 	 */ 
@@ -428,11 +426,11 @@ class ShortCollabsAPI {
 
 	}
 
-	/**	25	Not Used (MINIMIZE): deleteContent(reqParams)
+	/**	25	Not Used (MINIMIZE): deleteJoinContent(reqParams)
 	 *	`DELETE`	/cujoin/${username}/${contentID}/
 	 *	cuJoin: Delete content join. NOT IMPLEMENTED because how to restore?.
 	 */ 
-	static async deleteContent(username, contentID){
+	static async deleteJoinContent(username, contentID){
 
 		try{
 

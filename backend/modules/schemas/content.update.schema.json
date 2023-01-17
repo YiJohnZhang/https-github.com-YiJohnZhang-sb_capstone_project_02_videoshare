@@ -13,13 +13,13 @@
 			"type": "string", "maxLength": 1024
 		},
 		"link": {
-			"type": "integer", "maximum": 128
+			"type": "string", "maxLength": 100
 		},
 		"owner": {
 			"$ref": "#/definitions/usernameString"
 		},
 		"contractType": {
-			"type": "string", "enum": ["single", "byview", "presplit"]
+			"type": "string", "enum": ["solo", "byview", "presplit"]
 		},
 		"participants": {
 			"type": "array",

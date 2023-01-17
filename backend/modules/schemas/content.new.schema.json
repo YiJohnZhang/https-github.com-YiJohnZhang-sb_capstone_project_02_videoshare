@@ -18,7 +18,7 @@
 			"$ref": "#/definitions/usernameString"
 		},
 		"contractType": {
-			"type": "string", "enum": ["single", "byview", "presplit"]
+			"type": "string", "enum": ["solo", "byview", "presplit"]
 		},
 		"participants": {
 			"type": "array",

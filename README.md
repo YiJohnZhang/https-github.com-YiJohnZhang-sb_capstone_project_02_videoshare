@@ -1,7 +1,7 @@
 # ShortCollabs
 *The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature that encourages content creators to collaborate with another by allowing a pre-agreement of monetization distribution allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations to non-randomly select a user's profile. The intention of this feature is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans entry onto the platform.*
 
-**Live Link `as of 2023-01-0`**: []() (`todo:inserlink`)
+**Live Link `as of 2023-01-19`**: []() (`todo:inserlink`)
 **NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, projects hosted on the free-tier has unreliable performance compared to being hosted locally. **Consider [downloading and building this project locally](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)**: the default backend port is `:3000` and the default frontend port `:3001`.
 
 ## Special Thanks
@@ -26,17 +26,23 @@ I like to thank the following two individuals for the respective reasons:
 - 
 
 
-USER FLOWS
+## 01.01. Sample Userflow
 
-## 01.01. Top Priorities (2022-01-13)
+
+
+
+
+## 01.02. Top Priorities (2022-01-13)
 1. **Model, Critical**: Resolve the extent ACID is to be preserved for this database
 2. **GUI, Critical**: GUI contract "detail" modification (share modification) & "signing" w/ client-side calculator to make sure proposed range is 0 < x < 1 && 0.9(5?) < \Sigma(x_i) < 1
 3. **GUI, QOL**: For the `ContentCard`, display participants picture with participants username as tooltip to fit more before truncating the number of participants shown
 4. **Model**: Searchable user field when adding participants, privacy settings to block being added, and server-side valid participant validation
+5. **GUI, User Profile**: left-justify the contents.
 
+# 01.03. Develpoment Build Suggestions
 1. **An Open-Source Project for React (forms)**: A class-definable form-validation (i.e. formik + configurable class fields/input-label element patterns), [Flask-WTF!@#$]() with Jinja templating is an excellent example.
-
-## 01.02. Sample Userflow
+2. Schema Design / JSONSchema Notes
+	- `user.updateTypeUser.schema.json` Note: since all content in this db is local, `picture` does NOT have to be a `uri` format string
 
 
 # 02. Project Specifications
@@ -436,12 +442,7 @@ Some suggested improvements to this concept are:
 |58|`contents` tests|2022-01-09|19:46 - 20:33|47|
 |59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-09|20:39 - 22:00|81|
 |63|route patterns now reflect RESTful practices where it is easy to implement; however, plural base routes for single items are still in effect; `random` test|2023-01-14|19:14 - 20:00|46|
-
-|6|clean up and format backend codebase to be presentable; add docstrings?|2023-01-14|: - :||
-|6||2023-01-14|: - :||
-63		6x
-1573	---
-||**50.01.04**. Routes (Backend)||**Net Total Time**| (--h--m)|
+||**50.01.04**. Routes (Backend)||**Net Total Time**| 3052 + 1573 min (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|exploring `formik` for frontend, attempted `material-ui`, alongside other express form validation and/or styling libraries; db work|2022-12-28|16:01 - 18:24|143|
 |27|onboarding and frontend styling|2022-12-30|17:02 - 18:03|61|
@@ -456,11 +457,10 @@ Some suggested improvements to this concept are:
 |64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 |65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45|248|
 |66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
-|68|iron out front-end, fix seed data, fix backend data return; |2023-01-16|19:23 - :||
+|68|iron out front-end, fix seed data, fix backend data return; patched content editing|2023-01-16|19:23 - :||
 |69||2023-01-16|: - :||
-|70||2023-01-16|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
-66		67
+66		68
 1998
 
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
@@ -468,16 +468,12 @@ Some suggested improvements to this concept are:
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
-293
+|70||2023-01-16|: - :||
+60		7x?
+293		
 ||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
 ||||**Total Time**|_ minutes (--h--m)|
-
-2022-01-15 Notes:
-- home page, done
-- onboarding: login done, logout works, register works
-- navbar: navbar picture that is shortcut to profile page
-- createContent: it works, new todo: conveneint link to in progress for content participants
-
+667+
 
 - todo:
 	- **DB UPDATE**: set default picture profile (db) to `default.png`
@@ -490,14 +486,6 @@ Some suggested improvements to this concept are:
 - add in authenticationredirect (still need to do tests w/out)
 - double check all relative paths to `hooks`/`helpesr`/`context` are updated `src/` post-reorganization
 - comments updated to reflect readme?
-
-backend:
-- return user status as "accountStatus"?!?!?!
-
-
-1. update route patterns
-content/:contentID/username/:userHandle
-
 
 notes
 `user.updateTypeUser.schema.json` Note: since all content in this db is local, `picture` does NOT have to be a `uri` format string

@@ -5,7 +5,7 @@ import './ContentCard.css';
 import ContentPreviewComponent from './ContentPreviewComponent';
 import UserDetailsContext from '../context/UserDetailsContext';
 
-function ContentCard({isProfilePage = false, contentID, title, description, link, participants = [], datePublished}){
+function ContentCard({isProfilePage = false, contentID, title, description, link, participants = [], datePublished, privateView = false}){
 	
 	const participantsSet = new Set(participants);
 	const { sessionUsername } = useContext(UserDetailsContext);
@@ -93,8 +93,9 @@ function ContentCard({isProfilePage = false, contentID, title, description, link
 				))}
 				{participantsLinkList.length < participants.length ? <span>,&nbsp;<Link to={`/content/${contentID}`} title={`Content ${contentID}`}>...</Link></span> : null}
 			</p>
-			{(isProfilePage && sessionUsername && participantsSet.has(sessionUsername)) && (
-			<p className="contentCard-ownerSettings">
+			{/* {(isProfilePage && sessionUsername && sessionUsername === '' && participantsSet.has(sessionUsername)) && ( */}
+			{(privateView && isProfilePage && participantsSet.has(sessionUsername)) && (
+				<p className="contentCard-ownerSettings">
 				<span>&nbsp;</span>
 				{!datePublished && <Link className="inline btn btn-outline-primary default-transition" to={`/edit/${contentID}`} title="Edit Master Content">
 					<i className="fa-duotone fa-file-pen"></i>
