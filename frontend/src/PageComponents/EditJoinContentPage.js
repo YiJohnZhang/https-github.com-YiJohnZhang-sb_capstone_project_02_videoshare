@@ -39,8 +39,12 @@ function EditContentPage(){
 
 				const result = await ShortCollabsAPI.getJoinContentData(sessionUsername, contentID);
 				
-				const { description } = result;
-					overwriteFormState({ description });
+				// const { description } = result;
+				let { description } = result;
+				description = description || '';
+				// basically react screaming `textarea` shouldn't be null
+
+				overwriteFormState({ description });
 				
 				const { id, title, link, participants, dateCreated, dateStandby, datePublished } = result;
 				setContentStaticData({ id, title, link, participants, dateCreated, dateStandby, datePublished });

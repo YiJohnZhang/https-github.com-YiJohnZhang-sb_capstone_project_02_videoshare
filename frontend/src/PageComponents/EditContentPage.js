@@ -27,7 +27,7 @@ function EditContentPage({ contentMethod }){
 			// link: '',
 			contractType: 'solo',
 			participants: `["${sessionUsername}"]`,
-			contractDetails: `{views:[{username:${sessionUsername},share:1}],engagement:[{username:${sessionUsername},share:1}]}`
+			contractDetails: `{"views":[{"username":"${sessionUsername}","share":1}],"engagement":[{"username":"${sessionUsername}","share":1}]}`
 		}
 
 	}else{
@@ -64,6 +64,10 @@ function EditContentPage({ contentMethod }){
 				const { status, owner, contractType, dateCreated, dateStandby } = result;
 				setContentStaticData({ status, owner, contractType, dateCreated, dateStandby });
 
+				if(status === 'published' || status === 'legacy')
+					history.push(`/user/${sessionUsername}/${contentID}/edit`)
+					// backend blocking works, now protecc the from the front-end :)
+
 			}catch(error){
 				
 				// user does not have permissions or this content is published.
@@ -98,12 +102,29 @@ function EditContentPage({ contentMethod }){
 
 		if(contentMethod==='create'){
 
+			// jsonify the data
+			// this can be removed if there is a comprehensive front-end validator and using the proposed GUI sign implementation
+			const parsedForm = {
+				...formState,
+				participants: JSON.parse(formState.participants),
+				contractDetails: JSON.parse(formState.contractDetails),
+				owner: sessionUsername
+			}
+
 			try{
-				await ShortCollabsAPI.createContent(formState);
+
+				const result = await ShortCollabsAPI.createContent(parsedForm);
+				
+				// TODO: modify returned data to include contentID
+				// const { id } = result; 
+				// history.push(`/edit/${id}`)
+
 			}catch(error){
 
 				// usually form validation error or user session provides invalid token
 				setFormErrorText(`Error: ${error.message}`);
+				// handle fk error
+
 				console.log(error);
 					// do nothing else for now
 				
