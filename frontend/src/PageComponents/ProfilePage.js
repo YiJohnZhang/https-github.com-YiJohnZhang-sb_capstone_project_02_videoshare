@@ -62,7 +62,7 @@ function ProfilePage({}){
 			picture={userData.picture}
 			description={userData.description}
 			/>
-		<div id="profile-content-root">
+		<div id="profile-content-root" className="textAlign-center">
 			{userData.content.map((content) => (
 				<ContentCard
 					isProfilePage={true}

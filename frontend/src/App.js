@@ -47,7 +47,7 @@ function App(){
 			{/* <Route path="/search">	
 				<SearchPage />
 			</Route> */}
-			<Route path="/user/:userHandle/:contentId/edit">
+			<Route path="/user/:userHandle/:contentID/edit">
 				<EditJoinContentPage />
 			</Route>
 			<Route path="/user/:userHandle">

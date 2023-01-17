@@ -29,11 +29,14 @@ I like to thank the following two individuals for the respective reasons:
 USER FLOWS
 
 ## 01.01. Top Priorities (2022-01-13)
-- Searchable user field when adding participants, privacy settings to block being added, and server-side valid participant validation.
-- GUI contract "detail" modification (share modification) & "signing" w/ client-side calculator to make sure proposed range is 0 < x < 1 && 0.9(5?) < \Sigma(x_i) < 1
-- **An Open-Source Project for React (forms)**: A class-definable form-validation (i.e. formik + configurable class fields/input-label element patterns), [Flask-WTF!@#$]() with Jinja templating is an excellent example.
+1. **Model, Critical**: Resolve the extent ACID is to be preserved for this database
+2. **GUI, Critical**: GUI contract "detail" modification (share modification) & "signing" w/ client-side calculator to make sure proposed range is 0 < x < 1 && 0.9(5?) < \Sigma(x_i) < 1
+3. **GUI, QOL**: For the `ContentCard`, display participants picture with participants username as tooltip to fit more before truncating the number of participants shown
+4. **Model**: Searchable user field when adding participants, privacy settings to block being added, and server-side valid participant validation
 
+1. **An Open-Source Project for React (forms)**: A class-definable form-validation (i.e. formik + configurable class fields/input-label element patterns), [Flask-WTF!@#$]() with Jinja templating is an excellent example.
 
+## 01.02. Sample Userflow
 
 
 # 02. Project Specifications
@@ -120,7 +123,7 @@ Content_U... => Contents_Users_...
 User => Users
 ```
 
-## 02.02. Frontend Userflow (`todo`)
+## 02.02. Frontend Documentation (`todo`)
 ```sh
 /
 ├──	signin/
@@ -182,7 +185,7 @@ User => Users
 |24|`deleteContent`|`DISABLED` / `DELETE`|`/contents/:contentID`|
 |25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:username/:contentID`|
 
-## 02.03. Backend Routes (`todo`)
+## 02.03. Backend Documentation (`todo`)
 ```sh
 /
 ├──	authorization
@@ -453,7 +456,7 @@ Some suggested improvements to this concept are:
 |64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 |65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45|248|
 |66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
-|68|finish up front end?|2023-01-16|19:23 - :||
+|68|iron out front-end, fix seed data, fix backend data return; |2023-01-16|19:23 - :||
 |69||2023-01-16|: - :||
 |70||2023-01-16|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||

@@ -27,7 +27,7 @@ function EditContentPage(){
 
 	//	... give a preview?
 	const [contentStaticData, setContentStaticData] = useState({
-		id: '', title: '', link: '', participants: '', dateCreated: '', dateStandby: '', datePublished: ''
+		id: '', title: '', link: '', participants: [], dateCreated: '', dateStandby: '', datePublished: ''
 	});
 
 	useEffect(() => {
@@ -43,11 +43,9 @@ function EditContentPage(){
 				
 				const { id, title, link, participants, dateCreated, dateStandby, datePublished } = result;
 				setContentStaticData({ id, title, link, participants, dateCreated, dateStandby, datePublished });
-				updateFormState();
 
 			}catch(error){
 				
-				console.log(error);
 				// user does not have permissions or this content is published.
 				history.push('/');
 					// push to home for now, consider going to error page
@@ -93,7 +91,7 @@ function EditContentPage(){
 	<form id="editJoinContentForm" className="row g-4 width-85percent margin-auto bootstrap-form marginTop-5pct">
 		
 		<div id="form-information" className="col-md-12">
-			<h2>Edit {contentStaticData.title}</h2>
+			<h2>Edit "{contentStaticData.title}"</h2>
 		</div>
 
 		<div className="col-md-12">
@@ -107,39 +105,39 @@ function EditContentPage(){
 		</div>
 
 		<div className="col-md-4">
-			<p><strong>Date Created</strong>: {contentStaticData.dateCreated}</p>
+			<p><strong>Date Created</strong>: {contentStaticData.dateCreated ? contentStaticData.dateCreated.substring(0, 10) : contentStaticData.dateCreated}</p>
 		</div>
 		<div className="col-md-4">
-			<p><strong>Date Standby</strong>: {contentStaticData.dateStandby}</p>
+			<p><strong>Date Standby</strong>: {contentStaticData.dateStandby ? contentStaticData.dateStandby.substring(0, 10) : 'Not yet signed.'}</p>
 		</div>
 		<div className="col-md-4">
-			<p><strong>Date Published</strong>: {contentStaticData.datePublished}</p>
+			<p><strong>Date Published</strong>: {contentStaticData.datePublished ? contentStaticData.datePublished.substring(0, 10) : 'Not yet published.'}</p>
 		</div>
 
 		<div className="col-md-12">
 			<button name="submit"
 				type="submit"
-				className="form-control btn btn-outline-success animation-400"
+				className="form-control btn btn-outline-success default-transition"
 				onClick={updateHandler}
 				>
 				Update
 			</button>
 		</div>
-		<div class='spacing-16px'></div>
+		<div className="spacing-16px"></div>
+		<div className="spacing-16px"></div>
 
 		{/* todo: preview? */}
 		<div id="" className="col-md-12">
 			<h2>Edit Preview {formState.title}</h2>
 		</div>
-		<div class='spacing-16px'></div>
-		{/* <ContentCard aspectRatio="tall"
-			contentID={contentId || contentStaticData.id}
+		<ContentCard isProfile = {true}
+			contentID={contentID || contentStaticData.id}
 			title={contentStaticData.title}
 			description={formState.description}
 			link={contentStaticData.link}
 			participants={contentStaticData.participants}
 			datePublished={contentStaticData.datePublished}
-			/> */}
+			/>
 
 	</form>
 	</div>

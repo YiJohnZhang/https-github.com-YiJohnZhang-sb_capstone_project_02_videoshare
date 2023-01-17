@@ -65,8 +65,9 @@ function EditContentPage({ contentMethod }){
 
 			}catch(error){
 				
+				console.log(error);
 				// user does not have permissions or this content is published.
-				history.push('/');
+				// history.push('/');
 					// push to home for now, consider going to error page
 				
 			}
@@ -174,7 +175,7 @@ function EditContentPage({ contentMethod }){
 	<form id="editContentForm" className="row g-4 width-85percent margin-auto bootstrap-form marginTop-5pct">
 		
 		<div id="form-information" className="col-md-12">
-			<h2>{contentMethod === 'create' ? `Create ${formState.title}` : `Update ${formState.title}`}</h2>
+			<h2>{contentMethod === 'create' ? 'Create' : 'Update'} "{formState.title}"</h2>
 		</div>
 
 		<div className="form-floating col-md-12">
@@ -244,7 +245,7 @@ function EditContentPage({ contentMethod }){
 				<p><strong>Owner</strong>: <Link to={`user/${contentStaticData.owner}`}>{contentStaticData.owner}</Link></p>
 			</div>
 			<div className="col-md-3">
-				<p><strong>Date Created</strong>: {contentStaticData.dateCreated}</p>
+				<p><strong>Date Created</strong>: {contentStaticData.dateCreated.substring(0, 10)}</p>
 			</div>
 			<div className="col-md-3">
 				<p><strong>Contract Type</strong>: {contentStaticData.contractType}</p>

@@ -9,11 +9,8 @@ class ShortCollabsAPI {
 	static BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 	static token = localStorage.getItem('jwt') || null;
 	// static token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndyaWdodGdlb3JnZSIsImlzRWxldmF0ZWQiOmZhbHNlLCJpYXQiOjE2NzM3NTk0MDN9.zpSxB0Dxzgjz7BDKuCKjitvLG5-B3p0HAZKxXNUYvig";
-	
-	//	temporary token:
-		//	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndyaWdodGdlb3JnZSIsImlzRWxldmF0ZWQiOmZhbHNlLCJpYXQiOjE2NzM3NTk0MDN9.zpSxB0Dxzgjz7BDKuCKjitvLG5-B3p0HAZKxXNUYvig
 		// username: "wrightgeorge"
-
+	
 	static async request(endpoint, method="get", data={}) {
 		
 		// console.debug("API Call:", endpoint, method, data);
@@ -27,14 +24,14 @@ class ShortCollabsAPI {
 			// set params
 
 		try{
-		
+
 			const result = await axios({ url, method, data, params, headers });
 			console.log(result);
 			return result.data;
 			
 		}catch(error){
 
-				// console.error(error.response);
+				console.error(error.response);
 				throw new ExpressError(error.response.status, error.response.data);
 			
 		}
@@ -305,11 +302,13 @@ class ShortCollabsAPI {
 	static async getFullContentData(contentID){
 
 		try{
-
+			console.log(contentID)
 			const response = await this.request(`contents/${contentID}/edit`);
+			console.log(response)
 			return response.content;
 
 		}catch(error){
+			console.log(error);
 			throw new ExpressError(error.status, error.message);
 		}
 

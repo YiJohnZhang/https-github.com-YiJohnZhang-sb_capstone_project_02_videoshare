@@ -129,7 +129,7 @@ class Content {
 		const sqlQueryBeforeWHERE = (`
 			SELECT ${QUERY_GENERAL_PROPERTIES}
 			FROM ${this.relationName}`);
-		const sqlQueryAfterWHERE = (`ORDER BY date_published`);
+		const sqlQueryAfterWHERE = (`ORDER BY date_published DESC`);
 		
 		let result;
 		const queryObjectLength = Object.keys(queryObject).length || 0;
@@ -162,7 +162,7 @@ class Content {
 		const sqlQueryBeforeWHERE = (`
 			SELECT ${QUERY_GENERAL_PROPERTIES}
 			FROM ${this.relationName}`);
-		const sqlQueryAfterWHERE = (`ORDER BY date_published`);
+		const sqlQueryAfterWHERE = (`ORDER BY date_published DESC`);
 		
 		let result;
 		const queryObjectLength = Object.keys(queryObject).length || 0;

@@ -90,8 +90,6 @@ router.get('/:contentID', async(req, res, nxt) => {
  */
  router.get('/:contentID/random', async(req, res, nxt) => {
 
-	console.log(`${req.params.contentID}: begin=======================`)
-
 	try{
 
 		const result = await ContentModel.getParticipants(req.params.contentID);

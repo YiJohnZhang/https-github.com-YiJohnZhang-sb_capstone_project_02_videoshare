@@ -29,3 +29,9 @@
 	.contentCard-wide .contentCardImageContainer{
 		float:left;
 	}
+
+.contentCard-ownerSettings{
+	position:absolute;
+	bottom:16px;
+	right:16px;
+}

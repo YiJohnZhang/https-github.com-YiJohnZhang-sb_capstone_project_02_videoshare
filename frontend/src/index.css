@@ -69,6 +69,12 @@ p{
 		vertical-align: bottom;
 	}
 
+	.textAlign-left{
+		text-align: left;
+	}
+	.textAlign-center{
+		text-align: center;
+	}
 
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -105,4 +111,11 @@ img{}
 
 .formErrorText{
 	color:#F00;
+}
+
+.btn-check:focus+.btn-outline-danger, .btn-check:focus+.btn,
+	.btn:focus, .btn-check:focus+.btn, .btn:focus{
+	/* override bootstrap.min.css, without `!important`, it works for the searchbar button group (first line); */
+	outline:none !important;
+	box-shadow: none !important;
 }

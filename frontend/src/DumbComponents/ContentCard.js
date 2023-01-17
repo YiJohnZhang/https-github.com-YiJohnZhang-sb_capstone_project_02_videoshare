@@ -31,10 +31,6 @@ function ContentCard({isProfilePage = false, contentID, title, description, link
 
 	function returnTruncatedParticipants(participantList = [], shouldTruncateParticipantList=true, reducedParticipantListLength = 3){
 
-		// temporary fix: todo: RE-SEED DB AND REMOVE
-		if(!participantList)
-			participantList = [];
-
 			const particpantsWithLink = participantList.map((participant) => (
 			<Link className="inline" 
 				key={participant}
@@ -50,12 +46,8 @@ function ContentCard({isProfilePage = false, contentID, title, description, link
 			
 			let featuredParticipantSet = new Set();
 			
-			while(featuredParticipantSet.size < reducedParticipantListLength){
-
-				const randomIndex = Math.floor(Math.random())*participantListLength;
-				featuredParticipantSet.add(randomIndex);
-
-			}
+			while(featuredParticipantSet.size < reducedParticipantListLength)
+				featuredParticipantSet.add(Math.floor(Math.random()*participantListLength));
 
 			let reducedParticipantsWithLink = [];
 			for(let setValue of featuredParticipantSet)
@@ -70,11 +62,10 @@ function ContentCard({isProfilePage = false, contentID, title, description, link
 
 	}
 
-	// always truncate participants & description for now
 	const truncatedTitle = returnTruncatedTitle(title, isProfilePage);
+	// always truncate participants & description for now
 	const truncatedDescription = returnTruncatedDescription(description);
 	const participantsLinkList = returnTruncatedParticipants(participants);
-
 	// const truncatedDescription = returnTruncatedDescription(description, !isProfilePage);
 	// const participantsLinkList = returnTruncatedParticipants(participants, !isProfilePage);
 
@@ -83,7 +74,7 @@ function ContentCard({isProfilePage = false, contentID, title, description, link
 	}
 
 	return (
-	<div className={`card contentCard ${isProfilePage ? 'contentCard-tall' : 'contentCard-wide'} default-transition`}>
+	<div className={`card contentCard ${isProfilePage ? 'contentCard-tall' : 'contentCard-wide'} textAlign-left default-transition`}>
 		<ContentPreviewComponent
 				contentTitle={title}
 				contentLink={link}
@@ -100,9 +91,10 @@ function ContentCard({isProfilePage = false, contentID, title, description, link
 						<span>,&nbsp;</span>
 					</React.Fragment>)
 				))}
+				{participantsLinkList.length < participants.length ? <span>,&nbsp;<Link to={`/content/${contentID}`} title={`Content ${contentID}`}>...</Link></span> : null}
 			</p>
 			{(isProfilePage && sessionUsername && participantsSet.has(sessionUsername)) && (
-			<p className="floatRight">
+			<p className="contentCard-ownerSettings">
 				<span>&nbsp;</span>
 				{!datePublished && <Link className="inline btn btn-outline-primary default-transition" to={`/edit/${contentID}`} title="Edit Master Content">
 					<i className="fa-duotone fa-file-pen"></i>
@@ -112,10 +104,10 @@ function ContentCard({isProfilePage = false, contentID, title, description, link
 					<i className="fa-duotone fa-pen-to-square"></i>
 				</Link>
 				<span>&nbsp;</span>
-				<Link className="inline btn btn-outline-danger default-transition" onClick={() => notImplementedLink} title="Delete Join Content (DISABLED)">
+				<button className="inline btn btn-outline-danger default-transition" onClick={() => notImplementedLink} title="Delete Join Content (DISABLED)">
 					{/* to={} is purposefully not defined */}
 					<i className="fa-duotone fa-trash"></i>
-				</Link>
+				</button>
 			</p>
 			)}
 		</div>
