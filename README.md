@@ -457,11 +457,12 @@ Some suggested improvements to this concept are:
 |64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 |65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45|248|
 |66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
-|68|iron out front-end, fix seed data, fix backend data return; patched content editing|2023-01-16|19:23 - 23:45||
-|69||2023-01-16|: - :||
+|68|iron out front-end, fix seed data, fix backend data return; patched content editing; mostly done with create content|2023-01-16|19:23 - 23:45|262|
+|69||2023-01-17|13:37 - :||
+|70||2023-01-17|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
-66		68
-1998
+68		69
+2260
 
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
@@ -476,14 +477,7 @@ Some suggested improvements to this concept are:
 667+
 
 - todo:
-	- **DB UPDATE**: set default picture profile (db) to `default.png`
-	- **DB UPDATE**: content card work: maybe a shortcut to edit master content/join content on individual contents (need to re-seed database w/ db updates), `ContentCard.js: returnTruncatedParticipants:~35-36`
-	
-	- backend work, sort output content by most recent; prioritize non-published (`open`/`standby` first)
-
-- `ProfilePage`; create new content, editcontent, publish content
-- add in page validation
-- add in authenticationredirect (still need to do tests w/out)
+	- add in authenticationredirect (still need to do tests w/out)
 - double check all relative paths to `hooks`/`helpesr`/`context` are updated `src/` post-reorganization
 - comments updated to reflect readme?
 
