@@ -9,32 +9,32 @@ I like to thank the following two individuals for the respective reasons:
 - **Christos Gkoros**: *Course Mentor and Project Advisor*. Provided guidance, experience, feedback, and industry insight throughout the course.
 - **Anh Mai**: *Bootcamp On-Demand Mentor*. Resolved a bug that has bogged down progress for the majority of the project's early development (backend).
 
-# Table of Contents (`todo:inserthyperlinks`)
-- [01. Project Features]()
-	- [01.01. Sample Userflow]()
-	- [01.02. High-Priority Features]()
-	- [01.03. Develpoment Build Suggestions]()
-	- [01.04 Other Notes]()
-- [02. Project Details]()
-	- [02.01. Running & Testing Instructions](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)
-	- [02.02. Frontend Documentation]()
-	- [02.03. Backend Documentation]()
-	- [02.04. Resources & Data Source]()
-- [03. Misecllaneous Notes & Dump]()
-	- [03.01. Miscellaneous Further Study]()
-	- [03.02. Debugging Notes]()
+# Table of Contents
+- [01. Project Features](#01-project-features)
+	- [01.01. Sample Userflow](#0101-sample-userflow)
+	- [01.02. High-Priority Features](#0102-high-priority)
+	- [01.03. Develpoment Build Suggestions](#0103-develpoment-build-suggestions)
+	- [01.04 Other Notes](#0104-other-notes)
+- [02. Project Details](#02-project-specifications)
+	- [02.01. Running & Testing Instructions](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)	#0201-running--testing-instructions
+	- [02.02. Frontend Documentation](#0202-frontend-documentation)
+	- [02.03. Backend Documentation](#0203-backend-documentation)
+	- [02.04. Resources & Data Source](#0204-resources--data-source)
+- [03. Project Conclusions](#03-project-conclusions)
+	- [03.01. Some Ideas Dump](#0301-some-ideas-dump)
+	- [03.02. Debugging Notes](#0302-debugging-notes)
 
 # 01. Project Features
 - An editable User Model representing the userbase; user profiles are editable.
 	- *`DELETE` is disabled from the frontend concerning the extent the database should maintain consistency (ACID)*.
-- An editable Content Model representing contents [with **6 additional properties** to allow posted contents have multiple "participants" and "agree" on a monetization model before publishing the content. The monetization model, `contract_details`, is stringified JSON for a conceptual monetization API](`todo:GITHUBLINK TO Project SCHEMA`).
+- An editable Content Model representing contents [with **6 additional properties** to allow posted contents have multiple "participants" and "agree" on a monetization model before publishing the content. The monetization model, `contract_details`, is stringified JSON for a conceptual monetization API](#02-project-specifications).
 	- *`DELETE` is disabled from the frontend concerning the extent the database should maintain consistency (ACID)*.
 - An editable Content-User Join Model to allow multiple users to work together and write their own descriptions for a piece of content.
 	- *`DELETE` is disabled from the frontend concerning the extent the database should maintain consistency (ACID)*.
 - Built with PERN Stack.
 
 ## 01.01. Sample Userflow
-[`todo``]
+[`todo`]
 
 
 **01.01.A. *The Search API (Public)***. One Searchbar for searching either Content or Users
