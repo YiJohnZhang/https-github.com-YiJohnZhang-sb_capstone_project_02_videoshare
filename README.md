@@ -422,7 +422,7 @@ Some suggested improvements to this concept are:
 - **Backend**: 
 	- Being Generally Confused What Does What because of lack of Documentation and Schema Revisions: 50h52m
 	- Being Less Confused about the Backend (post-Frontend Work): 1_h__m
-- **Frontend**: 20h__m
+- **Frontend**: 41h40m
 - **Documentation (Dedicated)**: 
 
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
@@ -499,20 +499,16 @@ Some suggested improvements to this concept are:
 |66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
 |68|iron out frontend, fix seed data, fix backend data return; patched content editing; mostly done with create content|2023-01-16|19:23 - 23:45|262|
 |69|iron out frontend, db modifications, add temp content placeholder, modified db query order & updated tests to reflect db query modifications; mop up warnings, `console.log`, updated nav styling, update documentaiton|2023-01-17|13:37 - 17:37|240|
-69		7x
-2500
-|70||2023-01-17|19:36 - :||
-|6|clean up and format codebase to be presentable|2023-01-1|: - :||
-
-
-||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
+||**50.01.05**. Application (Front-End)||**Net Total Time**| 2500 min (41h 40m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
-|70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - 22:55||
-60		7x?
+|70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - 22:55|199|
+60		70
 293		
+|71|add schema, content preview img, userflow videos, organize "further study" section; finish finsh e2e and integration tests|2023-01-18|14:35 - 1:||
+|72||2023-01-18|1: - 1:||
 ||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
 ||||**Total Time**|_ minutes (--h--m)|
 667+
