@@ -36,7 +36,6 @@ function OnboardingPage({onboardingMethod}){
 			email: '',
 			firstName: '',
 			lastName: '',
-			email: '',
 			birthdate: ''
 		}
 

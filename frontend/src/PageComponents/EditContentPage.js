@@ -357,7 +357,7 @@ function EditContentPage({ contentMethod }){
 					type="submit"
 					className="form-control btn btn-outline-danger default-transition"
 					onClick={publishHandler}
-					disabled={(formState.link == '0' ) || contentStaticData.owner!==sessionUsername || !participantsMatchSignedParties()}>
+					disabled={Boolean(formState.link) === false || contentStaticData.owner!==sessionUsername || !participantsMatchSignedParties()}>
 					Publish!
 				</button>
 			</div>

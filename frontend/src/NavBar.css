@@ -1,6 +1,12 @@
 /* NavBar.css */
 #navigationTable{
-	
+	position: fixed;
+	z-index:9999;
+	background-color:rgba(255, 255, 255, 0.81);	/*fallback*/
+	background:rgba(255, 255, 255, 0.81);	/*fallback*/
+	background:	var(--blur-background);	/*fallback*/
+	-webkit-backdrop-filter: blur(4px);
+	backdrop-filter: blur(4px);
 }
 .navbarButton-container{
 

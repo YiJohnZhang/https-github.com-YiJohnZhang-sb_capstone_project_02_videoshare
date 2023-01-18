@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import './App.css';
-import ShortCollabsAPI from './helpers/api';
 import NavBar from './NavBar';
 import OnboardingPage from './PageComponents/OnboardingPage';
 import ContentPage from './PageComponents/ContentPage';
@@ -43,10 +42,6 @@ function App(){
 			<Route path="/edit/:contentID">
 				<EditContentPage contentMethod="update" />
 			</Route>
-			{/* below integrated into home page? */}
-			{/* <Route path="/search">	
-				<SearchPage />
-			</Route> */}
 			<Route path="/user/:userHandle/:contentID/edit">
 				<EditJoinContentPage />
 			</Route>

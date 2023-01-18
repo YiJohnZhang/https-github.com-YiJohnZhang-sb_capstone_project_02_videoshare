@@ -44,7 +44,7 @@ function NavBar() {
 			<td className="navbarButton-container"><NavLink className="nav-pfp" to={`/user/${sessionUsername}`}><img src={`/user_imgs/${sessionProfilePicture}`} alt={sessionUsername} title={`Hello, ${sessionUsername}!`}/></NavLink></td>
 			<td className="navbarButton-container"><NavLink className="btn btn-outline-success default-transition" activeStyle={ACTIVE_STYLE} to="/account" title="Edit Profile"><i className="fa-duotone fa-user-pen"></i></NavLink></td>
 			<td className="navbarButton-container"><NavLink className="btn btn-outline-danger default-transition" activeStyle={ACTIVE_STYLE} to="/upload" title="Create Content"><i className="fa-duotone fa-video-plus"></i></NavLink></td>
-			<td className="navbarButton-container"><NavLink className="btn btn-outline-dark default-transition" to="/logout" title="Logout">Logout</NavLink></td>
+			<td className="navbarButton-container"><NavLink className="btn btn-outline-dark default-transition" to="/logout" title="Logout"><i className="fa-duotone fa-arrow-right-from-bracket"></i></NavLink></td>
 		</React.Fragment>
 		}
 

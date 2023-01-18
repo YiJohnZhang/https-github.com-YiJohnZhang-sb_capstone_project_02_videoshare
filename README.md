@@ -7,53 +7,66 @@
 ## Special Thanks
 I like to thank the following two individuals for the respective reasons:
 - **Christos Gkoros**: *Course Mentor and Project Advisor*. Provided guidance, experience, feedback, and industry insight throughout the course.
-- **Anh Mai**: *Course On-Demand Mentor*. Resolved a bug that has bogged down progress for the majority of the project's development.
+- **Anh Mai**: *Bootcamp On-Demand Mentor*. Resolved a bug that has bogged down progress for the majority of the project's early development (backend).
 
 # Table of Contents (`todo:inserthyperlinks`)
 - [01. Project Features]()
+	- [01.01. Sample Userflow]()
+	- [01.02. High-Priority Features]()
+	- [01.03. Develpoment Build Suggestions]()
+	- [01.04 Other Notes]()
 - [02. Project Details]()
 	- [02.01. Running & Testing Instructions](GITHUB:RUNNING AND TESTING INSTRUCTIONS)
 	- [02.02. Frontend Userflow]()
 	- [02.03. Backend Routes]()
 	- [02.04. Resources & Data Source]()
 - [03. Misecllaneous Notes & Dump]()
-	- [03.01. Further Study]()
+	- [03.01. Miscellaneous Further Study]()
 	- [03.02. Debugging Notes]()
 
-# 01. Project Features (`todo`)
-- 
-- 
-- 
-
+# 01. Project Features
+- An editable User Model representing the userbase; user profiles are editable.
+	- *`DELETE` is disabled from the frontend concerning the extent the database should maintain consistency (ACID)*.
+- An editable Content Model representing contents [with **6 additional properties** to allow posted contents have multiple "participants" and "agree" on a monetization model before publishing the content. The monetization model, `contract_details`, is stringified JSON for a conceptual monetization API](`todo:GITHUBLINK TO Project SCHEMA`).
+	- *`DELETE` is disabled from the frontend concerning the extent the database should maintain consistency (ACID)*.
+- An editable Content-User Join Model to allow multiple users to work together and write their own descriptions for a piece of content.
+	- *`DELETE` is disabled from the frontend concerning the extent the database should maintain consistency (ACID)*.
+- Built with PERN Stack.
 
 ## 01.01. Sample Userflow
+[`todo``]
+- Public: show video of searching and users
+	1. video search:
+	2. user search:
+	3. user public profile "shawn89", "mitchellandwebb"
+- user login
+- user editing
+- content creation (2 effectively implemented stages)
 
-
-
-
-
-## 01.02. Top Priorities (2022-01-13)
+## 01.02. High-Priority
 1. **Model, Critical**: Resolve the extent ACID is to be preserved for this database
 2. **GUI, Critical**: GUI contract "detail" modification (share modification) & "signing" w/ client-side calculator to make sure proposed range is 0 < x < 1 && 0.9(5?) < \Sigma(x_i) < 1
 3. **GUI, QOL**: For the `ContentCard`, display participants picture with participants username as tooltip to fit more before truncating the number of participants shown
 4. **Model**: Searchable user field when adding participants, privacy settings to block being added, and server-side valid participant validation
 5. **GUI, User Profile**: left-justify the contents.
 
-# 01.03. Develpoment Build Suggestions
+## 01.03. Develpoment Build Suggestions
 1. **An Open-Source Project for React (forms)**: A class-definable form-validation (i.e. formik + configurable class fields/input-label element patterns), [Flask-WTF!@#$]() with Jinja templating is an excellent example.
 2. Schema Design / JSONSchema Notes
 	- `user.updateTypeUser.schema.json` Note: since all content in this db is local, `picture` does NOT have to be a `uri` format string
 
+## 01.04 Other Notes
+- `user.updateTypeUser.schema.json` Note: since all content in this db is local (hosted on `/public`, rather than another backend where the img data is stored), `picture` does NOT have to be a `uri` format string
 
 # 02. Project Specifications
 This web application uses the **PERN** stack:
 - `react` Frontend w/ Client-Side Routing using `react-router`
 - `express` Backend, using `node-pg` query builder
 - PostgreSQL RDBMS
-- Follows RESTful Routing specifications.
+- Follows RESTful Routing specifications **excluding the singular/plural resources pattern**.
 
 Project Schema:
-**`TODO: INSERT SCHEMA`**
+**`todo: INSERT SCHEMA`**
 The project proposes the following additional attributes to a `content` relation and a `content_user_join` relation to achieve the intended goals of the project's purpose:
 |Attribute Name|Data Type|Example|Description|
 |-|-|-|-|
@@ -129,7 +142,7 @@ Content_U... => Contents_Users_...
 User => Users
 ```
 
-## 02.02. Frontend Documentation (`todo`)
+## 02.02. Frontend Documentation
 ```sh
 /
 ├──	signin/
@@ -191,7 +204,7 @@ User => Users
 |24|`deleteContent`|`DISABLED` / `DELETE`|`/contents/:contentID`|
 |25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:username/:contentID`|
 
-## 02.03. Backend Documentation (`todo`)
+## 02.03. Backend Documentation
 ```sh
 /
 ├──	authorization
@@ -305,9 +318,9 @@ response.data.videos[INDEX];
 ```
 
 # 03. Project Conclusions
-`todo` inser text??
+- that backend nightmare
 
-## 03.01. Further Study (`todo`: organize)
+## 03.01. A Huge Further Study Dump (`todo`: organize)
 Some suggested improvements to this concept are:
 1. **admin dashboard**. admin dashboard to demonstrate potential of the present database schema design, specifically the `ENUM`sql types
 2. **realistic schema**. implement "hidden" status for suspended users/content?
@@ -458,7 +471,7 @@ Some suggested improvements to this concept are:
 |65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45|248|
 |66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
 |68|iron out frontend, fix seed data, fix backend data return; patched content editing; mostly done with create content|2023-01-16|19:23 - 23:45|262|
-|69|iron out frontend, db modifications, add temp content placeholder, modified db query order & updated tests to reflect db query modifications; |2023-01-17|13:37 - :||
+|69|iron out frontend, db modifications, add temp content placeholder, modified db query order & updated tests to reflect db query modifications; mop up warnings, `console.log`, updated nav styling, update documentaiton; resolving `autoprefixer` error |2023-01-17|13:37 - :||
 |70||2023-01-17|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
 68		69
@@ -475,11 +488,3 @@ Some suggested improvements to this concept are:
 ||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
 ||||**Total Time**|_ minutes (--h--m)|
 667+
-
-- todo:
-	- add in authenticationredirect (still need to do tests w/out)
-- double check all relative paths to `hooks`/`helpesr`/`context` are updated `src/` post-reorganization
-- comments updated to reflect readme?
-
-notes
-`user.updateTypeUser.schema.json` Note: since all content in this db is local, `picture` does NOT have to be a `uri` format string

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import ShortCollabsAPI from '../helpers/api';
 import UserDetailsContext from '../context/UserDetailsContext';
@@ -61,7 +61,7 @@ function EditContentPage(){
 
 		getContentData();
 
-	}, []);
+	}, [contentID]);
 
 	function formChangeHandler(evt){
 

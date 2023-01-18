@@ -26,7 +26,7 @@ class ShortCollabsAPI {
 		try{
 
 			const result = await axios({ url, method, data, params, headers });
-			console.log(result);
+			// console.log(result);
 			return result.data;
 			
 		}catch(error){
@@ -55,7 +55,6 @@ class ShortCollabsAPI {
 			return response;
 
 		}catch(error){
-			console.error(`error: ${error}`);
 			throw new ExpressError(error.status, error.message);
 		}
 
@@ -125,7 +124,7 @@ class ShortCollabsAPI {
 	static async getUserData(username){
 
 		try{
-			console.log(username);
+			
 			const response = await this.request(`users/${username}/public`);
 			return response.user;
 
@@ -306,7 +305,6 @@ class ShortCollabsAPI {
 			return response.content;
 
 		}catch(error){
-			console.log(error);
 			throw new ExpressError(error.status, error.message);
 		}
 

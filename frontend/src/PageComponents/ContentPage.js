@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import './ContentPage.css'
 import ShortCollabsAPI from '../helpers/api';
 import ContentPreviewComponent from '../DumbComponents/ContentPreviewComponent';
 
 function ContentPage(){
-	// props in case it will be a modal?
 
-	const history = useHistory();
 	const { contentID } = useParams();
 	const [contentDetails, setContentDetails] = useState({
 		id: contentID,
@@ -25,7 +23,6 @@ function ContentPage(){
 		async function fetchContentDetails(){
 
 			const selectedRandomUser = await ShortCollabsAPI.selectContent(contentID);
-			console.log(selectedRandomUser);
 			const contentResult = await ShortCollabsAPI.getContentData(selectedRandomUser.username, contentID);
 			setContentDetails(contentResult);
 
@@ -33,10 +30,8 @@ function ContentPage(){
 
 		fetchContentDetails();
 
-	}, []);
+	}, [contentID]);
 
-	// if 404: useHistory.push(/error)
-	
 	return (
 	<div className="page paddedPage">
 		<div id="content-majorContainer" className="width-85percent floatLeft">		
