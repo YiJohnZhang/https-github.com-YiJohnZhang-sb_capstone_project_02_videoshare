@@ -471,8 +471,8 @@ Some suggested improvements to this concept are:
 |65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45|248|
 |66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
 |68|iron out frontend, fix seed data, fix backend data return; patched content editing; mostly done with create content|2023-01-16|19:23 - 23:45|262|
-|69|iron out frontend, db modifications, add temp content placeholder, modified db query order & updated tests to reflect db query modifications; mop up warnings, `console.log`, updated nav styling, update documentaiton|2023-01-17|13:37 - 17:37||
-|70||2023-01-17|: - :||
+|69|iron out frontend, db modifications, add temp content placeholder, modified db query order & updated tests to reflect db query modifications; mop up warnings, `console.log`, updated nav styling, update documentaiton|2023-01-17|13:37 - 17:37|240|
+|70||2023-01-17|19:36 - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
 68		69
 2260
