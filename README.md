@@ -34,19 +34,24 @@ I like to thank the following two individuals for the respective reasons:
 - Built with PERN Stack.
 
 ## 01.01. Sample Userflow
-[`todo`]
 
-
+[![public search api](todo: imageLink)](githublink.mp4)
 **01.01.A. *The Search API (Public)***. One Searchbar for searching either Content or Users
 
-
+[![user login & content publishing](todo: imageLink)](githublink.mp4)
 **01.01.B. *User Login and Content Publishing***. Once content is published, it is publicly viewable. The join record has an independent description field than that of the master record. Content cards display participating users.
 
-
+[![user editing & content creation](todo: imageLink)](githublink.mp4)
 **01.01.C. *User Editing & Content Creation API***. Creating content with an added participant automatically creates a corresponding record to the participating user.
 
-
+[![join records are dynamic](todo: imageLink)](githublink.mp4)
 **01.01.D. *Join Records for a Piece of Content***. Join record(s) for a piece of content are updated automatically depending whether or not a user is invited or not.
+
+[![publish is a single-purpose method](todo: imageLink)](githublink.mp4)
+**01.01.E. *Publishing is a single-purpose method.***. The publish call is single-purpose, one must update it first (for now) then publish).
+
+[![registering a user, `testuser`](todo: imageLink)](githublink.mp4)
+**01.01.D. *Register User***. Registering `testuser`.
 
 
 - Public: show video of searching and users
@@ -63,6 +68,7 @@ I like to thank the following two individuals for the respective reasons:
 3. **GUI, QOL**: For the `ContentCard`, display participants picture with participants username as tooltip to fit more before truncating the number of participants shown
 4. **Model**: Searchable user field when adding participants, privacy settings to block being added, and server-side valid participant validation
 5. **GUI, User Profile**: left-justify the contents.
+6. **Content Hashing**: There now shouldn't be a reason for duplicate content. contents maybe get an un-watermarked "hash" to aid finding duplicate content.
 
 ## 01.03. Develpoment Build Suggestions
 1. **An Open-Source Project for React (forms)**: A class-definable form-validation (i.e. formik + configurable class fields/input-label element patterns), [Flask-WTF!@#$]() with Jinja templating is an excellent example.
@@ -83,7 +89,7 @@ This web application uses the **PERN** stack:
 	- **Frontend**: **24 Simple Tests** (Component Smoke and Snapshot Tests); **0 Event Tests** (focused on backend tests)
 
 Project Schema:
-**`todo: INSERT SCHEMA`**
+![todo: schema_img](imageLink)
 The project proposes the following additional attributes to a `content` relation and a `content_user_join` relation to achieve the intended goals of the project's purpose:
 |Attribute Name|Data Type|Example|Description|
 |-|-|-|-|
@@ -504,7 +510,7 @@ Some suggested improvements to this concept are:
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
-|70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - :||
+|70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - 22:55||
 60		7x?
 293		
 ||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
