@@ -30,14 +30,20 @@ describe('\'cujoin model\': getAllUserContent()', () => {
 	test('testuser1', async() => {
 
 		const queryResult = await ContentUserJoin.getAllUserContent('testuser1');
-		expect(queryResult).toEqual(USER_1_ALL_CONTENT_MODEL);
+		// expect(queryResult).toEqual(USER_1_ALL_CONTENT_MODEL);
+		expect(queryResult).toEqual(expect.arrayContaining(USER_1_ALL_CONTENT_MODEL));
+		expect(USER_1_ALL_CONTENT_MODEL).toEqual(expect.arrayContaining(queryResult));
+			// 2023-01-17: checking equivalence out of order rather than exact because of prioritizing `open` and `standby` content first
 
 	});
 
 	test('user2', async() => {
 
 		const queryResult = await ContentUserJoin.getAllUserContent('testuser2');
-		expect(queryResult).toEqual(USER_2_ALL_CONTENT_MODEL);
+		// expect(queryResult).toEqual(USER_2_ALL_CONTENT_MODEL);
+		expect(queryResult).toEqual(expect.arrayContaining(USER_2_ALL_CONTENT_MODEL));
+		expect(USER_2_ALL_CONTENT_MODEL).toEqual(expect.arrayContaining(queryResult));
+			// 2023-01-17: checking equivalence out of order rather than exact because of prioritizing `open` and `standby` content first
 
 	});
 

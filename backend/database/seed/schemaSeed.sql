@@ -61,7 +61,7 @@ CREATE TABLE contents (
 	contract_details	TEXT,
 		-- DEFAULT '{"views":[{"username": "temporary", share:1}], "engagement":[{"username": "temporary", "share":1}]}',
 			-- use JSON.parse to get the object; and JSON.stringify to store in db
-	contract_signed		TEXT,
+	contract_signed		TEXT DEFAULT '[]',
 		-- pre-2022-12-28: DEFAULT '[{username:"temporary", signed: false}, ...]',
 		-- 2022-12-30: DEFAULT '["username",...]'
 			-- use JSON.parse to get the object; and JSON.stringify to store in db

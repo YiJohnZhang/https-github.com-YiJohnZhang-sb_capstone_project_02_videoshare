@@ -97,7 +97,7 @@ function HomePage(props){
 						value="searchContent"
 						checked={formState.searchSelection==="searchContent"}
 						onChange={formChangeHandler} />
-					<label className="btn btn-outline-danger default-transition" htmlFor="searchContent"><i className="fa-duotone fa-video"></i></label>
+					<label className="btn btn-outline-danger default-transition" htmlFor="searchContent" title="Search Content"><i className="fa-duotone fa-video"></i></label>
 
 					<input name="searchSelection"
 						type="radio"
@@ -106,7 +106,7 @@ function HomePage(props){
 						value="searchUser"
 						checked={formState.searchSelection==="searchUser"}
 						onChange={formChangeHandler} />
-					<label className="btn btn-outline-danger default-transition" htmlFor="searchUser"><i className="fa-duotone fa-user"></i></label>
+					<label className="btn btn-outline-danger default-transition" htmlFor="searchUser" title="Search Users"><i className="fa-duotone fa-user"></i></label>
 
 				</div>
 			</form>

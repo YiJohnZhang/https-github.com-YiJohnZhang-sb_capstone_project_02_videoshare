@@ -437,7 +437,7 @@ class Content {
 
 		const { link, status, participants, contractSigned } = contentObject;
 
-		// 496: already published
+		//	496: already published
 		if(status === 'published' || status === 'legacy')
 			throw new ExpressError(496, 'Invalid content status.');
 			// lowpriority: really, don't have the time to make this proper. so therefore it is because `signUpdate` is deprecated for now. later include `open` in this logic.
@@ -446,9 +446,11 @@ class Content {
 		if(!link)
 			throw new ExpressError(497, 'Invalid link');
 
-		// 498: chick if everyone is signed
+		//	498: chick if everyone is signed
 		const participantArray = JSON.parse(participants);
 		const contractSignedArray = JSON.parse(contractSigned);
+
+		//	note: with the current implementation, one must update it first. maybe let "update" stay at the same page.
 
 		if(!checkArrayEquality(participantArray, contractSignedArray))
 			throw new ExpressError(498, 'All participants must have signed the contract.');

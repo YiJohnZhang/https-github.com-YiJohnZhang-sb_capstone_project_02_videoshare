@@ -457,8 +457,8 @@ Some suggested improvements to this concept are:
 |64|test application; a bit of debugging and page update|2023-01-14|20:20 - 22:22|122|
 |65|simplified components & finished public front-end styling|2023-01-15|12:37 - 16:45|248|
 |66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
-|68|iron out front-end, fix seed data, fix backend data return; patched content editing; mostly done with create content|2023-01-16|19:23 - 23:45|262|
-|69||2023-01-17|13:37 - :||
+|68|iron out frontend, fix seed data, fix backend data return; patched content editing; mostly done with create content|2023-01-16|19:23 - 23:45|262|
+|69|iron out frontend, db modifications, add temp content placeholder, modified db query order & updated tests to reflect db query modifications; |2023-01-17|13:37 - :||
 |70||2023-01-17|: - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
 68		69

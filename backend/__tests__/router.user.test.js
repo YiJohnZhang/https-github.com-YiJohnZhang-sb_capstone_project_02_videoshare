@@ -204,13 +204,23 @@ describe('GET \`/users/:username/private\`', () => {
 		const response = await request(app)
 			.get('/users/testuser1/private')
 			.set('authorization', `Bearer ${user1Token}`);
-		expect(response.body).toEqual({
-			user: {...
-				USER1_PUBLIC_RESPONSE,
-				content: USER_1_ALL_CONTENT_ROUTER
-			}
-		});
+			
+		// expect(response.body).toEqual({
+		// 	user: {...
+		// 		USER1_PUBLIC_RESPONSE,
+		// 		content: USER_1_ALL_CONTENT_ROUTER
+		// 	}
+		// });
 
+		const RESPONSE_USER_BODY = response.body.user;
+		const { content: TEST_CONTENT } = RESPONSE_USER_BODY;
+		delete RESPONSE_USER_BODY.content;
+
+		expect(RESPONSE_USER_BODY).toEqual(USER1_PUBLIC_RESPONSE);
+		expect(USER_1_ALL_CONTENT_ROUTER).toEqual(expect.arrayContaining(TEST_CONTENT));
+		expect(TEST_CONTENT).toEqual(expect.arrayContaining(USER_1_ALL_CONTENT_ROUTER));
+			// 2023-01-17: checking equivalence out of order rather than exact because of prioritizing `open` and `standby` content first
+		
 	});
 
 	// block any forced attempts to access private (even though front-end does not permit this route)

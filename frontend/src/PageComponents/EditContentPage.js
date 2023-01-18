@@ -79,11 +79,19 @@ function EditContentPage({ contentMethod }){
 
 		}
 
+		setFormErrorText('');
+			// reset error field
+
 		if(contentMethod === 'update'){
+			overwriteFormState(INITIAL_FORM_STATE);
+				// reinit form fields (upon contentMethod change)
 			fetchContentPrivateData();
+		}else{
+			overwriteFormState(INITIAL_FORM_STATE);
+				// reinit form fields (upon contentMethod change)
 		}
 
-	}, []);
+	}, [contentMethod]);
 
 	function formChangeHandler(evt){
 
@@ -93,6 +101,9 @@ function EditContentPage({ contentMethod }){
 	}
 
 	async function onSubmitHandler(evt){
+
+		setFormErrorText('');
+			// reset error message
 
 		evt.preventDefault();
 		const thisForm = document.getElementById('editContentForm');
@@ -114,10 +125,8 @@ function EditContentPage({ contentMethod }){
 			try{
 
 				const result = await ShortCollabsAPI.createContent(parsedForm);
-				
-				// TODO: modify returned data to include contentID
-				// const { id } = result; 
-				// history.push(`/edit/${id}`)
+				const { content_id } = result; 
+				history.push(`/edit/${content_id}`)
 
 			}catch(error){
 
@@ -146,7 +155,7 @@ function EditContentPage({ contentMethod }){
 			try{
 				
 				await ShortCollabsAPI.patchContentData(contentID, parsedForm);
-				history.push(`/user/${sessionUsername}`);
+				// history.push(`/user/${sessionUsername}`);
 
 			}catch(error){
 
@@ -162,6 +171,9 @@ function EditContentPage({ contentMethod }){
 	}
 
 	async function publishHandler(evt){
+
+		setFormErrorText('');
+			// reset error message
 		
 		evt.preventDefault();
 		const thisForm = document.getElementById('editContentForm');
@@ -177,11 +189,10 @@ function EditContentPage({ contentMethod }){
 
 		}catch(error){
 			
-			console.log(error);
-			console.error(`${error.message}`);
+			console.error(`${error || error.message}`);
 			// usually form validation error or user session provides invalid token
 			setFormErrorText(`Error: ${error.message}`);
-			console.log(error || error.message);
+			// console.log(error || error.message);
 				// do nothing else for now
 
 		}
@@ -252,16 +263,6 @@ function EditContentPage({ contentMethod }){
 				value={formState.description} required/>
 		</div>
 
-		<div className="form-floating col-md-12">
-			<input name="link"
-				type="text" maxLength="100"
-				className="form-control"
-				placeholder="Content Link (max 100 characters)"
-				onChange={formChangeHandler}
-				value={formState.link} /*required={}*//>
-			<label className="" htmlFor="link">Link</label>
-		</div>
-
 		{contentMethod==='create' && (
 		<React.Fragment>
 		{/* <div className="col-md-3"><strong>Monetization Type</strong></div> */}
@@ -282,11 +283,21 @@ function EditContentPage({ contentMethod }){
 		{contentMethod==='update' && (
 		<React.Fragment>
 
+			<div className="form-floating col-md-12">
+				<input name="link"
+					type="text" maxLength="100"
+					className="form-control"
+					placeholder="Content Link (max 100 characters)"
+					onChange={formChangeHandler}
+					value={formState.link} /*required={}*//>
+				<label className="" htmlFor="link">Link</label>
+			</div>
+
 			<div className="col-md-3">
 				<p><strong>Status</strong>: {contentStaticData.status}</p>
 			</div>
 			<div className="col-md-3">
-				<p><strong>Owner</strong>: <Link to={`user/${contentStaticData.owner}`}>{contentStaticData.owner}</Link></p>
+				<p><strong>Owner</strong>: <Link to={`/user/${contentStaticData.owner}`}>{contentStaticData.owner}</Link></p>
 			</div>
 			<div className="col-md-3">
 				<p><strong>Date Created</strong>: {contentStaticData.dateCreated.substring(0, 10)}</p>
@@ -305,7 +316,7 @@ function EditContentPage({ contentMethod }){
 				placeholder="Participants (Array Type)"
 				onChange={formChangeHandler}
 				value={formState.participants}
-				disabled={contentStaticData.owner!==sessionUsername && contentMethod!=='create'}
+				// disabled={contentStaticData.owner!==sessionUsername && contentMethod!=='create'}
 				required={contentStaticData.contractSigned!=='solo'||formState.contractSigned!=='solo'}
 				/>
 			<label className="" htmlFor="participants">Participants (Array Type)</label>

@@ -64,8 +64,17 @@ class ContentUserJoin {
 				FROM ${this.relationName} AS cu
 				JOIN contents AS c ON c.id = cu.content_id
 				WHERE cu.user_id = $1
-				ORDER BY c.date_published;
+				ORDER BY c.date_published DESC;
 			`, [username]);
+			// https://dba.stackexchange.com/a/95613
+				// 	Simo Kivistö: use the `CASE WHEN`sql oeprator
+				/*	ORDER BY c.status
+						CASE c.status
+							WHEN `open` THEN c.date_created DESC
+							WHEN 'standby` THEN c.date_standby DESC
+							WHEN 'published' OR 'legacy' THEN c.date_published DESC
+						END;
+				*/
 
 		const contentList = result.rows;
 
