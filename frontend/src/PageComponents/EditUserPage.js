@@ -11,7 +11,7 @@ function EditUserPage(){
 
 	// username, title, summary, status, accountStatus, birthdate, picture, description, password 
 
-	// useAuthenticationDependentRedirect(true);
+	useAuthenticationDependentRedirect(true);
 	const history = useHistory();
 
 	const { sessionUsername } = useContext(UserDetailsContext);

@@ -40,11 +40,11 @@ const CREATE_CONTENT5_RESPONSE = {
 /***	PATCH /contents/:contentID/edit	*/
 describe('PATCH \`contents/:contentID/edit\`', () => {
 
-	test('integration, ', async() => {
+	// test('integration, ', async() => {
 
-		fail('todo integration test (test join columns)');
+	// 	fail('todo integration test (test join columns)');
 
-	});
+	// });
 
 });
 
@@ -55,40 +55,40 @@ describe('PATCH \`contents/:contentID/publish\`', () => {
 	// none => {content: parseResponseBodyProperties(contentResult)}
 	//	private level
 
-	test('e2e, 498: error (everyone needs to be signed)', async() => {
+	// test('e2e, 498: error (everyone needs to be signed)', async() => {
 
-		fail('todo: \`498\` e2e test');
+	// 	fail('todo: \`498\` e2e test');
 
-		// const response = await request(app)
-		// 	.patch('/contents/5/publish')
-		// 	.set('authorization', `Bearer ${user1Token}`);
-		// expect(response.statusCode).toEqual(498);
+	// 	// const response = await request(app)
+	// 	// 	.patch('/contents/5/publish')
+	// 	// 	.set('authorization', `Bearer ${user1Token}`);
+	// 	// expect(response.statusCode).toEqual(498);
 	
-	});
+	// });
 
-	test('e2e, works', async() => {
+	// test('e2e, works', async() => {
 
-		fail('todo: working e2e test');
+	// 	fail('todo: working e2e test');
 
-		/*
-		const NEW_CONTENT = {
-
-
-
-		}
-		*/
-
-		// const response = await request(app)
-		// 	.patch('/contents/5/publish')
-		// 	.set('authorization', `Bearer ${user1Token}`);
-		// expect(response.statusCode).toEqual(200);
-
-		/*
+	// 	/*
+	// 	const NEW_CONTENT = {
 
 
 
-		*/
+	// 	}
+	// 	*/
+
+	// 	// const response = await request(app)
+	// 	// 	.patch('/contents/5/publish')
+	// 	// 	.set('authorization', `Bearer ${user1Token}`);
+	// 	// expect(response.statusCode).toEqual(200);
+
+	// 	/*
+
+
+
+	// 	*/
 	
-	});
+	// });
 
 });

@@ -212,13 +212,13 @@ describe('sqlJoinMultipleQueryBuilder_Configured', () => {
 		const newParticipants = ['users'];
 		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
 
-		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'userd' OR user_id = 'userf'`);
+		expect(stringifiedWHERE).toEqual(`WHERE (user_id = 'usera' AND content_id = '1') OR (user_id = 'userd' AND content_id = '1') OR (user_id = 'userf' AND content_id = '1')`);
 		expect(`
 			DELETE FROM contents_users_join
 				${stringifiedWHERE}`)
 		.toEqual(`
 			DELETE FROM contents_users_join
-				WHERE user_id = 'usera' OR user_id = 'userd' OR user_id = 'userf'`);
+				WHERE (user_id = 'usera' AND content_id = '1') OR (user_id = 'userd' AND content_id = '1') OR (user_id = 'userf' AND content_id = '1')`);
 
 		expect(stringifiedVALUES).toEqual(false);
 
@@ -230,7 +230,7 @@ describe('sqlJoinMultipleQueryBuilder_Configured', () => {
 		const newParticipants = [];
 		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
 
-		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'users' OR user_id = 'userd' OR user_id = 'userf'`);
+		expect(stringifiedWHERE).toEqual(`WHERE (user_id = 'usera' AND content_id = '1') OR (user_id = 'users' AND content_id = '1') OR (user_id = 'userd' AND content_id = '1') OR (user_id = 'userf' AND content_id = '1')`);
 
 		expect(stringifiedVALUES).toEqual(false);
 
@@ -282,13 +282,13 @@ describe('sqlJoinMultipleQueryBuilder_Configured', () => {
 		const newParticipants = ['userd', 'userf'];
 		const {stringifiedWHERE, stringifiedVALUES} = sqlJoinMultipleQueryBuilder_Configured(referenceParticipants, newParticipants, 'user_id = ', 1, 'somedesc');
 
-		expect(stringifiedWHERE).toEqual(`WHERE user_id = 'usera' OR user_id = 'users'`);
+		expect(stringifiedWHERE).toEqual(`WHERE (user_id = 'usera' AND content_id = '1') OR (user_id = 'users' AND content_id = '1')`);
 		expect(`
 			DELETE FROM contents_users_join
 				${stringifiedWHERE}`)
 		.toEqual(`
 			DELETE FROM contents_users_join
-				WHERE user_id = 'usera' OR user_id = 'users'`);
+				WHERE (user_id = 'usera' AND content_id = '1') OR (user_id = 'users' AND content_id = '1')`);
 
 		expect(stringifiedVALUES).toEqual(`VALUES ('userd', 1, 'somedesc'), ('userf', 1, 'somedesc')`)
 		expect(`

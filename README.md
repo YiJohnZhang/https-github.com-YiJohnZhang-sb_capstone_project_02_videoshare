@@ -1,7 +1,7 @@
 # ShortCollabs
 *The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature that encourages content creators to collaborate with another by allowing a pre-agreement of monetization distribution allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations to non-randomly select a user's profile. The intention of this feature is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans entry onto the platform.*
 
-**Live Link `as of 2023-01-19`**: []() (`todo:inserlink`)
+**Live Link, as of 2023-01-19**: []() (`todo:inserlink`)
 **NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, projects hosted on the free-tier has unreliable performance compared to being hosted locally. **Consider [downloading and building this project locally](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)**: the default backend port is `:3000` and the default frontend port `:3001`.
 
 ## Special Thanks
@@ -16,9 +16,9 @@ I like to thank the following two individuals for the respective reasons:
 	- [01.03. Develpoment Build Suggestions]()
 	- [01.04 Other Notes]()
 - [02. Project Details]()
-	- [02.01. Running & Testing Instructions](GITHUB:RUNNING AND TESTING INSTRUCTIONS)
-	- [02.02. Frontend Userflow]()
-	- [02.03. Backend Routes]()
+	- [02.01. Running & Testing Instructions](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)
+	- [02.02. Frontend Documentation]()
+	- [02.03. Backend Documentation]()
 	- [02.04. Resources & Data Source]()
 - [03. Misecllaneous Notes & Dump]()
 	- [03.01. Miscellaneous Further Study]()
@@ -35,6 +35,20 @@ I like to thank the following two individuals for the respective reasons:
 
 ## 01.01. Sample Userflow
 [`todo``]
+
+
+**01.01.A. *The Search API (Public)***. One Searchbar for searching either Content or Users
+
+
+**01.01.B. *User Login and Content Publishing***. Once content is published, it is publicly viewable. The join record has an independent description field than that of the master record. Content cards display participating users.
+
+
+**01.01.C. *User Editing & Content Creation API***. Creating content with an added participant automatically creates a corresponding record to the participating user.
+
+
+**01.01.D. *Join Records for a Piece of Content***. Join record(s) for a piece of content are updated automatically depending whether or not a user is invited or not.
+
+
 - Public: show video of searching and users
 	1. video search:
 	2. user search:
@@ -64,6 +78,9 @@ This web application uses the **PERN** stack:
 - `express` Backend, using `node-pg` query builder
 - PostgreSQL RDBMS
 - Follows RESTful Routing specifications **excluding the singular/plural resources pattern**.
+- **Test Statistics**
+	- **Backend**: **~150 Unit Tests** (take a few); **~5 Integration & E2E Tests** (give a few)
+	- **Frontend**: **24 Simple Tests** (Component Smoke and Snapshot Tests); **0 Event Tests** (focused on backend tests)
 
 Project Schema:
 **`todo: INSERT SCHEMA`**
@@ -79,8 +96,8 @@ The project proposes the following additional attributes to a `content` relation
 
 **Note**: This project was designed to exceed Springboard Bootcamp's final capstone project requirements.
 
-## 02.01. Running & Testing Instructions (`todo`: finish test numbering and file renaming)
-**To run the application**,
+## 02.01. Running & Testing Instructions
+**Running the Application**
 - Backend:
 ```sh
 # go to `backend` directory
@@ -98,7 +115,7 @@ npm start
 	# default resource location: localhost://127.0.0.1:3001
 ```
 
-**To run the tests**,
+**Testing the Application**,
 - Backend tests are located on `./backend/__tests__`:
 ```sh
 jest --runInBand
@@ -110,36 +127,39 @@ npm test	# alias for `react-scripts test` in `package.json`
 ```
 
 ```sh
-# Test Tree
-Tests	DIR
-=====	====
-		/backend
-		├──	__tests__/	
-29		│	├── helpers.*.js
-10		│	├── router.authentication.test.js
-34		│	├── router.users.test.js
-31		│	├── router.contents.test.js
-U15I1	│	├── router.content_user_join.test.js	# rename to "contentsusersjoin"
---		│	├── router._testCommons.test.js			# 01 but doesn't count
-06		│	├── model.ContentUserJoin.test.js
---		│	├── model._testCommons.test.js			# 01 but doesn't count
---		│	└── commonTestObject._Test_Contents		# 01 but doesn't count			
-			add e2e tests after submitting app, add
-		├──	... 
-		/frontend
-		└──	src/__tests__/
-			├── 
-			├── 
-			├── 
-			├── 
-			├── 
-			└── 
-# rename files
-routerContentsUserJoin => routerContentsUsersJoin
-# models
-Content => Contents
-Content_U... => Contents_Users_...
-User => Users
+# Test Directory
+/backend
+├──	__tests__/
+│	├── helpers.createTokeNHelper.test.js
+│	├── helpers.sqlQueryingHelper.test.js
+│	├── helpers.arrayEqualityHelper.test.js
+│	├── helpers.objectStringifyAndParseHelper.test.js
+│	├── router._testCommons.test.js
+│	├── router.authentication.test.js
+│	├── router.users.test.js
+│	├── router.content.test.js
+│	├── router.content.e2e.test.js
+│	├── router.content_user_join.test.js
+│	├── router._testCommons.test.js
+│	├── model._testCommons.test.js
+│	├── model.ContentUserJoin.test.js
+│	└── commonTestObject._Test_Contents
+├──	... 
+/frontend
+├──	...
+└──	src/__tests__/
+	├── App.test.js						# smoke & snapshot test, really went all out for the backend on this project
+	├── NavBar.test.js					# smoke & snapshot test, really went all out for the backend on this project
+	├── HomePage.test.js				# smoke & snapshot test, really went all out for the backend on this project
+	├── ErrorPage.test.js				# smoke & snapshot test, really went all out for the backend on this project
+	├── OnboardingPage.test.js			# smoke & snapshot test, really went all out for the backend on this project
+	├── ProfilePage.test.js				# smoke & snapshot test, really went all out for the backend on this project
+	├── EditUserPage.test.js			# smoke & snapshot test, really went all out for the backend on this project
+	├── ContentPage.test.js				# smoke & snapshot test, really went all out for the backend on this project
+	├── EditContentPage.test.js			# smoke & snapshot test, really went all out for the backend on this project
+	├── EditJoinContentPage.test.js		# smoke & snapshot test, really went all out for the backend on this project
+	├── ContentCard.test.js				# smoke & snapshot test, really went all out for the backend on this project
+	└── UserCard.test.js				# smoke & snapshot test, really went all out for the backend on this project
 ```
 
 ## 02.02. Frontend Documentation
@@ -159,14 +179,14 @@ User => Users
 
 |##|Page|Path|Page Component|Fe Router Auth.|Notes|API Call(s)|
 |-|-|-|-|-|-|-|
-|01|Home|`/`|`HomePage`|None|Home page, landing page. **Integrates search** w/out search history.|`searchUsers`, `searchPublicContent`, `getAllPublicContent`|
+|01|Home|`/`|`HomePage`|None|Home page, landing page. **Integrates search** w/out search history; right now displays master content description.|`searchUsers`, `searchPublicContent`, `getAllPublicContent`|
 |02A|Login|`/login`|`OnboardingPage`|notLoggedIn|To login.|`authenticateUser`|
 |02B|Signup|`/register`|`OnboardingPage`|""|To signup.|`registerUser`|
 |03|Logout|`/logout`|`LogoutComponent`|loggedIn|To logout. Doesn't render anything. `/` if error|None|
 |04|Error|`**??**`|`ErrorPage`|None|Error page. Hot link to home.|None|
 |05|Profile|`/user/:userHandle`|`ProfilePage`|None|push to `/error` if error|`getUserData` (public or neq ref user), `getAllUserData` (ref user)|
 |06|Profile, Edit|`/account`|`EditUserPage`|loggedIn|push to `/` if error|`getFullUserData`, `patchUserData`|
-|07|Content|`/content/:contentID`|`ContentPage?`|None|**`todo`**|`selectContent`, `getContentData`|
+|07|Content|`/content/:contentID`|`ContentPage?`|None|displays content (displays a random join content for now)|`selectContent`, `getContentData`|
 |08A|Content, Create|`/create`|`EditContentPage`|loggedIn|push to `/` if error|`createContent`|
 |08B|Content, Edit|`/edit/:contentID`|`EditContentPage`|loggedIn|push to `/error` if error|`getFullContentData`, `patchContentData`, `publishContent`|
 |09|Join Content, Edit|`/user/:userHandle/:contentId/edit`|`EditJoinContentPage`|loggedIn, referenceUser|push to `/error` if error|`getJoinContentData`, `patchJoinContent`|
@@ -200,7 +220,7 @@ User => Users
 |20|`returnAllContents`|`DISABLED` / `GET`|`/contents/`|
 |21|`returnContent`|`DISABLED` / `GET`|`/contents/:contentID`|
 |22|`signContent`|`DISABLED` / `PATCH`|`/contents/:contentID/:username/sign`|
-|23|`updateContent`|`**`todo`**` / `PATCH`|`/contents/:contentID/status`|
+|23|`updateContent`|`DISABLED` / `PATCH`|`/contents/:contentID/status`|
 |24|`deleteContent`|`DISABLED` / `DELETE`|`/contents/:contentID`|
 |25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:username/:contentID`|
 
@@ -247,12 +267,12 @@ User => Users
 |08|`POST`, `/`|`Contents`, `create()`|content public properties|Create content.|
 |09|`GET`, `/`|`Contents`, `getAll()`|arr, content public properties|Content search feature.|
 |10|`GET`, `/`|`Contents`, `getAll()`|arr, content public properties|Content search feature.|
-|11|`GET`, `/:contentID/random`|`???`, `???()`|content public properties|`TODO`: Content page.|
+|11|`GET`, `/:contentID/random`|`Contents`, `--`|content public properties|Content page.|
 |12|`GET`, `/:contentID/edit`|`Contents`, `getByPKPrivate()`|content private properties|Edit content page.|
 |13|`PATCH`, `/:contentID/edit`|`Contents`, `update()`|content private properties|Edit content page.|
 |14|`PATCH`, `/:contentID/publish`|`Contents`, `updatePublish()`|content id?|sets content status to `published`|
 ||`Content-User Join`, `/cujoin`||||
-|15|`GET`, `/:username/:contentID/`|`CU_Join`, `getByPK()`|cujoin public properties|`TODO`: Content page.|
+|15|`GET`, `/:username/:contentID/`|`CU_Join`, `getByPK()`|cujoin public properties|Content page.|
 |16|`PATCH`, `/:username/:contentID/edit`|`CU_Join`, `getByPKPrivate()`|cujoin private properties|Edit content join page.|
 |17|`PATCH`, `/:username/:contentID/edit`|`CU_Join`, `update()`|cujoin private properties|Edit content join page.|
 ||`Deprecated/Disabled`, `/`||||
@@ -392,11 +412,12 @@ Some suggested improvements to this concept are:
 3. 
 
 # 04. Time Tracker
-- **Seeding User Database + Schema Design**: 09h08m
+- **Seeding User Database + Schema Design**: 11h07m
 - **Backend**: 
 	- Being Generally Confused What Does What because of lack of Documentation and Schema Revisions: 50h52m
 	- Being Less Confused about the Backend (post-Frontend Work): 1_h__m
 - **Frontend**: 20h__m
+- **Documentation (Dedicated)**: 
 
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
@@ -472,21 +493,20 @@ Some suggested improvements to this concept are:
 |66|finish private front-end styling & routing, most common components are done.|2023-01-15|20:02 - 23:11|189|
 |68|iron out frontend, fix seed data, fix backend data return; patched content editing; mostly done with create content|2023-01-16|19:23 - 23:45|262|
 |69|iron out frontend, db modifications, add temp content placeholder, modified db query order & updated tests to reflect db query modifications; mop up warnings, `console.log`, updated nav styling, update documentaiton|2023-01-17|13:37 - 17:37|240|
+69		7x
+2500
 |70||2023-01-17|19:36 - :||
 |6|clean up and format codebase to be presentable|2023-01-1|: - :||
-68		69
-2260
+
 
 ||**50.01.05**. Application (Front-End)||**Net Total Time**| (--h--m)|
 |29|`README.md` work|2022-12-30|20:54 - 22:05|71|
 |47|update documentation.|2022-01-03|21:55 - 22:18|23|
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
-|70||2023-01-16|: - :||
+|70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - :||
 60		7x?
 293		
 ||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
 ||||**Total Time**|_ minutes (--h--m)|
 667+
-
-RESOLVE `autoprefixer` warning

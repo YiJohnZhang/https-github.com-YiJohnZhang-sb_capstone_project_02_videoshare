@@ -8,7 +8,7 @@ import useControlledForm from '../hooks/useControlledForm';
 
 function EditContentPage({ contentMethod }){
 
-	// useAuthenticationDependentRedirect(true);
+	useAuthenticationDependentRedirect(true);
 	// not: authenticate user permissions in useEffect to save an API call
 
 	const history = useHistory();
@@ -107,7 +107,8 @@ function EditContentPage({ contentMethod }){
 
 		evt.preventDefault();
 		const thisForm = document.getElementById('editContentForm');
-		thisForm.reportValidity();
+		if(!thisForm.reportValidity())
+			return;
 		// no formik or complicated form validation for now: see 01.01. Top Priorities
 			// https://stackoverflow.com/a/52547062
 
@@ -177,8 +178,9 @@ function EditContentPage({ contentMethod }){
 		
 		evt.preventDefault();
 		const thisForm = document.getElementById('editContentForm');
-		thisForm.reportValidity();
-			// no formik or complicated form validation for now: see 01.01. Top Priorities
+		if(!thisForm.reportValidity())
+			return;
+		// no formik or complicated form validation for now: see 01.01. Top Priorities
 			// https://stackoverflow.com/a/52547062
 
 		try{
@@ -250,7 +252,7 @@ function EditContentPage({ contentMethod }){
 				maxLength="512"	rows={3}
 				placeholder="Summary (max 512 characters)"
 				onChange={formChangeHandler}
-				value={formState.summary} />
+				value={formState.summary} required/>
 		</div>
 
 		<div className="col-md-12">
@@ -260,7 +262,7 @@ function EditContentPage({ contentMethod }){
 				maxLength={2200} rows={6}
 				placeholder="Description (max 2200 characters)"
 				onChange={formChangeHandler}
-				value={formState.description} required/>
+				value={formState.description} required={contentMethod==='update'}/>
 		</div>
 
 		{contentMethod==='create' && (

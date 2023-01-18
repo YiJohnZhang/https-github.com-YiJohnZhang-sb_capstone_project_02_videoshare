@@ -10,7 +10,7 @@ import ContentCard from '../DumbComponents/ContentCard';
 
 function EditContentPage(){
 
-	// useAuthenticationDependentRedirect(true);
+	useAuthenticationDependentRedirect(true);
 	// not: authenticate user permissions in useEffect to save an API call
 
 	const history = useHistory();
@@ -74,7 +74,8 @@ function EditContentPage(){
 		
 		evt.preventDefault();
 		const thisForm = document.getElementById('editJoinContentForm');
-		thisForm.reportValidity();
+		if(!thisForm.reportValidity())
+			return;
 		// no formik or complicated form validation for now: see 01.01. Top Priorities
 			// https://stackoverflow.com/a/52547062
 

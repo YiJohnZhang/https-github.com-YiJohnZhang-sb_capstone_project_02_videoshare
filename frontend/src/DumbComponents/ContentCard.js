@@ -81,7 +81,7 @@ function ContentCard({isProfilePage = false, contentID, title, description, link
 				contentID={contentID}/>
 		<div>
 			<Link to={`/content/${contentID}`} title={title}><h4>{truncatedTitle}</h4></Link>
-			{datePublished ? <p><em>{datePublished.substring(0, 10)}</em></p> : null} 
+			{datePublished ? <p><em>{datePublished.substring(0, 10)}</em></p> : 'Not yet published!'} 
 			<p title={description}>{truncatedDescription}</p>
 			<p>
 				{participantsLinkList.map((participantLink, index) => (

@@ -19,7 +19,7 @@ function NavBar() {
 	<table id="navigationTable" className='fullWidth'><tbody><tr>
 
 	{/* group 1 (align left) */}
-		<td className="navbarButton-container"><NavLink className="" exact to="/" title="ShortCollabs Home"><img src={logo} alt="logo"/></NavLink></td>
+		<td id="navigationtd-homeIcon" className="navbarButton-container"><NavLink className="" exact to="/" title="ShortCollabs Home"><img src={logo} alt="logo"/></NavLink></td>
 
 		<td id="navigationtd-message" className='fullWidth'>{!ShortCollabsAPI.BASE_URL.includes("localhost") &&
 		(<React.Fragment>

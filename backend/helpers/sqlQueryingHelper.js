@@ -158,12 +158,12 @@ function sqlUpdateQueryBuilder(updateData, jsonSQLMapping = {}) {
  *	@param {Array} referenceArray - before
  *	@param {Array} newArray - after
  *	@param {string} WHEREPropertyMatcher - int his configured case 'user_id = '
- *	@param {*} insertPropertyOne - in this configured case, content ID
+ *	@param {*} propertyOne - in this configured case, content ID
  *	@param {*} insertPropertyTwo - in this configured case, description
  *	@returns {string|boolean} stringifiedWHERE - string for `DELETE`sql / `UPDATE`sql
  *	@returns {string|boolean} stringifiedVALUES - string for `INSERT INTO`slq
  */
-function sqlJoinMultipleQueryBuilder_Configured(referenceArray, newArray, WHEREPropertyMatcher, insertPropertyOne, insertPropertyTwo){
+function sqlJoinMultipleQueryBuilder_Configured(referenceArray, newArray, WHEREPropertyMatcher, propertyOne, insertPropertyTwo){
 
 	// note referenceArray must s.t. [[...truncatedArray], ...]
 
@@ -175,8 +175,20 @@ function sqlJoinMultipleQueryBuilder_Configured(referenceArray, newArray, WHEREP
 
 		referenceArray.forEach((element) => {
 
-			if(!newSet.has(element))
-				whereArray.push(`${WHEREPropertyMatcher}'${element}'`);
+			if(!newSet.has(element)){
+			
+				if(propertyOne !== null){
+					
+					whereArray.push(`(${WHEREPropertyMatcher}'${element}' AND content_id = '${propertyOne}')`);
+				
+				}else{
+					
+					whereArray.push(`${WHEREPropertyMatcher}'${element}'`);
+
+				}
+			
+			
+			}
 
 		});
 
@@ -193,7 +205,7 @@ function sqlJoinMultipleQueryBuilder_Configured(referenceArray, newArray, WHEREP
 		newArray.forEach((element) => {
 
 			if(!referenceSet.has(element))
-				valuesArray.push(`('${element}', ${insertPropertyOne}, '${insertPropertyTwo}')`)
+				valuesArray.push(`('${element}', ${propertyOne}, '${insertPropertyTwo}')`)
 
 		});
 		

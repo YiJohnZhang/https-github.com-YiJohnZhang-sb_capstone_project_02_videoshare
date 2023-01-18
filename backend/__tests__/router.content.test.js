@@ -264,7 +264,6 @@ describe('GET \`/contents/:contentID/random\`', () => {
 
 		const response = await request(app)
 			.get('/contents/1/random');
-		console.log(response.body.username);
 		expect(response.body.username).toEqual('testuser1');
 	
 	});
@@ -282,7 +281,6 @@ describe('GET \`/contents/:contentID/random\`', () => {
 
 		const response = await request(app)
 			.get('/contents/2/random');
-		console.log(response.body.username);
 		expect(['testuser1', 'testuser2']).toContain(response.body.username);
 	
 	});
@@ -292,7 +290,6 @@ describe('GET \`/contents/:contentID/random\`', () => {
 		const response = await request(app)
 			.get('/contents/2/random')
 			.set('authorization', `Bearer ${user1Token}`);
-		console.log(response.body.username);
 		expect(['testuser1', 'testuser2']).toContain(response.body.username);
 	
 	});
@@ -301,7 +298,6 @@ describe('GET \`/contents/:contentID/random\`', () => {
 
 		const response = await request(app)
 			.get('/contents/100/random');
-		console.log(response.statusCode);
 		expect(response.statusCode).toEqual(404);
 	
 	});
@@ -386,12 +382,6 @@ describe('PATCH \`contents/:contentID/edit\`', () => {
 			datePublished: null
 		});
 	
-	});
-
-	test('integration, ', async() => {
-
-		fail('todo integration test (test join columns)');
-
 	});
 
 	test('401: unauthorized (wrong user)', async() => {
@@ -704,42 +694,6 @@ describe('PATCH \`contents/:contentID/publish\`', () => {
 			.patch('/contents/6/publish')
 			.set('authorization', `Bearer ${user1Token}`);
 		expect(response.statusCode).toEqual(404);
-	
-	});
-
-	test('e2e, 498: error (everyone needs to be signed)', async() => {
-
-		fail('todo: \`498\` e2e test');
-
-		// const response = await request(app)
-		// 	.patch('/contents/5/publish')
-		// 	.set('authorization', `Bearer ${user1Token}`);
-		// expect(response.statusCode).toEqual(498);
-	
-	});
-
-	test('e2e, works', async() => {
-
-		fail('todo: working e2e test');
-
-		/*
-		const NEW_CONTENT = {
-
-
-
-		}
-		*/
-
-		// const response = await request(app)
-		// 	.patch('/contents/5/publish')
-		// 	.set('authorization', `Bearer ${user1Token}`);
-		// expect(response.statusCode).toEqual(200);
-
-		/*
-
-
-
-		*/
 	
 	});
 

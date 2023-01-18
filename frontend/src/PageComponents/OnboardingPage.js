@@ -11,7 +11,7 @@ import UserDetailsContext from '../context/UserDetailsContext';
 
 function OnboardingPage({onboardingMethod}){
 
-	// useAuthenticationDependentRedirect(false);
+	useAuthenticationDependentRedirect(false);
 
 	const history = useHistory();
 	const [jwt, setJWT] = useLocalStorage('jwt');
@@ -53,7 +53,8 @@ function OnboardingPage({onboardingMethod}){
 
 		evt.preventDefault();
 		const thisForm = document.getElementById('onboardingForm');
-		thisForm.reportValidity();
+		if(!thisForm.reportValidity())
+			return;
 		// no formik or complicated form validation for now: see 01.01. Top Priorities
 			// https://stackoverflow.com/a/52547062
 			// webkit > 40, f > 49, o > 27: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/reportValidity
