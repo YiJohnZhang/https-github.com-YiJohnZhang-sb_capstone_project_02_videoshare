@@ -40,6 +40,8 @@ I like to thank the following two individuals for the respective reasons:
 - Built with PERN Stack.
 
 ## 01.01. Sample Userflow
+[Return to Table of Contents](#table-of-contents)
+
 ### 01.01.A. *The Search API (Public)*
 Searching either published Content or Users.
 [![public search api](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](https://user-images.githubusercontent.com/8562595/213333822-d069abdb-f184-4b41-90ed-d057a16c9bea.mp4)
@@ -63,14 +65,7 @@ The publish call is single-purpose, one must update it first (for now) then publ
 ### 01.01.F. *Register User*
 Registering `testuser`.
 [![registering a user, `testuser`](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](https://user-images.githubusercontent.com/8562595/213333966-abff29d3-0a17-4fe9-902a-b502dcdb5cb4.mp4)
-
-- Public: show video of searching and users
-	1. video search:
-	2. user search:
-	3. user public profile "shawn89", "mitchellandwebb"
-- user login
-- user editing
-- content creation (2 effectively implemented stages)
+[Return to Table of Contents](#table-of-contents)
 
 ## 01.02. High-Priority
 1. **Model, Critical**: Resolve the extent ACID is to be preserved for this database
@@ -90,6 +85,7 @@ Registering `testuser`.
 - `user.updateTypeUser.schema.json` Note: since all content in this db is local (hosted on `/public`, rather than another backend where the img data is stored), `picture` does NOT have to be a `uri` format string
 
 # 02. Project Specifications
+[Return to Table of Contents](#table-of-contents)
 This web application uses the **PERN** stack:
 - `react` Frontend w/ Client-Side Routing using `react-router`
 - `express` Backend, using `node-pg` query builder
@@ -114,6 +110,7 @@ The project proposes the following additional attributes to a `content` relation
 **Note**: This project was designed to exceed Springboard Bootcamp's final capstone project requirements.
 
 ## 02.01. Running & Testing Instructions
+[Return to Table of Contents](#table-of-contents)
 **Running the Application**
 - Backend:
 ```sh
@@ -146,7 +143,7 @@ npm test	# alias for `react-scripts test` in `package.json`
 ```sh
 # Test Directory
 /backend
-├──	__tests__/
+├── __tests__/
 │	├── helpers.createTokeNHelper.test.js
 │	├── helpers.sqlQueryingHelper.test.js
 │	├── helpers.arrayEqualityHelper.test.js
@@ -180,18 +177,19 @@ npm test	# alias for `react-scripts test` in `package.json`
 ```
 
 ## 02.02. Frontend Documentation
+[Return to Table of Contents](#table-of-contents)
 ```sh
 /
-├──	signin/
-├──	register/	
-├──	user/
+├── signin/
+├── register/	
+├── user/
 │	├── [username]
 │	└── [username]/[contentid]/edit
-├──	account/
+├── account/
 ├── create/
 ├── edit/[contentid]
-├──	error/[errorCode]
-└──	logout
+├── error/[errorCode]
+└── logout
 ```
 
 |##|Page|Path|Page Component|Fe Router Auth.|Notes|API Call(s)|
@@ -242,12 +240,13 @@ npm test	# alias for `react-scripts test` in `package.json`
 |25|`deleteJoinContent`|`DISABLED` / `DELETE`|`/cujoin/:username/:contentID`|
 
 ## 02.03. Backend Documentation
+[Return to Table of Contents](#table-of-contents)
 ```sh
 /
-├──	authorization
+├── authorization
 │	├── `POST`		/token/					# login
 │	└── `POST`		/register/				# register
-├──	users
+├── users
 │	├── `GET`		/						# return users (w/ filter)
 │	├── `GET`		/[username]/			# return user by id, public info
 │	├── `GET`		/[username]/edit		# return user by id, private info
@@ -301,9 +300,11 @@ npm test	# alias for `react-scripts test` in `package.json`
 |23|`PATCH`, `/content/:contentID/status`|`Contents`, `()`|disabled|Admin to update content status from `published` to `legacy`|
 |24|`DELETE`, `/content/:contentID`|`Contents`, `()`|disabled|Delete content[1].|
 |25|`DELETE`, `/cujoin/:username/:contentID`|`CU_Join`, `()`|disabled|Delete content join[1].|
+
 [1] Tested but not used concerning practices (what if a user wants to restore? How?)
 
 ## 02.04. Resources & Data Source
+[Return to Table of Contents](#table-of-contents)
 - The sample data is dummy data.
 - The user profile pictures are pulled from [xsgames.com/randomusers](https://xsgames.co/randomusers/).
 - The logo is sourced from [LogoIpsum](https://logoipsum.com/). It is [logo #247](https://logoipsum.com/artwork/247).
@@ -358,6 +359,7 @@ response.data.videos[INDEX];
 - that backend nightmare
 
 ## 03.01. A Huge Further Study Dump
+[Return to Table of Contents](#table-of-contents)
 Some suggested improvements to this concept are:
 1. better contnent creation GUI and UX.
 	- **realtime editing**: use a websockets connection for editing a `byview` or `presplit` collab to quickly negotiate an agreement. change the `summary` field to some kind of **markdown-based editor**, there are the following: `h1`-`h6`, italicizing, bold, maybe give it a screenwriting ui?
@@ -420,6 +422,7 @@ Some suggested improvements to this concept are:
 3. 
 
 # 04. Time Tracker
+[Return to Table of Contents](#table-of-contents)
 - **Seeding User Database + Schema Design**: 11h07m
 - **Backend**: 
 	- Being Generally Confused What Does What because of lack of Documentation and Schema Revisions: 50h52m
@@ -514,7 +517,7 @@ Some suggested improvements to this concept are:
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
 |70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - 22:55|199|
-|71|add schema, content preview img, userflow videos, organized [03.01](#0301-some-ideas-dump); add links to userflow videos and content imgs; updated `EditContentPage` to be more robust --|2023-01-18|14:35 - 17:||
+|71|add schema, content preview img, userflow videos, organized [03.01](#0301-some-ideas-dump); add links to userflow videos and content imgs; updated `EditContentPage` to be more robust --|2023-01-18|14:35 - 17:35||
 ||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
 ||||**Total Time**|_ minutes (--h--m)|
 
@@ -525,4 +528,6 @@ Some suggested improvements to this concept are:
 - make preview image wide screen
 - add sample userflow vids
 - re-order content titles.
+- add return to toc
+
 - finish e2e and integration tests
