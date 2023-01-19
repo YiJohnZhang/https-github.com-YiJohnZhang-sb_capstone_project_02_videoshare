@@ -12,6 +12,12 @@ I like to thank the following two individuals for the respective reasons:
 # Table of Contents
 - [01. Project Features](#01-project-features)
 	- [01.01. Sample Userflow](#0101-sample-userflow)
+		- [01.01.A. Search API (Public)]()
+		- [01.01.B. User Login & Content Publishing]()
+		- [01.01.C. User Editing & Content Creation API]()
+		- [01.01.D. Join Records for a Content Piece]()
+		- [01.01.E. Publishing (New) Content]()
+		- [01.01.F. Register User]()
 	- [01.02. High-Priority Features](#0102-high-priority)
 	- [01.03. Develpoment Build Suggestions](#0103-develpoment-build-suggestions)
 	- [01.04 Other Notes](#0104-other-notes)
@@ -34,25 +40,30 @@ I like to thank the following two individuals for the respective reasons:
 - Built with PERN Stack.
 
 ## 01.01. Sample Userflow
-
+### 01.01.A. *The Search API (Public)*
+Searching either published Content or Users.
 [![public search api](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
-**01.01.A. *The Search API (Public)***. One Searchbar for searching either Content or Users
 
+
+### 01.01.B. *User Login and Content Publishing*
+Once content is published, it is publicly viewable. The join record has an independent description field than that of the master record. Content cards display participating users.
 [![user login & content publishing](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
-**01.01.B. *User Login and Content Publishing***. Once content is published, it is publicly viewable. The join record has an independent description field than that of the master record. Content cards display participating users.
 
+### 01.01.C. *User Editing & Content Creation API*
+Creating content with an added participant automatically creates a corresponding record to the participating user.
 [![user editing & content creation](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
-**01.01.C. *User Editing & Content Creation API***. Creating content with an added participant automatically creates a corresponding record to the participating user.
 
+### 01.01.D. *Join Records for a Piece of Content*
+Join record(s) for a piece of content are updated automatically depending whether or not a user is invited or not.
 [![join records are dynamic](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
-**01.01.D. *Join Records for a Piece of Content***. Join record(s) for a piece of content are updated automatically depending whether or not a user is invited or not.
-
-**01.01.E. *Publishing is a single-purpose method.***. The publish call is single-purpose, one must update it first (for now) then publish).
+### 01.01.E. *Publishing is a single-purpose method.*
+The publish call is single-purpose, one must update it first (for now) then publish).
 [![publish is a single-purpose method](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 
-
-**01.01.F. *Register User***. Registering `testuser`.
+### 01.01.F. *Register User*
+Registering `testuser`.
 [![registering a user, `testuser`](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
+
 
 
 - Public: show video of searching and users
