@@ -512,5 +512,8 @@ Some suggested improvements to this concept are:
 70		71
 492		
 
-|72||2023-01-18|1: - 1:||
- finish e2e and integration tests
+|72||2023-01-18|17:04 - 1:||
+- make preview image wide screen
+- add sample userflow vids
+- re-order content titles.
+- finish e2e and integration tests
