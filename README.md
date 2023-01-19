@@ -92,7 +92,7 @@ This web application uses the **PERN** stack:
 - PostgreSQL RDBMS
 - Follows RESTful Routing specifications **excluding the singular/plural resources pattern**.
 - **Test Statistics**
-	- **Backend**: **~150 Unit Tests** (take a few); **~5 Integration & E2E Tests** (give a few)
+	- **Backend**: **~153 Unit Tests** (take a few); **~7 Integration & E2E Tests** (give a few)
 	- **Frontend**: **24 Simple Tests** (Component Smoke and Snapshot Tests); **0 Event Tests** (focused on backend tests)
 
 Project Schema:
@@ -424,14 +424,12 @@ Some suggested improvements to this concept are:
 # 04. Time Tracker
 [Return to Table of Contents](#table-of-contents)
 - **Seeding User Database + Schema Design**: 11h07m
-- **Backend**: 
-	- Being Generally Confused What Does What because of lack of Documentation and Schema Revisions: 50h52m
-	- Being Less Confused about the Backend (post-Frontend Work): 1_h__m
+- **Backend**: 77h5m
+	- while confused: 3052 min
+	- salvaging: 1573 min
 - **Frontend**: 41h40m
-- **Documentation (Dedicated)**: 
-- **Total Time**
-	- with Confusion: 
-	- without Confusion: 
+- **Documentation**: 12h40m
+- **Total Time**: 142h32m
 
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
@@ -515,13 +513,6 @@ Some suggested improvements to this concept are:
 |70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - 22:55|199|
 |71|add schema, content preview img, userflow videos, organized [03.01](#0301-some-ideas-dump); add links to userflow videos and content imgs; updated `EditContentPage` to be more robust --|2023-01-18|14:35 - 16:30|115|
 |72|preview image is wide-screen; add sample userflow videos; re-order content titles & added `return to toc` shortcut|2023-01-18|17:04 - 17:35|31|
-
-||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
-||||**Total Time**|_ minutes (--h--m)|
-
-|73|formatted time typos; fix missing sample userflow video `0101D`; e2e & integration tests; cleanup documentation|2023-01-18|18:48 - 18:||
-
-72		73
-638		
-
-- finish e2e and integration tests
+|73|formatted time typos; fix missing sample userflow video `0101D`; e2e & integration tests & cleanup documentation|2023-01-18|18:48 - 20:50|122|
+||**50.01.06**. Documentation||**Net Total Time**|760 (12h40m)|
+||||**Total Time**|8552 minutes (142h32m)|
