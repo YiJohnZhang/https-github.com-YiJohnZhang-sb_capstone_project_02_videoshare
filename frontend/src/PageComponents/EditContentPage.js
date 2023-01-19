@@ -209,23 +209,30 @@ function EditContentPage({ contentMethod }){
 			return true;
 		
 		// const participantsSet = new Set(JSON.parse(formState.participants));
-		const participantsSet = new Set(formState.participants.split(','));
+		const participantsSet = new Set(formState.participants.substring(1, formState.participants.length-1).split(','));
 		// const contractSignatories = JSON.parse(formState.contractSigned);
-		const contractSignatories = formState.contractSigned.split(',');
-
+		const contractSignatories = formState.contractSigned.substring(1, formState.contractSigned.length-1).split(',');
+		
 		if(participantsSet.size !== contractSignatories.length)
 			return false;
 
 		for(let i = 0; i < contractSignatories.length; i++){
 
-			if(participantsSet.has(contractSignatories[i]))
-				return true;
+			if(!participantsSet.has(contractSignatories[i]))
+				return false;
 
 		}
 
-		return false;
+		return true;
 
 	}
+
+	// console.log(`
+	// 	formstate.link is falsy: ${Boolean(formState.link) === false}
+	// 	contentOnwer?: ${contentStaticData.owner!==sessionUsername}
+	// 	participants is equiv to signatories: ${!participantsMatchSignedParties()}
+	// 	aggregate: ${Boolean(formState.link) === false || contentStaticData.owner!==sessionUsername || !participantsMatchSignedParties()}
+	// 	`);
 
 	return(
 	<div className="page">

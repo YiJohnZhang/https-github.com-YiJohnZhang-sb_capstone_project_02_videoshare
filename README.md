@@ -47,11 +47,12 @@ I like to thank the following two individuals for the respective reasons:
 [![join records are dynamic](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 **01.01.D. *Join Records for a Piece of Content***. Join record(s) for a piece of content are updated automatically depending whether or not a user is invited or not.
 
-[![publish is a single-purpose method](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 **01.01.E. *Publishing is a single-purpose method.***. The publish call is single-purpose, one must update it first (for now) then publish).
+[![publish is a single-purpose method](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 
-[![registering a user, `testuser`](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
+
 **01.01.F. *Register User***. Registering `testuser`.
+[![registering a user, `testuser`](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 
 
 - Public: show video of searching and users
@@ -416,6 +417,9 @@ Some suggested improvements to this concept are:
 	- Being Less Confused about the Backend (post-Frontend Work): 1_h__m
 - **Frontend**: 41h40m
 - **Documentation (Dedicated)**: 
+- **Total Time**
+	- with Confusion: 
+	- without Confusion: 
 
 |Session|Task(s)|Date|Time|Time Elapsed (min)|
 |-|-|-|-|-|
@@ -474,6 +478,10 @@ Some suggested improvements to this concept are:
 |58|`contents` tests|2022-01-09|19:46 - 20:33|47|
 |59|finished basic unit `contents` tests. some frontend work (test file)|2022-01-09|20:39 - 22:00|81|
 |63|route patterns now reflect RESTful practices where it is easy to implement; however, plural base routes for single items are still in effect; `random` test|2023-01-14|19:14 - 20:00|46|
+|72||2023-01-18|1: - 1:||
+63		72
+1573	
+
 ||**50.01.04**. Routes (Backend)||**Net Total Time**| 3052 + 1573 min (--h--m)|
 |11|application setup and skeleton; need to work on `./src/helpers/api.js`|2022-12-26 - 2022-12-27|22:15 - 00:47|152|
 |16|exploring `formik` for frontend, attempted `material-ui`, alongside other express form validation and/or styling libraries; db work|2022-12-28|16:01 - 18:24|143|
@@ -497,10 +505,12 @@ Some suggested improvements to this concept are:
 |51|build to-do list|2022-01-06|20:15 - 21:10|55|
 |60|update routes documentation|2023-01-11|16:03 - 18:27|144|
 |70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - 22:55|199|
-60		70
-293		
-|71|add schema, content preview img, userflow videos, organized [03.01](#0301-some-ideas-dump); add links to userflow videos and content imgs; finish e2e and integration tests|2023-01-18|14:35 - 17:||
-|72||2023-01-18|1: - 1:||
+|71|add schema, content preview img, userflow videos, organized [03.01](#0301-some-ideas-dump); add links to userflow videos and content imgs; updated `EditContentPage` to be more robust --|2023-01-18|14:35 - 17:||
 ||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
 ||||**Total Time**|_ minutes (--h--m)|
-667+
+
+70		71
+492		
+
+|72||2023-01-18|1: - 1:||
+ finish e2e and integration tests
