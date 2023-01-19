@@ -2,7 +2,7 @@
 *The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature integrated into a `Content` model intended to encourage content creators to collaborate with another by **creating the option** to choose a pre-agreed monetization monetization model where content monetization is calculated by the pre-agreed proportion of a piece of content's **aggregate engagement** and therefore allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations of which user's profile was selected to show that content. **The intention of this feature** is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans to literally engage with content creators on the platform, increasing user engagement through either more rich and unique content because of more involved individuals AND literally engaging with fans.*
 
 **Live Link, as of 2023-01-19**: []() (`todo:inserlink`)
-**NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, projects hosted on the free-tier has unreliable performance compared to being hosted locally. **Consider [downloading and building this project locally](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)**: the default backend port is `:3000` and the default frontend port `:3001`.
+**NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, projects hosted on the free-tier has unreliable performance compared to being hosted locally. **Consider [downloading and building this project locally](#0201-running--testing-instructions)**: the default backend port is `:3000` and the default frontend port `:3001`.
 
 ## Special Thanks
 I like to thank the following two individuals for the respective reasons:
@@ -12,17 +12,17 @@ I like to thank the following two individuals for the respective reasons:
 # Table of Contents
 - [01. Project Features](#01-project-features)
 	- [01.01. Sample Userflow](#0101-sample-userflow)
-		- [01.01.A. Search API (Public)]()
-		- [01.01.B. User Login & Content Publishing]()
-		- [01.01.C. User Editing & Content Creation API]()
-		- [01.01.D. Join Records for a Content Piece]()
-		- [01.01.E. Publishing (New) Content]()
-		- [01.01.F. Register User]()
+		- [01.01.A. Search API (Public)](#0101a-the-search-api-public)
+		- [01.01.B. User Login & Content Publishing](#0101b-user-login-and-content-publishing)
+		- [01.01.C. User Editing & Content Creation API](#0101c-user-editing--content-creation-api)
+		- [01.01.D. Join Records for a Content Piece](#0101d-join-records-for-a-piece-of-content)
+		- [01.01.E. Publishing (New) Content](#0101e-publishing-is-a-single-purpose-method)
+		- [01.01.F. Register User](#0101f-register-user)
 	- [01.02. High-Priority Features](#0102-high-priority)
 	- [01.03. Develpoment Build Suggestions](#0103-develpoment-build-suggestions)
 	- [01.04 Other Notes](#0104-other-notes)
 - [02. Project Details](#02-project-specifications)
-	- [02.01. Running & Testing Instructions](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)	#0201-running--testing-instructions
+	- [02.01. Running & Testing Instructions](#0201-running--testing-instructions)
 	- [02.02. Frontend Documentation](#0202-frontend-documentation)
 	- [02.03. Backend Documentation](#0203-backend-documentation)
 	- [02.04. Resources & Data Source](#0204-resources--data-source)
@@ -42,29 +42,27 @@ I like to thank the following two individuals for the respective reasons:
 ## 01.01. Sample Userflow
 ### 01.01.A. *The Search API (Public)*
 Searching either published Content or Users.
-[![public search api](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
-
+[![public search api](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](https://user-images.githubusercontent.com/8562595/213333822-d069abdb-f184-4b41-90ed-d057a16c9bea.mp4)
 
 ### 01.01.B. *User Login and Content Publishing*
 Once content is published, it is publicly viewable. The join record has an independent description field than that of the master record. Content cards display participating users.
-[![user login & content publishing](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
+[![user login & content publishing](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](https://user-images.githubusercontent.com/8562595/213333863-9a760ba1-3836-46e3-9fc3-7c9861e0917d.mp4)
 
 ### 01.01.C. *User Editing & Content Creation API*
 Creating content with an added participant automatically creates a corresponding record to the participating user.
-[![user editing & content creation](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
+[![user editing & content creation](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](https://user-images.githubusercontent.com/8562595/213333897-515908c2-72b4-4211-8162-76900859ae3b.mp4)
 
 ### 01.01.D. *Join Records for a Piece of Content*
 Join record(s) for a piece of content are updated automatically depending whether or not a user is invited or not.
 [![join records are dynamic](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
+
 ### 01.01.E. *Publishing is a single-purpose method.*
 The publish call is single-purpose, one must update it first (for now) then publish).
-[![publish is a single-purpose method](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
+[![publish is a single-purpose method](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](https://user-images.githubusercontent.com/8562595/213333961-8b9e78e7-da24-4f15-84da-50e5d8b1c62f.mp4)
 
 ### 01.01.F. *Register User*
 Registering `testuser`.
-[![registering a user, `testuser`](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
-
-
+[![registering a user, `testuser`](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](https://user-images.githubusercontent.com/8562595/213333966-abff29d3-0a17-4fe9-902a-b502dcdb5cb4.mp4)
 
 - Public: show video of searching and users
 	1. video search:
