@@ -1,5 +1,5 @@
 # ShortCollabs
-*The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature that encourages content creators to collaborate with another by allowing a pre-agreement of monetization distribution allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations to non-randomly select a user's profile. The intention of this feature is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans entry onto the platform.*
+*The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature integrated into a `Content` model intended to encourage content creators to collaborate with another by **creating the option** to choose a pre-agreed monetization monetization model where content monetization is calculated by the pre-agreed proportion of a piece of content's **aggregate engagement** and therefore allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations of which user's profile was selected to show that content. **The intention of this feature** is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans to literally engage with content creators on the platform, increasing user engagement through either more rich and unique content because of more involved individuals AND literally engaging with fans.*
 
 **Live Link, as of 2023-01-19**: []() (`todo:inserlink`)
 **NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, projects hosted on the free-tier has unreliable performance compared to being hosted locally. **Consider [downloading and building this project locally](`todo`:GITHUBlinkforRUNNINGandTESTINGinstructions)**: the default backend port is `:3000` and the default frontend port `:3001`.
@@ -51,7 +51,7 @@ I like to thank the following two individuals for the respective reasons:
 **01.01.E. *Publishing is a single-purpose method.***. The publish call is single-purpose, one must update it first (for now) then publish).
 
 [![registering a user, `testuser`](todo: imageLink)](githublink.mp4)
-**01.01.D. *Register User***. Registering `testuser`.
+**01.01.F. *Register User***. Registering `testuser`.
 
 
 - Public: show video of searching and users
@@ -69,6 +69,7 @@ I like to thank the following two individuals for the respective reasons:
 4. **Model**: Searchable user field when adding participants, privacy settings to block being added, and server-side valid participant validation
 5. **GUI, User Profile**: left-justify the contents.
 6. **Content Hashing**: There now shouldn't be a reason for duplicate content. contents maybe get an un-watermarked "hash" to aid finding duplicate content.
+7. Real-time back-end validation for adding participants
 
 ## 01.03. Develpoment Build Suggestions
 1. **An Open-Source Project for React (forms)**: A class-definable form-validation (i.e. formik + configurable class fields/input-label element patterns), [Flask-WTF!@#$]() with Jinja templating is an excellent example.
@@ -346,46 +347,37 @@ response.data.videos[INDEX];
 # 03. Project Conclusions
 - that backend nightmare
 
-## 03.01. A Huge Further Study Dump (`todo`: organize)
+## 03.01. A Huge Further Study Dump
 Some suggested improvements to this concept are:
-1. **admin dashboard**. admin dashboard to demonstrate potential of the present database schema design, specifically the `ENUM`sql types
-2. **realistic schema**. implement "hidden" status for suspended users/content?
-3. **user qol and privacy**. do an invitation-based "participants" system so that the invited user has to confirm before added to a content page; allow users to fully block or restrict invites.
-4. **real-time editing**. use a websockets connection for editing a `byview` or `presplit` collab to quickly negotiate an agreement 
-5. **intergrated communication**. maybe an integrated chat system, i.e. 3rd party or built-in integrated with the application to facilitate communication between users to organize collabs.
-6. **user safety**. given that social media connects many users, implement a "parental controls" or "guardian" feature to protect underage users that may want to use the collabs feature. this could be a "guardian account" acting as an "agent" for the underage user where any invitations to an underage user must be accepted by the respective "guardian account".
-7. **MORE TIME SPENT ON DOCUMENTATION BEFOREHAND**.
-- **Technical**
-	- **Use Flask Backend**: Since this is a prototype application, form validation w/ wtforms is much more straightforward and less time-consuming to use.
-	- 
-- Concerning the Contracts ("SetAgreement") feature UI to set contract & sign:
-	- Considering decimal slider input or relative input (send to a `PUT`/`PATCH`-called function that ).
+1. better contnent creation GUI and UX.
+	- **realtime editing**: use a websockets connection for editing a `byview` or `presplit` collab to quickly negotiate an agreement. change the `summary` field to some kind of **markdown-based editor**, there are the following: `h1`-`h6`, italicizing, bold, maybe give it a screenwriting ui?
+	- GUI for negotiating contract as well as setting the contract, i.e. maybe a decimal slider. **attempt contract resolution**: maybe a "negotiate contract feature" where all participants set a range of acceptable percentages for each category and an algo attempts to maximize majority to the upper-end?
 	- **Front-End**: "make it even button", Math.floor(first"Repeated"Digits(1/[number of participants]))/[number of participants])
-- Concerning the Contracts ("SetAgreement") feature UI to invite users:
-	- Users will receive an "invite" before being listed as a participant; Users may set their invite settings to (`Anyone`, `No One`), (`Followers & Following`, `Followers`, `Following`), (`Friends / Mutal Friends`?)
-	- Real-time backend validation user search (make the search bar in the frontend a Component and import it into the Content creation page).
-	- Complimentary backend validation of submitted participants users (I am guessing `SELECT username FROM users WHERE username = $1 OR ... = $n` and check against the results).
+	- better UI to set contract & signed
+	- client-side checking the `contract_details` add to ceil(0.95) - ceil(1.00)
+	- server-side checking the `contract_details` add to ceil(0.95) - ceil(1.00)
+2. **user schema**, user safety. use `verified`, `birthdate`, or `parental_controls` user properties to protect underage users that may want to use the collabs feature. this could be a "guardian account" acting as an "agent" for the underage user where any invitations to an underage user must be accepted by the respective "guardian account".
 	- Hide users < 18 to be found unless linked parent/guardian account that can act as an intemediatary?
-- Concerning Elevated Users
-	- **Schema**: change `isElevated` to `isAdmin` 
-	- **More Routes**: admin/moderator dashboard to demonstrate full potential of the database schema design.
+3. **user schema**, user privacy.
+	- searchable user invite system
+	- do an invitation-based "participants" system so that the invited user has to confirm before added to a content page.
+	- invitation privacy settings: (`Anyone`, `No One`), (`Followers & Following`, `Followers`, `Following`), (`Friends / Mutal Friends`?); or `proximity`-based --maybe a finder (phone shaking by location)?
+	- allow users to fully block or restrict invites.
+4. **content**.
+	- add an `editor` array to the model that allows edits to be made;
+	- make it so that the content's `owner` cannot be booted
+	- `visual_hash` / `audio_hash` for content: colalbs => there shouldn't be any duplicate content in the db anymroe
+5. **cujoin schema**. make `isElevated` behave as it suggests; moderators can (un)flag all content but cannot outright delete; marketing/brand accounts are also elevated in that they can invite anyone? or too dangerous? as long as they are screened?
+6. **admin dashboard**.
+	- admin dashboard to demonstrate potential of the present database schema design, specifically the `ENUM`sql types
+	- admin search in admin dashboard with full query methods
 	- admin delete content ()
-- Concerning Users & Contents
-	- Best practices for implementing `DELETE` routes
-- do an invitation-based `participants` invite system so that the invited user has to confirm before added to a content page
-- add an additional "social aspect" (chatting, messaging?) to organize collabs; use the `verified`/`parental_controls`/`birthdate` to 
-- had difficulty giving access to "invited" users to edit the main content.
-- content creation: when adding a username, on the frontend, validate it.
-- use Python Flask/React: form validation is much more straightforward and it is good for prototyping
-- better UI to set contract & signed
-- hide in progress 
-- admin dashboard to demonstrate full potential of the database schema design.
-- admin delete content ()
-- more time: delete content joins individually (`./models/Content.js`); remove master delete by owner (from database schema design)
-- do an invitation-based `participants` invite system so that the invited user has to confirm before added to a content page
-- add an additional "social aspect" (chatting, messaging?) to organize collabs; use the `verified`/`parental_controls`/`birthdate` to 
-- had difficulty giving access to "invited" users to edit the main content.
-- content creation: when adding a username, on the frontend, validate it.
+7. **schema ACID**. implement "hidden" status for suspended users/content; figure out who and how content should be deleted (i.e. if a user is deleted, do all contents owned by the user get deleted or not? if all participants delete their join content & profiles, should the contnet be deleted or not? what if it is iconic? i.e. see Youtube - *Topic* profiles that are not monetized) 
+8. **user schema**, general:
+9. [**need a better form templating system**](#0103-develpoment-build-suggestions)
+10. optional integrated communication. maybe an integrated chat system, i.e. 3rd party or built-in integrated with the application to facilitate communication between users to organize collabs.
+11. **MORE TIME SPENT ON DOCUMENTATION BEFOREHAND**. **Technical**
+	- **Use Flask Backend**: Since this is a prototype application, form validation w/ wtforms is much more straightforward and less time-consuming to use.
 
 ## 03.02. Debugging Notes
 1. Express Middleware has a a bias for falsey i.e. (`middlewareAAE.js: isReferenceUserOrAdmin`):
@@ -507,7 +499,7 @@ Some suggested improvements to this concept are:
 |70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - 22:55|199|
 60		70
 293		
-|71|add schema, content preview img, userflow videos, organize "further study" section; finish finsh e2e and integration tests|2023-01-18|14:35 - 1:||
+|71|add schema, content preview img, userflow videos, organized [03.01](#0301-some-ideas-dump); add links to userflow videos and content imgs; finish e2e and integration tests|2023-01-18|14:35 - 1:||
 |72||2023-01-18|1: - 1:||
 ||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
 ||||**Total Time**|_ minutes (--h--m)|

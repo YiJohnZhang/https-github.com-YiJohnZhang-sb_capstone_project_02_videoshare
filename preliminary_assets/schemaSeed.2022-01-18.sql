@@ -1,6 +1,8 @@
+DROP TABLE IF EXISTS roles_users_join, contents_users_join, roles, contents, users;-- DATABASE RELATIONS
+-- DATABASE RELATIONS
 --	users
 CREATE TYPE account_status AS ENUM ('standby', 'active', 'banned', 'suspended');
-	-- 'standby', 'active', 'banned', 'suspended'
+	-- default is 'standby', 'active', 'banned', 'suspended'
 
 CREATE TABLE users (
 
@@ -14,49 +16,57 @@ CREATE TABLE users (
 		-- not implemented but to set verified parent / guardian as a "manager" for the child
 	verified BOOLEAN DEFAULT FALSE,
 		-- default false
+	-- default 'standby'; 'active', 'banned', or 'suspended'
 	account_status account_status DEFAULT 'standby',
-		-- default 'standby';
-		-- unimplemented extra: basically it lets admin panel sort through which accounts to delete or lift the ban
+	-- extra: basically it lets admin panel sort through which accounts to delete or lift the ban
 	email VARCHAR(100) NOT NULL
     	CHECK (position('@' IN email) > 1),
 		-- < 100
 	"password" TEXT NOT NULL,
 	picture VARCHAR(64) DEFAULT 'default.jpg',
-		-- default default.jpg
-	"description" VARCHAR(512) NOT NULL,
+	"description" VARCHAR(512) DEFAULT '',
 		-- LEN <= 512 in client-side, server-side validation; also database
-	is_elevated BOOLEAN DEFAULT FALSE
+	is_elevated BOOLEAN DEFAULT FALSE,
 		-- reminder: block a request body from containing this attribute
+	UNIQUE (email)
 
 );
 
 --	contents
-CREATE TYPE status_state AS ENUM ('open', 'standby', 'active', 'legacy');
+CREATE TYPE status_state AS ENUM ('open', 'standby', 'published', 'legacy');
 	-- default is 'open'
+	-- `published` and `legacy` => JOIN is active
 CREATE TYPE contract_type_state AS ENUM ('solo', 'byview', 'presplit');
-	-- default is 'single'
+	-- default is 'solo'
 
 CREATE TABLE contents (
 	id					SERIAL PRIMARY KEY,
 	title				VARcHAR(64) NOT NULL,
-	summary				VARCHAR(512) NOT NULL,
-	"description"		VARCHAR(2200)
-		DEFAULT 'Description placeholder.',
+	summary				VARCHAR(512) DEFAULT '',
+	"description"		VARCHAR(2200) DEFAULT '',
 		-- https://mashable.com/article/tiktok-video-descriptions-photo-mode
-	link				VARCHAR(100),
+	link				VARCHAR(100) DEFAULT '',
 	-- bloopers
 	-- notes
 	-- visible
 	"status"			status_state DEFAULT 'open',
 	"owner"				VARCHAR(32)
 		REFERENCES users(username) ON DELETE CASCADE,
+	participants		TEXT,
+		-- DEFAULT '["username",...]'	
+			-- use JSON.parse to get the object; and JSON.stringify to store in db
 	contract_type		contract_type_state DEFAULT 'solo',
 		-- 2022-12-12 "monetization type"?
-	contract_details	TEXT
-		DEFAULT '{views:[{username: "temporary", share:1}], engagement:[{username: "temporary", share:1}]}',
-	contract_signed		TEXT
-		DEFAULT '[{username:"temporary", signed: false}]',
-	date_created		DATE NOT NULL, 
+		-- business logic: `solo` sets `participants`, `contract_details`, `contract_signed` to NULL on submission (basically sends NULL to `db`)
+	contract_details	TEXT,
+		-- DEFAULT '{"views":[{"username": "temporary", share:1}], "engagement":[{"username": "temporary", "share":1}]}',
+			-- use JSON.parse to get the object; and JSON.stringify to store in db
+	contract_signed		TEXT DEFAULT '[]',
+		-- pre-2022-12-28: DEFAULT '[{username:"temporary", signed: false}, ...]',
+		-- 2022-12-30: DEFAULT '["username",...]'
+			-- use JSON.parse to get the object; and JSON.stringify to store in db
+	date_created		DATE
+		DEFAULT CURRENT_DATE,
 	date_standby		DATE,
 	date_published		DATE
 
@@ -73,13 +83,14 @@ CREATE TABLE roles (
 --	contents_users_join
 CREATE TABLE contents_users_join (
 
-	user_id VARCHAR(32) NOT NULL
+	user_id			VARCHAR(32) NOT NULL
 		REFERENCES users(username) ON DELETE CASCADE,
-	content_id SMALLINT NOT NULL
+	content_id		SMALLINT NOT NULL
 		REFERENCES contents(id) ON DELETE CASCADE,
-	"description" VARCHAR(2200)
-		-- by default it inherits the contents `default_description`
+	"description"	VARCHAR(2200),
+		-- by default it inherits the contents `description`
 		-- each user sets their own content description
+	PRIMARY KEY (user_id, content_id)
 
 );
 
@@ -88,8 +99,9 @@ CREATE TABLE roles_users_join (
 	-- user, creator, brand (marketing admin), representative (brand assistant w/ delegated responsibilities), admin (site admin), moderator (admin assistant w/ delegated responsibilties)
 
 	user_id VARCHAR(32) NOT NULL
-		REFERENCES users(username),
+		REFERENCES users(username) ON DELETE CASCADE,
 	role_id SMALLINT NOT NULL
-		REFERENCES roles(id)
+		REFERENCES roles(id),
+	PRIMARY KEY (user_id, role_id)
 
 );

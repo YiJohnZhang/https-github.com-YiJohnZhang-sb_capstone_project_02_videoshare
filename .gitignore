@@ -1,7 +1,7 @@
 # directories
 **/deprecated
 **/node_modules
-/z_preliminary_assets/temp
+**/temp
 # /zbackend.2023-01-02.session38.bak
 
 # media
