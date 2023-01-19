@@ -56,7 +56,7 @@ Creating content with an added participant automatically creates a corresponding
 
 ### 01.01.D. *Join Records for a Piece of Content*
 Join record(s) for a piece of content are updated automatically depending whether or not a user is invited or not.
-[![join records are dynamic](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
+[![join records are dynamic](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](https://user-images.githubusercontent.com/8562595/213344037-e9573351-c8c0-414e-9133-a5181048b153.mp4)
 
 ### 01.01.E. *Publishing is a single-purpose method.*
 The publish call is single-purpose, one must update it first (for now) then publish).
