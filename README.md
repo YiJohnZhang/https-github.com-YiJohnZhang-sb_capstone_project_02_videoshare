@@ -7,7 +7,11 @@
 ## Special Thanks
 I like to thank the following two individuals for the respective reasons:
 - **Christos Gkoros**: *Course Mentor and Project Advisor*. Provided guidance, experience, feedback, and industry insight throughout the course.
-- **Anh Mai**: *Bootcamp On-Demand Mentor*. Resolved a bug that has bogged down progress for the majority of the project's early development (backend).
+- **Anh Mai**: *Bootcamp On-Demand Mentor*. Helped resolve a bug that has bogged down progress for the majority of the project's early development (backend).
+
+## Test Statistics
+- **Backend**: **~153 Unit Tests** (take a few); **~7 Integration & E2E Tests** (give a few)
+- **Frontend**: **24 Simple Tests** (Component Smoke and Snapshot Tests); **0 Event Tests** (focused on backend tests)
 
 # Table of Contents
 - [01. Project Features](#01-project-features)
@@ -95,8 +99,9 @@ This web application uses the **PERN** stack:
 	- **Backend**: **~153 Unit Tests** (take a few); **~7 Integration & E2E Tests** (give a few)
 	- **Frontend**: **24 Simple Tests** (Component Smoke and Snapshot Tests); **0 Event Tests** (focused on backend tests)
 
-Project Schema:
 ![shortcollabs schema img](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/schema_2023-01-04.png)
+**Figure 02.01**. Project Schema.
+
 The project proposes the following additional attributes to a `content` relation and a `content_user_join` relation to achieve the intended goals of the project's purpose:
 |Attribute Name|Data Type|Example|Description|
 |-|-|-|-|
@@ -105,7 +110,7 @@ The project proposes the following additional attributes to a `content` relation
 |`contract_type`|`ENUM`sql ('solo', 'byview', 'presplit')|`'solo'`|Is the content monetization for a single user (`solo`), free-for-all to collaborators based on view and engagement due to the algorithm (`byview`), or pre-allocated such that the pre-allocated split is offered (`presplit`)?|
 |`participants`|`TEXT`sql|`'["user1","user2","user3"]'`|A stringified array of usernames involved. It is `'["user1"]` if `contract_type` = `solo`.|
 |`contract_details`|`TEXT`sql|`'{"views":[{"username":"user1","share":0.25}, {"username":"user2","share":0.25},{"username":"user3","share":0.5}],"engagement":[{"username":"user1","share":0.74}, {"username":"user2","share":0.21},{"username":"user3","share":0.05}]}'`|A stringified JSON object of usernames and monetization fractions in respective monetization categories. It is `'{"views":[{"username":"user1","share":1}, ],"engagement":[{"username":"user1","share":1}]}'` if `contract_type` = `solo`.|
-|`contract_signed`|`TEXT`sql|Similar to `contract_details`.|A stringified array of usernames that have agreed to the contract. Used to check whether or not the content `status` may be set to `standby`.  Behaves similarly to `contract_details`.|
+|`contract_signed`|`TEXT`sql|Similar to `participants`.|A stringified array of usernames that have agreed to the contract. Used to check whether or not the content `status` may be set to `standby`.  Behaves similarly to `contract_details`.|
 
 **Note**: This project was designed to exceed Springboard Bootcamp's final capstone project requirements.
 
@@ -162,18 +167,18 @@ npm test	# alias for `react-scripts test` in `package.json`
 /frontend
 ├──	...
 └──	src/__tests__/
-	├── App.test.js						# smoke & snapshot test, really went all out for the backend on this project
-	├── NavBar.test.js					# smoke & snapshot test, really went all out for the backend on this project
-	├── HomePage.test.js				# smoke & snapshot test, really went all out for the backend on this project
-	├── ErrorPage.test.js				# smoke & snapshot test, really went all out for the backend on this project
-	├── OnboardingPage.test.js			# smoke & snapshot test, really went all out for the backend on this project
-	├── ProfilePage.test.js				# smoke & snapshot test, really went all out for the backend on this project
-	├── EditUserPage.test.js			# smoke & snapshot test, really went all out for the backend on this project
-	├── ContentPage.test.js				# smoke & snapshot test, really went all out for the backend on this project
-	├── EditContentPage.test.js			# smoke & snapshot test, really went all out for the backend on this project
-	├── EditJoinContentPage.test.js		# smoke & snapshot test, really went all out for the backend on this project
-	├── ContentCard.test.js				# smoke & snapshot test, really went all out for the backend on this project
-	└── UserCard.test.js				# smoke & snapshot test, really went all out for the backend on this project
+	├── App.test.js					# smoke & snapshot test, focused on backend tests
+	├── NavBar.test.js				# smoke & snapshot test, focused on backend tests
+	├── HomePage.test.js				# smoke & snapshot test, focused on backend tests
+	├── ErrorPage.test.js				# smoke & snapshot test, focused on backend tests
+	├── OnboardingPage.test.js			# smoke & snapshot test, focused on backend tests
+	├── ProfilePage.test.js				# smoke & snapshot test, focused on backend tests
+	├── EditUserPage.test.js			# smoke & snapshot test, focused on backend tests
+	├── ContentPage.test.js				# smoke & snapshot test, focused on backend tests
+	├── EditContentPage.test.js			# smoke & snapshot test, focused on backend tests
+	├── EditJoinContentPage.test.js			# smoke & snapshot test, focused on backend tests
+	├── ContentCard.test.js				# smoke & snapshot test, focused on backend tests
+	└── UserCard.test.js				# smoke & snapshot test, focused on backend tests
 ```
 
 ## 02.02. Frontend Documentation
