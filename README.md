@@ -35,22 +35,22 @@ I like to thank the following two individuals for the respective reasons:
 
 ## 01.01. Sample Userflow
 
-[![public search api](todo: imageLink)](githublink.mp4)
+[![public search api](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 **01.01.A. *The Search API (Public)***. One Searchbar for searching either Content or Users
 
-[![user login & content publishing](todo: imageLink)](githublink.mp4)
+[![user login & content publishing](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 **01.01.B. *User Login and Content Publishing***. Once content is published, it is publicly viewable. The join record has an independent description field than that of the master record. Content cards display participating users.
 
-[![user editing & content creation](todo: imageLink)](githublink.mp4)
+[![user editing & content creation](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 **01.01.C. *User Editing & Content Creation API***. Creating content with an added participant automatically creates a corresponding record to the participating user.
 
-[![join records are dynamic](todo: imageLink)](githublink.mp4)
+[![join records are dynamic](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 **01.01.D. *Join Records for a Piece of Content***. Join record(s) for a piece of content are updated automatically depending whether or not a user is invited or not.
 
-[![publish is a single-purpose method](todo: imageLink)](githublink.mp4)
+[![publish is a single-purpose method](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 **01.01.E. *Publishing is a single-purpose method.***. The publish call is single-purpose, one must update it first (for now) then publish).
 
-[![registering a user, `testuser`](todo: imageLink)](githublink.mp4)
+[![registering a user, `testuser`](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/shortcollabs_preview_img.png)](githublink.mp4)
 **01.01.F. *Register User***. Registering `testuser`.
 
 
@@ -90,7 +90,7 @@ This web application uses the **PERN** stack:
 	- **Frontend**: **24 Simple Tests** (Component Smoke and Snapshot Tests); **0 Event Tests** (focused on backend tests)
 
 Project Schema:
-![todo: schema_img](imageLink)
+![shortcollabs schema img](https://github.com/YiJohnZhang/sb_capstone_project_02_ShortCollabs/blob/main/README_assets/schema_2023-01-04.png)
 The project proposes the following additional attributes to a `content` relation and a `content_user_join` relation to achieve the intended goals of the project's purpose:
 |Attribute Name|Data Type|Example|Description|
 |-|-|-|-|
@@ -499,7 +499,7 @@ Some suggested improvements to this concept are:
 |70|resolved `autoprefixer` warning (on `color-adjust` css property), last minute styling changes, userflow walkthrough & last-minute changes|2023-01-17|19:36 - 22:55|199|
 60		70
 293		
-|71|add schema, content preview img, userflow videos, organized [03.01](#0301-some-ideas-dump); add links to userflow videos and content imgs; finish e2e and integration tests|2023-01-18|14:35 - 1:||
+|71|add schema, content preview img, userflow videos, organized [03.01](#0301-some-ideas-dump); add links to userflow videos and content imgs; finish e2e and integration tests|2023-01-18|14:35 - 17:||
 |72||2023-01-18|1: - 1:||
 ||**50.01.06**. Documentation||**Net Total Time**| (--h--m)|
 ||||**Total Time**|_ minutes (--h--m)|
