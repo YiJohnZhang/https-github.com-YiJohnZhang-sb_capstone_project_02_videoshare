@@ -112,26 +112,58 @@ The project proposes the following additional attributes to a `content` relation
 |`contract_details`|`TEXT`sql|`'{"views":[{"username":"user1","share":0.25}, {"username":"user2","share":0.25},{"username":"user3","share":0.5}],"engagement":[{"username":"user1","share":0.74}, {"username":"user2","share":0.21},{"username":"user3","share":0.05}]}'`|A stringified JSON object of usernames and monetization fractions in respective monetization categories. It is `'{"views":[{"username":"user1","share":1}, ],"engagement":[{"username":"user1","share":1}]}'` if `contract_type` = `solo`.|
 |`contract_signed`|`TEXT`sql|Similar to `participants`.|A stringified array of usernames that have agreed to the contract. Used to check whether or not the content `status` may be set to `standby`.  Behaves similarly to `contract_details`.|
 
-**Note**: This project was designed to exceed Springboard Bootcamp's final capstone project requirements.
-
 ## 02.01. Running & Testing Instructions
 [Return to Table of Contents](#table-of-contents)
-**Running the Application**
+
+- **Instructions Assumptions**:
+	- The instructions here assume one starts at the `Downloads` dir or equivalent where the sourcecode dir is contained.
+	- Let `projectDir` refer to `downloadsDir/sb_capstone_project_02_ShortCollabs-main`, where `downloadsDir` is the directoy where the sourcecode is saved, i.e. `~/Downloads`.
+
+**Running the Application & Setup**
 - Backend:
 ```sh
-# go to `backend` directory
-cd backend
-# run `server.js`
-node server.js	# by default, this starts on port 3000, the default port number is located in `config.js`
-	# by default, listens on: localhost://127.0.0.1:3000
+# 01. Seed the sample database
+# Go to the directory the project sourcecode is saved. Unzip it.
+# Let `projectDir` refer to `downloadsDir/sb_capstone_project_02_ShortCollabs-main`, where `downloadsDir` is the downloads directory this sourcecode is saved, i.e. `~/Downloads`.
+
+
+# 01.01. Go to 'projectDir/backend/database/seed', start psql there
+$ cd sb_capstone_project_02_ShortCollabs-main/backend/database/seed
+# cd ~/Downloads/sb_capstone_project_02_ShortCollabs-main/backend/database/seed
+$ psql
+
+# 01.02. Seed the database `sb_50_capstone_project_shortcollabs`
+# WARNING: Running the seed file, `baseSeed.sql` will drop any existing instance of `sb_50_capstone_project_shortcollabs`
+(psql)# \i baseSeed.sql
+ctl-D
+	# exit psql cli
+
+# 02. Run the Backend
+
+# 02.01. Go to 'projectDir/backend'
+$ cd ../..
+# cd ~/Downloads/sb_capstone_project_02_ShortCollabs-main/backend
+
+# 02.02. Start the server (after installing the modules)
+$ npm i
+$ node server.js
+	# or nodemon server.js. NOTE: This listens on 127.0.0.1:3000 (localhost:3000) by default; change it by editing `PORT_NUMBER` in `config.js`
 ```
 - Frontend:
 ```sh
-# go to `frontend` directory
-cd frontend
-# start react app
-npm start
-	# default resource location: localhost://127.0.0.1:3001
+# 03. Run the Frontend. Start a new CLI
+
+# 03.01. Go to `projectDir/frontend`
+$ cd ../frontend
+# cd ~/Downloads/sb_capstone_project_02_ShortCollabs-main/frontend
+
+# 03.02. Start the backend (after installing the modules)
+$ npm i
+$ npm start
+	# NOTE: This listens on 127.0.0.1:3001 (localhost:3001) by default; change it by editing `BASE_URL` in `projectDir/frontend/src/helpers/api.js`
+
+# Enjoy! Backend tests are located on `projectDir/backend/__tests__`.
+# Questions? Message me on LinkedIn: https://www.linkedin.com/in/yijohnzhang/
 ```
 
 **Testing the Application**,
