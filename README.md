@@ -1,7 +1,7 @@
 # ShortCollabs
 *The purpose of this project is to be a **prototype content-sharing web application** that focuses on a "Contracts" feature integrated into a `Content` model intended to encourage content creators to collaborate with another by **creating the option** to choose a pre-agreed monetization monetization model where content monetization is calculated by the pre-agreed proportion of a piece of content's **aggregate engagement** and therefore allowing the content algorithm to solely focus on featuring a piece of content and ignore considerations of which user's profile was selected to show that content. **The intention of this feature** is to encourage collaboration between creatives that are not necessarily at the same popularity and potentially allow fans to literally engage with content creators on the platform, increasing user engagement through either more rich and unique content because of more involved individuals AND literally engaging with fans.*
 
-**Live Link, as of 2023-01-19**: []() (`todo:inserlink`)
+**Live Link, as of 2023-01-24**: [http://whimsical-condition.surge.sh/](http://whimsical-condition.surge.sh/)
 **NOTE**: This project is hosted on the **free-tier plan** on **[surge.sh](https://surge.sh/)**, a frontend hosting service; from experience, projects hosted on the free-tier has unreliable performance compared to being hosted locally. **Consider [downloading and building this project locally](#0201-running--testing-instructions)**: the default backend port is `:3000` and the default frontend port `:3001`.
 
 ## Special Thanks
@@ -115,11 +115,16 @@ The project proposes the following additional attributes to a `content` relation
 ## 02.01. Running & Testing Instructions
 [Return to Table of Contents](#table-of-contents)
 
-- **Instructions Assumptions**:
-	- The instructions here assume one starts at the `Downloads` dir or equivalent where the sourcecode dir is contained.
-	- Let `projectDir` refer to `downloadsDir/sb_capstone_project_02_ShortCollabs-main`, where `downloadsDir` is the directoy where the sourcecode is saved, i.e. `~/Downloads`.
+**Instructions Assumptions**:
+- The instructions here assume one starts at the `Downloads` dir or equivalent where the sourcecode dir is contained.
+- Let `projectDir` refer to `downloadsDir/sb_capstone_project_02_ShortCollabs-main`, where `downloadsDir` is the directoy where the sourcecode is saved, i.e. `~/Downloads`.
 
 **Running the Application & Setup**
+- Other Dependencies & Notes:
+	- PostgreSQL > 9 (technically 8.3) for `ENUM` types
+	- [`nodeJS v16.14.2`](https://nodejs.org/docs/latest-v16.x/api/url.html)
+	- `npm`: `sudo apt install node` or equivalent
+	- [`node-pg` Notes](https://node-postgres.com/features/connecting): To run the source code as it is, `postgres` must be set to skip authenticating permissions. This is done by editing `pg_hba.conf`, it is found at in `/etc/postgresql/PSQL_VERSION/main/` in Linux, and setting user/address methods to `trust`. Otherwise you need to provide and configure the password into the `DB_URI` for `node-pg`, see the [`node-pg` documentation here](https://node-postgres.com/features/connecting#programmatic).
 - Backend:
 ```sh
 # 01. Seed the sample database
