@@ -18,6 +18,7 @@ const routerAuthentication = require('./modules/routerAuthentication');
 const routerUsers = require('./modules/routerUsers');
 const routerContents = require('./modules/routerContents');
 const routerContentsUsersJoin = require('./modules/routerContentUserJoin');
+const routerHealth = require('./modules/routerHealth');
 
 //  Settings & Before Middleware
 //  ============================
@@ -32,7 +33,8 @@ app.use(express.urlencoded({extended:true}));
 app.use('/authentication', routerAuthentication);
 app.use('/users', routerUsers);
 app.use('/contents', routerContents);
-app.use('/cujoin', routerContentsUsersJoin)
+app.use('/cujoin', routerContentsUsersJoin);
+app.use('/health', routerHealth);
 
 // 404 Route Not Found
 app.use((req, res, nxt) => {
